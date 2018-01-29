@@ -1,0 +1,136 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Common", "BIA.Net.Common\BIA.Net.Common.csproj", "{9073DA56-B20A-476A-B6DD-3231EA11D5BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Model", "BIA.Net.Model\BIA.Net.Model.csproj", "{E366DAD2-D95C-44F9-9215-6CCC912574DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8105F07E-D535-49ED-9E4A-87D49B2081B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Common.Tests", "BIA.Net.Common.Tests\BIA.Net.Common.Tests.csproj", "{8A4BF60E-E292-462B-AFFC-9604A9FA4E1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.MVC", "BIA.Net.MVC\BIA.Net.MVC.csproj", "{EE34C7A0-1A4A-4748-B749-2F9087C54AB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Business", "BIA.Net.Business\BIA.Net.Business.csproj", "{3F87600C-7C87-4768-812D-3CFDEDAE5E2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Dialog", "BIA.Net.Dialog\BIA.Net.Dialog.csproj", "{08AFA28F-5D87-4728-A71A-A2A28FB32693}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Dialog.MVC", "BIA.Net.Dialog.MVC\BIA.Net.Dialog.MVC.csproj", "{D1C8A684-B4E0-40E7-B40A-DD58A3E8A80F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication_BIA.Net_Test", "WebApplication_BIA.Net_Test\WebApplication_BIA.Net_Test.csproj", "{BDE858B3-99D4-4272-8237-643B82028DE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.ImageManager", "BIA.Net.ImageManager\BIA.Net.ImageManager.csproj", "{3F7026E1-896F-4A87-A2EC-4F5B75663EA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.WindowsService", "BIA.Net.WindowsService\BIA.Net.WindowsService.csproj", "{18784ED9-BEC2-4187-97D4-24CB78E444AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Web", "BIA.Net.Web\BIA.Net.Web.csproj", "{B122BAF6-F2C4-4457-A39D-7AFE4A30ED9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.SSDLToSQL", "BIA.Net.SSDLToSQL\BIA.Net.SSDLToSQL.csproj", "{19A3111B-301D-4BCA-B694-49BBA11D1D9A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9073DA56-B20A-476A-B6DD-3231EA11D5BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9073DA56-B20A-476A-B6DD-3231EA11D5BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9073DA56-B20A-476A-B6DD-3231EA11D5BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9073DA56-B20A-476A-B6DD-3231EA11D5BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E366DAD2-D95C-44F9-9215-6CCC912574DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E366DAD2-D95C-44F9-9215-6CCC912574DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E366DAD2-D95C-44F9-9215-6CCC912574DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E366DAD2-D95C-44F9-9215-6CCC912574DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A4BF60E-E292-462B-AFFC-9604A9FA4E1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A4BF60E-E292-462B-AFFC-9604A9FA4E1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A4BF60E-E292-462B-AFFC-9604A9FA4E1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A4BF60E-E292-462B-AFFC-9604A9FA4E1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE34C7A0-1A4A-4748-B749-2F9087C54AB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE34C7A0-1A4A-4748-B749-2F9087C54AB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE34C7A0-1A4A-4748-B749-2F9087C54AB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE34C7A0-1A4A-4748-B749-2F9087C54AB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F87600C-7C87-4768-812D-3CFDEDAE5E2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F87600C-7C87-4768-812D-3CFDEDAE5E2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F87600C-7C87-4768-812D-3CFDEDAE5E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F87600C-7C87-4768-812D-3CFDEDAE5E2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08AFA28F-5D87-4728-A71A-A2A28FB32693}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08AFA28F-5D87-4728-A71A-A2A28FB32693}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08AFA28F-5D87-4728-A71A-A2A28FB32693}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08AFA28F-5D87-4728-A71A-A2A28FB32693}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1C8A684-B4E0-40E7-B40A-DD58A3E8A80F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1C8A684-B4E0-40E7-B40A-DD58A3E8A80F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1C8A684-B4E0-40E7-B40A-DD58A3E8A80F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1C8A684-B4E0-40E7-B40A-DD58A3E8A80F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDE858B3-99D4-4272-8237-643B82028DE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDE858B3-99D4-4272-8237-643B82028DE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDE858B3-99D4-4272-8237-643B82028DE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDE858B3-99D4-4272-8237-643B82028DE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F7026E1-896F-4A87-A2EC-4F5B75663EA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F7026E1-896F-4A87-A2EC-4F5B75663EA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F7026E1-896F-4A87-A2EC-4F5B75663EA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F7026E1-896F-4A87-A2EC-4F5B75663EA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18784ED9-BEC2-4187-97D4-24CB78E444AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18784ED9-BEC2-4187-97D4-24CB78E444AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18784ED9-BEC2-4187-97D4-24CB78E444AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18784ED9-BEC2-4187-97D4-24CB78E444AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B122BAF6-F2C4-4457-A39D-7AFE4A30ED9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B122BAF6-F2C4-4457-A39D-7AFE4A30ED9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B122BAF6-F2C4-4457-A39D-7AFE4A30ED9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B122BAF6-F2C4-4457-A39D-7AFE4A30ED9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19A3111B-301D-4BCA-B694-49BBA11D1D9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19A3111B-301D-4BCA-B694-49BBA11D1D9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19A3111B-301D-4BCA-B694-49BBA11D1D9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19A3111B-301D-4BCA-B694-49BBA11D1D9A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8A4BF60E-E292-462B-AFFC-9604A9FA4E1D} = {8105F07E-D535-49ED-9E4A-87D49B2081B2}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 13
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = 
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = BIA.Net.Business\\BIA.Net.Business.csproj
+		SccProjectName1 = BIA.Net.Business
+		SccLocalPath1 = BIA.Net.Business
+		SccProjectUniqueName2 = BIA.Net.Common.Tests\\BIA.Net.Common.Tests.csproj
+		SccProjectTopLevelParentUniqueName2 = BIA.Net.sln
+		SccProjectName2 = BIA.Net.Common.Tests
+		SccLocalPath2 = BIA.Net.Common.Tests
+		SccProjectUniqueName3 = BIA.Net.Common\\BIA.Net.Common.csproj
+		SccProjectName3 = BIA.Net.Common
+		SccLocalPath3 = BIA.Net.Common
+		SccProjectUniqueName4 = BIA.Net.Model\\BIA.Net.Model.csproj
+		SccProjectName4 = BIA.Net.Model
+		SccLocalPath4 = BIA.Net.Model
+		SccProjectUniqueName5 = BIA.Net.MVC\\BIA.Net.MVC.csproj
+		SccProjectName5 = BIA.Net.MVC
+		SccLocalPath5 = BIA.Net.MVC
+		SccProjectUniqueName6 = BIA.Net.Dialog\\BIA.Net.Dialog.csproj
+		SccProjectName6 = BIA.Net.Dialog
+		SccLocalPath6 = BIA.Net.Dialog
+		SccProjectUniqueName7 = BIA.Net.Dialog.MVC\\BIA.Net.Dialog.MVC.csproj
+		SccProjectName7 = BIA.Net.Dialog.MVC
+		SccLocalPath7 = BIA.Net.Dialog.MVC
+		SccProjectUniqueName8 = WebApplication_BIA.Net_Test\\WebApplication_BIA.Net_Test.csproj
+		SccProjectName8 = WebApplication_BIA.Net_Test
+		SccLocalPath8 = WebApplication_BIA.Net_Test
+		SccProjectUniqueName9 = BIA.Net.ImageManager\\BIA.Net.ImageManager.csproj
+		SccProjectName9 = BIA.Net.ImageManager
+		SccLocalPath9 = BIA.Net.ImageManager
+		SccProjectUniqueName10 = BIA.Net.WindowsService\\BIA.Net.WindowsService.csproj
+		SccProjectName10 = BIA.Net.WindowsService
+		SccLocalPath10 = BIA.Net.WindowsService
+		SccProjectUniqueName11 = BIA.Net.Web\\BIA.Net.Web.csproj
+		SccProjectName11 = BIA.Net.Web
+		SccLocalPath11 = BIA.Net.Web
+		SccProjectUniqueName12 = BIA.Net.SSDLToSQL\\BIA.Net.SSDLToSQL.csproj
+		SccProjectName12 = BIA.Net.SSDLToSQL
+		SccLocalPath12 = BIA.Net.SSDLToSQL
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,576 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ProjectDB.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ProjectDBStoreContainer">
+    <EntitySet Name="AspNetRoles" EntityType="ProjectDB.Store.AspNetRoles" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AspNetUserClaims" EntityType="ProjectDB.Store.AspNetUserClaims" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AspNetUserLogins" EntityType="ProjectDB.Store.AspNetUserLogins" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AspNetUsers" EntityType="ProjectDB.Store.AspNetUsers" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Familles" EntityType="ProjectDB.Store.Familles" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Membres" EntityType="ProjectDB.Store.Membres" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Version" EntityType="ProjectDB.Store.Version" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Plannings" EntityType="ProjectDB.Store.Plannings" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="FamilleRoles" EntityType="ProjectDB.Store.FamilleRoles" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AspNetUserRole" EntityType="ProjectDB.Store.AspNetUserRoles" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_AspNetUserRole_AspNetRoles" Association="ProjectDB.Store.FK_AspNetUserRoles_AspNetRoles">
+      <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+      <End Role="AspNetUserRoles" EntitySet="AspNetUserRole" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AspNetUserRole_AspNetUsers" Association="ProjectDB.Store.FK_AspNetUserRoles_AspNetUsers">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserRoles" EntitySet="AspNetUserRole" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="ProjectDB.Store.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="ProjectDB.Store.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+    </AssociationSet>
+    <AssociationSet Name="FamilyPlanning" Association="ProjectDB.Store.FamilyPlanning">
+      <End Role="Famille" EntitySet="Familles" />
+      <End Role="Planning" EntitySet="Plannings" />
+    </AssociationSet>
+    <AssociationSet Name="FamilyMember" Association="ProjectDB.Store.FamilleMember">
+      <End Role="Famille" EntitySet="Familles" />
+      <End Role="Membre" EntitySet="Membres" />
+    </AssociationSet>
+    <AssociationSet Name="AspNetUsersMembre" Association="ProjectDB.Store.AspNetUsersMembre">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="Membre" EntitySet="Membres" />
+    </AssociationSet>
+    <AssociationSet Name="FamilyRoleMember" Association="ProjectDB.Store.FamilyRoleMember">
+      <End Role="FamilleRole" EntitySet="FamilleRoles" />
+      <End Role="Member" EntitySet="Membres" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="AspNetRoles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar" Nullable="false" MaxLength="128" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="256" />
+  </EntityType>
+  <EntityType Name="AspNetUserClaims">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="nvarchar" Nullable="false" MaxLength="128" />
+    <Property Name="ClaimType" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="ClaimValue" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="AspNetUserLogins">
+    <Key>
+      <PropertyRef Name="LoginProvider" />
+      <PropertyRef Name="ProviderKey" />
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="LoginProvider" Type="nvarchar" Nullable="false" MaxLength="128" />
+    <Property Name="ProviderKey" Type="nvarchar" Nullable="false" MaxLength="128" />
+    <Property Name="UserId" Type="nvarchar" Nullable="false" MaxLength="128" />
+  </EntityType>
+  <EntityType Name="AspNetUsers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar" Nullable="false" MaxLength="128" />
+    <Property Name="Email" Type="nvarchar" Nullable="true" MaxLength="256" />
+    <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+    <Property Name="PasswordHash" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="SecurityStamp" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="PhoneNumber" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="datetime" Nullable="true" />
+    <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar" Nullable="false" MaxLength="256" />
+  </EntityType>
+  <EntityType Name="Familles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Titre" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Membres">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EmailInvitation" Type="nvarchar" Nullable="true" MaxLength="256" />
+    <Property Name="SecurityTokenInvitation" Type="uniqueidentifier" Nullable="true" />
+    <Property Name="Famille_Id" Type="int" Nullable="false" />
+    <Property Name="AspNetUser_Id" Type="nvarchar" MaxLength="128" Nullable="true" />
+    <Property Name="FamilyRole_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Version">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Plannings">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Titre" Type="nvarchar" Nullable="false" MaxLength="25" />
+    <Property Name="Family_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FamilleRoles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Titre" Type="nvarchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="AspNetUserRoles">
+    <Key>
+      <PropertyRef Name="Role_Id" />
+      <PropertyRef Name="User_Id" />
+    </Key>
+    <Property Name="Role_Id" Type="nvarchar" Nullable="false" MaxLength="128" />
+    <Property Name="User_Id" Type="nvarchar" Nullable="false" MaxLength="128" />
+  </EntityType>
+  <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+    <End Role="AspNetUsers" Type="ProjectDB.Store.AspNetUsers" Multiplicity="1" />
+    <End Role="AspNetUserClaims" Type="ProjectDB.Store.AspNetUserClaims" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserClaims">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+    <End Role="AspNetUsers" Type="ProjectDB.Store.AspNetUsers" Multiplicity="1" />
+    <End Role="AspNetUserLogins" Type="ProjectDB.Store.AspNetUserLogins" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserLogins">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FamilyPlanning">
+    <End Role="Famille" Type="ProjectDB.Store.Familles" Multiplicity="1" />
+    <End Role="Planning" Type="ProjectDB.Store.Plannings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Famille">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Planning">
+        <PropertyRef Name="Family_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FamilleMember">
+    <End Role="Famille" Type="ProjectDB.Store.Familles" Multiplicity="1" />
+    <End Role="Membre" Type="ProjectDB.Store.Membres" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Famille">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Membre">
+        <PropertyRef Name="Famille_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AspNetUsersMembre">
+    <End Role="AspNetUsers" Type="ProjectDB.Store.AspNetUsers" Multiplicity="0..1" />
+    <End Role="Membre" Type="ProjectDB.Store.Membres" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Membre">
+        <PropertyRef Name="AspNetUser_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FamilyRoleMember">
+    <End Role="FamilleRole" Type="ProjectDB.Store.FamilleRoles" Multiplicity="1" />
+    <End Role="Member" Type="ProjectDB.Store.Membres" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FamilleRole">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Member">
+        <PropertyRef Name="FamilyRole_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AspNetUserRoles_AspNetRoles">
+    <End Role="AspNetRoles" Type="ProjectDB.Store.AspNetRoles" Multiplicity="1" />
+    <End Role="AspNetUserRoles" Type="ProjectDB.Store.AspNetUserRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetRoles">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserRoles">
+        <PropertyRef Name="Role_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AspNetUserRoles_AspNetUsers">
+    <End Role="AspNetUserRoles" Type="ProjectDB.Store.AspNetUserRoles" Multiplicity="*" />
+    <End Role="AspNetUsers" Type="ProjectDB.Store.AspNetUsers" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserRoles">
+        <PropertyRef Name="User_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="ProjectDB" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="ProjectDBContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AspNetRoles" EntityType="ProjectDB.AspNetRoles" />
+          <EntitySet Name="AspNetUserClaims" EntityType="ProjectDB.AspNetUserClaims" />
+          <EntitySet Name="AspNetUserLogins" EntityType="ProjectDB.AspNetUserLogins" />
+          <EntitySet Name="AspNetUsers" EntityType="ProjectDB.AspNetUsers" />
+          <EntitySet Name="Familles" EntityType="ProjectDB.Family" />
+          <EntitySet Name="Membres" EntityType="ProjectDB.Member" />
+          <EntitySet Name="Version" EntityType="ProjectDB.Version" />
+          <EntitySet Name="Plannings" EntityType="ProjectDB.Planning" />
+          <EntitySet Name="FamilleRoles" EntityType="ProjectDB.FamilyRole" />
+          <AssociationSet Name="AspNetUserRole" Association="ProjectDB.AspNetUserRoles">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="ProjectDB.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="ProjectDB.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FamilyPlanning" Association="ProjectDB.FamilyPlanning">
+            <End Role="Famille" EntitySet="Familles" />
+            <End Role="Planning" EntitySet="Plannings" />
+          </AssociationSet>
+          <AssociationSet Name="FamilyMember" Association="ProjectDB.FamilleMember">
+            <End Role="Famille" EntitySet="Familles" />
+            <End Role="Membre" EntitySet="Membres" />
+          </AssociationSet>
+          <AssociationSet Name="AspNetUsersMembre" Association="ProjectDB.AspNetUsersMembre">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Membre" EntitySet="Membres" />
+          </AssociationSet>
+          <AssociationSet Name="FamilyRoleMember" Association="ProjectDB.FamilyRoleMember">
+            <End Role="FamilleRole" EntitySet="FamilleRoles" />
+            <End Role="Member" EntitySet="Membres" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User" Relationship="ProjectDB.AspNetUserRoles" FromRole="AspNetRoles" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="ProjectDB.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaims" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="ProjectDB.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogins" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Role" Relationship="ProjectDB.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
+          <NavigationProperty Name="AspNetUserClaims" Relationship="ProjectDB.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="ProjectDB.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
+          <NavigationProperty Name="Members" Relationship="ProjectDB.AspNetUsersMembre" FromRole="AspNetUsers" ToRole="Membre" />
+        </EntityType>
+        <EntityType Name="Family">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Titre" Type="String" Nullable="false" />
+          <NavigationProperty Name="Plannings" Relationship="ProjectDB.FamilyPlanning" FromRole="Famille" ToRole="Planning" />
+          <NavigationProperty Name="Members" Relationship="ProjectDB.FamilleMember" FromRole="Famille" ToRole="Membre" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmailInvitation" Type="String" Nullable="true" MaxLength="256" />
+          <Property Name="SecurityTokenInvitation" Type="Guid" Nullable="true" />
+          <NavigationProperty Name="Famille" Relationship="ProjectDB.FamilleMember" FromRole="Membre" ToRole="Famille" />
+          <NavigationProperty Name="AspNetUser" Relationship="ProjectDB.AspNetUsersMembre" FromRole="Membre" ToRole="AspNetUsers" />
+          <NavigationProperty Name="FamilyRole" Relationship="ProjectDB.FamilyRoleMember" FromRole="Member" ToRole="FamilleRole" />
+        </EntityType>
+        <EntityType Name="Version">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Value" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Planning">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Titre" Type="String" Nullable="false" MaxLength="25" />
+          <NavigationProperty Name="Family" Relationship="ProjectDB.FamilyPlanning" FromRole="Planning" ToRole="Famille" />
+        </EntityType>
+        <EntityType Name="FamilyRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="Titre" Type="String" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <Association Name="AspNetUserRoles">
+          <End Type="ProjectDB.AspNetRoles" Role="AspNetRoles" Multiplicity="*" />
+          <End Type="ProjectDB.AspNetUsers" Role="AspNetUsers" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Type="ProjectDB.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
+          <End Type="ProjectDB.AspNetUserClaims" Role="AspNetUserClaims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Type="ProjectDB.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
+          <End Type="ProjectDB.AspNetUserLogins" Role="AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FamilyPlanning">
+          <End Type="ProjectDB.Family" Role="Famille" Multiplicity="1" />
+          <End Type="ProjectDB.Planning" Role="Planning" Multiplicity="*" />
+        </Association>
+        <Association Name="FamilleMember">
+          <End Type="ProjectDB.Family" Role="Famille" Multiplicity="1" />
+          <End Type="ProjectDB.Member" Role="Membre" Multiplicity="*" />
+        </Association>
+        <Association Name="AspNetUsersMembre">
+          <End Type="ProjectDB.AspNetUsers" Role="AspNetUsers" Multiplicity="0..1" />
+          <End Type="ProjectDB.Member" Role="Membre" Multiplicity="*" />
+        </Association>
+        <Association Name="FamilyRoleMember">
+          <End Type="ProjectDB.FamilyRole" Role="FamilleRole" Multiplicity="1" />
+          <End Type="ProjectDB.Member" Role="Member" Multiplicity="*" />
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ProjectDBStoreContainer" CdmEntityContainer="ProjectDBContainer">
+    <EntitySetMapping Name="AspNetRoles">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.AspNetRoles)">
+        <MappingFragment StoreEntitySet="AspNetRoles">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUserClaims">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.AspNetUserClaims)">
+        <MappingFragment StoreEntitySet="AspNetUserClaims">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+          <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUserLogins">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.AspNetUserLogins)">
+        <MappingFragment StoreEntitySet="AspNetUserLogins">
+          <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+          <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUsers">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.AspNetUsers)">
+        <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+          <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+          <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+          <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+          <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Familles">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.Family)">
+        <MappingFragment StoreEntitySet="Familles">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Titre" ColumnName="Titre" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Membres">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.Member)">
+        <MappingFragment StoreEntitySet="Membres">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="EmailInvitation" ColumnName="EmailInvitation" />
+          <ScalarProperty Name="SecurityTokenInvitation" ColumnName="SecurityTokenInvitation" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Version">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.Version)">
+        <MappingFragment StoreEntitySet="Version">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Plannings">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.Planning)">
+        <MappingFragment StoreEntitySet="Plannings">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Titre" ColumnName="Titre" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FamilleRoles">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.FamilyRole)">
+        <MappingFragment StoreEntitySet="FamilleRoles">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Titre" ColumnName="Titre" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="AspNetUserRole" TypeName="ProjectDB.AspNetUserRoles" StoreEntitySet="AspNetUserRole">
+      <EndProperty Name="AspNetRoles">
+        <ScalarProperty Name="Id" ColumnName="Role_Id" />
+      </EndProperty>
+      <EndProperty Name="AspNetUsers">
+        <ScalarProperty Name="Id" ColumnName="User_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="FamilyPlanning" TypeName="ProjectDB.FamilyPlanning" StoreEntitySet="Plannings">
+      <EndProperty Name="Famille">
+        <ScalarProperty Name="Id" ColumnName="Family_Id" />
+      </EndProperty>
+      <EndProperty Name="Planning">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="FamilyMember" TypeName="ProjectDB.FamilleMember" StoreEntitySet="Membres">
+      <EndProperty Name="Famille">
+        <ScalarProperty Name="Id" ColumnName="Famille_Id" />
+      </EndProperty>
+      <EndProperty Name="Membre">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="AspNetUsersMembre" TypeName="ProjectDB.AspNetUsersMembre" StoreEntitySet="Membres">
+      <EndProperty Name="AspNetUsers">
+        <ScalarProperty Name="Id" ColumnName="AspNetUser_Id" />
+      </EndProperty>
+      <EndProperty Name="Membre">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+      <Condition ColumnName="AspNetUser_Id" IsNull="false" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="FamilyRoleMember" TypeName="ProjectDB.FamilyRoleMember" StoreEntitySet="Membres">
+      <EndProperty Name="FamilleRole">
+        <ScalarProperty Name="Id" ColumnName="FamilyRole_Id" />
+      </EndProperty>
+      <EndProperty Name="Member">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

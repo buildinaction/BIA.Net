@@ -1,0 +1,2 @@
+﻿To transform several chained page in dialog 
+=> with MVC use BIA.Net.Dialog.MVC nugetpackage

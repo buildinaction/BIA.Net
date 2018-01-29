@@ -1,0 +1,13 @@
+-- --------------------------------------------------
+-- Creating all Index
+-- --------------------------------------------------
+
+<# // Sample to remove // You can use Sql to create index: #>
+--CREATE UNIQUE NONCLUSTERED INDEX [UX_Login] ON [dbo].[AspNetUsers]
+--(
+--	[Login] ASC
+--)
+--GO
+
+<# // Sample to remove // Or refere to an other Sql file (to use it remove the ' // ' in folowing line):#>
+<# // @ include file="..\Sql\Create_index.sql" #>

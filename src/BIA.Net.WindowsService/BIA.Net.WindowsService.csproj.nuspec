@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>$id$</id>
+        <version>1.6.2</version>
+        <title>$title$</title>
+        <authors>BIA Team (Leader: Gwenael Fillon)</authors>
+        <owners>BIA</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Common class for Windows Service development</description>
+        <copyright>Copyright © BIA 2017</copyright>
+        <tags>.Net MVC</tags>
+    </metadata>
+</package>

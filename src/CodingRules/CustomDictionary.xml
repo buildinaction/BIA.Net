@@ -1,0 +1,25 @@
+<!--How to: Customize the Code Analysis Dictionary: https://msdn.microsoft.com/en-us/library/bb514188.aspx -->
+<Dictionary>
+	<Words>
+		<Unrecognized>
+      <Word>sampleword</Word>
+		</Unrecognized>
+		<Recognized>
+      <Word>uams</Word>
+    </Recognized>
+		<Deprecated>
+			<Term PreferredAlternate=""></Term>
+		</Deprecated>
+		<Compound>
+			<Term CompoundAlternate="OnSite">onsite</Term>
+		</Compound>
+		<DiscreteExceptions>
+			<Term></Term>
+		</DiscreteExceptions>
+	</Words>
+	<Acronyms>
+		<CasingExceptions>
+      <Acronym>BIA</Acronym>
+    </CasingExceptions>
+	</Acronyms>
+</Dictionary>

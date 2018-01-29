@@ -1,0 +1,42 @@
+﻿@model IEnumerable<WebApplication_BIA.Net_Test.Models.Family>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create",new { }, new { BIADialogLink = "Type:Non-Modal" })
+</p>
+
+@*<div DialogRefreshUrl="@Url.Action("_List")" DialogRefreshOnFormValidated="@Url.Action("Create");@Url.Action("Edit");@Url.Action("Delete")">*@
+<div BIADialogRefresh="Url:@Url.Action("_List");OnFormValidated:@Url.Action("Create")|@Url.Action("Edit")|@Url.Action("Delete")" >
+    @Html.Partial("_List", Model)
+</div>
+
+
+@* Moved to _List partial View
+    
+    <table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Titre)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Titre)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>*@

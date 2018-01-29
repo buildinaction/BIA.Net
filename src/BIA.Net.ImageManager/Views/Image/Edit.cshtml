@@ -1,0 +1,56 @@
+﻿@model BIA.Net.ImageManager.ViewModel.UploadFileVM
+
+@{    ViewBag.Title = @TextResources.Edit + " " + @Html.Translate(Model.EntityName);
+}
+
+<h2>@(@TextResources.Edit + " " + Html.Translate(Model.EntityName))</h2>
+<br />
+<br />
+@using (Html.BeginForm("Edit", "Image", FormMethod.Post, new { id = "EditImageForm", enctype = "multipart/form-data", @class = "PreventDuplicateRequest" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.EntityId)
+        @Html.HiddenFor(model => model.EntityName)
+
+        <div>
+            @Html.T_LabelFor(model => model.UploadFile, htmlAttributes: new { @class = "control-label col-md-2" })
+        </div>
+        <div>
+            @Html.TextBoxFor(m => m.UploadFile, new { type = "file", accept = "image/" })
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("Delete", "Image", FormMethod.Post, new { id = "DeleteImageForm", enctype = "multipart/form-data", @class = "PreventDuplicateRequest" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.EntityId)
+    @Html.HiddenFor(model => model.EntityName)
+}
+
+<hr />
+<div style="width:33%">
+    @{ Html.RenderAction("_Details", "Image", new { entityName = Model.EntityName, id = Model.EntityId }); }
+</div>
+
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" onclick="location.href='@Url.Action("Index", Model.EntityName)'" class="btn btn-2">@TextResources.BackToList</button>
+        </div>
+        <div class="btn-action">
+            <button onclick="$('#DeleteImageForm').submit();" class="btn btn-2">@TextResources.Delete</button>
+        </div>
+        <div class="btn-action">
+            <button onclick="$('#EditImageForm').submit();" class="btn btn-2">@TextResources.Save</button>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

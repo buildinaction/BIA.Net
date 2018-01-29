@@ -1,0 +1,101 @@
+﻿/*Padding to avoid moving after javascript datatable*/
+.dataTable {
+  padding-top : 31px;
+  padding-bottom : calc(37px + 0.25em);
+}
+
+.dataTables_wrapper > .dataTable {
+  padding-top : 0px;
+  padding-bottom : 0px;
+}
+
+
+
+/*Class to align filter over the datatable*/
+.dataTables_filter > label > input {width:195px; height:26px}
+.col-dtf-right > label > div > button, .col-dtf-right > label > select, .col-dtf-right > label > input:not([type=checkbox]),
+.col-dtf-center > label > div > button, .col-dtf-right > label > select, .col-dtf-center > label > input:not([type=checkbox]),
+.col-dtf-right > label > div > button, .col-dtf-right > label > select, .col-dtf-right > label > input:not([type=checkbox]) {
+    margin-left: 7px; 
+    width:195px; 
+    height:26px
+}
+.col-dtf-right > label > input[type=checkbox],
+.col-dtf-center > label > input[type=checkbox],
+.col-dtf-right > label > input[type=checkbox] {
+    top: 3px;
+    position: relative;
+    margin-left: 7px; 
+    width:16px; 
+    height:16px
+}
+.col-dtf-right > label,
+.col-dtf-center > label,
+.col-dtf-right > label { 
+    height:26px
+}
+
+.col-dtf-1, .col-dtf-2, .col-dtf-3, .col-dtf-4, .col-dtf-5, .col-dtf-6, .col-dtf-7, .col-dtf-8, .col-dtf-9, .col-dtf-10, .col-dtf-11, .col-dtf-12 {
+    float: left;
+    color: #333;
+    white-space: nowrap;
+    height:31px;
+}
+.col-dtf-12 {
+width: 100%;
+}
+.col-dtf-11 {
+width: 91.66666667%;
+}
+.col-dtf-10 {
+width: 83.33333333%;
+}
+.col-dtf-9 {
+width: 75%;
+}
+.col-dtf-8 {
+width: 66.66666667%;
+}
+.col-dtf-7 {
+width: 58.33333333%;
+}
+.col-dtf-6 {
+width: 50%;
+}
+.col-dtf-5 {
+width: 41.66666667%;
+}
+.col-dtf-4 {
+width: 33.33333333%;
+}
+.col-dtf-3 {
+width: 25%;
+}
+.col-dtf-2 {
+width: 16.66666667%;
+}
+.col-dtf-1 {
+width: 8.33333333%;
+}
+
+.col-dtf-center {
+  text-align: center;
+}
+.col-dtf-left {
+  text-align: left;
+}
+.col-dtf-right {
+  text-align: right;
+}
+
+@media screen and (max-width: 640px) {
+  .col-dtf-1, .col-dtf-2, .col-dtf-3, .col-dtf-4, .col-dtf-5, .col-dtf-6, .col-dtf-7, .col-dtf-8, .col-dtf-9, .col-dtf-10, .col-dtf-11, .col-dtf-12 {
+        float: none;
+        white-space:inherit;
+        width : 100%;
+  }
+  .col-dtf-center, .col-dtf-left, .col-dtf-right {
+    text-align: center;
+    margin-top: 0.5em;
+  }
+}

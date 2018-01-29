@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a513c5a3671742b8bcb2eb4ae024323d" Name="Diagram1" ZoomLevel="82" >
+        <EntityTypeShape EntityType="ProjectDB.AspNetRoles" Width="1.5" PointX="0.5" PointY="2.875" FillColor="Fuchsia" />
+        <EntityTypeShape EntityType="ProjectDB.AspNetUserClaims" Width="1.5" PointX="5" PointY="1.5" FillColor="Fuchsia" />
+        <EntityTypeShape EntityType="ProjectDB.AspNetUserLogins" Width="1.5" PointX="5" PointY="4" FillColor="Fuchsia" />
+        <EntityTypeShape EntityType="ProjectDB.AspNetUsers" Width="1.5" PointX="2.75" PointY="1.75" FillColor="Fuchsia" />
+        <EntityTypeShape EntityType="ProjectDB.Family" Width="1.5" PointX="7.375" PointY="6.375" />
+        <EntityTypeShape EntityType="ProjectDB.Member" Width="1.5" PointX="3" PointY="6.375" />
+        <EntityTypeShape EntityType="ProjectDB.Version" Width="1.5" PointX="0.5" PointY="0.875" />
+        <EntityTypeShape EntityType="ProjectDB.Planning" Width="1.5" PointX="10.125" PointY="6.5" />
+        <EntityTypeShape EntityType="ProjectDB.FamilyRole" Width="1.5" PointX="3.125" PointY="9.625" />
+        <AssociationConnector Association="ProjectDB.AspNetUserRoles" />
+        <AssociationConnector Association="ProjectDB.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="ProjectDB.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="ProjectDB.FamilyPlanning" />
+        <AssociationConnector Association="ProjectDB.FamilleMember" />
+        <AssociationConnector Association="ProjectDB.AspNetUsersMembre" />
+        <AssociationConnector Association="ProjectDB.FamilyRoleMember" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

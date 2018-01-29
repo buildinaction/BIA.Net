@@ -1,0 +1,6 @@
+﻿@model BIA.Net.ImageManager.DTO.FileDTO
+
+@if (Model != null)
+{
+    <img src="data:image;base64,@System.Convert.ToBase64String(Model.Binary)" class="img-responsive">
+}

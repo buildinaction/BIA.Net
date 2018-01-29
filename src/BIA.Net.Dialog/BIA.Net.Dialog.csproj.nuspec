@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>$id$</id>
+        <version>1.7.0</version>
+        <title>$title$</title>
+        <authors>$author$</authors>
+        <owners>BIA</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Transform linked HTML page in pop-in to have interactive UI without changing page.
+- HTML page can be open in dialog or in full page with the same code.
+- Refresh dynamicaly page elements updated in popups.
+- No limite in number of pop-in levels. (= can open a pop-in in a pop-in)
+- It use jquery.UI to display pop-in.</description>
+        <copyright>BIA</copyright>
+        <tags>Pop-up Dialog MVC .Net</tags>
+        <dependencies>
+            <dependency id="jQuery.UI.Combined" version="1.12.1" />
+        </dependencies>
+    </metadata>
+</package>

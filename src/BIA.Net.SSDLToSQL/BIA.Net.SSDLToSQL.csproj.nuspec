@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>$id$</id>
+        <version>1.7.1</version>
+        <title>$title$</title>
+        <authors>BIA Team (Leader: Gwenael Fillon)</authors>
+        <owners>BIA</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Replace the generation of the sql in Entity Framework 6 to manage:
+- Default value used in SQL.
+- Use a Post SQL (to include Index...).
+        </description>
+        <copyright>Copyright © BIA 2018</copyright>
+        <tags>Entity Framework 6 SSDLToSQL</tags>
+    </metadata>
+    <files>
+        <file src="tools/**/*.*" target="\" />
+    </files>
+</package>
