@@ -67,9 +67,6 @@
       <Link>CustomDictionary.xml</Link>
       <SubType>Designer</SubType>
     </CodeAnalysisDictionary>
-    <AdditionalFiles Include="..\CodingRules\stylecop.json">
-      <Link>stylecop.json</Link>
-    </AdditionalFiles>
     <Compile Include="CustomMailMessage.cs" />
     <Compile Include="Log\CustomRollingFileAppender.cs" />
     <Compile Include="Helpers\ListHelper.cs" />
@@ -92,11 +89,6 @@
     <None Include="_CreateNewNuGetPackage\DoNotModify\New-NuGetPackage.ps1" />
     <None Include="_CreateNewNuGetPackage\DoNotModify\UploadNuGetPackage.ps1" />
     <None Include="_CreateNewNuGetPackage\RunMeToUploadNuGetPackage.cmd" />
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
     <None Include="_CreateNewNuGetPackage\DoNotModify\NuGet.exe" />

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>$id$</id>
-        <version>1.7.0</version>
+        <version>1.7.2</version>
         <title>$title$</title>
         <authors>$author$</authors>
         <owners>BIA</owners>
@@ -17,5 +17,7 @@
         <dependencies>
             <dependency id="jQuery.UI.Combined" version="1.12.1" />
         </dependencies>
+        <projectUrl>https://github.com/BIAdotNet/BIA.Net</projectUrl>
+        <iconUrl>https://raw.githubusercontent.com/BIAdotNet/BIA.Net/master/img/LogoBIA.png</iconUrl>
     </metadata>
 </package>

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>$id$</id>
-        <version>1.6.2</version>
+        <version>1.7.2</version>
         <title>$title$</title>
         <authors>BIA Team (Leader: Gwenael Fillon)</authors>
         <owners>BIA</owners>
@@ -10,5 +10,7 @@
         <description>Common class for Windows Service development</description>
         <copyright>Copyright © BIA 2017</copyright>
         <tags>.Net MVC</tags>
+        <projectUrl>https://github.com/BIAdotNet/BIA.Net</projectUrl>
+        <iconUrl>https://raw.githubusercontent.com/BIAdotNet/BIA.Net/master/img/LogoBIA.png</iconUrl>
     </metadata>
 </package>

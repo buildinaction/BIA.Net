@@ -43,8 +43,9 @@
     <LangVersion>5</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BIA.Net.Common">
-      <HintPath>..\packages\BIA.Net.Common.0.0.6\lib\net452\BIA.Net.Common.dll</HintPath>
+    <Reference Include="BIA.Net.Common, Version=0.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BIA.Net.Common.1.7.2\lib\net452\BIA.Net.Common.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
@@ -78,9 +79,6 @@
       <Link>CustomDictionary.xml</Link>
       <SubType>Designer</SubType>
     </CodeAnalysisDictionary>
-    <AdditionalFiles Include="..\CodingRules\stylecop.json">
-      <Link>stylecop.json</Link>
-    </AdditionalFiles>
     <Compile Include="DAL\EntityKeyHelper.cs" />
     <Compile Include="DAL\EntityPropHelper.cs" />
     <Compile Include="DAL\EntityTypeHelper.cs" />

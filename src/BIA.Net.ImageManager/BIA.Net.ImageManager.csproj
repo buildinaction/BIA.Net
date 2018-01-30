@@ -34,12 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BIA.Net.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BIA.Net.Business.0.1.4\lib\net452\BIA.Net.Business.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="BIA.Net.MVC, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BIA.Net.MVC.1.7.0\lib\net452\BIA.Net.MVC.dll</HintPath>
+      <HintPath>..\packages\BIA.Net.MVC.1.7.2\lib\net452\BIA.Net.MVC.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -96,13 +92,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="BIA.Net.ImageManager.csproj.nuspec" />
-    <None Include="packages.config" />
-    <Content Include="Content\BIA.Net\FilterDataTable.css" />
-    <Content Include="Scripts\BIA.Net\DataTablesHelper.js" />
-    <Content Include="Scripts\BIA.Net\DataTablesUtility.js" />
-    <Content Include="Scripts\BIA.Net\ListAjax.js" />
-    <Content Include="Scripts\BIA.Net\Localization.js" />
-    <Content Include="Scripts\BIA.Net\PreventDuplicateRequest.js" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Content\BIA.Net\FilterDataTable.css" />
+    <None Include="Scripts\BIA.Net\DataTablesHelper.js" />
+    <None Include="Scripts\BIA.Net\DataTablesUtility.js" />
+    <None Include="Scripts\BIA.Net\ListAjax.js" />
+    <None Include="Scripts\BIA.Net\Localization.js" />
+    <None Include="Scripts\BIA.Net\PreventDuplicateRequest.js" />
     <Content Include="Views\Image\Edit.cshtml" />
     <Content Include="Views\Image\_Details.cshtml" />
     <None Include="Views\Shared\BIA.Net\_Localization.cshtml" />

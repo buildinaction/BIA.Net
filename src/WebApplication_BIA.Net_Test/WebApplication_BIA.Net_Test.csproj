@@ -50,11 +50,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BIA.Net.Dialog, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BIA.Net.Dialog.1.0.0\lib\net451\BIA.Net.Dialog.dll</HintPath>
+      <HintPath>..\packages\BIA.Net.Dialog.1.7.2\lib\net451\BIA.Net.Dialog.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="BIA.Net.Dialog.MVC, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BIA.Net.Dialog.MVC.1.0.0\lib\net451\BIA.Net.Dialog.MVC.dll</HintPath>
+      <HintPath>..\packages\BIA.Net.Dialog.MVC.1.7.2\lib\net451\BIA.Net.Dialog.MVC.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -239,9 +239,9 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\BIA.Net\Dialog.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\BIA.Net\Dialog.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -301,6 +301,8 @@
     <Content Include="Models\Secure.sql" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="_Guides\BIA.Net.Dialog.MVC.txt" />
+    <Content Include="_Guides\BIA.Net.Dialog.txt" />
     <EntityDeploy Include="Models\ProjectDB.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ProjectDB.Designer.cs</LastGenOutput>
@@ -384,7 +386,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Notices\" />
-    <Folder Include="_Guides\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

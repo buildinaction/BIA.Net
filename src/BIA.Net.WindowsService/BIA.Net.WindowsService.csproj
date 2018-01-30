@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BIA.Net.Common, Version=0.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BIA.Net.Common.1.6.2\lib\net452\BIA.Net.Common.dll</HintPath>
+      <HintPath>..\packages\BIA.Net.Common.1.7.2\lib\net452\BIA.Net.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
