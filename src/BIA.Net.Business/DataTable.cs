@@ -12,7 +12,6 @@ namespace BIA.Net.Business
 {
     public class DataTable
     {
-
         public static JQueryDataTableAnswerModel GetPageTableData<T, ProjectDBContext>(IGenericRepository<T, ProjectDBContext> service, JQueryDataTableParameterModel parameter, IQueryable<T> query = null)
                                 where T : ObjectRemap, new()
         {
