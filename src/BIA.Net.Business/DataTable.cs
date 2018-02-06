@@ -8,6 +8,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Useless project
+/// </summary>
 namespace BIA.Net.Business
 {
     public class DataTable
