@@ -1,4 +1,7 @@
-﻿
+﻿// <copyright file="TGenericContext.cs" company="BIA.NET">
+// Copyright (c) BIA.NET. All rights reserved.
+// </copyright>
+
 namespace BIA.Net.Model.DAL
 {
     using System;
@@ -11,11 +14,12 @@ namespace BIA.Net.Model.DAL
     {
         public readonly object SyncRootDb = new object();
 
-        public TDBContainer() { }
+        public TDBContainer() {
+        }
 
         public TDBContainer(ProjectDBContext pDB, bool isMoq = false)
         {
-            _db = pDB;
+            this._db = pDB;
             this.IsMoq = isMoq;
         }
 
@@ -27,7 +31,7 @@ namespace BIA.Net.Model.DAL
             {
                 if (this._db == null)
                 {
-                    lock (SyncRootDb)
+                    lock (this.SyncRootDb)
                     {
                         if (this._db == null)
                         {
@@ -36,17 +40,16 @@ namespace BIA.Net.Model.DAL
 #if DEBUG
                             this._db.Database.Log = message => System.Diagnostics.Debug.WriteLine(message);
 #endif
-
                         }
                     }
                 }
 
-                return _db;
+                return this._db;
             }
 
             set
             {
-                _db = value;
+                this._db = value;
             }
         }
 
@@ -55,17 +58,17 @@ namespace BIA.Net.Model.DAL
 
         public void Dispose()
         {
-            if (_db != null)
+            if (this._db != null)
             {
-                _db.Dispose();
+                this._db.Dispose();
             }
 
-            _db = null;
+            this._db = null;
         }
     }
 
     public class TGenericContext<ProjectDBContext, ProjectDBContainer>
-        where ProjectDBContext : DbContext, new() 
+        where ProjectDBContext : DbContext, new()
         where ProjectDBContainer : TDBContainer<ProjectDBContext>, new()
     {
         private static readonly object SyncRootDbs = new object();

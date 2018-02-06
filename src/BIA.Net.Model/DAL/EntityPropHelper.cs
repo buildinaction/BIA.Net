@@ -1,19 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Reflection;
+﻿// <copyright file="EntityPropHelper.cs" company="BIA.NET">
+// Copyright (c) BIA.NET. All rights reserved.
+// </copyright>
 
 namespace BIA.Net.Model.DAL
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Data.Entity.Core.Objects;
+    using System.Data.Entity.Infrastructure;
+    using System.Linq;
+    using System.Reflection;
+
     public sealed class EntityPropHelper
     {
         private static readonly Lazy<EntityPropHelper> LazyInstance = new Lazy<EntityPropHelper>(() => new EntityPropHelper());
         private static readonly Dictionary<Type, string[]> Dict = new Dictionary<Type, string[]>();
         private static readonly Dictionary<Type, string[]> DictNavProp = new Dictionary<Type, string[]>();
-        private EntityPropHelper() { }
+
+        private EntityPropHelper() {
+        }
 
         public static EntityPropHelper Instance
         {

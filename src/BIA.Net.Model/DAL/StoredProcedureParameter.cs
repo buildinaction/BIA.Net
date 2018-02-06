@@ -1,4 +1,8 @@
-﻿namespace BIA.Net.Model.DAL
+﻿// <copyright file="StoredProcedureParameter.cs" company="BIA.NET">
+// Copyright (c) BIA.NET. All rights reserved.
+// </copyright>
+
+namespace BIA.Net.Model.DAL
 {
     using System.Collections.Generic;
 

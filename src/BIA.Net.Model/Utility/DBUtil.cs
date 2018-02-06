@@ -1,11 +1,15 @@
-﻿using BIA.Net.Common;
-using System;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Text;
+﻿// <copyright file="DBUtil.cs" company="BIA.NET">
+// Copyright (c) BIA.NET. All rights reserved.
+// </copyright>
 
 namespace BIA.Net.Model.Utility
 {
+    using System;
+    using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
+    using System.Text;
+    using Common;
+
     public class DBUtil
     {
         public static void ReformatDBConstraintError(System.Data.Entity.Validation.DbEntityValidationException dbEx)
@@ -16,19 +20,21 @@ namespace BIA.Net.Model.Utility
             {
                 foreach (var validationError in validationErrors.ValidationErrors)
                 {
-                    string message = string.Format("{0}:{1}",
+                    string message = string.Format(
+                        "{0}:{1}",
                         validationErrors.Entry.Entity.ToString(),
                         validationError.ErrorMessage);
                     builder.Append(message + "\n");
+
                     // raise a new exception nesting
                     // the current instance as InnerException
                     TraceManager.Error("DBUtil", "ReformatDBConstraintError", message);
                 }
             }
+
             raise = new InvalidOperationException(builder.ToString(), raise);
             throw raise;
         }
-
 
         public static void ReformatDBUpdateError(DbUpdateException dbEx)
         {
@@ -37,10 +43,15 @@ namespace BIA.Net.Model.Utility
             Exception exp = raise;
             while (exp.InnerException != null)
             {
-                if (!string.IsNullOrEmpty(message)) message = message + " \n\n";
+                if (!string.IsNullOrEmpty(message))
+                {
+                    message = message + " \n\n";
+                }
+
                 message += exp.InnerException.Message;
                 exp = exp.InnerException;
             }
+
             TraceManager.Error("DBUtil", "ReformatDBUpdateError", message);
             raise = new InvalidOperationException(message, raise);
             throw raise;
@@ -56,9 +67,9 @@ namespace BIA.Net.Model.Utility
                 {
                     builder.AppendFormat("Type: {0} was part of the problem. \n", result.Entity.GetType().Name);
                 }
+
                 if (dbu.InnerException != null)
                 {
-
                     Exception cycleEx = dbu;
                     while (cycleEx.InnerException != null)
                     {
@@ -78,25 +89,26 @@ namespace BIA.Net.Model.Utility
 
         public static void UndoChange(DbContext context)
         {
-            // Undo the changes of the all entries. 
+            // Undo the changes of the all entries.
             foreach (DbEntityEntry entry in context.ChangeTracker.Entries())
             {
                 switch (entry.State)
                 {
-                    // Under the covers, changing the state of an entity from  
-                    // Modified to Unchanged first sets the values of all  
-                    // properties to the original values that were read from  
-                    // the database when it was queried, and then marks the  
-                    // entity as Unchanged. This will also reject changes to  
-                    // FK relationships since the original value of the FK  
-                    // will be restored. 
+                    // Under the covers, changing the state of an entity from
+                    // Modified to Unchanged first sets the values of all
+                    // properties to the original values that were read from
+                    // the database when it was queried, and then marks the
+                    // entity as Unchanged. This will also reject changes to
+                    // FK relationships since the original value of the FK
+                    // will be restored.
                     case EntityState.Modified:
                         entry.State = EntityState.Unchanged;
                         break;
                     case EntityState.Added:
                         entry.State = EntityState.Detached;
                         break;
-                    // If the EntityState is the Deleted, reload the date from the database.   
+
+                    // If the EntityState is the Deleted, reload the date from the database.
                     case EntityState.Deleted:
                         entry.Reload();
                         break;

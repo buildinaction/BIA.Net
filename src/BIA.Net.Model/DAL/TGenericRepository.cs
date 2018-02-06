@@ -4,9 +4,6 @@
 
 namespace BIA.Net.Model
 {
-    using BIA.Net.Common;
-    using BIA.Net.Model.DAL;
-    using BIA.Net.Model.Utility;
     using System;
     using System.Collections.Generic;
     using System.Data;
@@ -21,6 +18,9 @@ namespace BIA.Net.Model
     using System.Linq.Dynamic;
     using System.Linq.Expressions;
     using System.Reflection;
+    using Common;
+    using DAL;
+    using Utility;
 
     /// <summary>
     /// Internal flag to perform correct action durring cascade
