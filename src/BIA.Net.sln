@@ -29,6 +29,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Web", "BIA.Net.Web\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.SSDLToSQL", "BIA.Net.SSDLToSQL\BIA.Net.SSDLToSQL.csproj", "{19A3111B-301D-4BCA-B694-49BBA11D1D9A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodingRules", "CodingRules", "{7DF5119E-2728-452C-B92F-97D7BD39135C}"
+	ProjectSection(SolutionItems) = preProject
+		CodingRules\CustomDictionary.xml = CodingRules\CustomDictionary.xml
+		CodingRules\stylecop.json = CodingRules\stylecop.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,48 +95,5 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8A4BF60E-E292-462B-AFFC-9604A9FA4E1D} = {8105F07E-D535-49ED-9E4A-87D49B2081B2}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 13
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = 
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = BIA.Net.Business\\BIA.Net.Business.csproj
-		SccProjectName1 = BIA.Net.Business
-		SccLocalPath1 = BIA.Net.Business
-		SccProjectUniqueName2 = BIA.Net.Common.Tests\\BIA.Net.Common.Tests.csproj
-		SccProjectTopLevelParentUniqueName2 = BIA.Net.sln
-		SccProjectName2 = BIA.Net.Common.Tests
-		SccLocalPath2 = BIA.Net.Common.Tests
-		SccProjectUniqueName3 = BIA.Net.Common\\BIA.Net.Common.csproj
-		SccProjectName3 = BIA.Net.Common
-		SccLocalPath3 = BIA.Net.Common
-		SccProjectUniqueName4 = BIA.Net.Model\\BIA.Net.Model.csproj
-		SccProjectName4 = BIA.Net.Model
-		SccLocalPath4 = BIA.Net.Model
-		SccProjectUniqueName5 = BIA.Net.MVC\\BIA.Net.MVC.csproj
-		SccProjectName5 = BIA.Net.MVC
-		SccLocalPath5 = BIA.Net.MVC
-		SccProjectUniqueName6 = BIA.Net.Dialog\\BIA.Net.Dialog.csproj
-		SccProjectName6 = BIA.Net.Dialog
-		SccLocalPath6 = BIA.Net.Dialog
-		SccProjectUniqueName7 = BIA.Net.Dialog.MVC\\BIA.Net.Dialog.MVC.csproj
-		SccProjectName7 = BIA.Net.Dialog.MVC
-		SccLocalPath7 = BIA.Net.Dialog.MVC
-		SccProjectUniqueName8 = WebApplication_BIA.Net_Test\\WebApplication_BIA.Net_Test.csproj
-		SccProjectName8 = WebApplication_BIA.Net_Test
-		SccLocalPath8 = WebApplication_BIA.Net_Test
-		SccProjectUniqueName9 = BIA.Net.ImageManager\\BIA.Net.ImageManager.csproj
-		SccProjectName9 = BIA.Net.ImageManager
-		SccLocalPath9 = BIA.Net.ImageManager
-		SccProjectUniqueName10 = BIA.Net.WindowsService\\BIA.Net.WindowsService.csproj
-		SccProjectName10 = BIA.Net.WindowsService
-		SccLocalPath10 = BIA.Net.WindowsService
-		SccProjectUniqueName11 = BIA.Net.Web\\BIA.Net.Web.csproj
-		SccProjectName11 = BIA.Net.Web
-		SccLocalPath11 = BIA.Net.Web
-		SccProjectUniqueName12 = BIA.Net.SSDLToSQL\\BIA.Net.SSDLToSQL.csproj
-		SccProjectName12 = BIA.Net.SSDLToSQL
-		SccLocalPath12 = BIA.Net.SSDLToSQL
 	EndGlobalSection
 EndGlobal
