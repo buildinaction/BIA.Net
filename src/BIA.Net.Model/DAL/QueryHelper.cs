@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.SqlServer;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="QueryHelper.cs" company="BIA.NET">
+// Copyright (c) BIA.NET. All rights reserved.
+// </copyright>
 
 namespace BIA.Net.Model.DAL
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity.SqlServer;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Reflection;
+
     public static class QueryHelper
     {
         public static IOrderedQueryable<TItem> OrderBy<TItem>(IQueryable<TItem> source, string propertyName, bool descending)
@@ -55,7 +57,6 @@ namespace BIA.Net.Model.DAL
                 if (propertyExpression.Type == typeof(DateTime) || propertyExpression.Type == typeof(DateTime?))
                 {
                     propertyExpression = DateTimeExpressionToString(propertyExpression);
-
                 }
                 else
                 {
@@ -85,7 +86,7 @@ namespace BIA.Net.Model.DAL
         private static Expression DateTimeExpressionToString(Expression propertyExpression)
         {
             MethodInfo toStringMethod = typeof(object).GetMethod("ToString");
-            MethodInfo sqlFunctionDatePartMethod = typeof(SqlFunctions).GetMethod("DatePart", new[] { typeof(string), typeof(Nullable<DateTime>) });
+            MethodInfo sqlFunctionDatePartMethod = typeof(SqlFunctions).GetMethod("DatePart", new[] { typeof(string), typeof(DateTime?) });
             MethodInfo stringConcat = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
 
             Expression dayExpression = AddZeroForDateFormat(Expression.Call(Expression.Call(sqlFunctionDatePartMethod, Expression.Constant("day"), Expression.Convert(propertyExpression, typeof(DateTime?))), toStringMethod));
@@ -120,7 +121,8 @@ namespace BIA.Net.Model.DAL
         private static Expression AddZeroForDateFormat(Expression expression)
         {
             MethodInfo stringConcat = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
-            return Expression.Condition(Expression.Equal(Expression.Property(expression, "Length"), Expression.Constant(2)),
+            return Expression.Condition(
+                Expression.Equal(Expression.Property(expression, "Length"), Expression.Constant(2)),
                 expression,
                 Expression.Add(Expression.Constant("0"), expression, stringConcat));
         }

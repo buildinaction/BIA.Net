@@ -1,38 +1,40 @@
-﻿#region Copyright (c) 2009 S. van Deursen
-/* The CuttingEdge.EntitySorting library.
- * 
- * To contact me, please visit my blog at http://www.cuttingedge.it/blogs/steven/ 
- *
- * Copyright (c) 2009 S. van Deursen
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
- * associated documentation files (the "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
- * following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all copies or substantial
- * portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
- * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
- * EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
- * USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-#endregion
+﻿// <copyright file="EntitySorter.cs" company="BIA.NET">
+// Copyright (c) BIA.NET. All rights reserved.
+// </copyright>
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-
-// NOTE: I placed all related classes in this single file, for easy access and downloading.
 namespace BIA.Net.Model.DAL.Sorting
 {
+    #region Copyright (c) 2009 S. van Deursen
+    /* The CuttingEdge.EntitySorting library.
+     *
+     * To contact me, please visit my blog at http://www.cuttingedge.it/blogs/steven/
+     *
+     * Copyright (c) 2009 S. van Deursen
+     *
+     * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+     * associated documentation files (the "Software"), to deal in the Software without restriction, including
+     * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+     * copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
+     * following conditions:
+     *
+     * The above copyright notice and this permission notice shall be included in all copies or substantial
+     * portions of the Software.
+     *
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+     * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
+     * EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+     * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+     * USE OR OTHER DEALINGS IN THE SOFTWARE.
+    */
+    #endregion
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Globalization;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Reflection;
+
     internal enum SortDirection
     {
         Ascending,
@@ -47,7 +49,7 @@ namespace BIA.Net.Model.DAL.Sorting
         /// <param name="collection">The collection.</param>
         /// <returns>An <see cref="IOrderedEnumerable{TEntity}"/> whose elements are sorted according to the
         /// <see cref="EntitySorter{TEntity}"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="collection"/> is a null 
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="collection"/> is a null
         /// reference.</exception>
         IOrderedQueryable<TEntity> Sort(IQueryable<TEntity> collection);
     }
@@ -67,7 +69,7 @@ namespace BIA.Net.Model.DAL.Sorting
         }
 
         /// <summary>
-        /// Creates a new <see cref="IEntitySorter{TEntity}"/> that sorts a collection of 
+        /// Creates a new <see cref="IEntitySorter{TEntity}"/> that sorts a collection of
         /// <typeparamref name="TEntity"/> objects in ascending order according to a key.
         /// </summary>
         /// <typeparam name="TKey">The type of the key.</typeparam>
@@ -85,7 +87,7 @@ namespace BIA.Net.Model.DAL.Sorting
         }
 
         /// <summary>
-        /// Creates a new <see cref="IEntitySorter{TEntity}"/> that sorts a collection of 
+        /// Creates a new <see cref="IEntitySorter{TEntity}"/> that sorts a collection of
         /// <typeparamref name="TEntity"/> objects in descending order according to a key.
         /// </summary>
         /// <typeparam name="TKey">The type of the key.</typeparam>
@@ -104,7 +106,7 @@ namespace BIA.Net.Model.DAL.Sorting
         }
 
         /// <summary>
-        /// Creates a new <see cref="IEntitySorter{TEntity}"/> that sorts a collection of 
+        /// Creates a new <see cref="IEntitySorter{TEntity}"/> that sorts a collection of
         /// <typeparamref name="TEntity"/> objects in ascending order by using the property, specified by it's
         /// <paramref name="propertyName"/>.</summary>
         /// <param name="propertyName">
@@ -124,7 +126,7 @@ namespace BIA.Net.Model.DAL.Sorting
         }
 
         /// <summary>
-        /// Creates a new <see cref="IEntitySorter{TEntity}"/> that sorts a collection of 
+        /// Creates a new <see cref="IEntitySorter{TEntity}"/> that sorts a collection of
         /// <typeparamref name="TEntity"/> objects in descending order by using the property, specified by it's
         /// <paramref name="propertyName"/>.</summary>
         /// <param name="propertyName">
@@ -182,9 +184,10 @@ namespace BIA.Net.Model.DAL.Sorting
         /// <param name="sorter">The sorter.</param>
         /// <param name="keySelector">A function to extract a key from an element.</param>
         /// <returns>An <see cref="IEntitySorter{TEntity}"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="sorter"/> or 
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="sorter"/> or
         /// <paramref name="keySelector"/> are null.</exception>
-        public static IEntitySorter<TEntity> OrderBy<TEntity, TKey>(this IEntitySorter<TEntity> sorter,
+        public static IEntitySorter<TEntity> OrderBy<TEntity, TKey>(
+            this IEntitySorter<TEntity> sorter,
             Expression<Func<TEntity, TKey>> keySelector)
         {
             if (sorter == null)
@@ -211,9 +214,10 @@ namespace BIA.Net.Model.DAL.Sorting
         /// <param name="sorter">The sorter.</param>
         /// <param name="keySelector">A function to extract a key from an element.</param>
         /// <returns>An <see cref="IEntitySorter{TEntity}"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="sorter"/> or 
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="sorter"/> or
         /// <paramref name="keySelector"/> are null.</exception>
-        public static IEntitySorter<TEntity> OrderByDescending<TEntity, TKey>(this IEntitySorter<TEntity> sorter,
+        public static IEntitySorter<TEntity> OrderByDescending<TEntity, TKey>(
+            this IEntitySorter<TEntity> sorter,
             Expression<Func<TEntity, TKey>> keySelector)
         {
             if (sorter == null)
@@ -241,9 +245,10 @@ namespace BIA.Net.Model.DAL.Sorting
         /// <param name="sorter">The sorter.</param>
         /// <param name="keySelector">The key selector.</param>
         /// <returns>An <see cref="IEntitySorter{TEntity}"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="sorter"/> or 
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="sorter"/> or
         /// <paramref name="keySelector"/> are null.</exception>
-        public static IEntitySorter<TEntity> ThenBy<TEntity, TKey>(this IEntitySorter<TEntity> sorter,
+        public static IEntitySorter<TEntity> ThenBy<TEntity, TKey>(
+            this IEntitySorter<TEntity> sorter,
             Expression<Func<TEntity, TKey>> keySelector)
         {
             if (sorter == null)
@@ -270,9 +275,10 @@ namespace BIA.Net.Model.DAL.Sorting
         /// <param name="sorter">The sorter.</param>
         /// <param name="keySelector">The key selector.</param>
         /// <returns>A new <see cref="EntitySorter{TEntity}"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="sorter"/> or 
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="sorter"/> or
         /// <paramref name="keySelector"/> are null.</exception>
-        public static IEntitySorter<TEntity> ThenByDescending<TEntity, TKey>(this IEntitySorter<TEntity> sorter,
+        public static IEntitySorter<TEntity> ThenByDescending<TEntity, TKey>(
+            this IEntitySorter<TEntity> sorter,
             Expression<Func<TEntity, TKey>> keySelector)
         {
             if (sorter == null)
@@ -303,9 +309,10 @@ namespace BIA.Net.Model.DAL.Sorting
         /// <exception cref="ArgumentException">Thrown when the specified <paramref name="propertyName"/> is
         /// empty or when the specified property could not be found on the <typeparamref name="TEntity"/>.
         /// </exception>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="sorter"/> or 
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="sorter"/> or
         /// <paramref name="propertyName"/> are null.</exception>
-        public static IEntitySorter<TEntity> ThenBy<TEntity>(this IEntitySorter<TEntity> sorter,
+        public static IEntitySorter<TEntity> ThenBy<TEntity>(
+            this IEntitySorter<TEntity> sorter,
             string propertyName)
         {
             if (sorter == null)
@@ -334,9 +341,10 @@ namespace BIA.Net.Model.DAL.Sorting
         /// <exception cref="ArgumentException">Thrown when the specified <paramref name="propertyName"/> is
         /// empty or when the specified property could not be found on the <typeparamref name="TEntity"/>.
         /// </exception>
-        /// <exception cref="ArgumentNullException">Thrown when <paramref name="sorter"/> or 
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="sorter"/> or
         /// <paramref name="propertyName"/> are null.</exception>
-        public static IEntitySorter<TEntity> ThenByDescending<TEntity>(this IEntitySorter<TEntity> sorter,
+        public static IEntitySorter<TEntity> ThenByDescending<TEntity>(
+            this IEntitySorter<TEntity> sorter,
             string propertyName)
         {
             if (sorter == null)
@@ -423,7 +431,8 @@ namespace BIA.Net.Model.DAL.Sorting
         }
 
         // Builds a Expression<Func<TEntity, TKey>>
-        private static LambdaExpression BuildLambda(IEnumerable<MethodInfo> propertyAccessors,
+        private static LambdaExpression BuildLambda(
+            IEnumerable<MethodInfo> propertyAccessors,
             Type keyType)
         {
             ILambdaBuilder lambdaBuilder = CreateGenericLambdaBuilder(keyType);
@@ -451,8 +460,10 @@ namespace BIA.Net.Model.DAL.Sorting
             }
             catch (InvalidOperationException ex)
             {
-                string exceptionMessage = string.Format(CultureInfo.InvariantCulture,
-                    "'{0}' could not be parsed. ", propertyName);
+                string exceptionMessage = string.Format(
+                    CultureInfo.InvariantCulture,
+                    "'{0}' could not be parsed. ",
+                    propertyName);
 
                 // We throw a more expressive exception at this level.
                 throw new ArgumentException(exceptionMessage + ex.Message, "propertyName");
@@ -498,8 +509,11 @@ namespace BIA.Net.Model.DAL.Sorting
 
             if (property == null)
             {
-                string exceptionMessage = string.Format(CultureInfo.InvariantCulture,
-                    "{0} does not contain a property named '{1}'.", declaringType, propertyName);
+                string exceptionMessage = string.Format(
+                    CultureInfo.InvariantCulture,
+                    "{0} does not contain a property named '{1}'.",
+                    declaringType,
+                    propertyName);
 
                 throw new InvalidOperationException(exceptionMessage);
             }
@@ -516,7 +530,8 @@ namespace BIA.Net.Model.DAL.Sorting
                 string exceptionMessage = string.Format(
                     CultureInfo.InvariantCulture,
                     "The property '{1}' of type {0} does not contain a public getter.",
-                    declaringType, propertyInfo.Name);
+                    declaringType,
+                    propertyInfo.Name);
 
                 throw new InvalidOperationException(exceptionMessage);
             }
@@ -543,7 +558,8 @@ namespace BIA.Net.Model.DAL.Sorting
                 return Expression.Lambda<Func<TEntity, TKey>>(propertyExpression, new[] { parameterExpression });
             }
 
-            private static Expression BuildPropertyExpression(IEnumerable<MethodInfo> propertyAccessors,
+            private static Expression BuildPropertyExpression(
+                IEnumerable<MethodInfo> propertyAccessors,
                 ParameterExpression parameterExpression)
             {
                 Expression propertyExpression = null;
@@ -561,7 +577,7 @@ namespace BIA.Net.Model.DAL.Sorting
                             propertyExpression_tmp = Expression.Property(innerExpression, propertyAccessor_tmp);
                             break;
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
                             if (propertyAccessor_tmp.ReflectedType.BaseType != typeof(ObjectRemap))
                             {
@@ -569,10 +585,11 @@ namespace BIA.Net.Model.DAL.Sorting
                             }
                             else
                             {
-                                throw(e);
+                                throw e;
                             }
                         }
                     }
+
                     propertyExpression = propertyExpression_tmp;
                 }
 
@@ -645,8 +662,10 @@ namespace BIA.Net.Model.DAL.Sorting
         /// <param name="baseSorter">The base sorter.</param>
         /// <param name="keySelector">The key selector.</param>
         /// <param name="direction">The direction.</param>
-        public ThenByEntitySorter(IEntitySorter<TEntity> baseSorter,
-            Expression<Func<TEntity, TKey>> keySelector, SortDirection direction)
+        public ThenByEntitySorter(
+            IEntitySorter<TEntity> baseSorter,
+            Expression<Func<TEntity, TKey>> keySelector,
+            SortDirection direction)
         {
             this.baseSorter = baseSorter;
             this.keySelector = keySelector;

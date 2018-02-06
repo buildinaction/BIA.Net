@@ -1,19 +1,23 @@
-﻿#region Copyright (c) 2009 S. van Deursen
+﻿// <copyright file="EntityFilter.cs" company="BIA.NET">
+// Copyright (c) BIA.NET. All rights reserved.
+// </copyright>
+
+#region Copyright (c) 2009 S. van Deursen
 /* The CuttingEdge.EntitySorting library.
- * 
- * To contact me, please visit my blog at http://www.cuttingedge.it/blogs/steven/ 
+ *
+ * To contact me, please visit my blog at http://www.cuttingedge.it/blogs/steven/
  *
  * Copyright (c) 2009 S. van Deursen
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction, including
  * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
  * following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all copies or substantial
  * portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
  * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
  * EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
@@ -22,14 +26,14 @@
 */
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Linq.Expressions;
-
 // NOTE: I placed all related classes in this single file, for easy access and downloading.
 namespace BIA.Net.Model.DAL.Sorting
 {
+    using System;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Linq.Expressions;
+
     /// <summary>
     /// Specifies a method that filters a collection by returning a filtered collection.
     /// </summary>
@@ -105,7 +109,8 @@ namespace BIA.Net.Model.DAL.Sorting
         /// <param name="baseFilter">The base filter.</param>
         /// <param name="predicate">The predicate.</param>
         /// <returns>A new <see cref="IEntityFilter{TEntity}"/>.</returns>
-        public static IEntityFilter<TEntity> Where<TEntity>(this IEntityFilter<TEntity> baseFilter,
+        public static IEntityFilter<TEntity> Where<TEntity>(
+            this IEntityFilter<TEntity> baseFilter,
             Expression<Func<TEntity, bool>> predicate)
         {
             if (baseFilter == null)

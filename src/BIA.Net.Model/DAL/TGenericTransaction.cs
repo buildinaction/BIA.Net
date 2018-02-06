@@ -1,10 +1,14 @@
-﻿namespace BIA.Net.Model.DAL
+﻿// <copyright file="TGenericTransaction.cs" company="BIA.NET">
+// Copyright (c) BIA.NET. All rights reserved.
+// </copyright>
+
+namespace BIA.Net.Model.DAL
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    using BIA.Net.Model.Utility;
     using System.Linq;
+    using Utility;
 
     public class TGenericTransaction<ProjectDBContext, ProjectDBContainer>
         where ProjectDBContext : DbContext, new()
@@ -37,7 +41,6 @@
         {
             try
             {
-
                 ProjectDBContainer dbContainer = TGenericContext<ProjectDBContext, ProjectDBContainer>.GetDbContainer(contextGuid);
 
                 dbContainer.db.Database.BeginTransaction();
@@ -64,7 +67,7 @@
             catch (Exception e)
             {
                 throw e;
-                return false;
+                // return false;
             }
         }
 

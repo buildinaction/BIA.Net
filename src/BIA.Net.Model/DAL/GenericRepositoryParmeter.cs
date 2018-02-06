@@ -1,4 +1,7 @@
-﻿
+﻿// <copyright file="GenericRepositoryParmeter.cs" company="BIA.NET">
+// Copyright (c) BIA.NET. All rights reserved.
+// </copyright>
+
 namespace BIA.Net.Model
 {
     using System.Collections.Generic;
