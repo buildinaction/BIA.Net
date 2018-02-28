@@ -266,7 +266,13 @@ namespace BIA.Net.Helpers
             {
                 foreach (XElement option in options)
                 {
-                    CascadingSelectListItem cascadingItem = selectList.FirstOrDefault(x => x.Value == option.FirstAttribute.Value);
+
+                    CascadingSelectListItem cascadingItem = null;
+
+                    if (option.Attributes("value").FirstOrDefault() != null)
+                    {
+                        cascadingItem = selectList.FirstOrDefault(x => x.Value == option.Attributes("value").First().Value);
+                    }
 
                     if (cascadingItem != null)
                     {
