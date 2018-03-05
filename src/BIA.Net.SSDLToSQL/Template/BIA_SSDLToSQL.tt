@@ -163,7 +163,7 @@ CREATE TABLE <# if (!IsSQLCE) {#>[<#=schemaName#>].<#}#>[<#=tableName#>] (
         {
             EdmProperty prop = entitySet.ElementType.Properties[p];
 #>
-    [<#=Id(prop.Name)#>] <#=prop.ToStoreType()#> <#=WriteIdentity(prop, targetVersion)#> <#=WriteNullable(prop.Nullable)#><#=(Object.Equals(prop.DefaultValue,null)) ? "" : " DEFAULT ('" + prop.DefaultValue.ToString() + "')"#> <#=(p < entitySet.ElementType.Properties.Count - 1) ? "," : ""#>
+    [<#=Id(prop.Name)#>] <#=prop.ToStoreType()#> <#=WriteIdentity(prop, targetVersion)#> <#=WriteNullable(prop.Nullable)#><#=Helper.DefaultValue(prop)#> <#=(p < entitySet.ElementType.Properties.Count - 1) ? "," : ""#>
 <#
         }
 #>
@@ -236,3 +236,33 @@ GO
 -- --------------------------------------------------
 -- Script has ended
 -- --------------------------------------------------
+<#+
+
+public static class Helper
+{
+    public static string DefaultValue(EdmProperty prop)
+    {
+		if (((PrimitiveType)prop.TypeUsage.EdmType).PrimitiveTypeKind == PrimitiveTypeKind.Boolean)
+		{
+			if(!Object.Equals(prop.DefaultValue,null))
+			{
+				if(prop.DefaultValue.ToString().ToUpper() == "FALSE")
+				{
+					return " DEFAULT (0)";
+				}
+				else if(prop.DefaultValue.ToString().ToUpper() == "TRUE")
+				{
+					return " DEFAULT (1)";
+				}
+			}
+			else
+			{
+				return "";
+			}
+		}
+
+		return (Object.Equals(prop.DefaultValue,null)) ? "" : " DEFAULT ('" + prop.DefaultValue.ToString() + "')";
+
+    }
+}
+#>
