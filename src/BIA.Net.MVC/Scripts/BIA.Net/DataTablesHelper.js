@@ -1,6 +1,6 @@
 ﻿var DataTableSettings = [];
 
-function BIAInitAjaxDataTable(dataTableId, url_GetListData, columns, exportButtons, formId, url_OnClickRow) {
+function BIAInitAjaxDataTable(dataTableId, url_GetListData, columns, exportButtons, formId, url_OnClickRow, rowCallback) {
 
     let dom = 'lfrtip';
 
@@ -40,7 +40,8 @@ function BIAInitAjaxDataTable(dataTableId, url_GetListData, columns, exportButto
             $(this).LinkToDialog();
             $(this).AddRefreshAction();
         },
-        "columns": columns
+        "columns": columns,
+        'rowCallback': rowCallback
     });
 }
 
