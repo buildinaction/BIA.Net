@@ -262,7 +262,6 @@ public static class Helper
 		}
 
 		return (Object.Equals(prop.DefaultValue,null)) ? "" : " DEFAULT ('" + prop.DefaultValue.ToString() + "')";
-
     }
 }
 #>
