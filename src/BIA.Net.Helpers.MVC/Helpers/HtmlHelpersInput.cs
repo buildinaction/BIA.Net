@@ -210,6 +210,13 @@ namespace BIA.Net.Helpers
             return htmlHelper.ListBoxFor(expression, selectList, htmlAttributes);
         }
 
+
+        public enum CascadingDropDownListType
+        {
+            None=1,
+            ChildList=2
+        }
+
         /// <summary>
         /// Create a dropdownlist whose display will depend on a parent dropdownlist
         /// </summary>
@@ -220,12 +227,13 @@ namespace BIA.Net.Helpers
         /// <param name="selectList">A collection of System.Web.Mvc.SelectListItem objects that are used to populate the drop-down list</param>
         /// <param name="optionLabel">The text for a default empty item. This parameter can be null</param>
         /// <param name="htmlAttributes">An object that contains the HTML attributes to set for the element</param>
+        /// <param name="listType">automaticaly add the javascript for a type of list</param>
         /// <returns>An HTML select element for each property in the object that is represented by the expression</returns>
-        public static MvcHtmlString CascadingDropDownListFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, IEnumerable<CascadingSelectListItem> selectList, string optionLabel, object htmlAttributes = null)
+        public static MvcHtmlString CascadingDropDownListFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, IEnumerable<CascadingSelectListItem> selectList, string optionLabel, object htmlAttributes = null, CascadingDropDownListType listType = CascadingDropDownListType.ChildList)
         {
             MvcHtmlString mvcHtmlString = htmlHelper.DropDownListFor(expression, selectList, optionLabel, htmlAttributes);
             string dropDownListId = htmlHelper.IdFor(expression).ToString();
-            return CascadingDropDownList(htmlHelper, selectList, optionLabel, mvcHtmlString, dropDownListId);
+            return CascadingDropDownList(htmlHelper, selectList, optionLabel, mvcHtmlString, dropDownListId, listType);
         }
 
         /// <summary>
@@ -236,12 +244,13 @@ namespace BIA.Net.Helpers
         /// <param name="selectList">A collection of System.Web.Mvc.SelectListItem objects that are used to populate the drop-down list</param>
         /// <param name="optionLabel">The text for a default empty item. This parameter can be null</param>
         /// <param name="htmlAttributes">An object that contains the HTML attributes to set for the element</param>
+        /// <param name="listType">automaticaly add the javascript for a type of list</param>
         /// <returns>An HTML select element with an option subelement for each item in the list</returns>
-        public static MvcHtmlString CascadingDropDownList(this HtmlHelper htmlHelper, string name, IEnumerable<CascadingSelectListItem> selectList, string optionLabel, object htmlAttributes = null)
+        public static MvcHtmlString CascadingDropDownList(this HtmlHelper htmlHelper, string name, IEnumerable<CascadingSelectListItem> selectList, string optionLabel, object htmlAttributes = null, CascadingDropDownListType listType = CascadingDropDownListType.ChildList)
         {
             MvcHtmlString mvcHtmlString = htmlHelper.DropDownList(name, selectList, optionLabel, htmlAttributes);
             string dropDownListId = name;
-            return CascadingDropDownList(htmlHelper, selectList, optionLabel, mvcHtmlString, dropDownListId);
+            return CascadingDropDownList(htmlHelper, selectList, optionLabel, mvcHtmlString, dropDownListId, listType);
         }
 
         /// <summary>
@@ -252,8 +261,9 @@ namespace BIA.Net.Helpers
         /// <param name="optionLabel">The text for a default empty item. This parameter can be null</param>
         /// <param name="mvcHtmlString">An HTML select element with an option subelement for each item</param>
         /// <param name="dropDownListId">The id of the form field to return</param>
+        /// <param name="listType">automaticaly add the javascript for a type of list</param>
         /// <returns>An HTML select element with an option subelement for each item in the list</returns>
-        private static MvcHtmlString CascadingDropDownList(HtmlHelper htmlHelper, IEnumerable<CascadingSelectListItem> selectList, string optionLabel, MvcHtmlString mvcHtmlString, string dropDownListId)
+        private static MvcHtmlString CascadingDropDownList(HtmlHelper htmlHelper, IEnumerable<CascadingSelectListItem> selectList, string optionLabel, MvcHtmlString mvcHtmlString, string dropDownListId, CascadingDropDownListType listType)
         {
             XDocument selectDoc = XDocument.Parse(mvcHtmlString.ToString());
             string prefixDataAttr = "data-";
@@ -303,8 +313,11 @@ namespace BIA.Net.Helpers
                 }
             }
 
-            string javascript = "<script type=\"text/javascript\">$(document).ready(function() { $(\"#" + dropDownListId + "\").cascadingDropDownList(); });</script>";
-            htmlHelper.Script(javascript, HtmlHelpersScript.Priority.FastRender);
+            if (listType == CascadingDropDownListType.ChildList)
+            {
+                string javascript = "<script type=\"text/javascript\">$(document).ready(function() { $(\"#" + dropDownListId + "\").cascadingDropDownList(); });</script>";
+                htmlHelper.Script(javascript, HtmlHelpersScript.Priority.FastRender);
+            }
 
             return MvcHtmlString.Create(selectDoc.ToString());
         }
