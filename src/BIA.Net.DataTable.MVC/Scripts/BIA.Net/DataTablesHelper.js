@@ -1,11 +1,19 @@
 ﻿var DataTableSettings = [];
 
-function BIAInitFullAjaxDataTable(dataTableId, url_GetListData, columns, exportButtons, getDataExtend, url_OnClickRow) {
+function BIAInitFullAjaxDataTable(dataTableId, url_GetListData, columns, displayExportButton, getDataExtend, url_OnClickRow) {
 
     let dom = 'lfrtip';
+    var button = null;
 
-    if (exportButtons != null) {
+    if (displayExportButton === true) {
         dom = 'Bfrtip';
+        button = [{
+            text: 'Export',
+            action: function (e, dt, node, config) {
+                var params = dt.ajax.params();
+                window.location.href = url_GetListData + '?dataJson=' + JSON.stringify(params);
+            }
+        }];
     }
 
     $(window).on('OnBIADialogRefresh', function (e) {
@@ -16,19 +24,15 @@ function BIAInitFullAjaxDataTable(dataTableId, url_GetListData, columns, exportB
         "serverSide": true,
         "language": cultureDataTable,
         "dom": dom,
-        "buttons": [{
-            text: 'Export',
-            action: function (e, dt, node, config) {
-                var params = dt.ajax.params();
-                window.location.href = url_GetListData + '?dataJson=' + JSON.stringify(params);
-            }
-        }],
+        "buttons": button,
         ajax: {
             url: url_GetListData,
             type: 'POST'
             ,
             "data": function (d) {
-                return $.extend({}, d, getDataExtend());
+                if (getDataExtend != null) {
+                    return $.extend({}, d, getDataExtend());
+                }
             }
         },
         rowId: 'Id',
