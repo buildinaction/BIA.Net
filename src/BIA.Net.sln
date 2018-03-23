@@ -37,6 +37,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodingRules", "CodingRules"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Helpers.MVC", "BIA.Net.Helpers.MVC\BIA.Net.Helpers.MVC.csproj", "{590D4FB1-AA55-4C5B-9BC6-AE4073B44EF5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.DataTable.DTO", "BIA.Net.DataTable.DTO\BIA.Net.DataTable.DTO.csproj", "{27C61A0B-D29F-4B28-A1EA-ED1A42D2CF71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.DataTable.MVC", "BIA.Net.DataTable.MVC\BIA.Net.DataTable.MVC.csproj", "{60AA7919-68DF-45C3-A97E-BC3605CCE179}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +99,14 @@ Global
 		{590D4FB1-AA55-4C5B-9BC6-AE4073B44EF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{590D4FB1-AA55-4C5B-9BC6-AE4073B44EF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{590D4FB1-AA55-4C5B-9BC6-AE4073B44EF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27C61A0B-D29F-4B28-A1EA-ED1A42D2CF71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27C61A0B-D29F-4B28-A1EA-ED1A42D2CF71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27C61A0B-D29F-4B28-A1EA-ED1A42D2CF71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27C61A0B-D29F-4B28-A1EA-ED1A42D2CF71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60AA7919-68DF-45C3-A97E-BC3605CCE179}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60AA7919-68DF-45C3-A97E-BC3605CCE179}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60AA7919-68DF-45C3-A97E-BC3605CCE179}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60AA7919-68DF-45C3-A97E-BC3605CCE179}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

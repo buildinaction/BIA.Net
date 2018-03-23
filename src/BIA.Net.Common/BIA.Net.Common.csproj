@@ -43,6 +43,10 @@
     <LangVersion>5</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.8.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.8.1\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -54,6 +58,7 @@
       <HintPath>..\packages\System.Linq.Dynamic.1.0.7\lib\net40\System.Linq.Dynamic.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -61,6 +66,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\CodingRules\CustomDictionary.xml">
@@ -68,6 +74,8 @@
       <SubType>Designer</SubType>
     </CodeAnalysisDictionary>
     <Compile Include="CustomMailMessage.cs" />
+    <Compile Include="Helpers\OpenXmlExcelHelper.cs" />
+    <Compile Include="Helpers\SerializationHelper.cs" />
     <Compile Include="Log\CustomRollingFileAppender.cs" />
     <Compile Include="Helpers\ListHelper.cs" />
     <Compile Include="Helpers\StopWatchHelper.cs" />
