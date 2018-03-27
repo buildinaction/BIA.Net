@@ -11,7 +11,7 @@ function BIAInitFullAjaxDataTable(dataTableId, url_GetListData, columns, display
             text: 'Export',
             action: function (e, dt, node, config) {
                 var params = dt.ajax.params();
-                window.location.href = url_GetListData + '?dataJson=' + JSON.stringify(params);
+                window.location.href = url_GetListData + '?dataJson=' + JSON.stringify(params).replace(',"search":{"value":"","regex":false}', ''); // replace otherwise url too long for a GET
             }
         }];
     }
