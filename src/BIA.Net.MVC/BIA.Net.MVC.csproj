@@ -83,7 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\BIA.Net\FilterDataTable.css" />
-    <Content Include="Scripts\BIA.Net\DataTablesHelper.js" />
     <Content Include="Scripts\BIA.Net\Localization.js" />
     <Content Include="Scripts\BIA.Net\PreventDuplicateRequest.js" />
     <None Include="BIA.Net.MVC.csproj.nuspec">
