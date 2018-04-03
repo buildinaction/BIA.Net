@@ -12,8 +12,8 @@
 
         if (parentSelectedValue != "") {
             childOptions.each(function () {
-                // if attrbute contains the selectedValue
-                if ($(this).attr(prefixDataAttr + parentId) != null && $(this).attr(prefixDataAttr + parentId).indexOf(parentSelectedValue) >= 0) {
+                // if attribute = the selectedValue
+                if ($(this).attr(prefixDataAttr + parentId) != null && $(this).attr(prefixDataAttr + parentId) === parentSelectedValue) {
                     // $(this).show(); does not work on IE
                     nbOptionShow = nbOptionShow + 1;
                 } else {
