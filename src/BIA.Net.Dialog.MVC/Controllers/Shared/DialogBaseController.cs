@@ -25,8 +25,11 @@ namespace BIA.Net.Dialog.MVC.Controllers
     {
         public enum DisplayFlag
         {
-            None = 0x0,
-            Popup = 0x1,
+            None = 0,
+            Popup = 1,
+            MainPageContent = 2,
+            Document = 3,
+            Content = 4
         };
 
         private string UniformizeUrl(string url)
@@ -38,14 +41,14 @@ namespace BIA.Net.Dialog.MVC.Controllers
         protected override RedirectToRouteResult RedirectToAction(string actionName, string controllerName, RouteValueDictionary routeValues)
         {
             DisplayFlag displayFlag = 0;
-            if (HttpContext.Request["displayFlag"] != null)
-                displayFlag = (DisplayFlag)int.Parse(HttpContext.Request["displayFlag"]);
+            if (HttpContext.Request["BIANetDialogDisplayFlag"] != null)
+                displayFlag = (DisplayFlag)int.Parse(HttpContext.Request["BIANetDialogDisplayFlag"]);
             if (displayFlag != 0)
             {
                 //Test if we are returned to parent Page
                 string dialogUrlParent = null;
-                if (HttpContext.Request["dialogUrlParent"] != null)
-                    dialogUrlParent = ((string) HttpContext.Request["dialogUrlParent"]).ToLower();
+                if (HttpContext.Request["BIANetDialogUrlParent"] != null)
+                    dialogUrlParent = ((string) HttpContext.Request["BIANetDialogUrlParent"]).ToLower();
                 if (!string.IsNullOrEmpty(dialogUrlParent))
                 {
                     UrlHelper u = new UrlHelper(this.ControllerContext.RequestContext);
@@ -67,35 +70,50 @@ namespace BIA.Net.Dialog.MVC.Controllers
                 //Not parent page continue
                 if (routeValues == null)
                     routeValues = new RouteValueDictionary();
-                routeValues.Add("displayFlag", (int)displayFlag);
-                routeValues.Add("BIARedirectedDialogUrl", Url.Action(actionName, routeValues));
             }
+            routeValues.Add("BIANetDialogDisplayFlag", (int)displayFlag);
+            routeValues.Add("BIANetDialogRedirectedUrl", Url.Action(actionName, routeValues));
             return base.RedirectToAction(actionName, controllerName, routeValues);
         }
 
         protected override ViewResult View(string viewName, string masterName, object model)
         {
             DisplayFlag displayFlag = 0;
-            if (HttpContext.Request["displayFlag"] != null)
+            if (HttpContext.Request["BIANetDialogDisplayFlag"] != null)
             {
-                displayFlag = (DisplayFlag)int.Parse(HttpContext.Request["displayFlag"]);
+                displayFlag = (DisplayFlag)int.Parse(HttpContext.Request["BIANetDialogDisplayFlag"]);
             }
-            if(HttpContext.Request["BIARedirectedDialogUrl"] != null)
+            if(HttpContext.Request["BIANetDialogRedirectedUrl"] != null)
             {
-                HttpContext.Response.AddHeader("BIARedirectedDialogUrl", HttpContext.Request["BIARedirectedDialogUrl"]);
+                HttpContext.Response.AddHeader("BIANetDialogRedirectedUrl", HttpContext.Request["BIANetDialogRedirectedUrl"]);
             }
            /* if (HttpContext.Request["DialogRefreshPartialView"] != null)
             {
                 viewName = HttpContext.Request["DialogRefreshPartialView"];
                 return PartialViewConverter.Convert(base.PartialView(viewName, model));
             }*/
-            if ((displayFlag & DisplayFlag.Popup) == DisplayFlag.Popup)
+            if (displayFlag == DisplayFlag.Popup)
             {
                 ViewResult myView = base.View(viewName, masterName, model);
                 myView.MasterName = "~/Views/Shared/_Layout_Dialog.cshtml";
                 //Request.Add("BIACurrentDialogUrl", Url.Action(viewName));
                 return myView;
             }
+            else if (displayFlag == DisplayFlag.Content)
+            {
+                ViewResult myView = base.View(viewName, masterName, model);
+                myView.MasterName = "~/Views/Shared/_Layout_Content.cshtml";
+                //Request.Add("BIACurrentDialogUrl", Url.Action(viewName));
+                return myView;
+            }
+            else if (displayFlag == DisplayFlag.MainPageContent)
+            {
+                ViewResult myView = base.View(viewName, masterName, model);
+                myView.MasterName = "~/Views/Shared/_Layout_MainPageContent.cshtml";
+                //Request.Add("BIACurrentDialogUrl", Url.Action(viewName));
+                return myView;
+            }
+
             return base.View(viewName, masterName, model);
         }
     }
