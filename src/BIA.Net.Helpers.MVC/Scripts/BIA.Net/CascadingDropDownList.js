@@ -1,14 +1,15 @@
 $.fn.cascadingDropDownList = function () {
     var prefixDataAttr = "data-";
     var prefixIdAttr = "id-";
+    var separator = "|";
     function ManageOption(parentId, childList) {
         var childOptions = $(childList).children();
         var nbOptionShow = 0;
         var parentSelectedValue = $("#" + parentId).val();
         if (parentSelectedValue != "") {
             childOptions.each(function () {
-                // if attrbute contains the selectedValue
-                if ($(this).attr(prefixDataAttr + parentId) != null && $(this).attr(prefixDataAttr + parentId).indexOf(parentSelectedValue) >= 0) {
+                // if attribute contains the selectedValue
+                if ($(this).attr(prefixDataAttr + parentId) != null && $(this).attr(prefixDataAttr + parentId).split(separator).some(function (x) { return x === parentSelectedValue; })) {
                     // $(this).show(); does not work on IE
                     nbOptionShow = nbOptionShow + 1;
                 }
