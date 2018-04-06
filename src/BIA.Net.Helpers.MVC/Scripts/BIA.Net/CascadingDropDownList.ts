@@ -2,6 +2,7 @@
 
     const prefixDataAttr: string = "data-";
     const prefixIdAttr: string = "id-";
+    const separator: string = "|";
 
     function ManageOption(parentId: Element, childList: any) {
 
@@ -12,8 +13,8 @@
 
         if (parentSelectedValue != "") {
             childOptions.each(function () {
-                // if attribute = the selectedValue
-                if ($(this).attr(prefixDataAttr + parentId) != null && $(this).attr(prefixDataAttr + parentId) === parentSelectedValue) {
+                // if attribute contains the selectedValue
+                if ($(this).attr(prefixDataAttr + parentId) != null && $(this).attr(prefixDataAttr + parentId).split(separator).some(x => x === parentSelectedValue)) {
                     // $(this).show(); does not work on IE
                     nbOptionShow = nbOptionShow + 1;
                 } else {
