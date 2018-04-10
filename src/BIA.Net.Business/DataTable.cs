@@ -70,6 +70,7 @@ namespace BIA.Net.Business
             }
 
             result.aaData = data;
+
             return result;
         }
 
