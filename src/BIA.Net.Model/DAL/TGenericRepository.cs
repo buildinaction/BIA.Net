@@ -79,7 +79,7 @@ namespace BIA.Net.Model
         /// <summary>
         /// The database container
         /// </summary>
-        private ProjectDBContainer dbContainer = null;
+        private TGenericDBContainer<ProjectDBContext, ProjectDBContainer> dbContainer = null;
 
         /// <summary>
         /// The database set
@@ -92,7 +92,7 @@ namespace BIA.Net.Model
         /// <param name="contextGuid">The context unique identifier.</param>
         public TGenericRepository(Guid contextGuid)
         {
-            this.ContextGuid = contextGuid;
+            this.dbContainer = new TGenericDBContainer<ProjectDBContext, ProjectDBContainer>(contextGuid);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace BIA.Net.Model
         /// <param name="context">The context.</param>
         public TGenericRepository(ProjectDBContainer context)
         {
-            this.dbContainer = context;
+            this.dbContainer = new TGenericDBContainer<ProjectDBContext, ProjectDBContainer>(context);
         }
 
         /// <summary>
@@ -135,27 +135,11 @@ namespace BIA.Net.Model
         public List<Expression<Func<Entity, dynamic>>> ListInclude { get; set; }
 
         /// <summary>
-        /// Gets the database container.
-        /// </summary>
-        protected ProjectDBContainer DbContainer
-        {
-            get
-            {
-                if (this.dbContainer == null)
-                {
-                    this.dbContainer = TGenericContext<ProjectDBContext, ProjectDBContainer>.GetDbContainer(this.ContextGuid);
-                }
-
-                return this.dbContainer;
-            }
-        }
-
-        /// <summary>
         /// Gets the project db context
         /// </summary>
         protected ProjectDBContext Db
         {
-            get { return this.DbContainer.db; }
+            get { return this.dbContainer.GetProjectDBContext(); }
         }
 
         /// <summary>
@@ -163,13 +147,8 @@ namespace BIA.Net.Model
         /// </summary>
         protected bool IsInTransaction
         {
-            get { return this.DbContainer.isInTransaction; }
+            get { return this.dbContainer.IsInTransaction; }
         }
-
-        /// <summary>
-        /// Gets or sets the context unique identifier.
-        /// </summary>
-        private Guid ContextGuid { get; set; }
 
         /// <summary>
         /// Gets the database set.
@@ -193,7 +172,7 @@ namespace BIA.Net.Model
         /// <returns>The context without filter</returns>
         public ProjectDBContext GetProjectDBContextForOptim()
         {
-            return this.DbContainer.db;
+            return this.dbContainer.GetProjectDBContext();
         }
 
         /// <summary>
@@ -524,7 +503,7 @@ namespace BIA.Net.Model
         public virtual int DeleteById(object primaryKey, GenericRepositoryParmeter param = null)
         {
             TraceManager.Debug("GenericRepository", "DeleteById", "Begin DeleteById for element " + typeof(Entity).Name);
-            List<string> lstFieldToInclude = !this.DbContainer.IsMoq ? this.GetFieldToInclude(param, AccessMode.Delete) : null;
+            List<string> lstFieldToInclude = !this.dbContainer.IsMoq ? this.GetFieldToInclude(param, AccessMode.Delete) : null;
             Entity dbobj = this.Find(primaryKey, AccessMode.Delete, sFieldsToInclude: lstFieldToInclude);
 
             if (dbobj == null)
@@ -679,7 +658,7 @@ namespace BIA.Net.Model
                         {
                             if (targetParentObj != null)
                             {
-                                if (EntityPropHelper.GetProperties(this.Db, dbParentObj, this.DbContainer.IsMoq).Contains(propName))
+                                if (EntityPropHelper.GetProperties(this.Db, dbParentObj, this.dbContainer.IsMoq).Contains(propName))
                                 {
                                     // 09/11/2016 : key should be update for not generated key but not when key is null (case in search by Unicity key)...
                                     object targetItem = prop.GetValue(targetParentObj);

@@ -91,6 +91,7 @@
     <Compile Include="DAL\StoredProcedureParameter.cs" />
     <Compile Include="DAL\SubListRule.cs" />
     <Compile Include="DAL\TGenericContext.cs" />
+    <Compile Include="DAL\TGenericDBContainer.cs" />
     <Compile Include="DAL\TGenericRepository.cs" />
     <Compile Include="DAL\TGenericTransaction.cs" />
     <Compile Include="Model\ObjectRemap.cs" />
