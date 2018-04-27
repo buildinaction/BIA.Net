@@ -1,7 +1,7 @@
 ﻿module BIA.Net.Dialog {
     $(document).ready(function () {
-        BIA.Net.Dialog.DialogDiv.LinkToDialog($(document));
-        BIA.Net.Dialog.DialogDiv.AddRefreshAction($(document));
+        BIA.Net.Dialog.DialogDiv.LinkToDialog(BIA.Net.Dialog.DialogDiv.GetMainDiv().dialogElem);
+        BIA.Net.Dialog.DialogDiv.AddRefreshAction(BIA.Net.Dialog.DialogDiv.GetMainDiv().dialogElem);
     });
 
     export enum DialogDivType {
@@ -131,7 +131,7 @@
             }
         }
 
-        public GetParentUrl() : string {
+        public GetParentUrl(): string {
             if (this.parent == null) return null;
             else return this.parent.urlCurrent;
         }
@@ -139,7 +139,7 @@
         public static GetDialogDivByJQuery(dialog: JQuery) {
             let dialogDiv: DialogDiv = null;
             for (let entry of DialogDiv.AllDialogDiv) {
-                if (entry.dialogElem.attr('id') == dialog.attr('id') ) {
+                if (entry.dialogElem.attr('id') == dialog.attr('id')) {
                     dialogDiv = entry;
                     break;
                 }
@@ -154,8 +154,12 @@
 
         public static PrepareContentDiv(parent: DialogDiv, DivContent: string, DivScript: string, DivType: DialogDivType): DialogDiv {
             let dialog: JQuery;
+            if (parent == null) parent = DialogDiv.GetMainDiv();
             if (DivContent != "") {
                 dialog = parent.dialogElem.find(DivContent);
+                if (dialog == null || dialog.length == 0) {
+                    dialog = $(document).find(DivContent);
+                }
             }
             else
                 dialog = parent.dialogElem;
@@ -171,7 +175,7 @@
             return dialogDiv;
         }
 
-        public static ChangeContent(parent: DialogDiv, addHistory: boolean, url: string, DivContent: string, DivScript: string, DivType: DialogDivType) {
+        public static ChangeContent(parent: DialogDiv, addHistory: boolean, url: string, DivContent: string, DivScript: string = "", DivType: DialogDivType = DialogDivType.Content) {
             let dialogDiv: DialogDiv = DialogDiv.PrepareContentDiv(parent, DivContent, DivScript, DivType)
             dialogDiv.ReplaceInCurrentDialog(url, addHistory);
         }
@@ -199,16 +203,22 @@
             return this.dialogElem;
         }
 
-        public static GetMainDiv(): DialogDiv
-        {
+        public static GetMainDiv(): DialogDiv {
             if (DialogDiv.MainDialogDiv == null) {
-                DialogDiv.MainDialogDiv = new DialogDiv($(document), null, DialogDivType.Document);
-                DialogDiv.MainDialogDiv.urlCurrent = window.location.href;
+                var MainPageContent = $('.BiaNetMainPageContent');
+                if (MainPageContent != null && MainPageContent.length == 1) {
+                    DialogDiv.MainDialogDiv = new DialogDiv(MainPageContent, null, DialogDivType.MainPageContent);
+                    DialogDiv.MainDialogDiv.urlCurrent = AjaxLoading.UniformmizeUrl(window.location.href);
+                }
+                else {
+                    DialogDiv.MainDialogDiv = new DialogDiv($(document), null, DialogDivType.Document);
+                    DialogDiv.MainDialogDiv.urlCurrent = AjaxLoading.UniformmizeUrl(window.location.href);
+                }
             }
             return DialogDiv.MainDialogDiv;
         }
- 
-        public static GetParentDialogDiv(linkElem: JQuery) : DialogDiv {
+
+        public static GetParentDialogDiv(linkElem: JQuery): DialogDiv {
             var dialog = linkElem.closest(".BiaNetDialogDiv");
             if (dialog == null || dialog.length == 0) {
                 return DialogDiv.GetMainDiv();
@@ -256,7 +266,7 @@
                 });
             });
         };
-        
+
         public OnDialogLoaded(data, newUrl) {
             this.urlCurrent = newUrl;
             this.dialogElem.html(data);
@@ -276,7 +286,8 @@
             $(window).trigger(evt);
         }
         public CleanDialog() {
-            this.dialogElem.html("Loading ...");
+            this.dialogElem.append("<div id=\"divLoading\"></div>");
+            this.dialogElem.css("cursor", "progress");
             //var childList = this.dialogElem.prop("dialogChildList");
             if (this.children != null) {
                 this.children.forEach(function (entry) {
@@ -294,7 +305,7 @@
         };
 
         public AddDialogToChildList(child: DialogDiv) {
-             this.children.push(child);
+            this.children.push(child);
         }
         public static refreshIfRequiered(urlValidated) {
             urlValidated = urlValidated.toLowerCase();
@@ -304,7 +315,7 @@
         }
         private refreshIfRequiered(urlValidated) {
             var elemToRefresh: DialogDiv = this;
-            elemToRefresh.refrechAction.forEach(function (refrechAction) { 
+            elemToRefresh.refrechAction.forEach(function (refrechAction) {
                 for (var j = 0; j < refrechAction.OnValidatedFormsUrls.length; j++) {
                     if (urlValidated.indexOf(refrechAction.OnValidatedFormsUrls[j]) >= 0) {
                         refrechAction.RefreshContent();
@@ -341,7 +352,7 @@
 
         public AddRefreshAction(scopeElem?: JQuery) {
             if (scopeElem == null) scopeElem = this.dialogElem;
-            let CurrentDialogDiv: DialogDiv = this; 
+            let CurrentDialogDiv: DialogDiv = this;
             let CurrentDialog: JQuery = this.dialogElem;
             let RefrechActionCurrentDialog: RefreshAction[] = [];
             scopeElem.find('[BIADialogRefresh]')
@@ -404,10 +415,10 @@
             /*BIA.Net.Dialog.DialogDiv.DialogManager.put(CurrentDialog, {
                 RefrechAction: RefrechActionCurrentDialog, SimilarReturnUrls: DialogSimilarReturnUrlsCurrentDialog
             });*/
-           
+
         };
 
-     
+
         public CleanRefreshAction(scopeElem: JQuery) {
             this.refrechAction = this.refrechAction.filter(e => e.elemToRefresh !== scopeElem);
 

@@ -33,7 +33,7 @@ declare module BIA.Net.Dialog {
         static GetDialogDivByJQuery(dialog: JQuery): DialogDiv;
         private static RemoveDialogfromArrayByJQuery(dialog);
         static PrepareContentDiv(parent: DialogDiv, DivContent: string, DivScript: string, DivType: DialogDivType): DialogDiv;
-        static ChangeContent(parent: DialogDiv, addHistory: boolean, url: string, DivContent: string, DivScript: string, DivType: DialogDivType): void;
+        static ChangeContent(parent: DialogDiv, addHistory: boolean, url: string, DivContent: string, DivScript?: string, DivType?: DialogDivType): void;
         ReplaceInCurrentDialog(url: any, addHistory: any): void;
         GetViewPort(): JQuery;
         static GetMainDiv(): DialogDiv;

@@ -72,7 +72,7 @@ namespace BIA.Net.MVC.Utility
                                 if (ErrorHandler.IsAjaxRequest(HttpContext.Current.Request))
                                 {
                                     HttpContext.Server.ClearError();
-                                    HttpContext.Response.AddHeader("BIANetDialogRedirectedUrl", url);
+                                    HttpContext.Response.AddHeader("location", url);
                                 }
                                 else
                                 {

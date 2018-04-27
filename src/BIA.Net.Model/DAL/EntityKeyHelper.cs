@@ -47,53 +47,55 @@ namespace BIA.Net.Model.DAL
                 t = t.BaseType;
             }
 
-            KeyProperties[] keys;
+            KeyProperties[] keyProperties;
 
-            _dict.TryGetValue(t, out keys);
-            if (keys != null)
+            lock (_dict)
             {
-                return keys;
-            }
-
-            ObjectContext objectContext = ((IObjectContextAdapter)context).ObjectContext;
-
-            // create method CreateObjectSet with the generic parameter of the base-type
-            MethodInfo method = typeof(ObjectContext).GetMethod("CreateObjectSet", Type.EmptyTypes)
-                                                     .MakeGenericMethod(t);
-            dynamic objectSet = method.Invoke(objectContext, null);
-
-            // var objectSet = objectContext.CreateObjectSet<T>();
-            IEnumerable<dynamic> keyMembers = objectSet.EntitySet.ElementType.KeyMembers;
-
-            // KeyProperties[] keyNames = keyMembers.Select(k => new KeyProperties() { name = k.Name, StoreGeneratedPattern = k.StoreGeneratedPattern}).ToArray();
-            List<KeyProperties> listKeyProperties = new List<KeyProperties>();
-            foreach (EdmProperty keyMember in keyMembers)
-            {
-                KeyProperties keyProp = new KeyProperties();
-                keyProp.name = keyMember.Name;
-
-                // keyProp.typeUsage = keyMember.TypeUsage;
-                keyProp.typeName = keyMember.TypeName;
-                MetadataProperty meta = keyMember.MetadataProperties.FirstOrDefault(mp => mp.Name == "http://schemas.microsoft.com/ado/2009/02/edm/annotation:StoreGeneratedPattern");
-                keyProp.StoreGeneratedPattern = StoreGeneratedPattern.Identity;
-                if (meta != null)
+                _dict.TryGetValue(t, out keyProperties);
+                if (keyProperties != null)
                 {
-                    if (meta.Value.ToString().Equals("None"))
-                    {
-                        keyProp.StoreGeneratedPattern = StoreGeneratedPattern.None;
-                    }
-                    else if (meta.Value.ToString().Equals("Computed"))
-                    {
-                        keyProp.StoreGeneratedPattern = StoreGeneratedPattern.Computed;
-                    }
+                    return keyProperties;
                 }
 
-                listKeyProperties.Add(keyProp);
+                ObjectContext objectContext = ((IObjectContextAdapter)context).ObjectContext;
+
+                // create method CreateObjectSet with the generic parameter of the base-type
+                MethodInfo method = typeof(ObjectContext).GetMethod("CreateObjectSet", Type.EmptyTypes)
+                                                         .MakeGenericMethod(t);
+                dynamic objectSet = method.Invoke(objectContext, null);
+
+                // var objectSet = objectContext.CreateObjectSet<T>();
+                IEnumerable<dynamic> keyMembers = objectSet.EntitySet.ElementType.KeyMembers;
+
+                // KeyProperties[] keyNames = keyMembers.Select(k => new KeyProperties() { name = k.Name, StoreGeneratedPattern = k.StoreGeneratedPattern}).ToArray();
+                List<KeyProperties> listKeyProperties = new List<KeyProperties>();
+                foreach (EdmProperty keyMember in keyMembers)
+                {
+                    KeyProperties keyProp = new KeyProperties();
+                    keyProp.name = keyMember.Name;
+
+                    // keyProp.typeUsage = keyMember.TypeUsage;
+                    keyProp.typeName = keyMember.TypeName;
+                    MetadataProperty meta = keyMember.MetadataProperties.FirstOrDefault(mp => mp.Name == "http://schemas.microsoft.com/ado/2009/02/edm/annotation:StoreGeneratedPattern");
+                    keyProp.StoreGeneratedPattern = StoreGeneratedPattern.Identity;
+                    if (meta != null)
+                    {
+                        if (meta.Value.ToString().Equals("None"))
+                        {
+                            keyProp.StoreGeneratedPattern = StoreGeneratedPattern.None;
+                        }
+                        else if (meta.Value.ToString().Equals("Computed"))
+                        {
+                            keyProp.StoreGeneratedPattern = StoreGeneratedPattern.Computed;
+                        }
+                    }
+
+                    listKeyProperties.Add(keyProp);
+                }
+
+                keyProperties = listKeyProperties.ToArray();
+                _dict.Add(t, keyProperties);
             }
-
-            KeyProperties[] keyProperties = listKeyProperties.ToArray();
-            _dict.Add(t, keyProperties);
-
             return keyProperties;
         }
 

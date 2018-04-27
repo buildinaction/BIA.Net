@@ -46,7 +46,7 @@ var BIA;
                     return AjaxLoading.aForAbsoluteURL.href;
                 };
                 AjaxLoading.UniformmizeUrl = function (url) {
-                    return AjaxLoading.removeParam(['bianetdialogurlparent', 'bianetdialogdisplayflag'], AjaxLoading.getAbsoluteUrl(url).toLowerCase().replace(/#/g, "").replace(/\/$/, ""));
+                    return AjaxLoading.removeParam(['bianetdialogurlparent', 'bianetdialogdisplayflag', 'bianetdialogredirectedurl'], AjaxLoading.getAbsoluteUrl(url).toLowerCase().replace(/#/g, "").replace(/\/$/, ""));
                 };
                 AjaxLoading.ManageSubmitFormInDailog = function (dialogDiv, formElem) {
                     if ((!formElem.valid) || (formElem.data("validator") && formElem.data("validator").cancelSubmit) || (formElem.valid())) {
@@ -59,7 +59,6 @@ var BIA;
                         formElem.append('<input type=\'hidden\' name=\'BIANetDialogUrlParent\' value=\'' + parentUrl + '\' />');
                         var dataToSend = formElem.serialize(); // serializes the form's elements.
                         var urlBefore = dialogDiv.urlCurrent;
-                        dialog.html("Loading ...");
                         //console.log("FormInDialog : begin ajax");
                         var ajaxSettings = {
                             type: "POST",
@@ -75,7 +74,8 @@ var BIA;
                                 AjaxLoading.ErrorAjaxReplaceInCurrentDialog(xhr.responseText, this.dialogDiv, this.url, this.url, AjaxLoading.getResponseURL(xhr), xhr.getResponseHeader('location'), this.dialogDiv.IsStandardHistory());
                             }
                         };
-                        dialog.css("cursor", "progress");
+                        dialogDiv.dialogElem.append("<div id=\"divLoading\"></div>");
+                        dialogDiv.dialogElem.css("cursor", "progress");
                         $.ajax(ajaxSettings);
                     }
                 };
@@ -88,7 +88,6 @@ var BIA;
                     var DialogType = dialogDiv.type;
                     var url_timed = AjaxLoading.buildUrl(url, 'BIANetDialogDisplayFlag', DialogType.toString());
                     url_timed = AjaxLoading.buildUrl(url_timed, 'BIANetDialogUrlParent', dialogDiv.GetParentUrl());
-                    //dialog.html("Loading ...");
                     var ajaxSettings = {
                         url: url_timed,
                         urlOrigin: url,
@@ -102,6 +101,7 @@ var BIA;
                             AjaxLoading.ErrorAjaxReplaceInCurrentDialog(xhr.responseText, this.dialogDiv, this.urlOrigin, this.url, AjaxLoading.getResponseURL(xhr), xhr.getResponseHeader('location'), addHistory);
                         }
                     };
+                    dialogDiv.dialogElem.append("<div id=\"divLoading\"></div>");
                     dialogDiv.dialogElem.css("cursor", "progress");
                     $.ajax(ajaxSettings);
                 };
@@ -123,8 +123,12 @@ var BIA;
                         dialogDiv.OnDialogLoaded(data, newUrl);
                         //Change the URL history
                         if (addHistory) {
-                            var title = dialogDiv.dialogElem.find('title')[0].innerHTML;
-                            document.getElementsByTagName('title')[0].innerHTML = title;
+                            var titleElems = dialogDiv.dialogElem.find('title');
+                            var title = "";
+                            if (titleElems != null && titleElems.length > 0) {
+                                title = titleElems[0].innerHTML;
+                                document.getElementsByTagName('title')[0].innerHTML = title;
+                            }
                             window.history.pushState({ ajaxUrl: newUrl, ajaxDivContent: dialogDiv.divContent, ajaxDivScript: dialogDiv.divScript, ajaxDivType: dialogDiv.type }, title, newUrl);
                         }
                     }

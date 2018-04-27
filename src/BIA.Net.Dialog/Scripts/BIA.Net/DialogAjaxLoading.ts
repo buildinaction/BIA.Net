@@ -26,29 +26,29 @@ module BIA.Net.Dialog {
             }
             return rtn;
         }
-        
+
         public static getResponseURL(xhr) {
-        /*    if ('responseURL' in xhr) {
-                return xhr.responseURL;
-            }
-            if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
-                return xhr.getResponseHeader('X-Request-URL');
-            }*/
-            if(/^bianetdialogredirectedurl:/m.test(xhr.getAllResponseHeaders())) {
+            /*    if ('responseURL' in xhr) {
+                    return xhr.responseURL;
+                }
+                if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
+                    return xhr.getResponseHeader('X-Request-URL');
+                }*/
+            if (/^bianetdialogredirectedurl:/m.test(xhr.getAllResponseHeaders())) {
                 return xhr.getResponseHeader('bianetdialogredirectedurl');
             }
             return;
         }
 
         public static aForAbsoluteURL = null;
-        public static getAbsoluteUrl(url: string) : string {
+        public static getAbsoluteUrl(url: string): string {
             AjaxLoading.aForAbsoluteURL = AjaxLoading.aForAbsoluteURL || document.createElement('a');
             AjaxLoading.aForAbsoluteURL.href = url;
             return AjaxLoading.aForAbsoluteURL.href;
         }
 
         public static UniformmizeUrl(url) {
-            return AjaxLoading.removeParam(['bianetdialogurlparent', 'bianetdialogdisplayflag'], AjaxLoading.getAbsoluteUrl(url).toLowerCase().replace(/#/g, "").replace(/\/$/, ""));
+            return AjaxLoading.removeParam(['bianetdialogurlparent', 'bianetdialogdisplayflag', 'bianetdialogredirectedurl'], AjaxLoading.getAbsoluteUrl(url).toLowerCase().replace(/#/g, "").replace(/\/$/, ""));
         }
 
         public static ManageSubmitFormInDailog(dialogDiv: DialogDiv, formElem: JQuery) {
@@ -64,7 +64,6 @@ module BIA.Net.Dialog {
                 var dataToSend = formElem.serialize();// serializes the form's elements.
                 var urlBefore = dialogDiv.urlCurrent;
 
-                dialog.html("Loading ...");
                 //console.log("FormInDialog : begin ajax");
                 var ajaxSettings = {
                     type: "POST",
@@ -80,7 +79,8 @@ module BIA.Net.Dialog {
                         AjaxLoading.ErrorAjaxReplaceInCurrentDialog(xhr.responseText, this.dialogDiv, this.url, this.url, AjaxLoading.getResponseURL(xhr), xhr.getResponseHeader('location'), this.dialogDiv.IsStandardHistory())
                     }
                 };
-                dialog.css("cursor", "progress");
+                dialogDiv.dialogElem.append("<div id=\"divLoading\"></div>");
+                dialogDiv.dialogElem.css("cursor", "progress");
                 $.ajax(ajaxSettings);
             }
         }
@@ -95,7 +95,6 @@ module BIA.Net.Dialog {
             var url_timed = AjaxLoading.buildUrl(url, 'BIANetDialogDisplayFlag', DialogType.toString());
             url_timed = AjaxLoading.buildUrl(url_timed, 'BIANetDialogUrlParent', dialogDiv.GetParentUrl());
 
-            //dialog.html("Loading ...");
             var ajaxSettings = {
                 url: url_timed,
                 urlOrigin: url,
@@ -109,13 +108,14 @@ module BIA.Net.Dialog {
                     AjaxLoading.ErrorAjaxReplaceInCurrentDialog(xhr.responseText, this.dialogDiv, this.urlOrigin, this.url, AjaxLoading.getResponseURL(xhr), xhr.getResponseHeader('location'), addHistory)
                 }
             };
+            dialogDiv.dialogElem.append("<div id=\"divLoading\"></div>");
             dialogDiv.dialogElem.css("cursor", "progress");
             $.ajax(ajaxSettings);
 
 
         };
 
-        public static SuccesAjaxReplaceInCurrentDialog(data: string, dialogDiv:DialogDiv, urlorigin: string, url: string, responseURL: string, addHistory: boolean) {
+        public static SuccesAjaxReplaceInCurrentDialog(data: string, dialogDiv: DialogDiv, urlorigin: string, url: string, responseURL: string, addHistory: boolean) {
             //console.log("SuccesAjaxReplaceInCurrentDialog");
             if (data == "Close Dialog") {
                 //console.log("close detected");
@@ -123,7 +123,7 @@ module BIA.Net.Dialog {
                 dialogDiv.dialogElem.dialog("close");
             }
             else {
-                
+
                 dialogDiv.CleanDialog();
                 let newUrl = "";
                 if (responseURL && (AjaxLoading.UniformmizeUrl(responseURL) != AjaxLoading.UniformmizeUrl(url))) newUrl = AjaxLoading.UniformmizeUrl(responseURL)
@@ -133,8 +133,12 @@ module BIA.Net.Dialog {
 
                 //Change the URL history
                 if (addHistory) {
-                    var title = dialogDiv.dialogElem.find('title')[0].innerHTML;
-                    document.getElementsByTagName('title')[0].innerHTML = title;
+                    var titleElems = dialogDiv.dialogElem.find('title');
+                    var title = "";
+                    if (titleElems != null && titleElems.length > 0) {
+                        title = titleElems[0].innerHTML;
+                        document.getElementsByTagName('title')[0].innerHTML = title;
+                    }
                     window.history.pushState({ ajaxUrl: newUrl, ajaxDivContent: dialogDiv.divContent, ajaxDivScript: dialogDiv.divScript, ajaxDivType: dialogDiv.type }, title, newUrl);
                 }
             }

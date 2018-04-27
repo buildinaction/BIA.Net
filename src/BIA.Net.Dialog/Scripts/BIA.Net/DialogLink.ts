@@ -3,9 +3,9 @@
     ///let TestLink = new DialogLink($(document));
 
     enum DialogLinkTarget {
-        None=0,
-        Blank=1,
-        Current=2
+        None = 0,
+        Blank = 1,
+        Current = 2
     }
 
     export class DialogLink {
@@ -25,6 +25,7 @@
 
         public static PrepareLinkElement(linkElem: JQuery, parent: DialogDiv) {
             var url = linkElem.attr('href');
+            let containLink: boolean = false;
             if (url == null || url == "") {
                 var onclick = linkElem.attr('onclick');
                 if (onclick != null && onclick != "") {
@@ -42,26 +43,28 @@
                         }
                     }
                     if (url != null && url != "") {
+                        containLink = true;
                         linkElem.attr("onclick", "");
                     }
                 }
             }
             else {
                 //To avoid change on the this.url in case of use "mailto"
-                if (url.substr(0, 7) != "mailto:") {
+                if ((url.substr(0, 7) != "mailto:") && (url.substr(0, 11) != "javascript:")) {
+                    containLink = true;
                     linkElem.removeAttr("href");
                     linkElem.attr("style", "cursor:pointer");
                 }
             }
             //To avoid change on the this.url in case of use "mailto"
-            if (url != null && url != "" && url.substr(0, 7) != "mailto:") {
+            if (containLink) {
                 var DialogLink = new BIA.Net.Dialog.DialogLink(linkElem, parent, url);
                 linkElem.click(function (e) {
                     DialogLink.ActionClick();
                     e.stopPropagation();
                 });
             }
-        } 
+        }
 
         public ReplaceInRelatedDialog() {
             this.dialogDiv.ReplaceInCurrentDialog(this.url, false);
@@ -79,7 +82,7 @@
             }*/
             let attr = this.linkElem.attr("BIADialogLink");
             let dialogDivType: DialogDivType = DialogDivType.Popup;
-            if (attr== null) {
+            if (attr == null) {
                 if (this.parent.IsMainDialogDiv()) {
                     dialogDivType = DialogDivType.MainPageContent;
                 }
@@ -172,7 +175,7 @@
 
             if (dialogDivType == DialogDivType.Popup) {
                 this.target = DialogLinkTarget.Blank;
-                let dialog: any = $('<div class="BiaNetDialogPopup BiaNetDialogDiv">Loading ...</div>');
+                let dialog: any = $('<div class="BiaNetDialogPopup BiaNetDialogDiv"></div>');
                 this.dialogDiv = new DialogDiv(dialog, parentDialogDiv, dialogDivType);
                 let url = this.url;
                 let dialogDiv = this.dialogDiv;

@@ -65,14 +65,13 @@ namespace BIA.Net.Dialog.MVC.Controllers
                             return base.RedirectToAction("CloseDialog", "DialogBasicAction", null);
                         }
                     }
-                }
-
                 //Not parent page continue
                 if (routeValues == null)
                     routeValues = new RouteValueDictionary();
+                routeValues.Add("BIANetDialogDisplayFlag", (int)displayFlag);
+                routeValues.Add("BIANetDialogRedirectedUrl", Url.Action(actionName, routeValues));                }
             }
-            routeValues.Add("BIANetDialogDisplayFlag", (int)displayFlag);
-            routeValues.Add("BIANetDialogRedirectedUrl", Url.Action(actionName, routeValues));
+
             return base.RedirectToAction(actionName, controllerName, routeValues);
         }
 

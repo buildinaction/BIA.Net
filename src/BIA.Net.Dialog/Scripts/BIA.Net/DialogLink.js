@@ -21,6 +21,7 @@ var BIA;
                 }
                 DialogLink.PrepareLinkElement = function (linkElem, parent) {
                     var url = linkElem.attr('href');
+                    var containLink = false;
                     if (url == null || url == "") {
                         var onclick = linkElem.attr('onclick');
                         if (onclick != null && onclick != "") {
@@ -38,19 +39,21 @@ var BIA;
                                 }
                             }
                             if (url != null && url != "") {
+                                containLink = true;
                                 linkElem.attr("onclick", "");
                             }
                         }
                     }
                     else {
                         //To avoid change on the this.url in case of use "mailto"
-                        if (url.substr(0, 7) != "mailto:") {
+                        if ((url.substr(0, 7) != "mailto:") && (url.substr(0, 11) != "javascript:")) {
+                            containLink = true;
                             linkElem.removeAttr("href");
                             linkElem.attr("style", "cursor:pointer");
                         }
                     }
                     //To avoid change on the this.url in case of use "mailto"
-                    if (url != null && url != "" && url.substr(0, 7) != "mailto:") {
+                    if (containLink) {
                         var DialogLink = new BIA.Net.Dialog.DialogLink(linkElem, parent, url);
                         linkElem.click(function (e) {
                             DialogLink.ActionClick();
@@ -162,7 +165,7 @@ var BIA;
                         Height = parentViewPort.height();
                     if (dialogDivType == Dialog.DialogDivType.Popup) {
                         this.target = DialogLinkTarget.Blank;
-                        var dialog = $('<div class="BiaNetDialogPopup BiaNetDialogDiv">Loading ...</div>');
+                        var dialog = $('<div class="BiaNetDialogPopup BiaNetDialogDiv"></div>');
                         this.dialogDiv = new Dialog.DialogDiv(dialog, parentDialogDiv, dialogDivType);
                         var url_1 = this.url;
                         var dialogDiv_1 = this.dialogDiv;

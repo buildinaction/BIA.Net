@@ -38,23 +38,25 @@ namespace BIA.Net.Model.DAL
         {
             Type t = EntityTypeHelper.GetModelType(typeof(Entity));
             string[] properties;
-
-            Dict.TryGetValue(t, out properties);
-            if (properties != null)
+            lock (Dict)
             {
-                return properties;
-            }
+                Dict.TryGetValue(t, out properties);
+                if (properties != null)
+                {
+                    return properties;
+                }
 
-            if (!isMock)
-            {
-                properties = context.Entry(dbobj).CurrentValues.PropertyNames.ToArray();
-            }
-            else
-            {
-                properties = dbobj.GetType().GetProperties().Select(x => x.Name).ToArray();
-            }
+                if (!isMock)
+                {
+                    properties = context.Entry(dbobj).CurrentValues.PropertyNames.ToArray();
+                }
+                else
+                {
+                    properties = dbobj.GetType().GetProperties().Select(x => x.Name).ToArray();
+                }
 
-            Dict.Add(t, properties);
+                Dict.Add(t, properties);
+            }
 
             return properties;
         }
@@ -69,23 +71,26 @@ namespace BIA.Net.Model.DAL
         {
             string[] properties;
             Type t = EntityTypeHelper.GetModelType(typeof(Entity));
-
-            DictNavProp.TryGetValue(t, out properties);
-            if (properties != null)
+            lock (DictNavProp)
             {
-                return properties;
+                DictNavProp.TryGetValue(t, out properties);
+                if (properties != null)
+                {
+                    return properties;
+                }
+
+                // Get the System.Data.Entity.Core.Metadata.Edm.EntityType
+                // associated with the entity.
+                ObjectContext objectContext = ((IObjectContextAdapter)context).ObjectContext;
+
+                // create method CreateObjectSet with the generic parameter of the base-type
+                MethodInfo method = typeof(ObjectContext).GetMethod("CreateObjectSet", Type.EmptyTypes)
+                                                         .MakeGenericMethod(t);
+                dynamic objectSet = method.Invoke(objectContext, null);
+                IEnumerable<dynamic> keyMembers = objectSet.EntitySet.ElementType.NavigationProperties;
+                properties = keyMembers.Select(k => (string)k.Name).ToArray();
+                DictNavProp.Add(t, properties);
             }
-
-            // Get the System.Data.Entity.Core.Metadata.Edm.EntityType
-            // associated with the entity.
-            ObjectContext objectContext = ((IObjectContextAdapter)context).ObjectContext;
-
-            // create method CreateObjectSet with the generic parameter of the base-type
-            MethodInfo method = typeof(ObjectContext).GetMethod("CreateObjectSet", Type.EmptyTypes)
-                                                     .MakeGenericMethod(t);
-            dynamic objectSet = method.Invoke(objectContext, null);
-            IEnumerable<dynamic> keyMembers = objectSet.EntitySet.ElementType.NavigationProperties;
-            properties = keyMembers.Select(k => (string)k.Name).ToArray();
 
             return properties;
         }

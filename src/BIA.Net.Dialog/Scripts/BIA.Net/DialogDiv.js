@@ -5,8 +5,8 @@ var BIA;
         var Dialog;
         (function (Dialog) {
             $(document).ready(function () {
-                BIA.Net.Dialog.DialogDiv.LinkToDialog($(document));
-                BIA.Net.Dialog.DialogDiv.AddRefreshAction($(document));
+                BIA.Net.Dialog.DialogDiv.LinkToDialog(BIA.Net.Dialog.DialogDiv.GetMainDiv().dialogElem);
+                BIA.Net.Dialog.DialogDiv.AddRefreshAction(BIA.Net.Dialog.DialogDiv.GetMainDiv().dialogElem);
             });
             (function (DialogDivType) {
                 DialogDivType[DialogDivType["Popup"] = 1] = "Popup";
@@ -135,8 +135,13 @@ var BIA;
                 };
                 DialogDiv.PrepareContentDiv = function (parent, DivContent, DivScript, DivType) {
                     var dialog;
+                    if (parent == null)
+                        parent = DialogDiv.GetMainDiv();
                     if (DivContent != "") {
                         dialog = parent.dialogElem.find(DivContent);
+                        if (dialog == null || dialog.length == 0) {
+                            dialog = $(document).find(DivContent);
+                        }
                     }
                     else
                         dialog = parent.dialogElem;
@@ -150,6 +155,8 @@ var BIA;
                     return dialogDiv;
                 };
                 DialogDiv.ChangeContent = function (parent, addHistory, url, DivContent, DivScript, DivType) {
+                    if (DivScript === void 0) { DivScript = ""; }
+                    if (DivType === void 0) { DivType = DialogDivType.Content; }
                     var dialogDiv = DialogDiv.PrepareContentDiv(parent, DivContent, DivScript, DivType);
                     dialogDiv.ReplaceInCurrentDialog(url, addHistory);
                 };
@@ -174,8 +181,15 @@ var BIA;
                 };
                 DialogDiv.GetMainDiv = function () {
                     if (DialogDiv.MainDialogDiv == null) {
-                        DialogDiv.MainDialogDiv = new DialogDiv($(document), null, DialogDivType.Document);
-                        DialogDiv.MainDialogDiv.urlCurrent = window.location.href;
+                        var MainPageContent = $('.BiaNetMainPageContent');
+                        if (MainPageContent != null && MainPageContent.length == 1) {
+                            DialogDiv.MainDialogDiv = new DialogDiv(MainPageContent, null, DialogDivType.MainPageContent);
+                            DialogDiv.MainDialogDiv.urlCurrent = Dialog.AjaxLoading.UniformmizeUrl(window.location.href);
+                        }
+                        else {
+                            DialogDiv.MainDialogDiv = new DialogDiv($(document), null, DialogDivType.Document);
+                            DialogDiv.MainDialogDiv.urlCurrent = Dialog.AjaxLoading.UniformmizeUrl(window.location.href);
+                        }
                     }
                     return DialogDiv.MainDialogDiv;
                 };
@@ -248,7 +262,8 @@ var BIA;
                     $(window).trigger(evt);
                 };
                 DialogDiv.prototype.CleanDialog = function () {
-                    this.dialogElem.html("Loading ...");
+                    this.dialogElem.append("<div id=\"divLoading\"></div>");
+                    this.dialogElem.css("cursor", "progress");
                     //var childList = this.dialogElem.prop("dialogChildList");
                     if (this.children != null) {
                         this.children.forEach(function (entry) {
