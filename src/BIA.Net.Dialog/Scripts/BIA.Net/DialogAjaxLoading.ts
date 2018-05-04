@@ -1,6 +1,4 @@
 ﻿
-
-
 module BIA.Net.Dialog {
     var xhr;
     var _orgAjax = jQuery.ajaxSettings.xhr;
@@ -10,7 +8,6 @@ module BIA.Net.Dialog {
     };
 
     export class AjaxLoading {
-
         public static removeParam(keys, sourceURL) {
             var rtn = sourceURL.split("?")[0], param, params_arr = [], queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
             if (queryString !== "") {

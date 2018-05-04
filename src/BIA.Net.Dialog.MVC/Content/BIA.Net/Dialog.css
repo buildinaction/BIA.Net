@@ -1,0 +1,38 @@
+﻿/*.ui-dialog { z-index: 2000 !important ;}*/
+.navbar-fixed-top, .navbar-fixed-bottom {
+    z-index: 89;
+}
+.btn-action-bottom-dialog {
+    bottom:inherit;
+    /*left:inherit;
+    right:inherit;
+    margin-left: -16px;
+    margin-top: -20px;*/
+    position: absolute;
+    bottom:0px;
+}
+.ui-dialog {
+    padding: 1px;
+}
+
+.ui-dialog,
+.ui-dialog-content,
+.dialogContainer {
+    /*box-sizing: content-box;*/
+}
+
+.ui-dialog .ui-dialog-content {
+    overflow:hidden;
+    padding: 0px 0px;
+}
+
+.dialogContainer {
+    overflow: auto;
+    padding: 5px;
+    height:100%
+}
+
+.dialogContainer .form-horizontal .form-group {
+     margin-right: 0px; 
+     margin-left: 0px; 
+}

@@ -54,12 +54,12 @@
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
-    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
     <TypeScriptOutFile />
     <TypeScriptOutDir />
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
-    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
     <TypeScriptMapRoot />
     <TypeScriptSourceRoot />
   </PropertyGroup>
@@ -82,10 +82,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="_CreateNewNuGetPackage\DoNotModify\NuGet.exe" />
-    <Content Include="Scripts\BIA.Net\Dialog.js" />
-    <Content Include="Scripts\BIA.Net\DialogAjaxLoading.js" />
-    <Content Include="Scripts\BIA.Net\DialogDiv.js" />
-    <Content Include="Scripts\BIA.Net\DialogLink.js" />
     <Content Include="_Guides\BIA.Net.Dialog.txt" />
   </ItemGroup>
   <ItemGroup>

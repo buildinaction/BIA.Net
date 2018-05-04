@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.MVC", "BIA.Net.MVC\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Business", "BIA.Net.Business\BIA.Net.Business.csproj", "{3F87600C-7C87-4768-812D-3CFDEDAE5E2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Dialog", "BIA.Net.Dialog\BIA.Net.Dialog.csproj", "{08AFA28F-5D87-4728-A71A-A2A28FB32693}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Dialog.MVC", "BIA.Net.Dialog.MVC\BIA.Net.Dialog.MVC.csproj", "{D1C8A684-B4E0-40E7-B40A-DD58A3E8A80F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication_BIA.Net_Test", "WebApplication_BIA.Net_Test\WebApplication_BIA.Net_Test.csproj", "{BDE858B3-99D4-4272-8237-643B82028DE3}"
@@ -40,6 +38,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.DataTable.DTO", "BIA.Net.DataTable.DTO\BIA.Net.DataTable.DTO.csproj", "{27C61A0B-D29F-4B28-A1EA-ED1A42D2CF71}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.DataTable.MVC", "BIA.Net.DataTable.MVC\BIA.Net.DataTable.MVC.csproj", "{60AA7919-68DF-45C3-A97E-BC3605CCE179}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Dialog.DT", "BIA.Net.Dialog.DT\BIA.Net.Dialog.DT.csproj", "{171B8344-CFC4-466B-9853-01A157C1A2AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,10 +67,6 @@ Global
 		{3F87600C-7C87-4768-812D-3CFDEDAE5E2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F87600C-7C87-4768-812D-3CFDEDAE5E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F87600C-7C87-4768-812D-3CFDEDAE5E2A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{08AFA28F-5D87-4728-A71A-A2A28FB32693}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{08AFA28F-5D87-4728-A71A-A2A28FB32693}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{08AFA28F-5D87-4728-A71A-A2A28FB32693}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{08AFA28F-5D87-4728-A71A-A2A28FB32693}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D1C8A684-B4E0-40E7-B40A-DD58A3E8A80F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D1C8A684-B4E0-40E7-B40A-DD58A3E8A80F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1C8A684-B4E0-40E7-B40A-DD58A3E8A80F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -107,6 +103,10 @@ Global
 		{60AA7919-68DF-45C3-A97E-BC3605CCE179}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60AA7919-68DF-45C3-A97E-BC3605CCE179}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60AA7919-68DF-45C3-A97E-BC3605CCE179}.Release|Any CPU.Build.0 = Release|Any CPU
+		{171B8344-CFC4-466B-9853-01A157C1A2AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{171B8344-CFC4-466B-9853-01A157C1A2AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{171B8344-CFC4-466B-9853-01A157C1A2AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{171B8344-CFC4-466B-9853-01A157C1A2AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

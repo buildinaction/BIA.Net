@@ -13,5 +13,15 @@ namespace BIA.Net.Dialog.MVC.Controllers
         {
             return Content("Close Dialog");
         }
+        // GET: Dialog
+        public ActionResult CloseParentDialog()
+        {
+            return Content("Close Parent Dialog");
+        }
+        // GET: Dialog
+        public ActionResult ActionDialog(string action)
+        {
+            return Content("Action Dialog:" + action);
+        }
     }
 }

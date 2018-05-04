@@ -1,6 +1,6 @@
 ﻿var DataTableSettings = [];
 
-function BIAInitFullAjaxDataTable(dataTableId, url_GetListData, columns, displayExportButton, getDataExtend, url_OnClickRow) {
+function BIAInitFullAjaxDataTable(dataTableId, url_GetListData, columns, displayExportButton, getDataExtend, url_OnClickRow, rowCallback) {
 
     let dom = 'lfrtip';
     var button = null;
@@ -49,7 +49,8 @@ function BIAInitFullAjaxDataTable(dataTableId, url_GetListData, columns, display
             $(this).LinkToDialog();
             $(this).AddRefreshAction();
         },
-        "columns": columns
+        "columns": columns,
+        "rowCallback": rowCallback
     });
 }
 
