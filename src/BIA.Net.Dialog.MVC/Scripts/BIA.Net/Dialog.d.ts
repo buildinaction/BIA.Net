@@ -1,4 +1,7 @@
 declare module BIA.Net.Dialog {
+    function Close(linkElem: JQuery): void;
+    function DoActionAndRefresh(linkElem: JQuery, urlAction: string): void;
+    function RefreshCurrentDialog(linkElem: JQuery): void;
 }
 declare module BIA.Net.Dialog {
     class AjaxLoading {

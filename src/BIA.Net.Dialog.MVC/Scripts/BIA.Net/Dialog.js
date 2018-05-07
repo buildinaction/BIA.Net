@@ -4,16 +4,20 @@ var BIA;
     (function (Net) {
         var Dialog;
         (function (Dialog) {
-            function DoActionAndRefresh(dollarThis, urlAction) {
+            function Close(linkElem) {
+                BIA.Net.Dialog.DialogDiv.GetParentDialogDiv(linkElem).dialogElem.dialog('close');
+            }
+            Dialog.Close = Close;
+            function DoActionAndRefresh(linkElem, urlAction) {
                 $("body").css("cursor", "progress");
                 var ajaxSettings = {
                     type: 'POST',
                     async: true,
                     dataType: 'json',
                     url: urlAction,
-                    dollarThis: dollarThis,
+                    linkElem: linkElem,
                     success: function (data) {
-                        RefreshCurrentDialog(this.dollarThis);
+                        RefreshCurrentDialog(this.linkElem);
                         $("body").css("cursor", "default");
                     },
                     error: function (error) {
@@ -22,10 +26,12 @@ var BIA;
                 };
                 $.ajax(ajaxSettings);
             }
+            Dialog.DoActionAndRefresh = DoActionAndRefresh;
             function RefreshCurrentDialog(linkElem) {
                 var dialogDiv = BIA.Net.Dialog.DialogDiv.GetParentDialogDiv(linkElem);
                 dialogDiv.ReplaceInCurrentDialog(dialogDiv.urlCurrent, false);
             }
+            Dialog.RefreshCurrentDialog = RefreshCurrentDialog;
             $.fn.submitNoValidation = function (e) {
                 $(this).removeData('validator');
                 $(this).removeData('unobtrusiveValidation');
@@ -166,6 +172,7 @@ var BIA;
                         //console.log("close detected");
                         var str = data.substr(14);
                         var evt = $.Event('OnBIADialogAction');
+                        evt.dialogDiv = dialogDiv;
                         evt.dialog = dialogDiv.dialogElem;
                         evt.action = str;
                         $(window).trigger(evt);
@@ -272,12 +279,14 @@ var BIA;
                     var onlyEvent = this.isOnlyEvent;
                     if (onlyEvent) {
                         var evt = $.Event('OnBIADialogRefresh');
+                        evt.dialogDiv = ParentDialog;
                         evt.dialog = ParentDialog.dialogElem;
                         evt.element = this.elemToRefresh;
                         $(window).trigger(evt);
                     }
                     else {
                         var evt = $.Event('OnBIADialogRefreshing');
+                        evt.dialogDiv = ParentDialog;
                         evt.dialog = ParentDialog.dialogElem;
                         evt.element = this.elemToRefresh;
                         $(window).trigger(evt);
@@ -295,6 +304,7 @@ var BIA;
                                 this.ParentDialog.LinkToDialog(this.CurrentDialogDiv.elemToRefresh);
                                 this.ParentDialog.AddRefreshAction();
                                 var evt = $.Event('OnBIADialogRefreshed');
+                                evt.dialogDiv = this.ParentDialog;
                                 evt.dialog = this.ParentDialog.dialogElem;
                                 evt.element = this.CurrentDialogDiv.elemToRefresh;
                                 $(window).trigger(evt);
@@ -475,11 +485,13 @@ var BIA;
                     this.OnResizeDialog();
                     this.AddRefreshAction();
                     var evt = $.Event('OnBIADialogLoaded');
+                    evt.dialogDiv = this;
                     evt.dialog = this.dialogElem;
                     $(window).trigger(evt);
                 };
                 DialogDiv.prototype.OnResizeDialog = function () {
                     var evt = $.Event('OnBIADialogResize');
+                    evt.dialogDiv = this;
                     evt.dialog = this.dialogElem;
                     $(window).trigger(evt);
                 };

@@ -1,6 +1,9 @@
 ﻿module BIA.Net.Dialog {
+    export function Close(linkElem:JQuery) {
+        BIA.Net.Dialog.DialogDiv.GetParentDialogDiv(linkElem).dialogElem.dialog('close');
+    }
 
-    function DoActionAndRefresh(dollarThis, urlAction) {
+    export function DoActionAndRefresh(linkElem: JQuery, urlAction: string) {
         $("body").css("cursor", "progress");
         var ajaxSettings = {
 
@@ -8,9 +11,9 @@
             async: true,
             dataType: 'json',
             url: urlAction,
-            dollarThis: dollarThis,
+            linkElem: linkElem,
             success: function (data) {
-                RefreshCurrentDialog(this.dollarThis);
+                RefreshCurrentDialog(this.linkElem);
                 $("body").css("cursor", "default");
             },
             error: function (error) {
@@ -20,7 +23,7 @@
         $.ajax(ajaxSettings);
     }
 
-    function RefreshCurrentDialog(linkElem) {
+    export function RefreshCurrentDialog(linkElem: JQuery) {
         var dialogDiv = BIA.Net.Dialog.DialogDiv.GetParentDialogDiv(linkElem);
         dialogDiv.ReplaceInCurrentDialog(dialogDiv.urlCurrent, false);
     }

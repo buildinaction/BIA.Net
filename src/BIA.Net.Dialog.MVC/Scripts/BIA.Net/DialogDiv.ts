@@ -24,7 +24,6 @@
         //check if used
         parentDialogDiv: DialogDiv;
 
-
         public RefreshContent() {
             var formElem = null;
             var dataToSend = null;
@@ -57,12 +56,14 @@
             var onlyEvent = this.isOnlyEvent;
             if (onlyEvent) {
                 var evt = $.Event('OnBIADialogRefresh');
+                evt.dialogDiv = ParentDialog;
                 evt.dialog = ParentDialog.dialogElem;
                 evt.element = this.elemToRefresh;
                 $(window).trigger(evt);
             }
             else {
                 var evt = $.Event('OnBIADialogRefreshing');
+                evt.dialogDiv = ParentDialog;
                 evt.dialog = ParentDialog.dialogElem;
                 evt.element = this.elemToRefresh;
                 $(window).trigger(evt);
@@ -81,6 +82,7 @@
 
                         this.ParentDialog.AddRefreshAction();
                         var evt = $.Event('OnBIADialogRefreshed');
+                        evt.dialogDiv = this.ParentDialog;
                         evt.dialog = this.ParentDialog.dialogElem;
                         evt.element = this.CurrentDialogDiv.elemToRefresh;
                         $(window).trigger(evt);
@@ -277,11 +279,13 @@
             this.OnResizeDialog();
             this.AddRefreshAction();
             var evt = $.Event('OnBIADialogLoaded');
+            evt.dialogDiv = this;
             evt.dialog = this.dialogElem;
             $(window).trigger(evt);
         }
         public OnResizeDialog() {
             var evt = $.Event('OnBIADialogResize');
+            evt.dialogDiv = this;
             evt.dialog = this.dialogElem;
             $(window).trigger(evt);
         }

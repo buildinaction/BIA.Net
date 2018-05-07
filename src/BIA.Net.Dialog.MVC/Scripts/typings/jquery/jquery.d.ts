@@ -497,6 +497,7 @@ interface JQueryKeyEventObject extends JQueryInputEventObject {
 
 interface JQueryEventObject extends BaseJQueryEventObject, JQueryInputEventObject, JQueryMouseEventObject, JQueryKeyEventObject{
     dialog?: JQuery;
+    dialogDiv?: BIA.Net.Dialog.DialogDiv;
     element?: JQuery;
     action?: string;
 }

@@ -19,9 +19,9 @@ namespace BIA.Net.Dialog.MVC.Controllers
             return Content("Close Parent Dialog");
         }
         // GET: Dialog
-        public ActionResult ActionDialog(string action)
+        public ActionResult ActionDialog(string actionJS)
         {
-            return Content("Action Dialog:" + action);
+            return Content("Action Dialog:" + actionJS);
         }
     }
 }

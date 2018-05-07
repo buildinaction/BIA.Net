@@ -131,6 +131,7 @@ module BIA.Net.Dialog {
                 //console.log("close detected");
                 var str = data.substr(14);
                 var evt = $.Event('OnBIADialogAction');
+                evt.dialogDiv = dialogDiv;
                 evt.dialog = dialogDiv.dialogElem;
                 evt.action = str;
                 $(window).trigger(evt);
