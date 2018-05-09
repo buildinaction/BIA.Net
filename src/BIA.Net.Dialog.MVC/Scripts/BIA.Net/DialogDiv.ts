@@ -328,51 +328,52 @@
 
         public AddRefreshAction(scopeElem?: JQuery) {
             if (scopeElem == null) scopeElem = this.dialogElem;
-            let CurrentDialogDiv: DialogDiv = this;
-            let CurrentDialog: JQuery = this.dialogElem;
-            let RefrechActionCurrentDialog: RefreshAction[] = [];
-            scopeElem.find('[BIADialogRefresh]')
-                .each(function (e) {
-                    let onFormValidated: string[] = [];
-                    let dialogRefreshUrl: string = null;
-                    let dialogRefreshFormId: string = null;
-                    let dialogRefreshOnlyEvent: boolean = false;
-                    let DialogRefreshParams = $(this).attr('BIADialogRefresh').split(';');
-                    for (let x = 0; x < DialogRefreshParams.length; x++) {
-                        var d = DialogRefreshParams[x].split(":");
-                        if (d.length == 2) {
-                            var key = d[0].toLowerCase();
-                            var val = d[1].toLowerCase();
-                            if (key == "onformvalidated") {
-                                onFormValidated = val.split("|");
+            if (scopeElem != null) {
+                let CurrentDialogDiv: DialogDiv = this;
+                let CurrentDialog: JQuery = this.dialogElem;
+                let RefrechActionCurrentDialog: RefreshAction[] = [];
+                scopeElem.find('[BIADialogRefresh]')
+                    .each(function (e) {
+                        let onFormValidated: string[] = [];
+                        let dialogRefreshUrl: string = null;
+                        let dialogRefreshFormId: string = null;
+                        let dialogRefreshOnlyEvent: boolean = false;
+                        let DialogRefreshParams = $(this).attr('BIADialogRefresh').split(';');
+                        for (let x = 0; x < DialogRefreshParams.length; x++) {
+                            var d = DialogRefreshParams[x].split(":");
+                            if (d.length == 2) {
+                                var key = d[0].toLowerCase();
+                                var val = d[1].toLowerCase();
+                                if (key == "onformvalidated") {
+                                    onFormValidated = val.split("|");
+                                }
+                                if (key == "url") {
+                                    dialogRefreshUrl = val;
+                                }
+                                if (key == "formid") {
+                                    dialogRefreshFormId = d[1];
+                                }
                             }
-                            if (key == "url") {
-                                dialogRefreshUrl = val;
-                            }
-                            if (key == "formid") {
-                                dialogRefreshFormId = d[1];
+                            else if (d.length == 1) {
+                                var val = d[0].toLowerCase();
+                                if (val == "onlyevent") {
+                                    dialogRefreshOnlyEvent = true;
+                                }
                             }
                         }
-                        else if (d.length == 1) {
-                            var val = d[0].toLowerCase();
-                            if (val == "onlyevent") {
-                                dialogRefreshOnlyEvent = true;
-                            }
-                        }
-                    }
-                    let refrechAction: RefreshAction = new RefreshAction();
-                    refrechAction.elemToRefresh = $(this);
-                    refrechAction.refreshUrl = dialogRefreshUrl;
-                    refrechAction.formToRefresh = dialogRefreshFormId;
-                    refrechAction.isOnlyEvent = dialogRefreshOnlyEvent;
-                    refrechAction.OnValidatedFormsUrls = onFormValidated;
-                    refrechAction.parentDialogDiv = CurrentDialogDiv;
-                    RefrechActionCurrentDialog.push(refrechAction);
-                });
+                        let refrechAction: RefreshAction = new RefreshAction();
+                        refrechAction.elemToRefresh = $(this);
+                        refrechAction.refreshUrl = dialogRefreshUrl;
+                        refrechAction.formToRefresh = dialogRefreshFormId;
+                        refrechAction.isOnlyEvent = dialogRefreshOnlyEvent;
+                        refrechAction.OnValidatedFormsUrls = onFormValidated;
+                        refrechAction.parentDialogDiv = CurrentDialogDiv;
+                        RefrechActionCurrentDialog.push(refrechAction);
+                    });
 
-            CurrentDialogDiv.refrechAction = RefrechActionCurrentDialog
+                CurrentDialogDiv.refrechAction = RefrechActionCurrentDialog
 
-
+            }
         };
 
 

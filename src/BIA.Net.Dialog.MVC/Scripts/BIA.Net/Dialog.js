@@ -74,8 +74,8 @@ var BIA;
                 //return false;
             };
             $(document).ready(function () {
-                BIA.Net.Dialog.LinkToDialog(BIA.Net.Dialog.DialogDiv.GetMainDiv().dialogElem);
-                BIA.Net.Dialog.AddRefreshAction(BIA.Net.Dialog.DialogDiv.GetMainDiv().dialogElem);
+                BIA.Net.Dialog.LinkToDialog($(document));
+                BIA.Net.Dialog.AddRefreshAction($(document));
             });
         })(Dialog = Net.Dialog || (Net.Dialog = {}));
     })(Net = BIA.Net || (BIA.Net = {}));
@@ -569,48 +569,50 @@ var BIA;
                 DialogDiv.prototype.AddRefreshAction = function (scopeElem) {
                     if (scopeElem == null)
                         scopeElem = this.dialogElem;
-                    var CurrentDialogDiv = this;
-                    var CurrentDialog = this.dialogElem;
-                    var RefrechActionCurrentDialog = [];
-                    scopeElem.find('[BIADialogRefresh]')
-                        .each(function (e) {
-                        var onFormValidated = [];
-                        var dialogRefreshUrl = null;
-                        var dialogRefreshFormId = null;
-                        var dialogRefreshOnlyEvent = false;
-                        var DialogRefreshParams = $(this).attr('BIADialogRefresh').split(';');
-                        for (var x = 0; x < DialogRefreshParams.length; x++) {
-                            var d = DialogRefreshParams[x].split(":");
-                            if (d.length == 2) {
-                                var key = d[0].toLowerCase();
-                                var val = d[1].toLowerCase();
-                                if (key == "onformvalidated") {
-                                    onFormValidated = val.split("|");
+                    if (scopeElem != null) {
+                        var CurrentDialogDiv_1 = this;
+                        var CurrentDialog = this.dialogElem;
+                        var RefrechActionCurrentDialog_1 = [];
+                        scopeElem.find('[BIADialogRefresh]')
+                            .each(function (e) {
+                            var onFormValidated = [];
+                            var dialogRefreshUrl = null;
+                            var dialogRefreshFormId = null;
+                            var dialogRefreshOnlyEvent = false;
+                            var DialogRefreshParams = $(this).attr('BIADialogRefresh').split(';');
+                            for (var x = 0; x < DialogRefreshParams.length; x++) {
+                                var d = DialogRefreshParams[x].split(":");
+                                if (d.length == 2) {
+                                    var key = d[0].toLowerCase();
+                                    var val = d[1].toLowerCase();
+                                    if (key == "onformvalidated") {
+                                        onFormValidated = val.split("|");
+                                    }
+                                    if (key == "url") {
+                                        dialogRefreshUrl = val;
+                                    }
+                                    if (key == "formid") {
+                                        dialogRefreshFormId = d[1];
+                                    }
                                 }
-                                if (key == "url") {
-                                    dialogRefreshUrl = val;
-                                }
-                                if (key == "formid") {
-                                    dialogRefreshFormId = d[1];
+                                else if (d.length == 1) {
+                                    var val = d[0].toLowerCase();
+                                    if (val == "onlyevent") {
+                                        dialogRefreshOnlyEvent = true;
+                                    }
                                 }
                             }
-                            else if (d.length == 1) {
-                                var val = d[0].toLowerCase();
-                                if (val == "onlyevent") {
-                                    dialogRefreshOnlyEvent = true;
-                                }
-                            }
-                        }
-                        var refrechAction = new RefreshAction();
-                        refrechAction.elemToRefresh = $(this);
-                        refrechAction.refreshUrl = dialogRefreshUrl;
-                        refrechAction.formToRefresh = dialogRefreshFormId;
-                        refrechAction.isOnlyEvent = dialogRefreshOnlyEvent;
-                        refrechAction.OnValidatedFormsUrls = onFormValidated;
-                        refrechAction.parentDialogDiv = CurrentDialogDiv;
-                        RefrechActionCurrentDialog.push(refrechAction);
-                    });
-                    CurrentDialogDiv.refrechAction = RefrechActionCurrentDialog;
+                            var refrechAction = new RefreshAction();
+                            refrechAction.elemToRefresh = $(this);
+                            refrechAction.refreshUrl = dialogRefreshUrl;
+                            refrechAction.formToRefresh = dialogRefreshFormId;
+                            refrechAction.isOnlyEvent = dialogRefreshOnlyEvent;
+                            refrechAction.OnValidatedFormsUrls = onFormValidated;
+                            refrechAction.parentDialogDiv = CurrentDialogDiv_1;
+                            RefrechActionCurrentDialog_1.push(refrechAction);
+                        });
+                        CurrentDialogDiv_1.refrechAction = RefrechActionCurrentDialog_1;
+                    }
                 };
                 ;
                 DialogDiv.prototype.CleanRefreshAction = function (scopeElem) {
