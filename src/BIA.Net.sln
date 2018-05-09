@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.DataTable.MVC", "BI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Dialog.DT", "BIA.Net.Dialog.DT\BIA.Net.Dialog.DT.csproj", "{171B8344-CFC4-466B-9853-01A157C1A2AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.DataTable.DT", "BIA.Net.DataTable.DT\BIA.Net.DataTable.DT.csproj", "{D34BDEE4-2AC3-4FCE-80CC-C7265DBE3112}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,10 @@ Global
 		{171B8344-CFC4-466B-9853-01A157C1A2AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{171B8344-CFC4-466B-9853-01A157C1A2AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{171B8344-CFC4-466B-9853-01A157C1A2AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D34BDEE4-2AC3-4FCE-80CC-C7265DBE3112}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D34BDEE4-2AC3-4FCE-80CC-C7265DBE3112}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D34BDEE4-2AC3-4FCE-80CC-C7265DBE3112}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D34BDEE4-2AC3-4FCE-80CC-C7265DBE3112}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

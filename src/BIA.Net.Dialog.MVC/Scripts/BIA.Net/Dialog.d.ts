@@ -1,5 +1,10 @@
 declare module BIA.Net.Dialog {
     function Close(linkElem: JQuery): void;
+    function LinkToDialog(scopeElem: JQuery): void;
+    function LinkInDialog(scopeElem: any): void;
+    function AddRefreshAction(scopeElem: any): void;
+    function GetParentDialogDiv(linkElem: JQuery): DialogDiv;
+    function ChangeContent(parent: DialogDiv, addHistory: boolean, url: string, DivContent: string, DivScript?: string, DivType?: DialogDivType): void;
     function DoActionAndRefresh(linkElem: JQuery, urlAction: string): void;
     function RefreshCurrentDialog(linkElem: JQuery): void;
 }
@@ -52,14 +57,10 @@ declare module BIA.Net.Dialog {
         static GetDialogDivByJQuery(dialog: JQuery): DialogDiv;
         private static RemoveDialogfromArrayByJQuery(dialog);
         static PrepareContentDiv(parent: DialogDiv, DivContent: string, DivScript: string, DivType: DialogDivType): DialogDiv;
-        static ChangeContent(parent: DialogDiv, addHistory: boolean, url: string, DivContent: string, DivScript?: string, DivType?: DialogDivType): void;
         ReplaceInCurrentDialog(url: any, addHistory: any): void;
-        GetViewPort(): JQuery;
+        GetViewPort(): any;
         static GetMainDiv(): DialogDiv;
-        static GetParentDialogDiv(linkElem: JQuery): DialogDiv;
-        static LinkInDialog(scopeElem: any): void;
         LinkInDialog(scopeElem?: JQuery): void;
-        static LinkToDialog(scopeElem: any): void;
         LinkToDialog(scopeElem?: JQuery): void;
         FormInDialog(scopeElem?: JQuery): void;
         OnDialogLoaded(data: any, newUrl: any): void;
@@ -69,7 +70,6 @@ declare module BIA.Net.Dialog {
         AddDialogToChildList(child: DialogDiv): void;
         static refreshIfRequiered(urlValidated: any): void;
         private refreshIfRequiered(urlValidated);
-        static AddRefreshAction(scopeElem: any): void;
         AddRefreshAction(scopeElem?: JQuery): void;
         CleanRefreshAction(scopeElem: JQuery): void;
     }

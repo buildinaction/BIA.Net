@@ -139,7 +139,8 @@ module BIA.Net.Dialog {
                 //dialogDiv.dialogElem.dialog("close");
             }
             else {
-
+                /*dialogDiv.dialogElem.append("<div id=\"divLoading\"></div>");
+                dialogDiv.dialogElem.css("cursor", "progress");*/
                 dialogDiv.CleanDialog();
                 let newUrl = "";
                 if (responseURL && (AjaxLoading.UniformmizeUrl(responseURL) != AjaxLoading.UniformmizeUrl(url))) newUrl = AjaxLoading.UniformmizeUrl(responseURL)
@@ -158,7 +159,7 @@ module BIA.Net.Dialog {
                     window.history.pushState({ ajaxUrl: newUrl, ajaxDivContent: dialogDiv.divContent, ajaxDivScript: dialogDiv.divScript, ajaxDivType: dialogDiv.type }, title, newUrl);
                 }
             }
-            dialogDiv.dialogElem.css("cursor", "default");
+            if (dialogDiv.dialogElem != null) dialogDiv.dialogElem.css("cursor", "default");
         }
 
 
@@ -179,7 +180,7 @@ module BIA.Net.Dialog {
     }
     $(window).on("popstate", function () {
         if (history.state != null && history.state.ajaxUrl != null && history.state.ajaxUrl != "") {
-            BIA.Net.Dialog.DialogDiv.ChangeContent(BIA.Net.Dialog.DialogDiv.GetMainDiv(), false, history.state.ajaxUrl, history.state.ajaxDivContent, history.state.ajaxDivScript, history.state.ajaxDivType);
+            BIA.Net.Dialog.ChangeContent(BIA.Net.Dialog.DialogDiv.GetMainDiv(), false, history.state.ajaxUrl, history.state.ajaxDivContent, history.state.ajaxDivScript, history.state.ajaxDivType);
         }
         else {
             location.reload();

@@ -5,9 +5,42 @@ var BIA;
         var Dialog;
         (function (Dialog) {
             function Close(linkElem) {
-                BIA.Net.Dialog.DialogDiv.GetParentDialogDiv(linkElem).dialogElem.dialog('close');
+                BIA.Net.Dialog.GetParentDialogDiv(linkElem).dialogElem.dialog('close');
             }
             Dialog.Close = Close;
+            function LinkToDialog(scopeElem) {
+                var currentDialogDiv = GetParentDialogDiv(scopeElem);
+                currentDialogDiv.LinkToDialog(scopeElem);
+            }
+            Dialog.LinkToDialog = LinkToDialog;
+            ;
+            function LinkInDialog(scopeElem) {
+                var currentDialogDiv = GetParentDialogDiv(scopeElem);
+                currentDialogDiv.LinkInDialog(scopeElem);
+            }
+            Dialog.LinkInDialog = LinkInDialog;
+            ;
+            function AddRefreshAction(scopeElem) {
+                var currentDialogDiv = GetParentDialogDiv(scopeElem);
+                currentDialogDiv.AddRefreshAction(scopeElem);
+            }
+            Dialog.AddRefreshAction = AddRefreshAction;
+            ;
+            function GetParentDialogDiv(linkElem) {
+                var dialog = linkElem.closest(".BiaNetDialogDiv");
+                if (dialog == null || dialog.length == 0) {
+                    return Dialog.DialogDiv.GetMainDiv();
+                }
+                return Dialog.DialogDiv.GetDialogDivByJQuery(dialog);
+            }
+            Dialog.GetParentDialogDiv = GetParentDialogDiv;
+            function ChangeContent(parent, addHistory, url, DivContent, DivScript, DivType) {
+                if (DivScript === void 0) { DivScript = ""; }
+                if (DivType === void 0) { DivType = Dialog.DialogDivType.Content; }
+                var dialogDiv = Dialog.DialogDiv.PrepareContentDiv(parent, DivContent, DivScript, DivType);
+                dialogDiv.ReplaceInCurrentDialog(url, addHistory);
+            }
+            Dialog.ChangeContent = ChangeContent;
             function DoActionAndRefresh(linkElem, urlAction) {
                 $("body").css("cursor", "progress");
                 var ajaxSettings = {
@@ -28,7 +61,7 @@ var BIA;
             }
             Dialog.DoActionAndRefresh = DoActionAndRefresh;
             function RefreshCurrentDialog(linkElem) {
-                var dialogDiv = BIA.Net.Dialog.DialogDiv.GetParentDialogDiv(linkElem);
+                var dialogDiv = BIA.Net.Dialog.GetParentDialogDiv(linkElem);
                 dialogDiv.ReplaceInCurrentDialog(dialogDiv.urlCurrent, false);
             }
             Dialog.RefreshCurrentDialog = RefreshCurrentDialog;
@@ -41,8 +74,8 @@ var BIA;
                 //return false;
             };
             $(document).ready(function () {
-                BIA.Net.Dialog.DialogDiv.LinkToDialog($(document));
-                BIA.Net.Dialog.DialogDiv.AddRefreshAction($(document));
+                BIA.Net.Dialog.LinkToDialog(BIA.Net.Dialog.DialogDiv.GetMainDiv().dialogElem);
+                BIA.Net.Dialog.AddRefreshAction(BIA.Net.Dialog.DialogDiv.GetMainDiv().dialogElem);
             });
         })(Dialog = Net.Dialog || (Net.Dialog = {}));
     })(Net = BIA.Net || (BIA.Net = {}));
@@ -178,6 +211,8 @@ var BIA;
                         $(window).trigger(evt);
                     }
                     else {
+                        /*dialogDiv.dialogElem.append("<div id=\"divLoading\"></div>");
+                        dialogDiv.dialogElem.css("cursor", "progress");*/
                         dialogDiv.CleanDialog();
                         var newUrl = "";
                         if (responseURL && (AjaxLoading.UniformmizeUrl(responseURL) != AjaxLoading.UniformmizeUrl(url)))
@@ -196,7 +231,8 @@ var BIA;
                             window.history.pushState({ ajaxUrl: newUrl, ajaxDivContent: dialogDiv.divContent, ajaxDivScript: dialogDiv.divScript, ajaxDivType: dialogDiv.type }, title, newUrl);
                         }
                     }
-                    dialogDiv.dialogElem.css("cursor", "default");
+                    if (dialogDiv.dialogElem != null)
+                        dialogDiv.dialogElem.css("cursor", "default");
                 };
                 AjaxLoading.ErrorAjaxReplaceInCurrentDialog = function (data, dialogDiv, urlorigin, url, responseURL, redirectURL, addHistory) {
                     //console.log("ErrorAjaxReplaceInCurrentDialog");
@@ -218,7 +254,7 @@ var BIA;
             Dialog.AjaxLoading = AjaxLoading;
             $(window).on("popstate", function () {
                 if (history.state != null && history.state.ajaxUrl != null && history.state.ajaxUrl != "") {
-                    BIA.Net.Dialog.DialogDiv.ChangeContent(BIA.Net.Dialog.DialogDiv.GetMainDiv(), false, history.state.ajaxUrl, history.state.ajaxDivContent, history.state.ajaxDivScript, history.state.ajaxDivType);
+                    BIA.Net.Dialog.ChangeContent(BIA.Net.Dialog.DialogDiv.GetMainDiv(), false, history.state.ajaxUrl, history.state.ajaxDivContent, history.state.ajaxDivScript, history.state.ajaxDivType);
                 }
                 else {
                     location.reload();
@@ -233,10 +269,6 @@ var BIA;
     (function (Net) {
         var Dialog;
         (function (Dialog) {
-            $(document).ready(function () {
-                BIA.Net.Dialog.DialogDiv.LinkToDialog(BIA.Net.Dialog.DialogDiv.GetMainDiv().dialogElem);
-                BIA.Net.Dialog.DialogDiv.AddRefreshAction(BIA.Net.Dialog.DialogDiv.GetMainDiv().dialogElem);
-            });
             (function (DialogDivType) {
                 DialogDivType[DialogDivType["Popup"] = 1] = "Popup";
                 DialogDivType[DialogDivType["MainPageContent"] = 2] = "MainPageContent";
@@ -386,12 +418,6 @@ var BIA;
                     dialogDiv.divScript = DivScript;
                     return dialogDiv;
                 };
-                DialogDiv.ChangeContent = function (parent, addHistory, url, DivContent, DivScript, DivType) {
-                    if (DivScript === void 0) { DivScript = ""; }
-                    if (DivType === void 0) { DivType = DialogDivType.Content; }
-                    var dialogDiv = DialogDiv.PrepareContentDiv(parent, DivContent, DivScript, DivType);
-                    dialogDiv.ReplaceInCurrentDialog(url, addHistory);
-                };
                 DialogDiv.prototype.ReplaceInCurrentDialog = function (url, addHistory) {
                     var urlsParent = this.GetParentUrl();
                     if (urlsParent != null) {
@@ -409,6 +435,8 @@ var BIA;
                 DialogDiv.prototype.GetViewPort = function () {
                     if (this.type == DialogDivType.MainPageContent || this.type == DialogDivType.Document)
                         return $(window);
+                    if ((this.type == DialogDivType.Content) && (this.parent != null))
+                        return this.parent.GetViewPort();
                     return this.dialogElem;
                 };
                 DialogDiv.GetMainDiv = function () {
@@ -425,18 +453,6 @@ var BIA;
                     }
                     return DialogDiv.MainDialogDiv;
                 };
-                DialogDiv.GetParentDialogDiv = function (linkElem) {
-                    var dialog = linkElem.closest(".BiaNetDialogDiv");
-                    if (dialog == null || dialog.length == 0) {
-                        return DialogDiv.GetMainDiv();
-                    }
-                    return DialogDiv.GetDialogDivByJQuery(dialog);
-                };
-                DialogDiv.LinkInDialog = function (scopeElem) {
-                    var currentDialogDiv = DialogDiv.GetParentDialogDiv(scopeElem);
-                    currentDialogDiv.LinkInDialog(scopeElem);
-                };
-                ;
                 DialogDiv.prototype.LinkInDialog = function (scopeElem) {
                     if (scopeElem == null)
                         scopeElem = this.dialogElem;
@@ -445,11 +461,6 @@ var BIA;
                         .each(function (e) {
                         BIA.Net.Dialog.DialogLink.PrepareLinkElement($(this), currentDialogDiv);
                     });
-                };
-                ;
-                DialogDiv.LinkToDialog = function (scopeElem) {
-                    var currentDialogDiv = DialogDiv.GetParentDialogDiv(scopeElem);
-                    currentDialogDiv.LinkToDialog(scopeElem);
                 };
                 ;
                 DialogDiv.prototype.LinkToDialog = function (scopeElem) {
@@ -496,13 +507,11 @@ var BIA;
                     $(window).trigger(evt);
                 };
                 DialogDiv.prototype.CleanDialog = function () {
-                    this.dialogElem.append("<div id=\"divLoading\"></div>");
-                    this.dialogElem.css("cursor", "progress");
                     //var childList = this.dialogElem.prop("dialogChildList");
                     if (this.children != null) {
                         this.children.forEach(function (entry) {
                             entry.DisposeDialog();
-                            entry.dialogElem.remove();
+                            //entry.dialogElem.remove();
                         });
                     }
                     this.children = [];
@@ -510,6 +519,10 @@ var BIA;
                 DialogDiv.prototype.DisposeDialog = function () {
                     DialogDiv.RemoveDialogfromArrayByJQuery(this.dialogElem);
                     this.CleanDialog();
+                    if (this.dialogElem != null) {
+                        this.dialogElem.remove();
+                        this.dialogElem = null;
+                    }
                     //this.dialogElem.prop("dialogChildList", []);
                 };
                 ;
@@ -553,11 +566,6 @@ var BIA;
                         }
                     });
                 }*/
-                DialogDiv.AddRefreshAction = function (scopeElem) {
-                    var currentDialogDiv = DialogDiv.GetParentDialogDiv(scopeElem);
-                    currentDialogDiv.AddRefreshAction(scopeElem);
-                };
-                ;
                 DialogDiv.prototype.AddRefreshAction = function (scopeElem) {
                     if (scopeElem == null)
                         scopeElem = this.dialogElem;
@@ -600,29 +608,9 @@ var BIA;
                         refrechAction.isOnlyEvent = dialogRefreshOnlyEvent;
                         refrechAction.OnValidatedFormsUrls = onFormValidated;
                         refrechAction.parentDialogDiv = CurrentDialogDiv;
-                        /*
-                        $(this).prop("BIADialogRefreshUrl", dialogRefreshUrl);
-                        $(this).prop("BIADialogRefreshFormId", dialogRefreshFormId);
-                        $(this).prop("BIADialogRefreshOnlyEvent", dialogRefreshOnlyEvent);
-                        $(this).prop("BIADialogRefreshParent", CurrentDialog);
-                        $(this).prop("BIADialogRefreshFormsUrls", onFormValidated);
-                        let elemDialogDiv = new DialogDiv($(this), CurrentDialog, DialogDivType.Content);
-                        */
                         RefrechActionCurrentDialog.push(refrechAction);
                     });
-                    //RefrechAction.put(CurrentDialog, RefrechActionCurrentDialog);
-                    /*var DialogSimilarReturnUrlsCurrentDialog = [];
-                    scopeElem.find('[BIADialogSimilarReturnUrls]')
-                        .each(function (e) {
-                            var SimilarReturnUrls = $(this).attr('BIADialogSimilarReturnUrls').split(';');
-                            DialogSimilarReturnUrlsCurrentDialog = DialogSimilarReturnUrlsCurrentDialog.concat(SimilarReturnUrls);
-                            ;
-                        });*/
-                    //hashDialogSimilarReturnUrls.put(CurrentDialog, DialogSimilarReturnUrlsCurrentDialog);
                     CurrentDialogDiv.refrechAction = RefrechActionCurrentDialog;
-                    /*BIA.Net.Dialog.DialogDiv.DialogManager.put(CurrentDialog, {
-                        RefrechAction: RefrechActionCurrentDialog, SimilarReturnUrls: DialogSimilarReturnUrlsCurrentDialog
-                    });*/
                 };
                 ;
                 DialogDiv.prototype.CleanRefreshAction = function (scopeElem) {
@@ -834,7 +822,7 @@ var BIA;
                                 }
                             },
                             close: function (event, ui) {
-                                dialogDiv_1.CleanDialog();
+                                dialogDiv_1.DisposeDialog();
                             }
                         });
                         if (Id != "") {
@@ -848,7 +836,7 @@ var BIA;
                 };
                 DialogLink.prototype.ActionClick = function () {
                     //let dialog = this.linkElem.prop("dialogDiv");
-                    if (!this.dialogDiv) {
+                    if ((!this.dialogDiv) || (this.dialogDiv.dialogElem == null)) {
                         this.PrepareDialogDiv();
                     }
                     if (this.target == DialogLinkTarget.Blank) {

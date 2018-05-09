@@ -206,7 +206,7 @@
                         }
                     },
                     close: function (event, ui) {
-                        dialogDiv.CleanDialog();
+                        dialogDiv.DisposeDialog();
                     }
 
                 });
@@ -229,7 +229,7 @@
         public ActionClick() {
             //let dialog = this.linkElem.prop("dialogDiv");
 
-            if (!this.dialogDiv) {
+            if ((!this.dialogDiv) || (this.dialogDiv.dialogElem == null)) {
                 this.PrepareDialogDiv()
             }
             if (this.target == DialogLinkTarget.Blank) {
