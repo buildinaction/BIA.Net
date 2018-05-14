@@ -139,7 +139,7 @@ var BIA;
                         //console.log("FormInDialog : parentUrl ::" + parentUrl);
                         formElem.append('<input type=\'hidden\' name=\'BIANetDialogDisplayFlag\' value=\'' + dialogDiv.type + '\' />');
                         formElem.append('<input type=\'hidden\' name=\'BIANetDialogUrlParent\' value=\'' + parentUrl + '\' />');
-                        var dataToSend = formElem.serialize(); // serializes the form's elements.
+                        var dataToSend = new FormData(formElem[0]); // serializes the form's elements.
                         var urlBefore = dialogDiv.urlCurrent;
                         //console.log("FormInDialog : begin ajax");
                         var ajaxSettings = {
@@ -148,6 +148,9 @@ var BIA;
                             urlBefore: urlBefore,
                             dialogDiv: dialogDiv,
                             data: dataToSend,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
                             success: function (data, textStatus, xhr) {
                                 Dialog.DialogDiv.refreshIfRequiered(this.urlBefore);
                                 AjaxLoading.SuccesAjaxReplaceInCurrentDialog(data, this.dialogDiv, this.url, this.url, AjaxLoading.getResponseURL(xhr), this.dialogDiv.IsStandardHistory());

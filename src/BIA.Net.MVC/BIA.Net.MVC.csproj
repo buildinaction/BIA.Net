@@ -100,10 +100,6 @@
     <None Include="_CreateNewNuGetPackage\RunMeToUploadNuGetPackage.cmd" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\BIA.Net\DataTablesUtility.js" />
-    <Content Include="Scripts\BIA.Net\ListAjax.js" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\BIA.Net.Common\BIA.Net.Common.csproj">
       <Project>{9073da56-b20a-476a-b6dd-3231ea11d5bc}</Project>
       <Name>BIA.Net.Common</Name>

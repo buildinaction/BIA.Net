@@ -58,7 +58,7 @@ module BIA.Net.Dialog {
                 formElem.append('<input type=\'hidden\' name=\'BIANetDialogDisplayFlag\' value=\'' + dialogDiv.type + '\' />');
                 formElem.append('<input type=\'hidden\' name=\'BIANetDialogUrlParent\' value=\'' + parentUrl + '\' />');
 
-                var dataToSend = formElem.serialize();// serializes the form's elements.
+                var dataToSend = new FormData(<HTMLFormElement>formElem[0]); // serializes the form's elements.
                 var urlBefore = dialogDiv.urlCurrent;
 
                 //console.log("FormInDialog : begin ajax");
@@ -68,6 +68,9 @@ module BIA.Net.Dialog {
                     urlBefore: urlBefore,
                     dialogDiv: dialogDiv,
                     data: dataToSend,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
                     success: function (data: any, textStatus: string, xhr: XMLHttpRequest) {
                         DialogDiv.refreshIfRequiered(this.urlBefore);
                         AjaxLoading.SuccesAjaxReplaceInCurrentDialog(data, this.dialogDiv, this.url, this.url, AjaxLoading.getResponseURL(xhr), this.dialogDiv.IsStandardHistory());
