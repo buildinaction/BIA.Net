@@ -1524,17 +1524,7 @@ namespace BIA.Net.Model
         /// <returns>The result returned by the database after executing the command.</returns>
         public virtual int ExecuteProcedureNonQuery(StoredProcedureParameter storedProcedureParameter)
         {
-            if (storedProcedureParameter == null)
-            {
-                throw new ArgumentNullException("storedProcedureParameter");
-            }
-
-            List<SqlParameter> sqlParameters = null;
-            string sql = null;
-
-            FillSqlParameter(storedProcedureParameter, out sqlParameters, out sql);
-
-            return this.Db.Database.ExecuteSqlCommand(sql, sqlParameters != null ? sqlParameters.ToArray() : null);
+            return this.dbContainer.ExecuteProcedureNonQuery(storedProcedureParameter);
         }
 
         /// <summary>
@@ -1544,7 +1534,7 @@ namespace BIA.Net.Model
         /// <returns>List of Entity</returns>
         public virtual List<Entity> ExecuteProcedureReader(StoredProcedureParameter storedProcedureParameter)
         {
-            return this.ExecuteProcedureReader<Entity>(storedProcedureParameter);
+            return this.dbContainer.ExecuteProcedureReader<Entity>(storedProcedureParameter);
         }
 
         /// <summary>
@@ -1555,17 +1545,7 @@ namespace BIA.Net.Model
         /// <returns>List of Entity or EntityDTO</returns>
         public virtual List<T> ExecuteProcedureReader<T>(StoredProcedureParameter storedProcedureParameter)
         {
-            if (storedProcedureParameter == null)
-            {
-                throw new ArgumentNullException("storedProcedureParameter");
-            }
-
-            List<SqlParameter> sqlParameters = null;
-            string sql = null;
-
-            FillSqlParameter(storedProcedureParameter, out sqlParameters, out sql);
-
-            return this.Db.Database.SqlQuery<T>(sql, sqlParameters != null ? sqlParameters.ToArray() : null).ToList();
+            return this.dbContainer.ExecuteProcedureReader<T>(storedProcedureParameter);
         }
 
         /// <summary>
@@ -1618,27 +1598,6 @@ namespace BIA.Net.Model
             return query
                 .OfType<Entity>()
                 .Where(removeAllSubTypesLambda as Expression<Func<Entity, bool>>);
-        }
-
-        /// <summary>
-        /// Fill list of SqlParameter and sql command
-        /// </summary>
-        /// <param name="storedProcedureParameter"><see cref="StoredProcedureParameter"/></param>
-        /// <param name="sqlParameters">list of SqlParameter</param>
-        /// <param name="sql">sql command</param>
-        private static void FillSqlParameter(StoredProcedureParameter storedProcedureParameter, out List<SqlParameter> sqlParameters, out string sql)
-        {
-            sqlParameters = null;
-            sql = storedProcedureParameter.Name;
-            if (storedProcedureParameter.Parameters != null)
-            {
-                sqlParameters = storedProcedureParameter.Parameters.Where(x => x.Value != null).Select(x => new SqlParameter(x.Key, x.Value)).ToList();
-
-                if (sqlParameters != null && sqlParameters.Any())
-                {
-                    sql += " @" + string.Join(", @", sqlParameters.Select(x => x.ParameterName).ToList());
-                }
-            }
         }
     }
 #pragma warning restore SA1202 // Elements must be ordered by access

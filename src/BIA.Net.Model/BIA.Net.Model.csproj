@@ -88,7 +88,8 @@
     <Compile Include="DAL\QueryHelper.cs" />
     <Compile Include="DAL\Sorting\EntityFilter.cs" />
     <Compile Include="DAL\Sorting\EntitySorter.cs" />
-    <Compile Include="DAL\StoredProcedureParameter.cs" />
+    <Compile Include="DAL\StoredProcedure\StoredProcedureHelper.cs" />
+    <Compile Include="DAL\StoredProcedure\StoredProcedureParameter.cs" />
     <Compile Include="DAL\SubListRule.cs" />
     <Compile Include="DAL\TGenericContext.cs" />
     <Compile Include="DAL\TGenericDBContainer.cs" />

@@ -4,9 +4,10 @@
 
 namespace BIA.Net.Model
 {
-    using System;
-    using System.Data.Entity;
     using DAL;
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
 
     /// <summary>
     /// The TGenericRepository ofer the posibility to create a repository to manage advanced acces of the entity framework
@@ -90,18 +91,30 @@ namespace BIA.Net.Model
         /// Returns the context without filter. WARNING : It should be use only for optimisation else use GetStandardQuery.
         /// </summary>
         /// <returns>The context without filter</returns>
-        public ProjectDBContext GetProjectDBContextForOptim()
+        public ProjectDBContext GetProjectDBContext()
         {
             return this.DbContainer.db;
         }
 
         /// <summary>
-        /// Returns the context without filter. WARNING : It should be use only for optimisation else use GetStandardQuery.
+        /// Execute a stored procedure that does not end with a SELECT
         /// </summary>
-        /// <returns>The context without filter</returns>
-        public ProjectDBContext GetProjectDBContext()
+        /// <param name="storedProcedureParameter"><see cref="StoredProcedureParameter"/></param>
+        /// <returns>The result returned by the database after executing the command.</returns>
+        public virtual int ExecuteProcedureNonQuery(StoredProcedureParameter storedProcedureParameter)
         {
-            return this.DbContainer.db;
+            return StoredProcedureHelper.ExecuteProcedureNonQuery(this.Db, storedProcedureParameter);
+        }
+
+        /// <summary>
+        /// Execute a stored procedure of type SELECT
+        /// </summary>
+        /// <typeparam name="T">Entity or EntityDTO</typeparam>
+        /// <param name="storedProcedureParameter"><see cref="StoredProcedureParameter"/></param>
+        /// <returns>List of Entity or EntityDTO</returns>
+        public virtual List<T> ExecuteProcedureReader<T>(StoredProcedureParameter storedProcedureParameter)
+        {
+            return StoredProcedureHelper.ExecuteProcedureReader<T>(this.Db, storedProcedureParameter);
         }
     }
 }
