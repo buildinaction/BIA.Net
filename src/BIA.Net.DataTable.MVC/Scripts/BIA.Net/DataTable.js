@@ -77,7 +77,7 @@ var BIA;
                 $(dataTableId).dataTable(dataTableOption);
             }
             DataTable.InitFullAjax = InitFullAjax;
-            function InitAjax(dataTableId, url_GetListData, columns, exportButtons, formId, url_OnClickRow) {
+            function InitAjax(dataTableId, url_GetListData, columns, exportButtons, formId, url_OnClickRow, rowCallback) {
                 var dom = 'lfrtip';
                 if (exportButtons != null) {
                     dom = 'Bfrtip';
@@ -112,7 +112,8 @@ var BIA;
                         BIA.Net.Dialog.LinkToDialog($(this));
                         BIA.Net.Dialog.AddRefreshAction($(this));
                     },
-                    "columns": columns
+                    "columns": columns,
+                    "rowCallback": rowCallback
                 };
                 $(dataTableId).dataTable(dataTableOption);
             }
@@ -143,7 +144,7 @@ var BIA;
                 }
                 DataTableSettings[dataTableId] = null;
                 $(window).on('OnBIADialogRefreshing', function (e) {
-                    var dataTable = e.element.find(dataTableId);
+                    var dataTable = e.BIANetDialogData.targetElem.find(dataTableId);
                     if (dataTable.length == 1) {
                         var tableSettings = dataTable.dataTable().fnSettings();
                         var pageLength = tableSettings._iDisplayLength;
@@ -156,7 +157,7 @@ var BIA;
                 if (exportButtons == null) {
                     $(window).on('OnBIADialogRefreshed', function (e) {
                         var settings = DataTableSettings[dataTableId];
-                        e.element.find(dataTableId).each(function () {
+                        e.BIANetDialogData.targetElem.find(dataTableId).each(function () {
                             $(this).DataTable({
                                 "language": DataTable.cultureDataTable,
                                 "pageLength": settings.pageLength,
@@ -171,7 +172,7 @@ var BIA;
                 else {
                     $(window).on('OnBIADialogRefreshed', function (e) {
                         var settings = DataTableSettings[dataTableId];
-                        e.element.find(dataTableId).each(function () {
+                        e.BIANetDialogData.targetElem.find(dataTableId).each(function () {
                             var dataTableOption = {
                                 "language": DataTable.cultureDataTable,
                                 "dom": 'Bfrtip',

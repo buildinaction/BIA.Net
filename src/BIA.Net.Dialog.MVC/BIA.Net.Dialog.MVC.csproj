@@ -31,9 +31,9 @@
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
     <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
-    <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
-    <TypeScriptOutFile />
+    <TypeScriptOutFile>$(SolutionDir)\ZZProjectNameZZ\Safran.ZZProjectNameZZ\Scripts\BIA.Net\Dialog.js</TypeScriptOutFile>
     <TypeScriptOutDir />
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
@@ -123,6 +123,7 @@
     <TypeScriptCompile Include="Scripts\BIA.Net\Dialog.ts" />
     <TypeScriptCompile Include="Scripts\BIA.Net\DialogAjaxLoading.ts" />
     <TypeScriptCompile Include="Scripts\BIA.Net\DialogDiv.ts" />
+    <TypeScriptCompile Include="Scripts\BIA.Net\DialogEvent.ts" />
     <TypeScriptCompile Include="Scripts\BIA.Net\DialogLink.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery.ui.layout\jquery.ui.layout.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery.validation\jquery.validation.d.ts" />

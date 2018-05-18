@@ -1,5 +1,5 @@
 ﻿module BIA.Net.Dialog {
-    export function Close(linkElem:JQuery) {
+    export function Close(linkElem: JQuery) {
         BIA.Net.Dialog.GetParentDialogDiv(linkElem).dialogElem.dialog('close');
     }
 
@@ -25,7 +25,7 @@
         }
         return DialogDiv.GetDialogDivByJQuery(dialog);
     }
-    
+
     export function ChangeContent(parent: DialogDiv, addHistory: boolean, url: string, DivContent: string, DivScript: string = "", DivType: DialogDivType = DialogDivType.Content) {
         let dialogDiv: DialogDiv = DialogDiv.PrepareContentDiv(parent, DivContent, DivScript, DivType)
         dialogDiv.ReplaceInCurrentDialog(url, addHistory);

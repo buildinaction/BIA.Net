@@ -10,7 +10,7 @@
         <description>Helpers for .Net development of MVC Application (Translation, Script, cascading select, checkboxlist, iconified, multiselect (with jquery-ui)) </description>
         <copyright>Copyright © BIA 2018</copyright>
         <tags>.Net MVC Helpers cascading select, checkboxlist, iconified, multiselect</tags>
-        <projectUrl>https://github.com/BIAdotNet/BIA.Net</projectUrl>
+        <projectUrl>https://github.com/BIAdotNet/BIA.Net/wiki/Helpers</projectUrl>
         <iconUrl>https://raw.githubusercontent.com/BIAdotNet/BIA.Net/master/img/LogoBIA.png</iconUrl>
     </metadata>
 </package>

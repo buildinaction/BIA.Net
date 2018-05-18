@@ -10,7 +10,7 @@
         <description>Typescript definition file for BIA.Net.Dialog.MVC</description>
         <copyright>BIA</copyright>
         <tags>Pop-up Dialog MVC .Net</tags>
-        <projectUrl>https://github.com/BIAdotNet/BIA.Net</projectUrl>
+        <projectUrl>https://github.com/BIAdotNet/BIA.Net/wiki/Dialog</projectUrl>
         <iconUrl>https://raw.githubusercontent.com/BIAdotNet/BIA.Net/master/img/LogoBIA.png</iconUrl>
     </metadata>
 </package>

@@ -92,6 +92,13 @@ var BIA;
                 xhr = _orgAjax();
                 return xhr;
             };
+            //format send by DialogBasicActionController.SendEvent
+            var DialogEventContainer = (function () {
+                function DialogEventContainer() {
+                }
+                return DialogEventContainer;
+            }());
+            Dialog.DialogEventContainer = DialogEventContainer;
             var AjaxLoading = (function () {
                 function AjaxLoading() {
                 }
@@ -193,25 +200,22 @@ var BIA;
                 ;
                 AjaxLoading.SuccesAjaxReplaceInCurrentDialog = function (data, dialogDiv, urlorigin, url, responseURL, addHistory) {
                     //console.log("SuccesAjaxReplaceInCurrentDialog");
-                    if (data == "Close Dialog") {
-                        //console.log("close detected");
-                        //dialogDiv.dialogElem.html("");
-                        dialogDiv.dialogElem.dialog("close");
-                    }
-                    else if (data == "Close Parent Dialog") {
-                        //console.log("close detected");
-                        if (dialogDiv.parent.type == Dialog.DialogDivType.Popup) {
-                            dialogDiv.parent.dialogElem.dialog("close");
+                    if (data.IsBiaNetDialogEvent) {
+                        var dialogEventContainer = data;
+                        if (dialogEventContainer.EventName == "BIA.Net.Dialog.Close") {
+                            //console.log("close detected");
+                            //dialogDiv.dialogElem.html("");
+                            dialogDiv.dialogElem.dialog("close");
                         }
-                    }
-                    else if (data.indexOf("Action Dialog:") == 0) {
-                        //console.log("close detected");
-                        var str = data.substr(14);
-                        var evt = $.Event('OnBIADialogAction');
-                        evt.dialogDiv = dialogDiv;
-                        evt.dialog = dialogDiv.dialogElem;
-                        evt.action = str;
-                        $(window).trigger(evt);
+                        else if (dialogEventContainer.EventName == "BIA.Net.Dialog.CloseParent") {
+                            //console.log("close detected");
+                            if (dialogDiv.parent.type == Dialog.DialogDivType.Popup) {
+                                dialogDiv.parent.dialogElem.dialog("close");
+                            }
+                        }
+                        else {
+                            Dialog.DialogEvent.Send(dialogDiv, dialogEventContainer.EventName, dialogEventContainer.EventData, null);
+                        }
                     }
                     else {
                         /*dialogDiv.dialogElem.append("<div id=\"divLoading\"></div>");
@@ -313,18 +317,10 @@ var BIA;
                     var ParentDialog = this.parentDialogDiv;
                     var onlyEvent = this.isOnlyEvent;
                     if (onlyEvent) {
-                        var evt = $.Event('OnBIADialogRefresh');
-                        evt.dialogDiv = ParentDialog;
-                        evt.dialog = ParentDialog.dialogElem;
-                        evt.element = this.elemToRefresh;
-                        $(window).trigger(evt);
+                        Dialog.DialogEvent.Send(ParentDialog, 'OnBIADialogRefresh', null, this.elemToRefresh);
                     }
                     else {
-                        var evt = $.Event('OnBIADialogRefreshing');
-                        evt.dialogDiv = ParentDialog;
-                        evt.dialog = ParentDialog.dialogElem;
-                        evt.element = this.elemToRefresh;
-                        $(window).trigger(evt);
+                        Dialog.DialogEvent.Send(ParentDialog, 'OnBIADialogRefreshing', null, this.elemToRefresh);
                         var ajaxSettings = {
                             type: "POST",
                             url: refreshUrl,
@@ -338,11 +334,7 @@ var BIA;
                                 this.ParentDialog.FormInDialog(this.CurrentDialogDiv.elemToRefresh);
                                 this.ParentDialog.LinkToDialog(this.CurrentDialogDiv.elemToRefresh);
                                 this.ParentDialog.AddRefreshAction();
-                                var evt = $.Event('OnBIADialogRefreshed');
-                                evt.dialogDiv = this.ParentDialog;
-                                evt.dialog = this.ParentDialog.dialogElem;
-                                evt.element = this.CurrentDialogDiv.elemToRefresh;
-                                $(window).trigger(evt);
+                                Dialog.DialogEvent.Send(this.ParentDialog, 'OnBIADialogRefreshed', null, this.CurrentDialogDiv.elemToRefresh);
                             },
                             error: function (error) {
                                 console.log("Ajax Error " + error.status + " when calling : " + refreshUrl);
@@ -498,16 +490,10 @@ var BIA;
                     this.LinkToDialog();
                     this.OnResizeDialog();
                     this.AddRefreshAction();
-                    var evt = $.Event('OnBIADialogLoaded');
-                    evt.dialogDiv = this;
-                    evt.dialog = this.dialogElem;
-                    $(window).trigger(evt);
+                    Dialog.DialogEvent.Send(this, 'OnBIADialogLoaded', null, null);
                 };
                 DialogDiv.prototype.OnResizeDialog = function () {
-                    var evt = $.Event('OnBIADialogResize');
-                    evt.dialogDiv = this;
-                    evt.dialog = this.dialogElem;
-                    $(window).trigger(evt);
+                    Dialog.DialogEvent.Send(this, 'OnBIADialogResize', null, null);
                 };
                 DialogDiv.prototype.CleanDialog = function () {
                     //var childList = this.dialogElem.prop("dialogChildList");
@@ -626,6 +612,30 @@ var BIA;
                 return DialogDiv;
             }());
             Dialog.DialogDiv = DialogDiv;
+        })(Dialog = Net.Dialog || (Net.Dialog = {}));
+    })(Net = BIA.Net || (BIA.Net = {}));
+})(BIA || (BIA = {}));
+var BIA;
+(function (BIA) {
+    var Net;
+    (function (Net) {
+        var Dialog;
+        (function (Dialog) {
+            var DialogEvent = (function () {
+                function DialogEvent() {
+                }
+                DialogEvent.Send = function (dialogDiv, eventName, eventData, targetElem) {
+                    var evt = $.Event(eventName);
+                    evt.BIANetDialogData = new DialogEvent();
+                    evt.BIANetDialogData.dialogDiv = dialogDiv;
+                    evt.BIANetDialogData.eventData = eventData;
+                    evt.BIANetDialogData.targetElem = targetElem;
+                    $(window).trigger(evt);
+                    dialogDiv.dialogElem.trigger(evt);
+                };
+                return DialogEvent;
+            }());
+            Dialog.DialogEvent = DialogEvent;
         })(Dialog = Net.Dialog || (Net.Dialog = {}));
     })(Net = BIA.Net || (BIA.Net = {}));
 })(BIA || (BIA = {}));

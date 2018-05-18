@@ -51,18 +51,10 @@
             var ParentDialog = this.parentDialogDiv;
             var onlyEvent = this.isOnlyEvent;
             if (onlyEvent) {
-                var evt = $.Event('OnBIADialogRefresh');
-                evt.dialogDiv = ParentDialog;
-                evt.dialog = ParentDialog.dialogElem;
-                evt.element = this.elemToRefresh;
-                $(window).trigger(evt);
+                DialogEvent.Send(ParentDialog, 'OnBIADialogRefresh', null, this.elemToRefresh)
             }
             else {
-                var evt = $.Event('OnBIADialogRefreshing');
-                evt.dialogDiv = ParentDialog;
-                evt.dialog = ParentDialog.dialogElem;
-                evt.element = this.elemToRefresh;
-                $(window).trigger(evt);
+                DialogEvent.Send(ParentDialog, 'OnBIADialogRefreshing', null, this.elemToRefresh)
                 var ajaxSettings = {
                     type: "POST",
                     url: refreshUrl,
@@ -77,11 +69,7 @@
                         this.ParentDialog.LinkToDialog(this.CurrentDialogDiv.elemToRefresh);
 
                         this.ParentDialog.AddRefreshAction();
-                        var evt = $.Event('OnBIADialogRefreshed');
-                        evt.dialogDiv = this.ParentDialog;
-                        evt.dialog = this.ParentDialog.dialogElem;
-                        evt.element = this.CurrentDialogDiv.elemToRefresh;
-                        $(window).trigger(evt);
+                        DialogEvent.Send(this.ParentDialog, 'OnBIADialogRefreshed', null, this.CurrentDialogDiv.elemToRefresh)
                     },
                     error: function (error) {
                         console.log("Ajax Error " + error.status + " when calling : " + refreshUrl);
@@ -253,17 +241,13 @@
 
             this.OnResizeDialog();
             this.AddRefreshAction();
-            var evt = $.Event('OnBIADialogLoaded');
-            evt.dialogDiv = this;
-            evt.dialog = this.dialogElem;
-            $(window).trigger(evt);
+            DialogEvent.Send(this, 'OnBIADialogLoaded', null, null)
         }
+
         public OnResizeDialog() {
-            var evt = $.Event('OnBIADialogResize');
-            evt.dialogDiv = this;
-            evt.dialog = this.dialogElem;
-            $(window).trigger(evt);
+            DialogEvent.Send(this, 'OnBIADialogResize', null, null)
         }
+
         public CleanDialog() {
             //var childList = this.dialogElem.prop("dialogChildList");
             if (this.children != null) {

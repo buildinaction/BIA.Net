@@ -81,7 +81,7 @@
         $(dataTableId).dataTable(dataTableOption);
     }
 
-    export function InitAjax(dataTableId, url_GetListData, columns, exportButtons, formId, url_OnClickRow) {
+    export function InitAjax(dataTableId, url_GetListData, columns, exportButtons, formId, url_OnClickRow, rowCallback) {
 
         let dom = 'lfrtip';
 
@@ -121,7 +121,8 @@
                 BIA.Net.Dialog.LinkToDialog($(this));
                 BIA.Net.Dialog.AddRefreshAction($(this));
             },
-            "columns": columns
+            "columns": columns,
+            "rowCallback": rowCallback
         };
         $(dataTableId).dataTable(dataTableOption);
     }
@@ -153,7 +154,7 @@
 
         DataTableSettings[dataTableId] = null;
         $(window).on('OnBIADialogRefreshing', function (e) {
-            var dataTable = e.element.find(dataTableId);
+            var dataTable = e.BIANetDialogData.targetElem.find(dataTableId);
 
             if (dataTable.length == 1) {
                 var tableSettings = dataTable.dataTable().fnSettings();
@@ -167,7 +168,7 @@
         if (exportButtons == null) {
             $(window).on('OnBIADialogRefreshed', function (e) {
                 var settings = DataTableSettings[dataTableId];
-                e.element.find(dataTableId).each(function () {
+                e.BIANetDialogData.targetElem.find(dataTableId).each(function () {
                     $(this).DataTable({
                         "language": cultureDataTable,
                         "pageLength": settings.pageLength,
@@ -182,7 +183,7 @@
         else {
             $(window).on('OnBIADialogRefreshed', function (e) {
                 var settings = DataTableSettings[dataTableId];
-                e.element.find(dataTableId).each(function () {
+                e.BIANetDialogData.targetElem.find(dataTableId).each(function () {
                     var dataTableOption = {
                         "language": cultureDataTable,
                         "dom": 'Bfrtip',

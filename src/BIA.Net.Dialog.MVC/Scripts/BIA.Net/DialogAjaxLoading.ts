@@ -7,6 +7,12 @@ module BIA.Net.Dialog {
         return xhr;
     };
 
+    //format send by DialogBasicActionController.SendEvent
+    export class DialogEventContainer {
+        IsBiaNetDialogEvent: boolean;
+        EventName : string;
+        EventData : any;
+    }
     export class AjaxLoading {
         public static removeParam(keys, sourceURL) {
             var rtn = sourceURL.split("?")[0], param, params_arr = [], queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
@@ -115,31 +121,27 @@ module BIA.Net.Dialog {
 
         };
 
-        public static SuccesAjaxReplaceInCurrentDialog(data: string, dialogDiv: DialogDiv, urlorigin: string, url: string, responseURL: string, addHistory: boolean) {
+        public static SuccesAjaxReplaceInCurrentDialog(data: any, dialogDiv: DialogDiv, urlorigin: string, url: string, responseURL: string, addHistory: boolean) {
             //console.log("SuccesAjaxReplaceInCurrentDialog");
-            if (data == "Close Dialog") {
-                //console.log("close detected");
-                //dialogDiv.dialogElem.html("");
-                dialogDiv.dialogElem.dialog("close");
-            }
-            else if (data == "Close Parent Dialog") {
-                //console.log("close detected");
-                if (dialogDiv.parent.type == DialogDivType.Popup) {
-                    dialogDiv.parent.dialogElem.dialog("close");
+            if (data.IsBiaNetDialogEvent)
+            {
+                let dialogEventContainer : DialogEventContainer = <DialogEventContainer>data;
+                if (dialogEventContainer.EventName == "BIA.Net.Dialog.Close") {
+                    //console.log("close detected");
+                    //dialogDiv.dialogElem.html("");
+                    dialogDiv.dialogElem.dialog("close");
                 }
-                //dialogDiv.dialogElem.html("");
-                //dialogDiv.dialogElem.dialog("close");
-            }
-            else if (data.indexOf("Action Dialog:")==0) {
-                //console.log("close detected");
-                var str = data.substr(14);
-                var evt = $.Event('OnBIADialogAction');
-                evt.dialogDiv = dialogDiv;
-                evt.dialog = dialogDiv.dialogElem;
-                evt.action = str;
-                $(window).trigger(evt);
-                //dialogDiv.dialogElem.html("");
-                //dialogDiv.dialogElem.dialog("close");
+                else if (dialogEventContainer.EventName == "BIA.Net.Dialog.CloseParent") {
+                    //console.log("close detected");
+                    if (dialogDiv.parent.type == DialogDivType.Popup) {
+                        dialogDiv.parent.dialogElem.dialog("close");
+                    }
+                    //dialogDiv.dialogElem.html("");
+                    //dialogDiv.dialogElem.dialog("close");
+                }
+                else {
+                    DialogEvent.Send(dialogDiv, dialogEventContainer.EventName, dialogEventContainer.EventData, null)
+                }
             }
             else {
                 /*dialogDiv.dialogElem.append("<div id=\"divLoading\"></div>");
@@ -164,7 +166,6 @@ module BIA.Net.Dialog {
             }
             if (dialogDiv.dialogElem != null) dialogDiv.dialogElem.css("cursor", "default");
         }
-
 
         public static ErrorAjaxReplaceInCurrentDialog(data, dialogDiv: DialogDiv, urlorigin, url, responseURL, redirectURL, addHistory) {
             //console.log("ErrorAjaxReplaceInCurrentDialog");

@@ -9,6 +9,11 @@ declare module BIA.Net.Dialog {
     function RefreshCurrentDialog(linkElem: JQuery): void;
 }
 declare module BIA.Net.Dialog {
+    class DialogEventContainer {
+        IsBiaNetDialogEvent: boolean;
+        EventName: string;
+        EventData: any;
+    }
     class AjaxLoading {
         static removeParam(keys: any, sourceURL: any): any;
         static getResponseURL(xhr: any): any;
@@ -18,7 +23,7 @@ declare module BIA.Net.Dialog {
         static ManageSubmitFormInDialog(dialogDiv: DialogDiv, formElem: JQuery): void;
         private static buildUrl(base, key, value);
         static AjaxLoadDialog(dialogDiv: DialogDiv, url: string, addHistory: boolean): void;
-        static SuccesAjaxReplaceInCurrentDialog(data: string, dialogDiv: DialogDiv, urlorigin: string, url: string, responseURL: string, addHistory: boolean): void;
+        static SuccesAjaxReplaceInCurrentDialog(data: any, dialogDiv: DialogDiv, urlorigin: string, url: string, responseURL: string, addHistory: boolean): void;
         static ErrorAjaxReplaceInCurrentDialog(data: any, dialogDiv: DialogDiv, urlorigin: any, url: any, responseURL: any, redirectURL: any, addHistory: any): void;
     }
 }
@@ -72,6 +77,17 @@ declare module BIA.Net.Dialog {
         private refreshIfRequiered(urlValidated);
         AddRefreshAction(scopeElem?: JQuery): void;
         CleanRefreshAction(scopeElem: JQuery): void;
+    }
+}
+interface JQueryEventObject extends BaseJQueryEventObject, JQueryInputEventObject, JQueryMouseEventObject, JQueryKeyEventObject {
+    BIANetDialogData?: BIA.Net.Dialog.DialogEvent;
+}
+declare module BIA.Net.Dialog {
+    class DialogEvent {
+        dialogDiv: DialogDiv;
+        targetElem: JQuery;
+        eventData: any;
+        static Send(dialogDiv: DialogDiv, eventName: string, eventData: any, targetElem: JQuery): void;
     }
 }
 declare module BIA.Net.Dialog {
