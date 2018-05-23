@@ -14,6 +14,17 @@ module BIA.Net.Dialog {
         EventData : any;
     }
     export class AjaxLoading {
+
+        static initialAppliVersion: string;
+
+        public static Init() {
+            let VersionElems = $('version');
+            let currentAppliVersion = "";
+            if (VersionElems != null && VersionElems.length > 0) {
+                AjaxLoading.initialAppliVersion = VersionElems[0].innerHTML;
+            }
+        }
+
         public static removeParam(keys, sourceURL) {
             var rtn = sourceURL.split("?")[0], param, params_arr = [], queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
             if (queryString !== "") {
@@ -152,7 +163,15 @@ module BIA.Net.Dialog {
                 else newUrl = urlorigin;
 
                 dialogDiv.OnDialogLoaded(data, newUrl);
-
+                let VersionElems = dialogDiv.dialogElem.find('version');
+                let currentAppliVersion :string = "";
+                if (VersionElems != null && VersionElems.length > 0) {
+                    currentAppliVersion = VersionElems[0].innerHTML;
+                    if (currentAppliVersion != AjaxLoading.initialAppliVersion) {
+                        if (addHistory) location.href = newUrl;
+                        else location.reload(true);
+                    }
+                }
                 //Change the URL history
                 if (addHistory) {
                     var titleElems = dialogDiv.dialogElem.find('title');

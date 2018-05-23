@@ -15,6 +15,8 @@ declare module BIA.Net.Dialog {
         EventData: any;
     }
     class AjaxLoading {
+        static initialAppliVersion: string;
+        static Init(): void;
         static removeParam(keys: any, sourceURL: any): any;
         static getResponseURL(xhr: any): any;
         static aForAbsoluteURL: any;

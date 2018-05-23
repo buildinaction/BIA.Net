@@ -2,7 +2,7 @@
     export class PreventDuplicateRequest {
         public static Apply(form : JQuery) {
             var alreadySubmitted = false;
-            return $(this).submit(function () {
+            return form.submit(function () {
                 if (alreadySubmitted)
                     return false;
                 else {
@@ -15,5 +15,8 @@
     }
     $(document).ready(function ($) {
         PreventDuplicateRequest.Apply($('.PreventDuplicateRequest'));
+        $(window).on('OnBIADialogLoaded', function (e) {
+            PreventDuplicateRequest.Apply(e.BIANetDialogData.dialogDiv.dialogElem.find('.PreventDuplicateRequest'));
+        });
     });
 }

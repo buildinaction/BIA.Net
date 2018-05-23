@@ -74,6 +74,7 @@ var BIA;
                 //return false;
             };
             $(document).ready(function () {
+                BIA.Net.Dialog.AjaxLoading.Init();
                 BIA.Net.Dialog.LinkToDialog($(document));
                 BIA.Net.Dialog.AddRefreshAction($(document));
             });
@@ -102,6 +103,13 @@ var BIA;
             var AjaxLoading = (function () {
                 function AjaxLoading() {
                 }
+                AjaxLoading.Init = function () {
+                    var VersionElems = $('version');
+                    var currentAppliVersion = "";
+                    if (VersionElems != null && VersionElems.length > 0) {
+                        AjaxLoading.initialAppliVersion = VersionElems[0].innerHTML;
+                    }
+                };
                 AjaxLoading.removeParam = function (keys, sourceURL) {
                     var rtn = sourceURL.split("?")[0], param, params_arr = [], queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
                     if (queryString !== "") {
@@ -227,6 +235,17 @@ var BIA;
                         else
                             newUrl = urlorigin;
                         dialogDiv.OnDialogLoaded(data, newUrl);
+                        var VersionElems = dialogDiv.dialogElem.find('version');
+                        var currentAppliVersion = "";
+                        if (VersionElems != null && VersionElems.length > 0) {
+                            currentAppliVersion = VersionElems[0].innerHTML;
+                            if (currentAppliVersion != AjaxLoading.initialAppliVersion) {
+                                if (addHistory)
+                                    location.href = newUrl;
+                                else
+                                    location.reload(true);
+                            }
+                        }
                         //Change the URL history
                         if (addHistory) {
                             var titleElems = dialogDiv.dialogElem.find('title');

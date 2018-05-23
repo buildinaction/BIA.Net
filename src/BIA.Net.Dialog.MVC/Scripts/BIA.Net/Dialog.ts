@@ -66,6 +66,7 @@
     };
 
     $(document).ready(function () {
+        BIA.Net.Dialog.AjaxLoading.Init();
         BIA.Net.Dialog.LinkToDialog($(document));
         BIA.Net.Dialog.AddRefreshAction($(document));
     });
