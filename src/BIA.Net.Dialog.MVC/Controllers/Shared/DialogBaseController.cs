@@ -94,21 +94,21 @@ namespace BIA.Net.Dialog.MVC.Controllers
             if (displayFlag == DisplayFlag.Popup)
             {
                 ViewResult myView = base.View(viewName, masterName, model);
-                myView.MasterName = "~/Views/Shared/_Layout_Dialog.cshtml";
+                myView.MasterName = BIA.Net.Common.BIASettingsReader.GetDialogLayout("Popup");
                 //Request.Add("BIACurrentDialogUrl", Url.Action(viewName));
                 return myView;
             }
             else if (displayFlag == DisplayFlag.Content)
             {
                 ViewResult myView = base.View(viewName, masterName, model);
-                myView.MasterName = "~/Views/Shared/_Layout_Content.cshtml";
+                myView.MasterName = Common.BIASettingsReader.GetDialogLayout("Content");
                 //Request.Add("BIACurrentDialogUrl", Url.Action(viewName));
                 return myView;
             }
             else if (displayFlag == DisplayFlag.MainPageContent)
             {
                 ViewResult myView = base.View(viewName, masterName, model);
-                myView.MasterName = "~/Views/Shared/_Layout_MainPageContent.cshtml";
+                myView.MasterName = Common.BIASettingsReader.GetDialogLayout("MainPageContent");
                 //Request.Add("BIACurrentDialogUrl", Url.Action(viewName));
                 return myView;
             }

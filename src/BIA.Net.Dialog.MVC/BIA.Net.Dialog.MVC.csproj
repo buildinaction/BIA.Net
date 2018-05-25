@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BIA.Net.Dialog.MVC</RootNamespace>
     <AssemblyName>BIA.Net.Dialog.MVC</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -133,6 +133,12 @@
   <ItemGroup>
     <Content Include="Content\BIA.Net\Dialog.css" />
     <Content Include="Scripts\BIA.Net\Dialog.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BIA.Net.Common\BIA.Net.Common.csproj">
+      <Project>{9073da56-b20a-476a-b6dd-3231ea11d5bc}</Project>
+      <Name>BIA.Net.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />

@@ -16,5 +16,8 @@
         <tags>Pop-up Dialog MVC .Net</tags>
         <projectUrl>https://github.com/BIAdotNet/BIA.Net/wiki/Dialog</projectUrl>
         <iconUrl>https://raw.githubusercontent.com/BIAdotNet/BIA.Net/master/img/LogoBIA.png</iconUrl>
+        <dependencies>
+          <dependency id="BIA.Net.common" version="1.8.0" />
+        </dependencies>
     </metadata>
 </package>
