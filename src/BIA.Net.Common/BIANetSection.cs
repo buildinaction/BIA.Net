@@ -52,7 +52,6 @@ namespace BIA.Net.Common
     // This class shows how to use the ConfigurationElementCollection.
     public class LayoutsCollection : ConfigurationElementCollection
     {
-
         protected override ConfigurationElement CreateNewElement()
         {
             return new LayoutElement();
