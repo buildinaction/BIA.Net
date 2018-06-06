@@ -266,6 +266,7 @@
                 this.dialogElem.remove();
                 this.dialogElem = null;
             }
+            this.refrechAction = null;
             //this.dialogElem.prop("dialogChildList", []);
         };
 
@@ -280,14 +281,17 @@
         }
         private refreshIfRequiered(urlValidated) {
             var elemToRefresh: DialogDiv = this;
-            elemToRefresh.refrechAction.forEach(function (refrechAction) {
-                for (var j = 0; j < refrechAction.OnValidatedFormsUrls.length; j++) {
-                    if (urlValidated.indexOf(refrechAction.OnValidatedFormsUrls[j]) >= 0) {
-                        refrechAction.RefreshContent();
-                        break;
+            if (elemToRefresh.refrechAction != null) {
+                elemToRefresh.refrechAction.forEach(function (refrechAction) {
+                    for (var j = 0; j < refrechAction.OnValidatedFormsUrls.length; j++) {
+                        if (urlValidated.indexOf(refrechAction.OnValidatedFormsUrls[j]) >= 0) {
+                            refrechAction.RefreshContent();
+                            break;
+                        }
                     }
-                }
-            });
+                });
+            }
+
             if (this.children != null) {
                 this.children.forEach(function (e) {
                     e.refreshIfRequiered(urlValidated);
