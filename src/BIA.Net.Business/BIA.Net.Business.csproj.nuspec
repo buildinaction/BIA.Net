@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>$id$</id>
-        <version>0.1.5</version>
+        <version>1.8.0</version>
         <title>$title$</title>
         <authors>BIA Team (Leader: Gwenael Fillon)</authors>
         <owners>BIA</owners>
@@ -10,5 +10,11 @@
         <description>Class for DataTable development in MVC.Net Application</description>
         <copyright>Copyright © BIA 2017</copyright>
         <tags>.Net MVC</tags>
+        <projectUrl>https://github.com/BIAdotNet/BIA.Net/wiki/</projectUrl>
+        <iconUrl>https://raw.githubusercontent.com/BIAdotNet/BIA.Net/master/img/LogoBIA.png</iconUrl>
+        <dependencies>
+          <dependency id="BIA.Net.DataTable.DTO" version="1.7.5" />
+          <dependency id="BIA.Net.Common" version="1.8.0" />
+        </dependencies>
     </metadata>
 </package>

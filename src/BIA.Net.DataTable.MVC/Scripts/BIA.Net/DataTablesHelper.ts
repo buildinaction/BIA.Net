@@ -1,28 +1,28 @@
 ﻿module BIA.Net.DataTable {
 
     var DataTableSettings = [];
-    export var cultureDataTable = {
-        "sEmptyTable": "No data available in table",
-        "sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
-        "sInfoEmpty": "Showing 0 to 0 of 0 entries",
-        "sInfoFiltered": "(filtered from _MAX_ total entries)",
-        "sInfoPostFix": "",
-        "sInfoThousands": ",",
-        "sLengthMenu": "Show _MENU_ entries",
-        "sLoadingRecords": "Loading...",
-        "sProcessing": "Processing...",
-        "sSearch": "Search:",
-        "sZeroRecords": "No matching records found",
-        "oPaginate": {
-            "sFirst": "First",
-            "sLast": "Last",
-            "sNext": "Next",
-            "sPrevious": "Previous"
+    export let cultureDataTable: DataTables.LanguageSettings = {
+        emptyTable: "No data available in table",
+        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+        infoEmpty: "Showing 0 to 0 of 0 entries",
+        infoFiltered : "(filtered from _MAX_ total entries)",
+        infoPostFix: "",
+        thousands: ",",
+        lengthMenu: "Show _MENU_ entries",
+        loadingRecords: "Loading...",
+        processing: "Processing...",
+        search: "Search:",
+        zeroRecords: "No matching records found",
+        paginate: {
+            first: "First",
+            last: "Last",
+            next: "Next",
+            previous: "Previous"
 
         },
-        "oAria": {
-            "sSortAscending": ": activate to sort column ascending",
-            "sSortDescending": ": activate to sort column descending"
+        aria: {
+            sortAscending: ": activate to sort column ascending",
+            sortDescending: ": activate to sort column descending"
 
         }
     }
@@ -135,7 +135,7 @@
     export function InitStandard(dataTableId, exportButtons) {
         if (exportButtons == null) {
             $(document).ready(function () {
-                var dataTableOption = {
+                let dataTableOption : DataTables.Settings = {
                     "language": cultureDataTable
                 };
                 $(dataTableId).DataTable(dataTableOption);
