@@ -43,10 +43,6 @@
     <LangVersion>5</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BIA.Net.Common, Version=0.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BIA.Net.Common.1.7.2\lib\net452\BIA.Net.Common.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -85,14 +81,11 @@
     <Compile Include="DAL\FieldRule.cs" />
     <Compile Include="DAL\GenericRepositoryParmeter.cs" />
     <Compile Include="DAL\IGenericRepository.cs" />
-    <Compile Include="DAL\QueryHelper.cs" />
     <Compile Include="DAL\Sorting\EntityFilter.cs" />
-    <Compile Include="DAL\Sorting\EntitySorter.cs" />
     <Compile Include="DAL\StoredProcedure\StoredProcedureHelper.cs" />
     <Compile Include="DAL\StoredProcedure\StoredProcedureParameter.cs" />
     <Compile Include="DAL\SubListRule.cs" />
-    <Compile Include="DAL\TGenericContext.cs" />
-    <Compile Include="DAL\TGenericDBContainer.cs" />
+    <Compile Include="DAL\TDBContainer.cs" />
     <Compile Include="DAL\TGenericRepository.cs" />
     <Compile Include="DAL\TGenericTransaction.cs" />
     <Compile Include="Model\ObjectRemap.cs" />
@@ -128,6 +121,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="_CreateNewNuGetPackage\DoNotModify\NuGet.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BIA.Net.Common\BIA.Net.Common.csproj">
+      <Project>{9073da56-b20a-476a-b6dd-3231ea11d5bc}</Project>
+      <Name>BIA.Net.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

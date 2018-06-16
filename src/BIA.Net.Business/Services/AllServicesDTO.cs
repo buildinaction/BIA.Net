@@ -6,7 +6,6 @@ namespace BIA.Net.Business.Services
 {
     using BIA.Net.Common.Helpers;
     using BIA.Net.DataTable.DTO;
-    using Safran.ZZProjectNameZZ.Business.Services;
     using System;
     using System.Collections.Generic;
     using System.Linq.Expressions;
@@ -58,7 +57,7 @@ namespace BIA.Net.Business.Services
         public static object GetService<DTO>()
         {
             MapperServiceDTO.TypeMapper mapperType = MapperServiceDTO.ServiceMapping[typeof(DTO)];
-            return BIAUnity.RootContainer.Resolve(mapperType.IServiceType);
+            return BIAUnity.RootContainer.Resolve(mapperType.ServiceType);
 
         }
 

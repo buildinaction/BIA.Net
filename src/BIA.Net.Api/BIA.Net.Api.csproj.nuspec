@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>$id$</id>
+        <version>1.8.0</version>
+        <title>$title$</title>
+        <authors>BIA Team (Leader: Gwenael Fillon)</authors>
+        <owners>BIA</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Classes for Web Api Application</description>
+        <copyright>Copyright © BIA 2017</copyright>
+        <tags>.Net Web Api</tags>
+        <projectUrl>https://github.com/BIAdotNet/BIA.Net</projectUrl>
+        <iconUrl>https://raw.githubusercontent.com/BIAdotNet/BIA.Net/master/img/LogoBIA.png</iconUrl>
+    </metadata>
+</package>

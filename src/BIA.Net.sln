@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.DataTable.DT", "BIA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Business", "BIA.Net.Business\BIA.Net.Business.csproj", "{3F87600C-7C87-4768-812D-3CFDEDAE5E2A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Api", "BIA.Net.Api\BIA.Net.Api.csproj", "{830D2015-2332-4B37-8A3E-19B807B5876D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +115,10 @@ Global
 		{3F87600C-7C87-4768-812D-3CFDEDAE5E2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F87600C-7C87-4768-812D-3CFDEDAE5E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F87600C-7C87-4768-812D-3CFDEDAE5E2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{830D2015-2332-4B37-8A3E-19B807B5876D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{830D2015-2332-4B37-8A3E-19B807B5876D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{830D2015-2332-4B37-8A3E-19B807B5876D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{830D2015-2332-4B37-8A3E-19B807B5876D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

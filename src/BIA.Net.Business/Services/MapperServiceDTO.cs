@@ -2,7 +2,7 @@
 // Copyright (c) Safran. All rights reserved.
 // </copyright>
 
-namespace Safran.ZZProjectNameZZ.Business.Services
+namespace BIA.Net.Business.Services
 {
     using BIA.Net.Business.DTO.Infrastructure;
     using System;
@@ -81,7 +81,7 @@ namespace Safran.ZZProjectNameZZ.Business.Services
             /// The type of the service.
             /// </value>
             public Type ServiceType { get; }
-
+            /*
             /// <summary>
             /// Gets the type of the iService.
             /// </summary>
@@ -103,7 +103,7 @@ namespace Safran.ZZProjectNameZZ.Business.Services
             {
                 Type[] interfaces = ServiceType.GetInterfaces();
                 return interfaces.Last();
-            }
+            }*/
 
             /// <summary>
             /// Gets the type of the mapper.

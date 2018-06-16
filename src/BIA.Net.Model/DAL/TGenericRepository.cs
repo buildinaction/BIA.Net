@@ -12,12 +12,12 @@ namespace BIA.Net.Model
     using System.Data.Entity.Core.Objects;
     using System.Data.Entity.Core.Objects.DataClasses;
     using System.Data.Entity.Infrastructure;
-    using System.Data.SqlClient;
     using System.Diagnostics;
     using System.Linq;
     using System.Linq.Dynamic;
     using System.Linq.Expressions;
     using System.Reflection;
+    using BIA.Net.Common.Helpers;
     using Common;
     using DAL;
     using Utility;
@@ -54,10 +54,9 @@ namespace BIA.Net.Model
     /// <typeparam name="ProjectDBContext">The type of the project database context.</typeparam>
     /// <typeparam name="ProjectDBContainer">The type of the project database container.</typeparam>
     /// <seealso cref="BIA.Net.Model.DAL.IGenericRepository{T, ProjectDBContext}" />
-    public partial class TGenericRepository<Entity, ProjectDBContext, ProjectDBContainer> : IGenericRepository<Entity, ProjectDBContext>
+    public partial class TGenericRepository<Entity, ProjectDBContext> : IGenericRepository<Entity, ProjectDBContext>
         where Entity : ObjectRemap, new()
         where ProjectDBContext : DbContext, new()
-        where ProjectDBContainer : TDBContainer<ProjectDBContext>, new()
     {
 #if DEBUG
         /// <summary>
@@ -77,31 +76,21 @@ namespace BIA.Net.Model
         private string remapTab = string.Empty;
 
         /// <summary>
-        /// The database container
-        /// </summary>
-        private TGenericDBContainer<ProjectDBContext, ProjectDBContainer> dbContainer = null;
-
-        /// <summary>
         /// The database set
         /// </summary>
         private DbSet<Entity> dbSet = null;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TGenericRepository{Entity, ProjectDBContext, ProjectDBContainer}"/> class.
+        /// instance of dbContainer
         /// </summary>
-        /// <param name="contextGuid">The context unique identifier.</param>
-        public TGenericRepository(Guid contextGuid)
-        {
-            this.dbContainer = new TGenericDBContainer<ProjectDBContext, ProjectDBContainer>(contextGuid);
-        }
+        private TDBContainer<ProjectDBContext> dbContainer = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TGenericRepository{Entity, ProjectDBContext, ProjectDBContainer}"/> class.
         /// </summary>
         /// <param name="context">The context.</param>
-        public TGenericRepository(ProjectDBContainer context)
+        public TGenericRepository()
         {
-            this.dbContainer = new TGenericDBContainer<ProjectDBContext, ProjectDBContainer>(context);
         }
 
         /// <summary>
@@ -135,11 +124,27 @@ namespace BIA.Net.Model
         public List<Expression<Func<Entity, dynamic>>> ListInclude { get; set; }
 
         /// <summary>
+        /// Gets instance of dbContainer
+        /// </summary>
+        protected TDBContainer<ProjectDBContext> DbContainer
+        {
+            get
+            {
+                if (this.dbContainer == null)
+                {
+                    this.dbContainer = BIAUnity.Resolve<TDBContainer<ProjectDBContext>>();
+                }
+
+                return this.dbContainer;
+            }
+        }
+
+        /// <summary>
         /// Gets the project db context
         /// </summary>
         protected ProjectDBContext Db
         {
-            get { return this.dbContainer.GetProjectDBContext(); }
+            get { return this.DbContainer.db; }
         }
 
         /// <summary>
@@ -147,7 +152,7 @@ namespace BIA.Net.Model
         /// </summary>
         protected bool IsInTransaction
         {
-            get { return this.dbContainer.IsInTransaction; }
+            get { return this.DbContainer.IsInTransaction; }
         }
 
         /// <summary>
@@ -172,7 +177,7 @@ namespace BIA.Net.Model
         /// <returns>The context without filter</returns>
         public ProjectDBContext GetProjectDBContextForOptim()
         {
-            return this.dbContainer.GetProjectDBContext();
+            return this.DbContainer.db;
         }
 
         /// <summary>
@@ -503,7 +508,7 @@ namespace BIA.Net.Model
         public virtual int DeleteById(object primaryKey, GenericRepositoryParmeter param = null)
         {
             TraceManager.Debug("GenericRepository", "DeleteById", "Begin DeleteById for element " + typeof(Entity).Name);
-            List<string> lstFieldToInclude = !this.dbContainer.IsMoq ? this.GetFieldToInclude(param, AccessMode.Delete) : null;
+            List<string> lstFieldToInclude = !BIAUnity.IsMoq ? this.GetFieldToInclude(param, AccessMode.Delete) : null;
             Entity dbobj = this.Find(primaryKey, AccessMode.Delete, sFieldsToInclude: lstFieldToInclude);
 
             if (dbobj == null)
@@ -658,7 +663,7 @@ namespace BIA.Net.Model
                         {
                             if (targetParentObj != null)
                             {
-                                if (EntityPropHelper.GetProperties(this.Db, dbParentObj, this.dbContainer.IsMoq).Contains(propName))
+                                if (EntityPropHelper.GetProperties(this.Db, dbParentObj, BIAUnity.IsMoq).Contains(propName))
                                 {
                                     // 09/11/2016 : key should be update for not generated key but not when key is null (case in search by Unicity key)...
                                     object targetItem = prop.GetValue(targetParentObj);
@@ -1524,7 +1529,7 @@ namespace BIA.Net.Model
         /// <returns>The result returned by the database after executing the command.</returns>
         public virtual int ExecuteProcedureNonQuery(StoredProcedureParameter storedProcedureParameter)
         {
-            return this.dbContainer.ExecuteProcedureNonQuery(storedProcedureParameter);
+            return this.DbContainer.ExecuteProcedureNonQuery(storedProcedureParameter);
         }
 
         /// <summary>
@@ -1534,7 +1539,7 @@ namespace BIA.Net.Model
         /// <returns>List of Entity</returns>
         public virtual List<Entity> ExecuteProcedureReader(StoredProcedureParameter storedProcedureParameter)
         {
-            return this.dbContainer.ExecuteProcedureReader<Entity>(storedProcedureParameter);
+            return this.DbContainer.ExecuteProcedureReader<Entity>(storedProcedureParameter);
         }
 
         /// <summary>
@@ -1545,7 +1550,7 @@ namespace BIA.Net.Model
         /// <returns>List of Entity or EntityDTO</returns>
         public virtual List<T> ExecuteProcedureReader<T>(StoredProcedureParameter storedProcedureParameter)
         {
-            return this.dbContainer.ExecuteProcedureReader<T>(storedProcedureParameter);
+            return this.DbContainer.ExecuteProcedureReader<T>(storedProcedureParameter);
         }
 
         /// <summary>

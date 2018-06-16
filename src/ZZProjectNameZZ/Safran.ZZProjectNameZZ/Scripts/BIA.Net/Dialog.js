@@ -548,14 +548,16 @@ var BIA;
                 };
                 DialogDiv.prototype.refreshIfRequiered = function (urlValidated) {
                     var elemToRefresh = this;
-                    elemToRefresh.refrechAction.forEach(function (refrechAction) {
-                        for (var j = 0; j < refrechAction.OnValidatedFormsUrls.length; j++) {
-                            if (urlValidated.indexOf(refrechAction.OnValidatedFormsUrls[j]) >= 0) {
-                                refrechAction.RefreshContent();
-                                break;
+                    if (elemToRefresh.refrechAction != null) {
+                        elemToRefresh.refrechAction.forEach(function (refrechAction) {
+                            for (var j = 0; j < refrechAction.OnValidatedFormsUrls.length; j++) {
+                                if (urlValidated.indexOf(refrechAction.OnValidatedFormsUrls[j]) >= 0) {
+                                    refrechAction.RefreshContent();
+                                    break;
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                     if (this.children != null) {
                         this.children.forEach(function (e) {
                             e.refreshIfRequiered(urlValidated);

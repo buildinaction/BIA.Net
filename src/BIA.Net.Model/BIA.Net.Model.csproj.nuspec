@@ -12,5 +12,8 @@
         <tags>entityframefork .Net MVC WebForm </tags>
         <projectUrl>https://github.com/BIAdotNet/BIA.Net/wiki/Model</projectUrl>
         <iconUrl>https://raw.githubusercontent.com/BIAdotNet/BIA.Net/master/img/LogoBIA.png</iconUrl>
+        <dependencies>
+          <dependency id="BIA.Net.Common" version="1.8.0" />
+        </dependencies>
     </metadata>
 </package>

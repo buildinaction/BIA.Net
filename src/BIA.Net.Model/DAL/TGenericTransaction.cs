@@ -8,15 +8,15 @@ namespace BIA.Net.Model.DAL
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     using System.Linq;
+    using BIA.Net.Common.Helpers;
     using Utility;
 
-    public class TGenericTransaction<ProjectDBContext, ProjectDBContainer>
+    public class TGenericTransaction<ProjectDBContext>
         where ProjectDBContext : DbContext, new()
-        where ProjectDBContainer : TDBContainer<ProjectDBContext>, new()
     {
         private static DelegateSucces delegateSuccesStatic = null;
 
-        public delegate void DelegateSucces(Guid contextGuid, bool rootModeInTransaction);
+        public delegate void DelegateSucces(bool rootModeInTransaction);
 
         public static DelegateSucces DelegateSuccesStatic
         {
@@ -27,22 +27,21 @@ namespace BIA.Net.Model.DAL
         // set in Transaction if not set and return the rootModeInTransaction
         public static bool BeginTransaction(Guid contextGuid)
         {
-            ProjectDBContainer dbContainer = TGenericContext<ProjectDBContext, ProjectDBContainer>.GetDbContainer(contextGuid);
-            if (dbContainer.isInTransaction)
+            TDBContainer<ProjectDBContext> dbContainer = BIAUnity.Resolve<TDBContainer<ProjectDBContext>>();
+            if (dbContainer.IsInTransaction)
             {
                 return true;
             }
 
-            dbContainer.isInTransaction = true;
+            dbContainer.IsInTransaction = true;
             return false;
         }
 
-        public static bool Lock(Guid contextGuid, string tableName)
+        public static bool Lock(string tableName)
         {
             try
             {
-                ProjectDBContainer dbContainer = TGenericContext<ProjectDBContext, ProjectDBContainer>.GetDbContainer(contextGuid);
-
+                TDBContainer<ProjectDBContext> dbContainer = BIAUnity.Resolve<TDBContainer<ProjectDBContext>>();
                 dbContainer.db.Database.BeginTransaction();
 
                 string query = "SELECT [Value] FROM [dbo].[" + tableName + "] WHERE [Name] = 'LockTable'";
@@ -71,9 +70,9 @@ namespace BIA.Net.Model.DAL
             }
         }
 
-        public static void UnLock(Guid contextGuid, string tableName)
+        public static void UnLock(string tableName)
         {
-            ProjectDBContainer dbContainer = TGenericContext<ProjectDBContext, ProjectDBContainer>.GetDbContainer(contextGuid);
+            TDBContainer<ProjectDBContext> dbContainer = BIAUnity.Resolve<TDBContainer<ProjectDBContext>>();
             try
             {
                 dbContainer.db.Database.ExecuteSqlCommand("UPDATE [dbo].[" + tableName + "] SET Value = 'false' WHERE Name = 'LockTable'");
@@ -85,11 +84,11 @@ namespace BIA.Net.Model.DAL
             }
         }
 
-        protected static void BaseEndTransaction(Guid contextGuid, bool rootModeInTransaction)
+        protected static void BaseEndTransaction(bool rootModeInTransaction)
         {
             if (!rootModeInTransaction)
             {
-                ProjectDBContainer dbContainer = TGenericContext<ProjectDBContext, ProjectDBContainer>.GetDbContainer(contextGuid);
+                TDBContainer<ProjectDBContext> dbContainer = BIAUnity.Resolve<TDBContainer<ProjectDBContext>>();
                 try
                 {
                     dbContainer.db.SaveChanges();
@@ -106,10 +105,10 @@ namespace BIA.Net.Model.DAL
 
                 if (delegateSuccesStatic != null)
                 {
-                    delegateSuccesStatic(contextGuid, rootModeInTransaction);
+                    delegateSuccesStatic(rootModeInTransaction);
                 }
 
-                dbContainer.isInTransaction = false;
+                dbContainer.IsInTransaction = false;
             }
         }
     }

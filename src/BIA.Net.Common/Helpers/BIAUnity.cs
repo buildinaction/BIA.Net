@@ -53,6 +53,20 @@
             RootContainer.RegisterType(from, to, (LifetimeManager)Activator.CreateInstance(LifetimeManagerType));
         }
 
+        /// <summary>Registers the type mappings with the Unity container.</summary>
+        /// <typeparam name="T">Type from</typeparam>
+        public static void RegisterType<T>()
+        {
+            RootContainer.RegisterType<T>((LifetimeManager)Activator.CreateInstance(LifetimeManagerType));
+        }
+
+        /// <summary>Registers the type mappings with the Unity container.</summary>
+        /// <param name="t">Type from</param>
+        public static void RegisterType(Type t)
+        {
+            RootContainer.RegisterType(t, (LifetimeManager)Activator.CreateInstance(LifetimeManagerType));
+        }
+
         /// <summary>
         /// Resolve Unity
         /// </summary>

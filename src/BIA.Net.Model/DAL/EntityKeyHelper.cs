@@ -96,6 +96,7 @@ namespace BIA.Net.Model.DAL
                 keyProperties = listKeyProperties.ToArray();
                 _dict.Add(t, keyProperties);
             }
+
             return keyProperties;
         }
 
