@@ -90,29 +90,29 @@
 
 
         /// <summary>Registers the type mappings with the Unity container.</summary>
-        /// <typeparam name="T">Type from</typeparam>
-        public static void RegisterTypeContent<Contents>(Func<object> ContentCreator)
+        /// <typeparam name="Content">Type from as Content</typeparam>
+        public static void RegisterTypeContent<Content>(Func<object> ContentCreator)
         {
-            if (BIAContentCreator.ContentsCreator.ContainsKey(typeof(Contents)))
+            if (BIAUnityContentCreator.ContentsCreator.ContainsKey(typeof(Content)))
             {
-                BIAContentCreator.ContentsCreator[typeof(Contents)] = ContentCreator;
+                BIAUnityContentCreator.ContentsCreator[typeof(Content)] = ContentCreator;
             }
             else
             {
-                BIAContentCreator.ContentsCreator.Add(typeof(Contents), ContentCreator);
+                BIAUnityContentCreator.ContentsCreator.Add(typeof(Content), ContentCreator);
             }
-            RootContainer.RegisterType<BIAContainer<Contents>>((LifetimeManager)Activator.CreateInstance(LifetimeManagerType));
+            RootContainer.RegisterType<BIAUnityContainer<Content>>((LifetimeManager)Activator.CreateInstance(LifetimeManagerType));
         }
 
         /// <summary>
         /// Resolve Unity for Content
         /// </summary>
-        /// <param name="from"></param>
+        /// <param name="TContentFrom"></param>
         /// <returns>The object resolve</returns>
-        public static TContentsFrom ResolveContent<TContentsFrom>()
+        public static TContentFrom ResolveContent<TContentFrom>()
         {
-            BIAContainer<TContentsFrom> Container = BIAUnity.Resolve<BIAContainer<TContentsFrom>>();
-            return Container.contents;
+            BIAUnityContainer<TContentFrom> Container = BIAUnity.Resolve<BIAUnityContainer<TContentFrom>>();
+            return Container.content;
         }
     }
 }
