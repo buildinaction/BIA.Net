@@ -359,8 +359,10 @@
                         RefrechActionCurrentDialog.push(refrechAction);
                     });
 
-                CurrentDialogDiv.refrechAction = RefrechActionCurrentDialog
-
+                if (RefrechActionCurrentDialog.length > 0) {
+                    if (CurrentDialogDiv.refrechAction == null) CurrentDialogDiv.refrechAction = RefrechActionCurrentDialog;
+                    else CurrentDialogDiv.refrechAction = CurrentDialogDiv.refrechAction.concat(RefrechActionCurrentDialog);
+                }
             }
         };
 

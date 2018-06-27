@@ -86,5 +86,33 @@
         {
             return BIAUnity.RootContainer.Resolve(from);
         }
+
+
+
+        /// <summary>Registers the type mappings with the Unity container.</summary>
+        /// <typeparam name="T">Type from</typeparam>
+        public static void RegisterTypeContent<Contents>(Func<object> ContentCreator)
+        {
+            if (BIAContentCreator.ContentsCreator.ContainsKey(typeof(Contents)))
+            {
+                BIAContentCreator.ContentsCreator[typeof(Contents)] = ContentCreator;
+            }
+            else
+            {
+                BIAContentCreator.ContentsCreator.Add(typeof(Contents), ContentCreator);
+            }
+            RootContainer.RegisterType<BIAContainer<Contents>>((LifetimeManager)Activator.CreateInstance(LifetimeManagerType));
+        }
+
+        /// <summary>
+        /// Resolve Unity for Content
+        /// </summary>
+        /// <param name="from"></param>
+        /// <returns>The object resolve</returns>
+        public static TContentsFrom ResolveContent<TContentsFrom>()
+        {
+            BIAContainer<TContentsFrom> Container = BIAUnity.Resolve<BIAContainer<TContentsFrom>>();
+            return Container.contents;
+        }
     }
 }

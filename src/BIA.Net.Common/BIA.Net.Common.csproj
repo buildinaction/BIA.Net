@@ -99,6 +99,7 @@
     </CodeAnalysisDictionary>
     <Compile Include="BIANetSection.cs" />
     <Compile Include="CustomMailMessage.cs" />
+    <Compile Include="Helpers\BIAContainer.cs" />
     <Compile Include="Helpers\OpenXmlExcelHelper.cs" />
     <Compile Include="Helpers\SerializationHelper.cs" />
     <Compile Include="Helpers\BIAUnity.cs" />

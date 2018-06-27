@@ -94,13 +94,13 @@ var BIA;
                 return xhr;
             };
             //format send by DialogBasicActionController.SendEvent
-            var DialogEventContainer = /** @class */ (function () {
+            var DialogEventContainer = (function () {
                 function DialogEventContainer() {
                 }
                 return DialogEventContainer;
             }());
             Dialog.DialogEventContainer = DialogEventContainer;
-            var AjaxLoading = /** @class */ (function () {
+            var AjaxLoading = (function () {
                 function AjaxLoading() {
                 }
                 AjaxLoading.Init = function () {
@@ -220,8 +220,6 @@ var BIA;
                             if (dialogDiv.parent.type == Dialog.DialogDivType.Popup) {
                                 dialogDiv.parent.dialogElem.dialog("close");
                             }
-                            //dialogDiv.dialogElem.html("");
-                            //dialogDiv.dialogElem.dialog("close");
                         }
                         else {
                             Dialog.DialogEvent.Send(dialogDiv, dialogEventContainer.EventName, dialogEventContainer.EventData, null);
@@ -297,14 +295,14 @@ var BIA;
     (function (Net) {
         var Dialog;
         (function (Dialog) {
-            var DialogDivType;
             (function (DialogDivType) {
                 DialogDivType[DialogDivType["Popup"] = 1] = "Popup";
                 DialogDivType[DialogDivType["MainPageContent"] = 2] = "MainPageContent";
                 DialogDivType[DialogDivType["Document"] = 3] = "Document";
                 DialogDivType[DialogDivType["Content"] = 4] = "Content";
-            })(DialogDivType = Dialog.DialogDivType || (Dialog.DialogDivType = {}));
-            var RefreshAction = /** @class */ (function () {
+            })(Dialog.DialogDivType || (Dialog.DialogDivType = {}));
+            var DialogDivType = Dialog.DialogDivType;
+            var RefreshAction = (function () {
                 function RefreshAction() {
                 }
                 RefreshAction.prototype.RefreshContent = function () {
@@ -368,7 +366,7 @@ var BIA;
                 return RefreshAction;
             }());
             Dialog.RefreshAction = RefreshAction;
-            var DialogDiv = /** @class */ (function () {
+            var DialogDiv = (function () {
                 function DialogDiv(dialogElem, parent, type) {
                     this.dialogElem = dialogElem;
                     this.children = [];
@@ -624,7 +622,12 @@ var BIA;
                             refrechAction.parentDialogDiv = CurrentDialogDiv_1;
                             RefrechActionCurrentDialog_1.push(refrechAction);
                         });
-                        CurrentDialogDiv_1.refrechAction = RefrechActionCurrentDialog_1;
+                        if (RefrechActionCurrentDialog_1.length > 0) {
+                            if (CurrentDialogDiv_1.refrechAction == null)
+                                CurrentDialogDiv_1.refrechAction = RefrechActionCurrentDialog_1;
+                            else
+                                CurrentDialogDiv_1.refrechAction = CurrentDialogDiv_1.refrechAction.concat(RefrechActionCurrentDialog_1);
+                        }
                     }
                 };
                 ;
@@ -645,7 +648,7 @@ var BIA;
     (function (Net) {
         var Dialog;
         (function (Dialog) {
-            var DialogEvent = /** @class */ (function () {
+            var DialogEvent = (function () {
                 function DialogEvent() {
                 }
                 DialogEvent.Send = function (dialogDiv, eventName, eventData, targetElem) {
@@ -676,7 +679,7 @@ var BIA;
                 DialogLinkTarget[DialogLinkTarget["Blank"] = 1] = "Blank";
                 DialogLinkTarget[DialogLinkTarget["Current"] = 2] = "Current";
             })(DialogLinkTarget || (DialogLinkTarget = {}));
-            var DialogLink = /** @class */ (function () {
+            var DialogLink = (function () {
                 function DialogLink(linkElem, parent, url) {
                     this.linkElem = linkElem;
                     this.url = url;
@@ -867,11 +870,6 @@ var BIA;
                         if (Id != "") {
                             dialog.prop("DialogByIds", Id);
                         }
-                        /*dialog.on('dialogclose', function (event) {
-                            var dialogCurrent = $(this);
-        
-                            DisposeDialog(dialogCurrent);
-                        });*/
                     }
                     else {
                         this.target = DialogLinkTarget.Current;
@@ -902,7 +900,6 @@ var BIA;
                     }
                     else if (this.target == DialogLinkTarget.Current) {
                         this.dialogDiv.ReplaceInCurrentDialog(this.url, this.dialogDiv.IsStandardHistory());
-                        //DialogDiv.ChangeContent(parentDialogDiv, true, this.url, DivContent, DivScript);
                     }
                 };
                 return DialogLink;
