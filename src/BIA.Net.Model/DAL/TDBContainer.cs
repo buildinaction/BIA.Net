@@ -13,6 +13,10 @@ namespace BIA.Net.Model.DAL
     public class TDBContainer<ProjectDBContext> : IDisposable
         where ProjectDBContext : DbContext, new()
     {
+        /// <summary>
+        /// Use to make traces
+        /// </summary>
+        private Guid contextKey;
         public readonly object SyncRootDb = new object();
 
         public TDBContainer() {
@@ -31,6 +35,9 @@ namespace BIA.Net.Model.DAL
                         if (this._db == null)
                         {
                             this._db = new ProjectDBContext();
+
+                            this.contextKey = Guid.NewGuid();
+                            TraceManager.Debug("TDBContainer<ProjectDBContext>", "db", "new context " + this.contextKey);
 
 #if DEBUG
                             this._db.Database.Log = message => System.Diagnostics.Debug.WriteLine(message);
@@ -81,6 +88,7 @@ namespace BIA.Net.Model.DAL
             if (this._db != null)
             {
                 this._db.Dispose();
+                TraceManager.Debug("TDBContainer<ProjectDBContext>", "Dispose", "dispose context " + this.contextKey);
             }
 
             this._db = null;
