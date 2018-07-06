@@ -56,6 +56,18 @@
         dialogDiv.ReplaceInCurrentDialog(dialogDiv.urlCurrent, false);
     }
 
+    export function RefreshContent(elemToRefresh: JQuery) {
+        var dialogDiv = BIA.Net.Dialog.GetParentDialogDiv(elemToRefresh);
+        if (dialogDiv.refrechAction != null) {
+            for (let refrechAction of dialogDiv.refrechAction) {
+                if (refrechAction.elemToRefresh != null && refrechAction.elemToRefresh.attr('id') == elemToRefresh.attr('id')) {
+                    refrechAction.RefreshContent();
+                    break;
+                }
+            }
+        }
+    }
+
     $.fn.submitNoValidation = function (e) {
         $(this).removeData('validator');
         $(this).removeData('unobtrusiveValidation');

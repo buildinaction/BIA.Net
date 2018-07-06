@@ -7,6 +7,7 @@ declare module BIA.Net.Dialog {
     function ChangeContent(parent: DialogDiv, addHistory: boolean, url: string, DivContent: string, DivScript?: string, DivType?: DialogDivType): void;
     function DoActionAndRefresh(linkElem: JQuery, urlAction: string): void;
     function RefreshCurrentDialog(linkElem: JQuery): void;
+    function RefreshContent(elemToRefresh: JQuery): void;
 }
 declare module BIA.Net.Dialog {
     class DialogEventContainer {

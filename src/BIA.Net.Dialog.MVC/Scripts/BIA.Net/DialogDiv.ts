@@ -78,7 +78,6 @@
                 $.ajax(ajaxSettings);
             }
         };
-
     }
 
     export class DialogDiv {
