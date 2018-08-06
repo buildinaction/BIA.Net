@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>$id$</id>
+        <version>1.8.0.1</version>
+        <title>$title$</title>
+        <authors>$author$</authors>
+        <owners>Safran</owners>
+        <projectUrl>http://www.safran-cgs.com/</projectUrl>
+        <iconUrl>http://www.safran-cgs.com/sites/safran-cgs/files/favicon_0.ico</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Authentication function for Safran Framework: 
+        - Authentification</description>
+        <copyright>Safran</copyright>
+        <tags>Safran Authentication MVC .Net</tags>
+        <dependencies>
+          <dependency id="BIA.Net.Common" version="1.8.0.1" />
+          <dependency id="BIA.Net.Web" version="1.8.0.1" />
+          <dependency id="BIA.Net.Authentication.Business" version="1.8.0.1" />
+        </dependencies>
+    </metadata>
+</package>

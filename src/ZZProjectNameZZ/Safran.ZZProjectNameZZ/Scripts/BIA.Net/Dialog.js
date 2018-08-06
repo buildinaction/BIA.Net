@@ -65,6 +65,19 @@ var BIA;
                 dialogDiv.ReplaceInCurrentDialog(dialogDiv.urlCurrent, false);
             }
             Dialog.RefreshCurrentDialog = RefreshCurrentDialog;
+            function RefreshContent(elemToRefresh) {
+                var dialogDiv = BIA.Net.Dialog.GetParentDialogDiv(elemToRefresh);
+                if (dialogDiv.refrechAction != null) {
+                    for (var _i = 0, _a = dialogDiv.refrechAction; _i < _a.length; _i++) {
+                        var refrechAction = _a[_i];
+                        if (refrechAction.elemToRefresh != null && refrechAction.elemToRefresh.attr('id') == elemToRefresh.attr('id')) {
+                            refrechAction.RefreshContent();
+                            break;
+                        }
+                    }
+                }
+            }
+            Dialog.RefreshContent = RefreshContent;
             $.fn.submitNoValidation = function (e) {
                 $(this).removeData('validator');
                 $(this).removeData('unobtrusiveValidation');
@@ -624,7 +637,12 @@ var BIA;
                             refrechAction.parentDialogDiv = CurrentDialogDiv_1;
                             RefrechActionCurrentDialog_1.push(refrechAction);
                         });
-                        CurrentDialogDiv_1.refrechAction = RefrechActionCurrentDialog_1;
+                        if (RefrechActionCurrentDialog_1.length > 0) {
+                            if (CurrentDialogDiv_1.refrechAction == null)
+                                CurrentDialogDiv_1.refrechAction = RefrechActionCurrentDialog_1;
+                            else
+                                CurrentDialogDiv_1.refrechAction = CurrentDialogDiv_1.refrechAction.concat(RefrechActionCurrentDialog_1);
+                        }
                     }
                 };
                 ;

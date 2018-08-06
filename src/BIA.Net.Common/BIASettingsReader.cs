@@ -43,6 +43,23 @@ namespace BIA.Net.Common
             }
         }
 
+        private static BIANetSection biaNetSection = null;
+
+        /// <summary>
+        /// Get the BIANe Section
+        /// </summary>
+        public static BIANetSection BIANetSection
+        {
+            get
+            {
+                if (biaNetSection == null)
+                {
+                        biaNetSection = (BIANetSection)ConfigurationManager.GetSection("BiaNet");
+                }
+                return biaNetSection;
+            }
+        }
+
         /// <summary>
         /// Gets AD Groups As Application Users
         /// </summary>
@@ -56,5 +73,145 @@ namespace BIA.Net.Common
 
             return null;
         }
+
+
+
+        ///TMP To remove
+ 
+        /// <summary>
+        /// Gets AD Domains
+        /// </summary>
+        public static List<string> ADDomains
+        {
+            get
+            {
+                string value = ConfigurationManager.AppSettings["ADDomains"];
+                if (string.IsNullOrEmpty(value))
+                {
+                    return null;
+                }
+
+                return value.Split(',').ToList();
+            }
+        }
+
+        /// <summary>
+        /// Gets AD Simulated Roles
+        /// </summary>
+        public static List<string> ADSimuRoles
+        {
+            get
+            {
+                string value = ConfigurationManager.AppSettings["ADSimuRoles"];
+                if (string.IsNullOrEmpty(value))
+                {
+                    return null;
+                }
+
+                return value.Split(',').ToList();
+            }
+        }
+
+        /// <summary>
+        /// Gets AD Simulated User
+        /// </summary>
+        public static string ADSimuUser
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["ADSimuUser"];
+            }
+        }
+
+        private static Dictionary<string, List<string>> adRoles = null;
+        public static Dictionary<string, List<string>> ADRoles
+        {
+            get
+            {
+                if (adRoles == null)
+                {
+                    adRoles = new Dictionary<string, List<string>>();
+                    NameValueCollection section = (NameValueCollection)ConfigurationManager.GetSection("ADRoles");
+                    if (section != null)
+                    {
+                        foreach (string role in section.AllKeys)
+                        {
+                            List<string> values = new List<string>(section[role].Split(',')).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+
+                            if (values != null && values.Any())
+                            {
+                                adRoles.Add(role, values);
+                            }
+                        }
+                    }
+                }
+                return adRoles;
+            }
+        }
+        /// <summary>
+        /// Gets AD Groups As Application Users
+        /// </summary>
+        public static List<string> GetADGroupsForRole(string role)
+        {
+            List<string> value = null;
+            if (ADRoles.TryGetValue(role, out value))
+            {
+                return value;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets AD Simulated User
+        /// </summary>
+        public static string UrlRefreshProfile
+        {
+            get
+            {
+
+                string value = ConfigurationManager.AppSettings["UrlRefreshProfile"];
+                if (string.IsNullOrEmpty(value))
+                {
+                    value = UrlDMIndex;
+                    if (string.IsNullOrEmpty(value)) return null;
+                    value = value + "/UserProfile/GetUserProfile";
+                }
+                return value;
+            }
+        }
+
+        /// <summary>
+        /// Gets AD Simulated User
+        /// </summary>
+        public static string UrlDMIndex
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["UrlDMIndex"];
+            }
+        }
+
+        /// <summary>
+        /// Gets AD Simulated User
+        /// </summary>
+        public static bool DisableUserGroupCheck
+        {
+            get
+            {
+                string value = ConfigurationManager.AppSettings["DisableUserGroupCheck"];
+                if (string.IsNullOrEmpty(value))
+                {
+                    return false;
+                }
+                if (value.ToLower() == "true") return true;
+                return false;
+            }
+        }
+
+        ///End TMP
+
+
+
     }
 }

@@ -97,6 +97,7 @@
       <Link>CustomDictionary.xml</Link>
       <SubType>Designer</SubType>
     </CodeAnalysisDictionary>
+    <Compile Include="BIAConstantes.cs" />
     <Compile Include="BIANetSection.cs" />
     <Compile Include="CustomMailMessage.cs" />
     <Compile Include="Helpers\BIAAUnityContainer.cs" />

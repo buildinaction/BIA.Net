@@ -107,13 +107,13 @@ var BIA;
                 return xhr;
             };
             //format send by DialogBasicActionController.SendEvent
-            var DialogEventContainer = (function () {
+            var DialogEventContainer = /** @class */ (function () {
                 function DialogEventContainer() {
                 }
                 return DialogEventContainer;
             }());
             Dialog.DialogEventContainer = DialogEventContainer;
-            var AjaxLoading = (function () {
+            var AjaxLoading = /** @class */ (function () {
                 function AjaxLoading() {
                 }
                 AjaxLoading.Init = function () {
@@ -233,6 +233,8 @@ var BIA;
                             if (dialogDiv.parent.type == Dialog.DialogDivType.Popup) {
                                 dialogDiv.parent.dialogElem.dialog("close");
                             }
+                            //dialogDiv.dialogElem.html("");
+                            //dialogDiv.dialogElem.dialog("close");
                         }
                         else {
                             Dialog.DialogEvent.Send(dialogDiv, dialogEventContainer.EventName, dialogEventContainer.EventData, null);
@@ -308,14 +310,14 @@ var BIA;
     (function (Net) {
         var Dialog;
         (function (Dialog) {
+            var DialogDivType;
             (function (DialogDivType) {
                 DialogDivType[DialogDivType["Popup"] = 1] = "Popup";
                 DialogDivType[DialogDivType["MainPageContent"] = 2] = "MainPageContent";
                 DialogDivType[DialogDivType["Document"] = 3] = "Document";
                 DialogDivType[DialogDivType["Content"] = 4] = "Content";
-            })(Dialog.DialogDivType || (Dialog.DialogDivType = {}));
-            var DialogDivType = Dialog.DialogDivType;
-            var RefreshAction = (function () {
+            })(DialogDivType = Dialog.DialogDivType || (Dialog.DialogDivType = {}));
+            var RefreshAction = /** @class */ (function () {
                 function RefreshAction() {
                 }
                 RefreshAction.prototype.RefreshContent = function () {
@@ -379,7 +381,7 @@ var BIA;
                 return RefreshAction;
             }());
             Dialog.RefreshAction = RefreshAction;
-            var DialogDiv = (function () {
+            var DialogDiv = /** @class */ (function () {
                 function DialogDiv(dialogElem, parent, type) {
                     this.dialogElem = dialogElem;
                     this.children = [];
@@ -661,7 +663,7 @@ var BIA;
     (function (Net) {
         var Dialog;
         (function (Dialog) {
-            var DialogEvent = (function () {
+            var DialogEvent = /** @class */ (function () {
                 function DialogEvent() {
                 }
                 DialogEvent.Send = function (dialogDiv, eventName, eventData, targetElem) {
@@ -692,7 +694,7 @@ var BIA;
                 DialogLinkTarget[DialogLinkTarget["Blank"] = 1] = "Blank";
                 DialogLinkTarget[DialogLinkTarget["Current"] = 2] = "Current";
             })(DialogLinkTarget || (DialogLinkTarget = {}));
-            var DialogLink = (function () {
+            var DialogLink = /** @class */ (function () {
                 function DialogLink(linkElem, parent, url) {
                     this.linkElem = linkElem;
                     this.url = url;
@@ -883,6 +885,11 @@ var BIA;
                         if (Id != "") {
                             dialog.prop("DialogByIds", Id);
                         }
+                        /*dialog.on('dialogclose', function (event) {
+                            var dialogCurrent = $(this);
+        
+                            DisposeDialog(dialogCurrent);
+                        });*/
                     }
                     else {
                         this.target = DialogLinkTarget.Current;
@@ -913,6 +920,7 @@ var BIA;
                     }
                     else if (this.target == DialogLinkTarget.Current) {
                         this.dialogDiv.ReplaceInCurrentDialog(this.url, this.dialogDiv.IsStandardHistory());
+                        //DialogDiv.ChangeContent(parentDialogDiv, true, this.url, DivContent, DivScript);
                     }
                 };
                 return DialogLink;
