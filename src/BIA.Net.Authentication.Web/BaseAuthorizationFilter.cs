@@ -16,6 +16,10 @@ namespace BIA.Net.Authentication.Web
     using BIA.Net.Authentication.Business.Helpers;
     using BIA.Net.Common.Helpers;
     using System.Reflection;
+    using System.DirectoryServices.AccountManagement;
+    using static BIA.Net.Common.Configuration.CommonElement;
+    using static BIA.Net.Common.Configuration.AuthenticationElement.SourcesElement.IdentityElement;
+    using static BIA.Net.Common.Configuration.AuthenticationElement.SourcesElement.IdentityElement.ADIdentityValueCollection;
 
     public enum RolesRedirectAction
     {
@@ -68,11 +72,13 @@ namespace BIA.Net.Authentication.Web
             bool shouldRefreshUserProfile = true;
             bool shouldRefreshUserLangage = true;
             bool shouldRefreshUserRoles = true;
+            bool shouldRefreshLogins = true;
             if (Session != null)
             {
                 if (Session[AuthenticationConstants.SessionUserInfo] != null)
                 {
                     user = (TUserInfo)Session[AuthenticationConstants.SessionUserInfo];
+                    shouldRefreshLogins = false;
 
                     if (!ShouldRefresh(AuthenticationConstants.SessionRefreshUserPropertiesDate, Session, user?.Login))
                     {
@@ -107,7 +113,12 @@ namespace BIA.Net.Authentication.Web
                 user.Identity = windowsIdentity;
             }
 
-            RefreshUser(Session, user, shouldRefreshUserProperties, shouldRefreshUserProfile, shouldRefreshUserLangage, shouldRefreshUserRoles);
+            RefreshUser(Session, user,
+                shouldRefreshLogins : shouldRefreshLogins,
+                shouldRefreshUserProperties: shouldRefreshUserProperties, 
+                shouldRefreshUserProfile : shouldRefreshUserProfile, 
+                shouldRefreshUserLangage: shouldRefreshUserLangage, 
+                shouldRefreshUserRoles: shouldRefreshUserRoles);
 
             return user;
             /* TODO for AD
@@ -192,7 +203,7 @@ namespace BIA.Net.Authentication.Web
                         PropertyInfo propertyInfo = user.GetType().GetProperty(value.Key);
                         if (propertyInfo!=null)
                         {
-                            propertyInfo.SetValue(user, Convert.ChangeType(value.Value, propertyInfo.PropertyType), null);
+                            propertyInfo.SetValue(user, Convert.ChangeType(value.Value, propertyInfo.PropertyType));
                         }
                     }
                 }
@@ -207,7 +218,7 @@ namespace BIA.Net.Authentication.Web
                             PropertyInfo propertyInfo = user.GetType().GetProperty(value.Key);
                             if (propertyInfo != null)
                             {
-                                propertyInfo.SetValue(user, Convert.ChangeType(PreparePrincipalUserName(user.Identity, value.IdentityField, value.RemoveDomain), propertyInfo.PropertyType), null);
+                                propertyInfo.SetValue(user, Convert.ChangeType(PreparePrincipalUserName(user.Identity, value.IdentityField, value.RemoveDomain), propertyInfo.PropertyType));
                             }
                         }
                     }
@@ -233,6 +244,7 @@ namespace BIA.Net.Authentication.Web
                                 adUserGroups.Add(value.Value);
                             }
                         }
+
                         KeyValueCollection ADRoles = BIASettingsReader.BIANetSection?.Authentication?.Sources?.Roles?.AD;
                         if (ADRoles != null)
                         {
@@ -247,11 +259,14 @@ namespace BIA.Net.Authentication.Web
                             }
                         }
 
-                        string appliLogin = user.Login;
+
+                        //TO test
+                        ///>>string appliLogin = user.Login;
                         ///Get login name if user connected with generic account
-                        if (!shouldRefreshUserProperties && !string.IsNullOrEmpty(user?.SecondaryLogin)) appliLogin = user.SecondaryLogin;
+                        ///>if (!shouldRefreshUserProperties && !string.IsNullOrEmpty(user?.SecondaryLogin)) appliLogin = user.SecondaryLogin;
                         //get properties from database or from AD (used to compute roles)
-                        newUserProperties = GetUserProperties(user.Login, appliLogin, adUserGroups);
+                        ///>>newUserProperties = GetUserProperties(user.Login, appliLogin, adUserGroups);
+                        newUserProperties = GetUserProperties(user, adUserGroups);
                     }
                 }
 
@@ -306,7 +321,7 @@ namespace BIA.Net.Authentication.Web
             PropertyInfo propertyInfo = Identity.GetType().GetProperty(fromFieldName);
             if (propertyInfo != null)
             {
-                userName = (string) propertyInfo.GetValue(Identity);
+                userName = (string)propertyInfo.GetValue(Identity);
             }
 
             if (string.IsNullOrEmpty(userName))
@@ -329,12 +344,11 @@ namespace BIA.Net.Authentication.Web
             return userName;
         }
 
-
-
-        static protected TUserInfo ConnectUser(HttpSessionState Session, TUserDB aspNetUser)
+        static protected TUserInfo ConnectUser(HttpSessionState Session, TUserDB aspNetUser, string secondaryLogin)
         {
             TUserInfo user = (TUserInfo)Session[AuthenticationConstants.SessionUserInfo];
             user.Properties = aspNetUser;
+            user.SecondaryLogin = secondaryLogin;
             user.AdditionnalRoles = new List<string> { "User" };
             RefreshUser(Session, user, shouldRefreshUserProperties: false );
             return user;
@@ -344,6 +358,7 @@ namespace BIA.Net.Authentication.Web
         {
             TUserInfo user = (TUserInfo)Session[AuthenticationConstants.SessionUserInfo];
             user.Properties = default(TUserDB);
+            user.SecondaryLogin = null;
             user.AdditionnalRoles = null;
             RefreshUser(Session, user);
             return user;
@@ -401,53 +416,34 @@ namespace BIA.Net.Authentication.Web
         /// <param name="userName">Name of the user.</param>
         /// <returns>The user information</returns>
         /// <exception cref="System.Exception">You're not authorize to connect to this application: Your aren't in the AD user group.</exception>
-        static private TUserDB GetUserProperties(string userLogin, string appliLogin, List<string> adUserGroups)
+        static private TUserDB GetUserProperties(TUserInfo userInfo, List<string> adUserGroups)
         {
             TUserDB userProperties = default(TUserDB);
             //Initialize Properties
-            userProperties = new TUserDB();
+
+            MethodFunctionElement Service = BIASettingsReader.BIANetSection?.Authentication?.Sources?.UserProperties?.Service;
+            if (Service!= null && Service.Type != null)
+            {
+                 userProperties = (TUserDB)Service.Type.GetMethod(Service.Method).Invoke(null, new object[] { userInfo.Login, userInfo.SecondaryLogin, adUserGroups });
+            }
+            else
+            {
+                userProperties = PropertiesHelper.PrepareProperties<TUserInfo,TUserDB>(userInfo);
+            }
 
             KeyValueCollection UserPropertiesValues = BIASettingsReader.BIANetSection?.Authentication?.Sources?.UserProperties?.Values;
-            if (UserPropertiesValues != null)
+            if (UserPropertiesValues != null && UserPropertiesValues.Count > 0)
             {
                 foreach (KeyValueElement value in UserPropertiesValues)
                 {
                     PropertyInfo propertyInfo = userProperties.GetType().GetProperty(value.Key);
-                    propertyInfo.SetValue(userProperties, Convert.ChangeType(value.Value, propertyInfo.PropertyType), null);
+                    propertyInfo.SetValue(userProperties, Convert.ChangeType(value.Value, propertyInfo.PropertyType));
                 }
             }
 
-            /*TODO for AD
-
-            AServiceSynchronizeUser serviceUser = BIAUnity.Resolve<AServiceSynchronizeUser>();
-            if (adUserGroups.Contains("User"))
-            {
-                userProperties = (TUserDB) serviceUser.GetAspNetUserByName(appliLogin);
-                if (userProperties == null)
-                {
-
-                    userProperties = (TUserDB)serviceUser.CreateUserFromAD(userLogin, true);
-                }
-                else
-                {
-                    if ((userProperties?.UserAdInDB != null)  && (!userProperties.UserAdInDB.DAIEnable))
-                    {
-                        userProperties.UserAdInDB.DAIEnable = serviceUser.ResetDAIEnable(userProperties.UserAdInDB, true).DAIEnable;
-                    }
-                }
-            }
-            else if (adUserGroups.Contains("Generic"))
-            {
-                userProperties = (TUserDB)serviceUser.CreateUserGenericFromAD(userLogin);
-            }
-            else
-            {
-                // Technical user or DisableUserGroupCheck return an user build with AD Info
-                userProperties = (TUserDB) serviceUser.CreateUserFromAD(userLogin, false);
-            }
-            */
             return userProperties;
         }
+
 
         protected RolesRedirectAction CheckAuthorize<TContext>(TUserInfo user, out RolesRedirectURL redirect, Func<TContext, bool> IsAllowAnonymousCallback, Func<TContext, List<string>> DisableRedirectRoles, TContext context)
         {

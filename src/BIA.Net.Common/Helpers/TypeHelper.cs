@@ -118,6 +118,27 @@ namespace BIA.Net.Common.Helpers
 
             return outputData;
         }
+        public static Type GetTypeFromString(string sType)
+        {
+            Type type = null;
+            foreach (var _a in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (var _t in _a.GetTypes())
+                {
+                    try
+                    {
+                        if ((_t.FullName == sType) /*&& _t.IsClass*/)
+                        {
+                            type = _t;
+                            break;
+                        }
+                    }
+                    catch { }
+                }
+                if (type != null) break;
+            }
+            return type;
+        }
     }
 
     /// <summary>

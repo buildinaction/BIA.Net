@@ -1,16 +1,15 @@
-﻿
-namespace BIA.Net.Authentication.Business.Helpers
+﻿namespace BIA.Net.Authentication.Business.Helpers
 {
     using BIA.Net.Common;
     using BIA.Net.Common.Helpers;
     using Business;
-    using Common;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Security.Principal;
     using System.Text;
+    using static BIA.Net.Common.Configuration.CommonElement;
 
     /// <summary>
     /// Class to define identity.

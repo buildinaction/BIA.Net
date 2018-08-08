@@ -76,7 +76,7 @@ namespace BIA.Net.Authentication.Controllers
             {
                 using (TServiceSynchronizeUser serviceUserDB = new TServiceSynchronizeUser())
                 {
-                    userDeleted = serviceUserDB.SynchronizeUsers<TUserADinDB>(BIASettingsReader.GetADGroupsForRole("User"));
+                    userDeleted = serviceUserDB.SynchronizeUsers<TUserInfo, TUserDB, TUserADinDB>(BIASettingsReader.GetADGroupsForRole("User"));
                 }
             }
 

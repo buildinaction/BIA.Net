@@ -1,79 +1,70 @@
-﻿namespace BIA.Net.Authentication.Business
+﻿namespace BIA.Net.Authentication.Business.Helpers
 {
     using BIA.Net.Common;
-    using Common;
     using System;
     using System.Collections.Generic;
     using System.DirectoryServices;
     using System.DirectoryServices.AccountManagement;
     using System.Linq;
+    using System.Reflection;
     using System.Security.Principal;
     using System.Text.RegularExpressions;
+    using static BIA.Net.Common.Configuration.AuthenticationElement.SourcesElement.UserPropertiesElement;
+    using static BIA.Net.Common.Configuration.AuthenticationElement.SourcesElement.UserPropertiesElement.ADFieldsCollection;
+    using static BIA.Net.Common.Configuration.CommonElement;
 
     /// <summary>
     /// AuthHelper
     /// </summary>
     public static class ADHelper
     {
-        /// <summary>
-        /// create an aspNetUser from a UserPrincipal.
-        /// </summary>
-        /// <param name="user">The user.</param>
-        /// <typeparam name="TUserADinDB">The type of the user DB table DTO.</typeparam>
-        /// <returns>an aspNetUser</returns>
-        public static TUserADinDB UserADinDBFromUserPrincipal<TUserADinDB>(UserPrincipal user)
-            where TUserADinDB : IUserADinDB, new()
-        {
-            string userName = GetUserName(user);
-            TUserADinDB aspUser = new TUserADinDB()
-            {
-                Login = userName,
-                /*Email = user.EmailAddress,
-                FirstName = (user.GivenName!=null) ? user.GivenName : " ---- ",
-                LastName = (user.Surname != null) ? user.Surname : " ---- ",
-                IsEmployee = true,
-                IsExternal = false,
-                DAIDate = DateTime.Now,*/
-                DAIEnable = true,
-            };
-            /*
-            aspUser.Site = GetProperty(user, "description", 50, "Dummy");
-            aspUser.Language = GetProperty(user, "c", 10, "EN");
-            aspUser.Company = GetProperty(user, "company", 50, "Dummy");
-            aspUser.Office = GetProperty(user, "physicalDeliveryOfficeName", 20, "Dummy");
-            aspUser.DistinguishedName = GetProperty(user, "distinguishedName", 250, "Dummy");
-            aspUser.Manager = GetProperty(user, "manager", 250);
 
-            string title = GetProperty(user, "title", 50);
-            if (!string.IsNullOrEmpty(title))
+        /// <summary>
+        /// Set Properties from AD conformly to the parameter in web.config
+        /// </summary>
+        /// <param name="userLogin"></param>
+        /// <param name="userProperties"></param>
+        /// <param name="adFieldsCollection"></param>
+        public static void SetPropertiesFromAD<TUserADinDB>(string userLogin, TUserADinDB userProperties)
+        {
+            ADFieldsCollection adFieldsCollection = BIASettingsReader.BIANetSection?.Authentication?.Sources?.UserProperties?.AD;
+            MethodFunctionElement customCodeAD = BIASettingsReader.BIANetSection?.Authentication?.Sources?.UserProperties?.CustomCodeAD;
+
+            if ((adFieldsCollection != null && adFieldsCollection.Count > 0) || (customCodeAD != null))
             {
-                if (title.IndexOf(':') > 0)
+                UserPrincipal userPrincipal = ADHelper.GetUserFromADs(userLogin);
+
+                if (adFieldsCollection != null && adFieldsCollection.Count > 0)
                 {
-                    string[] extInfo = title.Split(':');
-                    if (extInfo[0] == "EXT" && extInfo.Length == 2)
+
+                    if (userPrincipal != null)
                     {
-                        aspUser.IsEmployee = false;
-                        aspUser.IsExternal = true;
-                        aspUser.ExternalCompany = extInfo[1];
+                        foreach (ADFieldElement value in adFieldsCollection)
+                        {
+                            PropertyInfo propertyInfo = userProperties.GetType().GetProperty(value.Key);
+                            if (propertyInfo != null)
+                            {
+                                propertyInfo.SetValue(userProperties, Convert.ChangeType(ADHelper.GetProperty(userPrincipal, value.Adfield, value.MaxLenght, value.Default), propertyInfo.PropertyType));
+                            }
+                        }
+                    }
+                }
+
+                if (customCodeAD != null)
+                {
+                    if (customCodeAD.Type != null)
+                    {
+                        if (!string.IsNullOrEmpty(customCodeAD.Method))
+                        {
+                            customCodeAD.Type.GetMethod(customCodeAD.Method).Invoke(null, new object[] { userPrincipal, userProperties });
+                        }
+                        else
+                        {
+                            customCodeAD.Type.GetProperty(customCodeAD.Property).GetValue(null, new object[] { userPrincipal, userProperties });
+                        }
                     }
                 }
             }
-
-            string fullDepartment = GetProperty(user, "department", 100, "Dummy");
-            string department = fullDepartment;
-            string subDepartment = string.Empty;
-            if (fullDepartment.IndexOf('-') > 0)
-            {
-                department = fullDepartment.Substring(0, fullDepartment.IndexOf('-') - 1);
-                if (fullDepartment.Length > fullDepartment.IndexOf('-') + 2)
-                {
-                    subDepartment = fullDepartment.Substring(fullDepartment.IndexOf('-') + 3);
-                }
-            }
-
-            aspUser.Department = !string.IsNullOrWhiteSpace(department) ? department : "Dummy";
-            aspUser.SubDepartment = subDepartment;*/
-            return aspUser;
         }
 
         /// <summary>
@@ -435,7 +426,7 @@
             List<string> result = new List<string>();
             foreach (KeyValueElement roleGroup in ADRoles)
             {
-                foreach (string adGroup in roleGroup.Value.Split(';'))
+                foreach (string adGroup in roleGroup.Value.Split(','))
                 {
                     string sRole = roleGroup.Key;
                     if (sRole.Contains('$'))
@@ -486,14 +477,21 @@
         /// <param name="maxLenght">The maximum lenght.</param>
         /// <param name="empty">The empty.</param>
         /// <returns>the value of the property</returns>
-        private static string GetProperty(UserPrincipal principal, string property, int maxLenght, string empty = "")
+        public static string GetProperty(UserPrincipal principal, string property, int maxLenght, string empty = "")
         {
-            DirectoryEntry directoryEntry = principal.GetUnderlyingObject() as DirectoryEntry;
-            if (directoryEntry.Properties.Contains(property))
+            if (!string.IsNullOrEmpty(property))
             {
-                string propValue = directoryEntry.Properties[property].Value.ToString();
-                propValue = propValue.Length <= maxLenght ? propValue : propValue.Substring(0, maxLenght);
-                return propValue;
+                DirectoryEntry directoryEntry = principal.GetUnderlyingObject() as DirectoryEntry;
+                if (directoryEntry.Properties.Contains(property))
+                {
+                    string propValue = directoryEntry.Properties[property].Value.ToString();
+                    propValue = propValue.Length <= maxLenght ? propValue : propValue.Substring(0, maxLenght);
+                    return propValue;
+                }
+                else
+                {
+                    return empty;
+                }
             }
             else
             {

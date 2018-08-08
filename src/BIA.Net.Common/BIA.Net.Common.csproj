@@ -28,7 +28,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>6</LangVersion>
-    <CodeAnalysisRuleSet>..\CodingRules\BIA.debug.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -37,7 +38,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>..\CodingRules\BIA.release.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>
+    </CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <DocumentationFile>bin\Release\BIA.Net.Common.XML</DocumentationFile>
     <LangVersion>6</LangVersion>
@@ -98,7 +100,10 @@
       <SubType>Designer</SubType>
     </CodeAnalysisDictionary>
     <Compile Include="BIAConstantes.cs" />
-    <Compile Include="BIANetSection.cs" />
+    <Compile Include="Configuration\BIANetSection.cs" />
+    <Compile Include="Configuration\AuthenticationElement.cs" />
+    <Compile Include="Configuration\CommonElement.cs" />
+    <Compile Include="Configuration\DialogElement.cs" />
     <Compile Include="CustomMailMessage.cs" />
     <Compile Include="Helpers\BIAAUnityContainer.cs" />
     <Compile Include="Helpers\OpenXmlExcelHelper.cs" />

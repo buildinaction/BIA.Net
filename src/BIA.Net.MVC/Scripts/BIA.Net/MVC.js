@@ -4,7 +4,7 @@ var BIA;
     (function (Net) {
         var MVC;
         (function (MVC) {
-            var Localisation = /** @class */ (function () {
+            var Localisation = (function () {
                 function Localisation() {
                 }
                 //Manage Calendar format
@@ -54,7 +54,7 @@ var BIA;
     (function (Net) {
         var MVC;
         (function (MVC) {
-            var PreventDuplicateRequest = /** @class */ (function () {
+            var PreventDuplicateRequest = (function () {
                 function PreventDuplicateRequest() {
                 }
                 PreventDuplicateRequest.Apply = function (form) {
