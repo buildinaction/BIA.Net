@@ -11,46 +11,6 @@
     public abstract class AServiceSynchronizeUser : IDisposable
     {
         /// <summary>
-        /// Get
-        /// </summary>
-        /// <param name="userLogin">Login in first security level</param>
-        /// <param name="appliLogin">Login id for local DB</param>
-        /// <param name="userRoles">Roles of the user</param>
-        /// <returns>The user properties</returns>
-        public static IUserDB GetUserProperties(string userLogin, string appliLogin, List<string> userRoles)
-        {
-            IUserDB userProperties = null;
-            AServiceSynchronizeUser serviceUser = BIAUnity.Resolve<AServiceSynchronizeUser>();
-            if (userRoles.Contains("User"))
-            {
-                userProperties = serviceUser.GetAspNetUserByName(appliLogin);
-                if (userProperties == null)
-                {
-                    List<string> Options = BIASettingsReader.BIANetSection?.Authentication?.Sources?.UserProperties?.Service?.Options;
-                    userProperties = serviceUser.CreateUserFromAD(userLogin, Options.Contains("autoCreateUserInDatabase"));
-                }
-                else
-                {
-                    if ((userProperties?.UserAdInDB != null) && (!userProperties.UserAdInDB.DAIEnable))
-                    {
-                        userProperties.UserAdInDB.DAIEnable = serviceUser.ResetDAIEnable(userProperties.UserAdInDB, true).DAIEnable;
-                    }
-                }
-            }
-            else if (userRoles.Contains("Generic"))
-            {
-                userProperties = serviceUser.CreateUserGenericFromAD(userLogin);
-            }
-            else
-            {
-                // Technical user or DisableUserGroupCheck return an user build with AD Info
-                userProperties = serviceUser.CreateUserFromAD(userLogin, false);
-            }
-
-            return userProperties;
-        }
-
-        /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         /// <exception cref="System.Exception">Please overide Dispose</exception>
@@ -111,7 +71,7 @@
         /// <param name="adGroupsAsApplicationUsers">List of ad groups</param>
         /// <typeparam name="TUserADinDB">The type of the user DB table DTO.</typeparam>
         /// <returns>List of user deleted</returns>
-        public List<string> SynchronizeUsers<TUserInfo, TUserDB, TUserADinDB>(List<string> adGroupsAsApplicationUsers)
+        public virtual List<string> SynchronizeUsers<TUserInfo, TUserDB, TUserADinDB>(List<string> adGroupsAsApplicationUsers)
                where TUserADinDB : IUserADinDB, new()
                where TUserInfo : AUserInfo<TUserDB>, new()
                where TUserDB : IUserDB, new()
@@ -133,9 +93,8 @@
                         TUserInfo userInfo = new TUserInfo();
                         userInfo.Login = userName;
                         // Create the missing user
-                        userInfo.Properties = PropertiesHelper.PrepareProperties<TUserInfo, TUserDB>(userInfo);
 
-                        IUserADinDB adUserCreated = Insert(userInfo.Properties.UserAdInDB);
+                        IUserADinDB adUserCreated = Insert(userInfo.GetBasicProperties().UserAdInDB);
                         listUserName.Add(new TUserADinDB { Login = userName, DAIEnable = true });
                     }
                     else if (findedUser.DAIEnable == false)

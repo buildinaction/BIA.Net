@@ -16,12 +16,37 @@ namespace BIA.Net.Common.Configuration
             get { return (ParametersElement)this["Parameters"]; }
             set { this["Parameters"] = value; }
         }
-        [ConfigurationProperty("Sources", IsRequired = false)]
-        public SourcesElement Sources
+        [ConfigurationProperty("Identity", IsRequired = false)]
+        public IdentityElement Identity
         {
-            get { return (SourcesElement)this["Sources"]; }
-            set { this["Sources"] = value; }
+            get { return (IdentityElement)this["Identity"]; }
+            set { this["Identity"] = value; }
         }
+        [ConfigurationProperty("UserProperties", IsRequired = false)]
+        public UserPropertiesElement UserProperties
+        {
+            get { return (UserPropertiesElement)this["UserProperties"]; }
+            set { this["UserProperties"] = value; }
+        }
+        [ConfigurationProperty("Language", IsRequired = false)]
+        public LanguageElement Language
+        {
+            get { return (LanguageElement)this["Language"]; }
+            set { this["Language"] = value; }
+        }
+        [ConfigurationProperty("Roles", IsRequired = false)]
+        public RolesElement Roles
+        {
+            get { return (RolesElement)this["Roles"]; }
+            set { this["Roles"] = value; }
+        }
+        [ConfigurationProperty("UserProfile", IsRequired = false)]
+        public UserProfileElement UserProfile
+        {
+            get { return (UserProfileElement)this["UserProfile"]; }
+            set { this["UserProfile"] = value; }
+        }
+
         public class ParametersElement : ConfigurationElement
         {
             [ConfigurationProperty("AD", IsRequired = false)]
@@ -33,7 +58,7 @@ namespace BIA.Net.Common.Configuration
             public class ADParametersElement : ConfigurationElement
             {
                 [ConfigurationProperty("Domains", IsDefaultCollection = false)]
-                [ConfigurationCollection(typeof(LayoutsCollection),
+                [ConfigurationCollection(typeof(KeyValueCollection),
                     AddItemName = "add",
                     ClearItemsName = "clear",
                     RemoveItemName = "remove")]
@@ -44,402 +69,298 @@ namespace BIA.Net.Common.Configuration
                 }
             }
         }
-        public class SourcesElement : ConfigurationElement
+        public class IdentityElement : ConfigurationElement
         {
-            [ConfigurationProperty("Identity", IsRequired = false)]
-            public IdentityElement Identity
-            {
-                get { return (IdentityElement)this["Identity"]; }
-                set { this["Identity"] = value; }
-            }
-            [ConfigurationProperty("UserProperties", IsRequired = false)]
-            public UserPropertiesElement UserProperties
-            {
-                get { return (UserPropertiesElement)this["UserProperties"]; }
-                set { this["UserProperties"] = value; }
-            }
-            [ConfigurationProperty("Language", IsRequired = false)]
-            public LanguageElement Language
-            {
-                get { return (LanguageElement)this["Language"]; }
-                set { this["Language"] = value; }
-            }
-            [ConfigurationProperty("Roles", IsRequired = false)]
-            public RolesElement Roles
-            {
-                get { return (RolesElement)this["Roles"]; }
-                set { this["Roles"] = value; }
-            }
-            [ConfigurationProperty("UserProfile", IsRequired = false)]
-            public UserProfileElement UserProfile
-            {
-                get { return (UserProfileElement)this["UserProfile"]; }
-                set { this["UserProfile"] = value; }
-            }
-            public class IdentityElement : ConfigurationElement
-            {
-                [ConfigurationProperty("Values", IsDefaultCollection = false)]
-                [ConfigurationCollection(typeof(LayoutsCollection),
-                    AddItemName = "add",
-                    ClearItemsName = "clear",
-                    RemoveItemName = "remove")]
-                public KeyValueCollection Values
-                {
-                    get { return (KeyValueCollection)this["Values"]; }
-                    set { this["Values"] = value; }
-                }
-                [ConfigurationProperty("AD", IsDefaultCollection = false)]
-                [ConfigurationCollection(typeof(LayoutsCollection),
-                    AddItemName = "add",
-                    ClearItemsName = "clear",
-                    RemoveItemName = "remove")]
-                public ADIdentityValueCollection AD
-                {
-                    get { return (ADIdentityValueCollection)this["AD"]; }
-                    set { this["AD"] = value; }
-                }
-
-                public class ADIdentityValueCollection : ConfigurationElementCollection
-                {
-                    protected override ConfigurationElement CreateNewElement()
-                    {
-                        return new ADIdentityValueElement();
-                    }
-
-                    protected override Object GetElementKey(ConfigurationElement element)
-                    {
-                        return ((ADIdentityValueElement)element).Key;
-                    }
-                    public class ADIdentityValueElement : ConfigurationElement
-                    {
-                        [ConfigurationProperty("key", IsRequired = true, IsKey = true)]
-                        public string Key
-                        {
-                            get
-                            {
-                                return (string)this["key"];
-                            }
-                            set
-                            {
-                                this["key"] = value;
-                            }
-                        }
-                        [ConfigurationProperty("identityField", IsRequired = false, IsKey = false)]
-                        public string IdentityField
-                        {
-                            get
-                            {
-                                return (string)this["identityField"];
-                            }
-                            set
-                            {
-                                this["identityField"] = value;
-                            }
-                        }
-                        [ConfigurationProperty("removeDomain", IsRequired = false, IsKey = false)]
-                        public bool RemoveDomain
-                        {
-                            get
-                            {
-                                return (bool)(this["removeDomain"] == null ? false : this["removeDomain"]);
-                            }
-                            set
-                            {
-                                this["removeDomain"] = value;
-                            }
-                        }
-                    }
-                }
-            }
-
-            public class UserPropertiesElement : ConfigurationElement
-            {
-                [ConfigurationProperty("Values", IsDefaultCollection = false)]
-                [ConfigurationCollection(typeof(LayoutsCollection),
-                    AddItemName = "add",
-                    ClearItemsName = "clear",
-                    RemoveItemName = "remove")]
-                public KeyValueCollection Values
-                {
-                    get { return (KeyValueCollection)this["Values"]; }
-                    set { this["Values"] = value; }
-                }
-
-                [ConfigurationProperty("AD", IsDefaultCollection = false)]
-                [ConfigurationCollection(typeof(LayoutsCollection),
+            [ConfigurationProperty("Values", IsDefaultCollection = false)]
+            [ConfigurationCollection(typeof(KeyValueCollection),
                 AddItemName = "add",
                 ClearItemsName = "clear",
                 RemoveItemName = "remove")]
-                public ADFieldsCollection AD
-                {
-                    get { return (ADFieldsCollection)this["AD"]; }
-                    set { this["AD"] = value; }
-                }
-
-                [ConfigurationProperty("Objects", IsDefaultCollection = false)]
-                [ConfigurationCollection(typeof(LayoutsCollection),
+            public KeyValueCollection Values
+            {
+                get { return (KeyValueCollection)this["Values"]; }
+                set { this["Values"] = value; }
+            }
+            [ConfigurationProperty("AD", IsDefaultCollection = false)]
+            [ConfigurationCollection(typeof(ADIdentityValueCollection),
                 AddItemName = "add",
                 ClearItemsName = "clear",
                 RemoveItemName = "remove")]
-                public ObjectFieldsCollection Objects
-                {
-                    get { return (ObjectFieldsCollection)this["Objects"]; }
-                    set { this["Object"] = value; }
-                }
+            public ADIdentityValueCollection AD
+            {
+                get { return (ADIdentityValueCollection)this["AD"]; }
+                set { this["AD"] = value; }
+            }
 
-                [ConfigurationProperty("Functions", IsDefaultCollection = false)]
-                [ConfigurationCollection(typeof(LayoutsCollection),
-                AddItemName = "add",
-                ClearItemsName = "clear",
-                RemoveItemName = "remove")]
-                public FunctionsCollection Functions
+            public class ADIdentityValueCollection : ConfigCollection<ADIdentityValueCollection.ADIdentityValueElement>
+            {
+                public class ADIdentityValueElement : KeyElement
                 {
-                    get { return (FunctionsCollection)this["Functions"]; }
-                    set { this["Functions"] = value; }
-                }
-
-                [ConfigurationProperty("Service", IsRequired = false)]
-                public ServiceElement Service
-                {
-                    get { return (ServiceElement)this["Service"]; }
-                    set { this["Service"] = value; }
-                }
-
-                [ConfigurationProperty("CustomCodeAD", IsRequired = false)]
-                public MethodFunctionElement CustomCodeAD
-                {
-                    get { return (MethodFunctionElement)this["CustomCodeAD"]; }
-                    set { this["CustomCodeAD"] = value; }
-                }
-
-                public class ADFieldsCollection : ConfigurationElementCollection
-                {
-                    protected override ConfigurationElement CreateNewElement()
+                    [ConfigurationProperty("identityField", IsRequired = false, IsKey = false)]
+                    public string IdentityField
                     {
-                        return new ADFieldElement();
-                    }
-
-                    protected override Object GetElementKey(ConfigurationElement element)
-                    {
-                        return ((ADFieldElement)element).Key;
-                    }
-                    public class ADFieldElement : ConfigurationElement
-                    {
-                        [ConfigurationProperty("key", IsRequired = true, IsKey = true)]
-                        public string Key
+                        get
                         {
-                            get
-                            {
-                                return (string)this["key"];
-                            }
-                            set
-                            {
-                                this["key"] = value;
-                            }
+                            return (string)this["identityField"];
                         }
-                        [ConfigurationProperty("adfield", IsRequired = false, IsKey = false)]
-                        public string Adfield
+                        set
                         {
-                            get
-                            {
-                                return (string)this["adfield"];
-                            }
-                            set
-                            {
-                                this["adfield"] = value;
-                            }
-                        }
-                        [ConfigurationProperty("maxLenght", IsRequired = false, IsKey = false)]
-                        public int MaxLenght
-                        {
-                            get
-                            {
-                                return (int)this["maxLenght"];
-                            }
-                            set
-                            {
-                                this["maxLenght"] = value;
-                            }
-                        }
-                        [ConfigurationProperty("default", IsRequired = false, IsKey = false)]
-                        public string Default
-                        {
-                            get
-                            {
-                                return (string)this["default"];
-                            }
-                            set
-                            {
-                                this["default"] = value;
-                            }
+                            this["identityField"] = value;
                         }
                     }
-                }
-
-                public class ObjectFieldsCollection : ConfigurationElementCollection
-                {
-                    protected override ConfigurationElement CreateNewElement()
+                    [ConfigurationProperty("removeDomain", IsRequired = false, IsKey = false)]
+                    public bool RemoveDomain
                     {
-                        return new ObjectFieldElement();
-                    }
-
-                    protected override Object GetElementKey(ConfigurationElement element)
-                    {
-                        return ((ObjectFieldElement)element).Key;
-                    }
-                    public class ObjectFieldElement : ConfigurationElement
-                    {
-                        [ConfigurationProperty("key", IsRequired = true, IsKey = true)]
-                        public string Key
+                        get
                         {
-                            get
-                            {
-                                return (string)this["key"];
-                            }
-                            set
-                            {
-                                this["key"] = value;
-                            }
+                            return (bool)(this["removeDomain"] == null ? false : this["removeDomain"]);
                         }
-                        [ConfigurationProperty("object", IsRequired = false, IsKey = false)]
-                        public string Object
+                        set
                         {
-                            get
-                            {
-                                return (string)this["object"];
-                            }
-                            set
-                            {
-                                this["object"] = value;
-                            }
-                        }
-                        [ConfigurationProperty("field", IsRequired = false, IsKey = false)]
-                        public string Field
-                        {
-                            get
-                            {
-                                return (string)this["field"];
-                            }
-                            set
-                            {
-                                this["field"] = value;
-                            }
-                        }
-                    }
-                }
-
-                public class FunctionsCollection : ConfigurationElementCollection
-                {
-                    protected override ConfigurationElement CreateNewElement()
-                    {
-                        return new FunctionElement();
-                    }
-
-                    protected override Object GetElementKey(ConfigurationElement element)
-                    {
-                        return ((FunctionElement)element).Key;
-                    }
-                    public class FunctionElement : MethodFunctionElement
-                    {
-                        [ConfigurationProperty("key", IsRequired = true, IsKey = true)]
-                        public string Key
-                        {
-                            get
-                            {
-                                return (string)this["key"];
-                            }
-                            set
-                            {
-                                this["key"] = value;
-                            }
-                        }
-                    }
-                }
-
-                public class ServiceElement : MethodFunctionElement
-                {
-
-                    [ConfigurationProperty("options", IsRequired = false)]
-                    public string options
-                    {
-                        get { return (string)this["options"]; }
-                        set { this["options"] = value; }
-                    }
-
-                    List<string> _options = null;
-                    public List<string> Options
-                    {
-                        get {
-                            if (_options == null)
-                            {
-                                if (options != null)
-                                {
-                                    _options = (options).Split('|').ToList();
-                                }
-                                else
-                                {
-                                    _options = new List<string>();
-                                }
-                            }
-                             return _options;
+                            this["removeDomain"] = value;
                         }
                     }
                 }
             }
-            public class RolesElement : ConfigurationElement
-            {
-                [ConfigurationProperty("Values", IsDefaultCollection = false)]
-                [ConfigurationCollection(typeof(LayoutsCollection),
-                    AddItemName = "add",
-                    ClearItemsName = "clear",
-                    RemoveItemName = "remove")]
-                public ValueCollection Values
-                {
-                    get { return (ValueCollection)this["Values"]; }
-                    set { this["Values"] = value; }
-                }
-                [ConfigurationProperty("AD", IsDefaultCollection = false)]
-                [ConfigurationCollection(typeof(LayoutsCollection),
+        }
+        public class UserPropertiesElement : ConfigurationElement
+        {
+            [ConfigurationProperty("Values", IsDefaultCollection = false)]
+            [ConfigurationCollection(typeof(KeyValueCollection),
                 AddItemName = "add",
                 ClearItemsName = "clear",
                 RemoveItemName = "remove")]
-                public KeyValueCollection AD
+            public KeyValueCollection Values
+            {
+                get { return (KeyValueCollection)this["Values"]; }
+                set { this["Values"] = value; }
+            }
+
+            [ConfigurationProperty("AD", IsDefaultCollection = false)]
+            [ConfigurationCollection(typeof(ADFieldsCollection),
+            AddItemName = "add",
+            ClearItemsName = "clear",
+            RemoveItemName = "remove")]
+            public ADFieldsCollection AD
+            {
+                get { return (ADFieldsCollection)this["AD"]; }
+                set { this["AD"] = value; }
+            }
+
+            [ConfigurationProperty("Objects", IsDefaultCollection = false)]
+            [ConfigurationCollection(typeof(ObjectFieldsCollection),
+            AddItemName = "add",
+            ClearItemsName = "clear",
+            RemoveItemName = "remove")]
+            public ObjectFieldsCollection Objects
+            {
+                get { return (ObjectFieldsCollection)this["Objects"]; }
+                set { this["Object"] = value; }
+            }
+
+            [ConfigurationProperty("Functions", IsDefaultCollection = false)]
+            [ConfigurationCollection(typeof(FunctionsCollection),
+            AddItemName = "add",
+            ClearItemsName = "clear",
+            RemoveItemName = "remove")]
+            public FunctionsCollection Functions
+            {
+                get { return (FunctionsCollection)this["Functions"]; }
+                set { this["Functions"] = value; }
+            }
+
+            [ConfigurationProperty("CustomCodeAD", IsRequired = false)]
+            public MethodFunctionElement CustomCodeAD
+            {
+                get { return (MethodFunctionElement)this["CustomCodeAD"]; }
+                set { this["CustomCodeAD"] = value; }
+            }
+
+            [ConfigurationProperty("CustomCode", IsRequired = false)]
+            public CustomCodeElement CustomCode
+            {
+                get { return (CustomCodeElement)this["CustomCode"]; }
+                set { this["CustomCode"] = value; }
+            }
+
+            public class ADFieldsCollection : ConfigCollection<ADFieldsCollection.ADFieldElement>
+            {
+                public class ADFieldElement : KeyElement
                 {
-                    get { return (KeyValueCollection)this["AD"]; }
-                    set { this["AD"] = value; }
+
+                    [ConfigurationProperty("adfield", IsRequired = false, IsKey = false)]
+                    public string Adfield
+                    {
+                        get
+                        {
+                            return (string)this["adfield"];
+                        }
+                        set
+                        {
+                            this["adfield"] = value;
+                        }
+                    }
+                    [ConfigurationProperty("maxLenght", IsRequired = false, IsKey = false)]
+                    public int MaxLenght
+                    {
+                        get
+                        {
+                            return (int)this["maxLenght"];
+                        }
+                        set
+                        {
+                            this["maxLenght"] = value;
+                        }
+                    }
+                    [ConfigurationProperty("default", IsRequired = false, IsKey = false)]
+                    public string Default
+                    {
+                        get
+                        {
+                            return (string)this["default"];
+                        }
+                        set
+                        {
+                            this["default"] = value;
+                        }
+                    }
                 }
             }
-            public class LanguageElement : ConfigurationElement
+
+            public class FunctionsCollection : ConfigurationElementCollection
             {
-                /*
-                [ConfigurationProperty("Mapping", IsDefaultCollection = false)]
-                [ConfigurationCollection(typeof(LayoutsCollection),
-                    AddItemName = "add",
-                    ClearItemsName = "clear",
-                    RemoveItemName = "remove")]
-                public KeyValueCollection Mapping
+                protected override ConfigurationElement CreateNewElement()
                 {
-                    get { return (KeyValueCollection)this["Mapping"]; }
-                    set { this["Mapping"] = value; }
-                }*/
-                [ConfigurationProperty("default", IsRequired = true)]
-                public string Default
+                    return new FunctionElement();
+                }
+
+                protected override Object GetElementKey(ConfigurationElement element)
                 {
-                    get { return (string)this["default"]; }
-                    set { this["default"] = value; }
+                    return ((FunctionElement)element).Key;
+                }
+                public class FunctionElement : MethodFunctionElement
+                {
+                    [ConfigurationProperty("key", IsRequired = true, IsKey = true)]
+                    public string Key
+                    {
+                        get
+                        {
+                            return (string)this["key"];
+                        }
+                        set
+                        {
+                            this["key"] = value;
+                        }
+                    }
                 }
             }
-            public class UserProfileElement : ConfigurationElement
+        }
+        public class RolesElement : ConfigurationElement
+        {
+            [ConfigurationProperty("Values", IsDefaultCollection = false)]
+            [ConfigurationCollection(typeof(KeyCollection),
+                AddItemName = "add",
+                ClearItemsName = "clear",
+                RemoveItemName = "remove")]
+            public KeyCollection Values
             {
-                [ConfigurationProperty("Values", IsDefaultCollection = false)]
-                [ConfigurationCollection(typeof(LayoutsCollection),
-                    AddItemName = "add",
-                    ClearItemsName = "clear",
-                    RemoveItemName = "remove")]
-                public KeyValueCollection Values
+                get { return (KeyCollection)this["Values"]; }
+                set { this["Values"] = value; }
+            }
+            [ConfigurationProperty("AD", IsDefaultCollection = false)]
+            [ConfigurationCollection(typeof(KeyValueCollection),
+            AddItemName = "add",
+            ClearItemsName = "clear",
+            RemoveItemName = "remove")]
+            public KeyValueCollection AD
+            {
+                get { return (KeyValueCollection)this["AD"]; }
+                set { this["AD"] = value; }
+            }
+
+            [ConfigurationProperty("CustomCode", IsRequired = false)]
+            public CustomCodeElement CustomCode
+            {
+                get { return (CustomCodeElement)this["CustomCode"]; }
+                set { this["CustomCode"] = value; }
+            }
+            
+        }
+        public class LanguageElement : ConfigurationElement
+        {
+            [ConfigurationProperty("default", IsRequired = true)]
+            public string Default
+            {
+                get { return (string)this["default"]; }
+                set { this["default"] = value; }
+            }
+
+            [ConfigurationProperty("Resolvers", IsDefaultCollection = false)]
+            [ConfigurationCollection(typeof(ResolversCollection),
+                AddItemName = "add",
+                ClearItemsName = "clear",
+                RemoveItemName = "remove")]
+            public ResolversCollection Resolvers
+            {
+                get { return (ResolversCollection)this["Resolvers"]; }
+                set { this["Resolvers"] = value; }
+            }
+
+            public class ResolversCollection : ConfigCollection<ResolversCollection.ResolverElement>
+            {
+                public class ResolverElement : KeyElement
                 {
-                    get { return (KeyValueCollection)this["Values"]; }
-                    set { this["Values"] = value; }
+                    [ConfigurationProperty("Mapping", IsDefaultCollection = false)]
+                    [ConfigurationCollection(typeof(MappingCollection),
+                        AddItemName = "add",
+                        ClearItemsName = "clear",
+                        RemoveItemName = "remove")]
+                    public MappingCollection Mapping
+                    {
+                        get { return (MappingCollection)this["Mapping"]; }
+                        set { this["Mapping"] = value; }
+                    }
+
+                    public class MappingCollection : KeyValueCollection
+                    {
+                        [ConfigurationProperty("property", IsRequired = true)]
+                        public string Property
+                        {
+                            get { return (string)this["property"]; }
+                            set { this["property"] = value; }
+                        }
+                    }
+                }
+            }
+        }
+        public class UserProfileElement : ConfigurationElement
+        {
+            [ConfigurationProperty("Values", IsDefaultCollection = false)]
+            [ConfigurationCollection(typeof(KeyValueCollection),
+                AddItemName = "add",
+                ClearItemsName = "clear",
+                RemoveItemName = "remove")]
+            public KeyValueCollection Values
+            {
+                get { return (KeyValueCollection)this["Values"]; }
+                set { this["Values"] = value; }
+            }
+
+            [ConfigurationProperty("WebServices", IsDefaultCollection = false)]
+            [ConfigurationCollection(typeof(WebServicesCollection),
+                AddItemName = "add",
+                ClearItemsName = "clear",
+                RemoveItemName = "remove")]
+            public WebServicesCollection WebServices
+            {
+                get
+                {
+                    return (WebServicesCollection)this["WebServices"];
+                }
+
+                set
+                {
+                    this["WebServices"] = value;
                 }
             }
         }

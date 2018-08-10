@@ -54,64 +54,59 @@ namespace BIA.Net.Common.Configuration
             }
         }
 
-        public class KeyValueCollection : ConfigurationElementCollection
-        {
-            protected override ConfigurationElement CreateNewElement()
-            {
-                return new KeyValueElement();
-            }
 
-            protected override Object GetElementKey(ConfigurationElement element)
-            {
-                return ((KeyValueElement)element).Key;
-            }
 
-        }
-        // Define the UrlsConfigElement elements that are contained 
-        // by the LayoutsCollection.
-        public class KeyValueElement : ValueElement
-        {
-            [ConfigurationProperty("key", IsRequired = true, IsKey = true)]
-            public string Key
-            {
-                get
-                {
-                    return (string)this["key"];
-                }
-                set
-                {
-                    this["key"] = value;
-                }
-            }
-        }
         // Define the LayoutsCollection that contains the 
         // UrlsConfigElement elements.
         // This class shows how to use the ConfigurationElementCollection.
-        public class ValueCollection : ConfigurationElementCollection
+        public class ConfigCollection<ConfigElem> : ConfigurationElementCollection
+            where ConfigElem : KeyElement, new()
         {
             protected override ConfigurationElement CreateNewElement()
             {
-                return new ValueElement();
+                return new ConfigElem();
             }
 
             protected override Object GetElementKey(ConfigurationElement element)
             {
-                return ((ValueElement)element).Value;
+                return ((ConfigElem)element).Key;
             }
 
         }
+
+        public class KeyCollection : ConfigCollection<KeyElement> { }
+
         // Define the UrlsConfigElement elements that are contained 
         // by the LayoutsCollection.
-        public class ValueElement : ConfigurationElement
+        public class KeyElement : ConfigurationElement
         {
-            [ConfigurationProperty("value", IsRequired = true)]
-            public string Value
+            [ConfigurationProperty("key", IsRequired = true)]
+            public string Key
             {
-                get { return (string)this["value"]; }
-                set { this["value"] = value; }
+                get { return (string)this["key"]; }
+                set { this["key"] = value; }
             }
         }
 
+        public class KeyValueCollection : ConfigCollection<KeyValueElement> { }
+
+        // Define the UrlsConfigElement elements that are contained 
+        // by the LayoutsCollection.
+        public class KeyValueElement : KeyElement
+        {
+            [ConfigurationProperty("value", IsRequired = true, IsKey = true)]
+            public string Value
+            {
+                get
+                {
+                    return (string)this["value"];
+                }
+                set
+                {
+                    this["value"] = value;
+                }
+            }
+        }
 
 
         // Define the UrlsConfigElement elements that are contained 
@@ -149,6 +144,75 @@ namespace BIA.Net.Common.Configuration
             {
                 get { return (string)this["property"]; }
                 set { this["property"] = value; }
+            }
+        }
+
+        public class CustomCodeElement : ConfigurationElement
+        {
+
+            [ConfigurationProperty("function", IsRequired = true)]
+            public string Function
+            {
+                get { return (string)this["function"]; }
+                set { this["function"] = value; }
+            }
+        }
+
+        /*<WebService URL = "$(UrlDMIndex)/UserProfile/GetUserProfile" >
+          < Parameters >
+            < add key="Login" object="UserInfo" field="Login" />
+          </Parameters>
+        </WebService>*/
+        public class WebServicesCollection : ConfigCollection<WebServiceElement> { }
+        public class WebServiceElement : KeyElement
+        {
+
+            [ConfigurationProperty("URL", IsRequired = true)]
+            public string URL
+            {
+                get { return (string)this["URL"]; }
+                set { this["URL"] = value; }
+            }
+
+
+            [ConfigurationProperty("Parameters", IsDefaultCollection = false)]
+            [ConfigurationCollection(typeof(ObjectFieldsCollection),
+            AddItemName = "add",
+            ClearItemsName = "clear",
+            RemoveItemName = "remove")]
+            public ObjectFieldsCollection Parameters
+            {
+                get { return (ObjectFieldsCollection)this["Parameters"]; }
+                set { this["Parameters"] = value; }
+            }
+        }
+
+        public class ObjectFieldsCollection : ConfigCollection<ObjectFieldElement> {}
+        public class ObjectFieldElement : KeyElement
+        {
+            [ConfigurationProperty("object", IsRequired = false, IsKey = false)]
+            public string Object
+            {
+                get
+                {
+                    return (string)this["object"];
+                }
+                set
+                {
+                    this["object"] = value;
+                }
+            }
+            [ConfigurationProperty("field", IsRequired = false, IsKey = false)]
+            public string Field
+            {
+                get
+                {
+                    return (string)this["field"];
+                }
+                set
+                {
+                    this["field"] = value;
+                }
             }
         }
     }

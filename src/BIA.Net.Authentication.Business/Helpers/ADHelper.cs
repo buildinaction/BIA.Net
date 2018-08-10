@@ -9,8 +9,8 @@
     using System.Reflection;
     using System.Security.Principal;
     using System.Text.RegularExpressions;
-    using static BIA.Net.Common.Configuration.AuthenticationElement.SourcesElement.UserPropertiesElement;
-    using static BIA.Net.Common.Configuration.AuthenticationElement.SourcesElement.UserPropertiesElement.ADFieldsCollection;
+    using static BIA.Net.Common.Configuration.AuthenticationElement.UserPropertiesElement;
+    using static BIA.Net.Common.Configuration.AuthenticationElement.UserPropertiesElement.ADFieldsCollection;
     using static BIA.Net.Common.Configuration.CommonElement;
 
     /// <summary>
@@ -27,8 +27,8 @@
         /// <param name="adFieldsCollection"></param>
         public static void SetPropertiesFromAD<TUserADinDB>(string userLogin, TUserADinDB userProperties)
         {
-            ADFieldsCollection adFieldsCollection = BIASettingsReader.BIANetSection?.Authentication?.Sources?.UserProperties?.AD;
-            MethodFunctionElement customCodeAD = BIASettingsReader.BIANetSection?.Authentication?.Sources?.UserProperties?.CustomCodeAD;
+            ADFieldsCollection adFieldsCollection = BIASettingsReader.BIANetSection?.Authentication?.UserProperties?.AD;
+            MethodFunctionElement customCodeAD = BIASettingsReader.BIANetSection?.Authentication?.UserProperties?.CustomCodeAD;
 
             if ((adFieldsCollection != null && adFieldsCollection.Count > 0) || (customCodeAD != null))
             {

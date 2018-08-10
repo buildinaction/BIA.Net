@@ -1,6 +1,7 @@
 ﻿using BIA.Net.Common.Helpers;
 using System;
 using System.Configuration;
+using static BIA.Net.Common.Configuration.CommonElement;
 
 namespace BIA.Net.Common.Configuration
 {
@@ -31,6 +32,20 @@ namespace BIA.Net.Common.Configuration
             set
             {
                 this["Dialog"] = value;
+            }
+        }
+
+        [ConfigurationProperty("Language", IsRequired = false)]
+        public LanguageElement Language
+        {
+            get
+            {
+                return (LanguageElement)this["Language"];
+            }
+
+            set
+            {
+                this["Language"] = value;
             }
         }
     }

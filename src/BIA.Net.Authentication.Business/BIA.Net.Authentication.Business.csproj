@@ -96,7 +96,6 @@
     <Compile Include="Helpers\IUserInfo.cs" />
     <Compile Include="IUserADinDB.cs" />
     <Compile Include="IUserDB.cs" />
-    <Compile Include="Helpers\PropertiesHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

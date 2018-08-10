@@ -104,6 +104,7 @@
     <Compile Include="Configuration\AuthenticationElement.cs" />
     <Compile Include="Configuration\CommonElement.cs" />
     <Compile Include="Configuration\DialogElement.cs" />
+    <Compile Include="Configuration\LanguageElement.cs" />
     <Compile Include="CustomMailMessage.cs" />
     <Compile Include="Helpers\BIAAUnityContainer.cs" />
     <Compile Include="Helpers\OpenXmlExcelHelper.cs" />
