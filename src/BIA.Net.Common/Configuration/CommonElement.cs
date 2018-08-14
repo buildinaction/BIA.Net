@@ -72,6 +72,20 @@ namespace BIA.Net.Common.Configuration
                 return ((ConfigElem)element).Key;
             }
 
+            public ConfigElem GetElemByKey(string key)
+            {
+                if (Count > 0)
+                {
+                    foreach (ConfigElem value in this)
+                    {
+                        if (value.Key == key)
+                        {
+                            return value;
+                        }
+                    }
+                }
+                return null;
+            }
         }
 
         public class KeyCollection : ConfigCollection<KeyElement> { }
@@ -80,7 +94,7 @@ namespace BIA.Net.Common.Configuration
         // by the LayoutsCollection.
         public class KeyElement : ConfigurationElement
         {
-            [ConfigurationProperty("key", IsRequired = true)]
+            [ConfigurationProperty("key", IsRequired = true, IsKey = true)]
             public string Key
             {
                 get { return (string)this["key"]; }
@@ -94,7 +108,7 @@ namespace BIA.Net.Common.Configuration
         // by the LayoutsCollection.
         public class KeyValueElement : KeyElement
         {
-            [ConfigurationProperty("value", IsRequired = true, IsKey = true)]
+            [ConfigurationProperty("value", IsRequired = true, IsKey = false)]
             public string Value
             {
                 get
@@ -190,7 +204,7 @@ namespace BIA.Net.Common.Configuration
         public class ObjectFieldsCollection : ConfigCollection<ObjectFieldElement> {}
         public class ObjectFieldElement : KeyElement
         {
-            [ConfigurationProperty("object", IsRequired = false, IsKey = false)]
+            [ConfigurationProperty("object", IsRequired = true, IsKey = false)]
             public string Object
             {
                 get
@@ -202,7 +216,7 @@ namespace BIA.Net.Common.Configuration
                     this["object"] = value;
                 }
             }
-            [ConfigurationProperty("field", IsRequired = false, IsKey = false)]
+            [ConfigurationProperty("field", IsRequired = true, IsKey = false)]
             public string Field
             {
                 get
@@ -212,6 +226,60 @@ namespace BIA.Net.Common.Configuration
                 set
                 {
                     this["field"] = value;
+                }
+            }
+            /*
+            [ConfigurationProperty("dictionary", IsRequired = false, IsKey = false)]
+            public string Dictionary
+            {
+                get
+                {
+                    return (string)this["dictionary"];
+                }
+                set
+                {
+                    this["dictionary"] = value;
+                }
+            }
+            [ConfigurationProperty("index", IsRequired = false, IsKey = false)]
+            public string Index
+            {
+                get
+                {
+                    return (string)this["index"];
+                }
+                set
+                {
+                    this["index"] = value;
+                }
+            }*/
+        }
+
+        public class WindowsIdentityCollection : ConfigCollection<WindowsIdentityElement> { }
+        public class WindowsIdentityElement : KeyElement
+        {
+            [ConfigurationProperty("identityField", IsRequired = false, IsKey = false)]
+            public string IdentityField
+            {
+                get
+                {
+                    return (string)this["identityField"];
+                }
+                set
+                {
+                    this["identityField"] = value;
+                }
+            }
+            [ConfigurationProperty("removeDomain", IsRequired = false, IsKey = false)]
+            public bool RemoveDomain
+            {
+                get
+                {
+                    return (bool)(this["removeDomain"] == null ? false : this["removeDomain"]);
+                }
+                set
+                {
+                    this["removeDomain"] = value;
                 }
             }
         }

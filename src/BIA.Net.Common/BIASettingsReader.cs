@@ -74,53 +74,7 @@ namespace BIA.Net.Common
         }
 
 
-
-        ///TMP To remove
- 
         /// <summary>
-        /// Gets AD Domains
-        /// </summary>
-        public static List<string> ADDomains
-        {
-            get
-            {
-                string value = ConfigurationManager.AppSettings["ADDomains"];
-                if (string.IsNullOrEmpty(value))
-                {
-                    return null;
-                }
-
-                return value.Split(',').ToList();
-            }
-        }
-
-        /// <summary>
-        /// Gets AD Simulated Roles
-        /// </summary>
-        public static List<string> ADSimuRoles
-        {
-            get
-            {
-                string value = ConfigurationManager.AppSettings["ADSimuRoles"];
-                if (string.IsNullOrEmpty(value))
-                {
-                    return null;
-                }
-
-                return value.Split(',').ToList();
-            }
-        }
-
-        /// <summary>
-        /// Gets AD Simulated User
-        /// </summary>
-        public static string ADSimuUser
-        {
-            get
-            {
-                return ConfigurationManager.AppSettings["ADSimuUser"];
-            }
-        }
 
         private static Dictionary<string, List<string>> adRoles = null;
         public static Dictionary<string, List<string>> ADRoles
@@ -130,16 +84,16 @@ namespace BIA.Net.Common
                 if (adRoles == null)
                 {
                     adRoles = new Dictionary<string, List<string>>();
-                    NameValueCollection section = (NameValueCollection)ConfigurationManager.GetSection("ADRoles");
-                    if (section != null)
+                    KeyValueCollection ADRolesCollection = BIASettingsReader.BIANetSection?.Authentication?.Roles?.AD;
+                    if (ADRolesCollection != null && ADRolesCollection.Count>0)
                     {
-                        foreach (string role in section.AllKeys)
+                        foreach (KeyValueElement role in ADRolesCollection)
                         {
-                            List<string> values = new List<string>(section[role].Split(',')).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+                            List<string> values = new List<string>(role.Value.Split(',')).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
 
                             if (values != null && values.Any())
                             {
-                                adRoles.Add(role, values);
+                                adRoles.Add(role.Key, values);
                             }
                         }
                     }

@@ -18,8 +18,7 @@ namespace BIA.Net.Authentication.Web
     using System.Reflection;
     using System.DirectoryServices.AccountManagement;
     using static BIA.Net.Common.Configuration.CommonElement;
-    using static BIA.Net.Common.Configuration.AuthenticationElement.IdentityElement;
-    using static BIA.Net.Common.Configuration.AuthenticationElement.IdentityElement.ADIdentityValueCollection;
+    using static BIA.Net.Common.Configuration.AuthenticationElement.IdentitiesElement;
     using static BIA.Net.Common.Configuration.AuthenticationElement.LanguageElement;
 
     public enum RolesRedirectAction
@@ -65,122 +64,95 @@ namespace BIA.Net.Authentication.Web
             this.rolesAllowAnonymous = rolesAllowAnonymous?.Split(',').ToArray().ToList();
         }
 
-        public static TUserInfo PrepareUserInfo(IPrincipal principal, HttpSessionState Session)
+        public static TUserInfo PrepareUserInfo()
         {
-            TUserInfo user = default(TUserInfo);
 
-            //bool shouldRefreshUserProperties = true;
-            //user.userInfoContainer.userProfileShouldBeRefreshed = true;
-            //bool shouldRefreshUserLangage = true;
-            //bool shouldRefreshUserRoles = true;
-            //bool shouldRefreshLogins = true;
-            if (Session != null)
+            TUserInfo user = new TUserInfo();
+            string cachingParameter = BIASettingsReader.BIANetSection?.Authentication?.Parameters?.Caching;
+
+            if (cachingParameter == "Session")
             {
-                if (Session[AuthenticationConstants.SessionUserInfo] != null)
+                HttpSessionState Session = HttpContext.Current.Session;
+                if (Session != null)
                 {
-                    user = (TUserInfo)Session[AuthenticationConstants.SessionUserInfo];
-                    //shouldRefreshLogins = false;
-
-                    if (ShouldRefresh(AuthenticationConstants.SessionRefreshUserPropertiesDate, user?.Login, user.userInfoContainer.propertiesRefreshDate))
+                    AUserInfo<TUserDB>.UserInfoContainer container = (AUserInfo<TUserDB>.UserInfoContainer)Session[AuthenticationConstants.SessionUserInfo];
+                    if (Session[AuthenticationConstants.SessionUserInfo] != null)
                     {
-                        user.userInfoContainer.propertiesShouldBeRefreshed = true;
-                        user.userInfoContainer.languageShouldBeRefreshed = true;
+                        user.userInfoContainer = container;
+                        CheckInfoToRefresh(user);
                     }
-
-                    if (ShouldRefresh(AuthenticationConstants.SessionRefreshUserRolesDate, user?.Login, user.userInfoContainer.rolesRefreshDate))
+                    else
                     {
-                        user.userInfoContainer.rolesShouldBeRefreshed = true;
-                    }
-
-                    if (ShouldRefresh(AuthenticationConstants.SessionRefreshUserProfileDate, user.userInfoContainer.userProfileKey, user.userInfoContainer.userProfileRefreshDate))
-                    {
-                        user.userInfoContainer.userProfileShouldBeRefreshed = true;
+                        Session[AuthenticationConstants.SessionUserInfo] = user.userInfoContainer;
                     }
                 }
-                else
-                {
-                    user = new TUserInfo();
-                }
             }
-            else
-            {
-                user = new TUserInfo();
-                user.userInfoContainer.userProfileShouldBeRefreshed = false;
-                user.userInfoContainer.languageShouldBeRefreshed = false;
-            }
+
+
+            IPrincipal principal = HttpContext.Current.User;
             WindowsIdentity windowsIdentity = (WindowsIdentity)principal.Identity;
             if (windowsIdentity != null && windowsIdentity.IsAuthenticated)
             {
                 user.Identity = windowsIdentity;
             }
-            if (Session != null) Session[AuthenticationConstants.SessionUserInfo] = user;
 
-            RefreshUser(Session, user,
-                shouldRefreshLogins : user.userInfoContainer.loginShouldBeRefreshed,
-                shouldRefreshUserProperties: user.userInfoContainer.propertiesShouldBeRefreshed, 
-                shouldRefreshUserProfile : user.userInfoContainer.userProfileShouldBeRefreshed, 
-                shouldRefreshUserLangage: user.userInfoContainer.languageShouldBeRefreshed, 
-                shouldRefreshUserRoles: user.userInfoContainer.rolesShouldBeRefreshed);
+            user.FinalizePreparation();
 
             return user;
         }
 
-        static private void RefreshUser(HttpSessionState Session, TUserInfo user, bool shouldRefreshLogins = true, bool shouldRefreshUserProperties =true, bool shouldRefreshUserProfile = true, bool shouldRefreshUserLangage = true, bool shouldRefreshUserRoles = true)
+        public static void CheckInfoToRefresh(TUserInfo user)
         {
-
-
-            if (shouldRefreshLogins)
+            if (ShouldRefresh(AuthenticationConstants.SessionRefreshUserPropertiesDate, user.userInfoContainer.propertiesKey, user.userInfoContainer.propertiesRefreshDate))
             {
-
+                user.userInfoContainer.propertiesShouldBeRefreshed = true;
             }
 
-            if (user.Login != null)
+            if (ShouldRefresh(AuthenticationConstants.SessionRefreshUserRolesDate, user.userInfoContainer.rolesKey, user.userInfoContainer.rolesRefreshDate))
             {
-                
+                user.userInfoContainer.rolesShouldBeRefreshed = true;
+            }
 
-                if (Session != null)
-                {
-                    if (shouldRefreshUserProperties) Session[AuthenticationConstants.SessionRefreshUserPropertiesDate] = DateTime.Now;
-                    if (shouldRefreshUserRoles) Session[AuthenticationConstants.SessionRefreshUserRolesDate] = DateTime.Now;
-                }
+            if (ShouldRefresh(AuthenticationConstants.SessionRefreshUserProfileDate, user.userInfoContainer.userProfileKey, user.userInfoContainer.userProfileRefreshDate))
+            {
+                user.userInfoContainer.userProfileShouldBeRefreshed = true;
+            }
 
-
-                if (shouldRefreshUserRoles)
-                {
-
-                }
-
-                if (shouldRefreshUserProfile)
-                {
-                    user.UserProfile = null;
-                }
-
-                if (shouldRefreshUserLangage)
-                {
-                    InitLanguage(user);
-                }
-
-                //if (Session != null) Session[AuthenticationConstants.SessionUserInfo] = user;
+            if (ShouldRefresh(AuthenticationConstants.SessionRefreshLanguageDate, user.userInfoContainer.languageKey, user.userInfoContainer.languageRefreshDate))
+            {
+                user.userInfoContainer.languageShouldBeRefreshed = true;
             }
         }
 
-        static protected TUserInfo ConnectUser(HttpSessionState Session, TUserDB aspNetUser, string localUserLogin)
+        static private void RefreshUser(TUserInfo user, bool shouldRefreshIdentities = true, bool shouldRefreshUserProperties =true, bool shouldRefreshUserProfile = true, bool shouldRefreshUserLangage = true, bool shouldRefreshUserRoles = true)
         {
-            TUserInfo user = (TUserInfo)Session[AuthenticationConstants.SessionUserInfo];
+            user.userInfoContainer.identitiesShouldBeRefreshed = shouldRefreshIdentities;
+            user.userInfoContainer.propertiesShouldBeRefreshed = shouldRefreshUserProperties;
+            user.userInfoContainer.userProfileShouldBeRefreshed = shouldRefreshUserProfile;
+            user.userInfoContainer.languageShouldBeRefreshed = shouldRefreshUserLangage;
+            user.userInfoContainer.rolesShouldBeRefreshed = shouldRefreshUserRoles;
+        }
+
+        static protected TUserInfo ConnectUser(HttpSessionState Session, TUserDB aspNetUser, string localUserId)
+        {
+            TUserInfo user = new TUserInfo();
+            user.userInfoContainer = (AUserInfo<TUserDB>.UserInfoContainer) Session[AuthenticationConstants.SessionUserInfo];
             user.Properties = aspNetUser;
-            user.LocalUserLogin = localUserLogin;
+            if (user.Identities.Keys.Contains("LocalUserID")) user.Identities.Remove("LocalUserID");
+            user.Identities.Add("LocalUserID", localUserId);
             user.AdditionnalRoles = new List<string> { "User" };
-            RefreshUser(Session, user, shouldRefreshUserProperties: false );
+            RefreshUser( user, shouldRefreshUserProperties: false );
             return user;
         }
 
         static protected TUserInfo DisconnectUser(HttpSessionState Session)
         {
-            TUserInfo user = (TUserInfo)Session[AuthenticationConstants.SessionUserInfo];
+            TUserInfo user = new TUserInfo();
+            user.userInfoContainer = (AUserInfo<TUserDB>.UserInfoContainer)Session[AuthenticationConstants.SessionUserInfo];
             user.Properties = default(TUserDB);
-            user.LocalUserLogin = null;
+            if (user.Identities.Keys.Contains("LocalUserID")) user.Identities.Remove("LocalUserID");
             user.AdditionnalRoles = null;
-            RefreshUser(Session, user);
+            RefreshUser(user);
             return user;
         }
 
@@ -196,78 +168,6 @@ namespace BIA.Net.Authentication.Web
             if (dateTimeLastRefresh == DateTime.MinValue) return true;
             return HttpContext.Current.Application[RefreshKey + "_" + userName] != null && DateTime.Compare((DateTime)HttpContext.Current.Application[RefreshKey + "_" + userName], dateTimeLastRefresh) > 0;
         }
-
-        /// <summary>
-        /// Initializes the language.
-        /// </summary>
-        /// <param name="user">The user.</param>
-        static private void InitLanguage(TUserInfo user)
-        {
-            string languageCode = null;
-            ResolversCollection resolvers = BIASettingsReader.BIANetSection?.Authentication?.Language?.Resolvers;
-            List<string> ApplicationLanguages = BIASettingsReader.BIANetSection?.Language?.GetApplicationLanguages();
-
-            if (resolvers != null && resolvers.Count > 0)
-            {
-                foreach (ResolversCollection.ResolverElement resolver in resolvers)
-                {
-                    if (resolver.Key == "mapping")
-                    {
-                        PropertyInfo propertyInfo = null;
-
-                        if (resolver?.Mapping?.Property != null)
-                        {
-                            propertyInfo = user.Properties.GetType().GetProperty(resolver.Mapping.Property);
-                        }
-                        
-                        if (propertyInfo != null)
-                        {
-                            string propertyToMap = propertyInfo.GetValue(user.Properties).ToString();
-                            foreach (KeyValueElement mapping in resolver.Mapping)
-                            {
-                                if (mapping.Key == propertyToMap)
-                                {
-                                    languageCode = mapping.Value;
-                                    break;
-                                }
-                            }
-                        }
-                        if (languageCode != null) break;
-                    }
-                    else if (resolver.Key == "browser")
-                    {
-                        if (!string.IsNullOrEmpty(HttpContext.Current?.Request?.UserLanguages?[0]))
-                        {
-                            string currentLanguageCode = HttpContext.Current.Request.UserLanguages[0];
-
-                            if (ApplicationLanguages.Contains(currentLanguageCode))
-                            {
-                                languageCode = currentLanguageCode;
-                                break;
-                            }
-                            else if (ApplicationLanguages.Select(d => d.Substring(0, 2)).Contains(currentLanguageCode.Substring(0, 2)))
-                            {
-                                languageCode = ApplicationLanguages.Where(c => c.Substring(0, 2) == currentLanguageCode.Substring(0, 2)).First();
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            if (languageCode == null)
-            {
-                languageCode = BIASettingsReader.BIANetSection?.Authentication?.Language?.Default;
-            }
-            if (languageCode != null)
-            {
-                CultureHelper.SetCurrentLangageCode(languageCode);
-            }
-            else
-            {
-                CultureHelper.SetCurrentLangageCode("en-US");
-            }
-        }
-
 
         protected RolesRedirectAction CheckAuthorize<TContext>(TUserInfo user, out RolesRedirectURL redirect, Func<TContext, bool> IsAllowAnonymousCallback, Func<TContext, List<string>> DisableRedirectRoles, TContext context)
         {

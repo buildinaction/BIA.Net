@@ -106,9 +106,9 @@ namespace BIA.Net.Authentication.Api
             return null;
         }
 
-        static public void ConnectUser(TUserDB aspNetUser, string secondaryLogin)
+        static public void ConnectUser(TUserDB aspNetUser, string localUserId)
         {
-            HttpContext.Current.User = (IPrincipal)ConnectUser(HttpContext.Current.Session, aspNetUser, secondaryLogin);
+            HttpContext.Current.User = (IPrincipal)ConnectUser(HttpContext.Current.Session, aspNetUser, localUserId);
         }
 
         static public void DisconnectUser()

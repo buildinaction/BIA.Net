@@ -16,17 +16,18 @@ namespace BIA.Net.Common.Configuration
             get { return (ParametersElement)this["Parameters"]; }
             set { this["Parameters"] = value; }
         }
-        [ConfigurationProperty("Identity", IsRequired = false)]
-        public IdentityElement Identity
+        [ConfigurationProperty("Identities", IsRequired = false)]
+        public IdentitiesElement Identities
         {
-            get { return (IdentityElement)this["Identity"]; }
-            set { this["Identity"] = value; }
+            get { return (IdentitiesElement)this["Identities"]; }
+            set { this["Identities"] = value; }
         }
-        [ConfigurationProperty("UserProperties", IsRequired = false)]
-        public UserPropertiesElement UserProperties
+
+        [ConfigurationProperty("Properties", IsRequired = false)]
+        public UserPropertiesElement Properties
         {
-            get { return (UserPropertiesElement)this["UserProperties"]; }
-            set { this["UserProperties"] = value; }
+            get { return (UserPropertiesElement)this["Properties"]; }
+            set { this["Properties"] = value; }
         }
         [ConfigurationProperty("Language", IsRequired = false)]
         public LanguageElement Language
@@ -49,27 +50,60 @@ namespace BIA.Net.Common.Configuration
 
         public class ParametersElement : ConfigurationElement
         {
-            [ConfigurationProperty("AD", IsRequired = false)]
-            public ADParametersElement AD
+            [ConfigurationProperty("Values", IsDefaultCollection = false)]
+            [ConfigurationCollection(typeof(KeyValueCollection),
+                AddItemName = "add",
+                ClearItemsName = "clear",
+                RemoveItemName = "remove")]
+            public KeyValueCollection Values
             {
-                get { return (ADParametersElement)this["AD"]; }
-                set { this["AD"] = value; }
+                get { return (KeyValueCollection)this["Values"]; }
+                set { this["Values"] = value; }
             }
-            public class ADParametersElement : ConfigurationElement
+
+            private List<string> _adDomaines = null;
+            public List<string> ADDomains
             {
-                [ConfigurationProperty("Domains", IsDefaultCollection = false)]
-                [ConfigurationCollection(typeof(KeyValueCollection),
-                    AddItemName = "add",
-                    ClearItemsName = "clear",
-                    RemoveItemName = "remove")]
-                public KeyValueCollection Domains
+                get
                 {
-                    get { return (KeyValueCollection)this["Domains"]; }
-                    set { this["Domains"] = value; }
+                    if (_adDomaines == null)
+                    {
+                        KeyValueElement adDomaines = Values?.GetElemByKey("ADDomains");
+                        if (adDomaines != null)
+                        {
+                            _adDomaines = adDomaines.Value.Split(',').ToList<string>();
+                        }
+                        else
+                        {
+                            _adDomaines = new List<string>();
+                        }
+                    }
+                    return _adDomaines;
+                }
+            }
+
+            private string _caching = null;
+            public string Caching
+            {
+                get
+                {
+                    if (_caching == null)
+                    {
+                        KeyValueElement caching = Values?.GetElemByKey("Caching");
+                        if (caching != null)
+                        {
+                            _caching = caching.Value;
+                        }
+                        else
+                        {
+                            _caching = "";
+                        }
+                    }
+                    return _caching;
                 }
             }
         }
-        public class IdentityElement : ConfigurationElement
+        public class IdentitiesElement : ConfigurationElement
         {
             [ConfigurationProperty("Values", IsDefaultCollection = false)]
             [ConfigurationCollection(typeof(KeyValueCollection),
@@ -81,47 +115,27 @@ namespace BIA.Net.Common.Configuration
                 get { return (KeyValueCollection)this["Values"]; }
                 set { this["Values"] = value; }
             }
-            [ConfigurationProperty("AD", IsDefaultCollection = false)]
-            [ConfigurationCollection(typeof(ADIdentityValueCollection),
+            [ConfigurationProperty("WindowsIdentities", IsDefaultCollection = false)]
+            [ConfigurationCollection(typeof(WindowsIdentityCollection),
                 AddItemName = "add",
                 ClearItemsName = "clear",
                 RemoveItemName = "remove")]
-            public ADIdentityValueCollection AD
+            public WindowsIdentityCollection WindowsIdentities
             {
-                get { return (ADIdentityValueCollection)this["AD"]; }
-                set { this["AD"] = value; }
+                get { return (WindowsIdentityCollection)this["WindowsIdentities"]; }
+                set { this["WindowsIdentities"] = value; }
+            }
+            [ConfigurationProperty("Objects", IsDefaultCollection = false)]
+            [ConfigurationCollection(typeof(ObjectFieldsCollection),
+                AddItemName = "add",
+                ClearItemsName = "clear",
+                RemoveItemName = "remove")]
+            public ObjectFieldsCollection Objects
+            {
+                get { return (ObjectFieldsCollection)this["Objects"]; }
+                set { this["Object"] = value; }
             }
 
-            public class ADIdentityValueCollection : ConfigCollection<ADIdentityValueCollection.ADIdentityValueElement>
-            {
-                public class ADIdentityValueElement : KeyElement
-                {
-                    [ConfigurationProperty("identityField", IsRequired = false, IsKey = false)]
-                    public string IdentityField
-                    {
-                        get
-                        {
-                            return (string)this["identityField"];
-                        }
-                        set
-                        {
-                            this["identityField"] = value;
-                        }
-                    }
-                    [ConfigurationProperty("removeDomain", IsRequired = false, IsKey = false)]
-                    public bool RemoveDomain
-                    {
-                        get
-                        {
-                            return (bool)(this["removeDomain"] == null ? false : this["removeDomain"]);
-                        }
-                        set
-                        {
-                            this["removeDomain"] = value;
-                        }
-                    }
-                }
-            }
         }
         public class UserPropertiesElement : ConfigurationElement
         {
@@ -167,13 +181,6 @@ namespace BIA.Net.Common.Configuration
             {
                 get { return (FunctionsCollection)this["Functions"]; }
                 set { this["Functions"] = value; }
-            }
-
-            [ConfigurationProperty("CustomCodeAD", IsRequired = false)]
-            public MethodFunctionElement CustomCodeAD
-            {
-                get { return (MethodFunctionElement)this["CustomCodeAD"]; }
-                set { this["CustomCodeAD"] = value; }
             }
 
             [ConfigurationProperty("CustomCode", IsRequired = false)]
@@ -224,6 +231,13 @@ namespace BIA.Net.Common.Configuration
                             this["default"] = value;
                         }
                     }
+                }
+
+                [ConfigurationProperty("CustomCode", IsRequired = false)]
+                public CustomCodeElement CustomCode
+                {
+                    get { return (CustomCodeElement)this["CustomCode"]; }
+                    set { this["CustomCode"] = value; }
                 }
             }
 
@@ -329,6 +343,12 @@ namespace BIA.Net.Common.Configuration
                             get { return (string)this["property"]; }
                             set { this["property"] = value; }
                         }
+                    }
+                    [ConfigurationProperty("CustomCode", IsRequired = false)]
+                    public CustomCodeElement CustomCode
+                    {
+                        get { return (CustomCodeElement)this["CustomCode"]; }
+                        set { this["CustomCode"] = value; }
                     }
                 }
             }

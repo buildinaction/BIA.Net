@@ -35,8 +35,9 @@ namespace BIA.Net.Authentication.Controllers
             string languageCode = JsonConvert.DeserializeObject<string>(code);
             if (!string.IsNullOrEmpty(languageCode))
             {
-                AuthentVarSession.MyMenu = null;
-                CultureHelper.SetCurrentLangageCode(languageCode);
+                //AuthentVarSession.MyMenu = null;
+                //CultureHelper.SetCurrentLangageCode(languageCode);
+                ((TUserInfo)User).Language = languageCode;
             }
 
             return new EmptyResult();
@@ -46,7 +47,7 @@ namespace BIA.Net.Authentication.Controllers
         /// Refresh the current user properties and right
         /// </summary>
         [HttpPost]
-        public void RefreshUserInfo()
+        public virtual void RefreshUserInfo()
         {
             SafranAuthorizationFilter<TUserInfo, TUserDB>.RefreshAllUserInfo(((TUserInfo)User).Login);
         }
@@ -58,7 +59,7 @@ namespace BIA.Net.Authentication.Controllers
         /// <returns>Empty</returns>
         [HttpGet]
         [System.Web.Mvc.Authorize(Roles = BIAConstantes.RoleInternal)]
-        public ActionResult RefreshUserProfile(string login)
+        public virtual ActionResult RefreshUserProfile(string login)
         {
             SafranAuthorizationFilter<TUserInfo, TUserDB>.RefreshUserProfile(login);
             return Content("User " + login + " is refreshed.");

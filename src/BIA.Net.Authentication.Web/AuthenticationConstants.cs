@@ -26,5 +26,11 @@
         /// Time of the last refresh of the Session variable user Info
         /// </summary>
         public const string SessionRefreshUserPropertiesDate = "RefreshUserProperties";
+
+        /// <summary>
+        /// Time of the last refresh of the Session variable user Info
+        /// </summary>
+        public const string SessionRefreshLanguageDate = "RefreshLanguages";
+
     }
 }

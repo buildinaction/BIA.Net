@@ -120,7 +120,6 @@
   <ItemGroup>
     <Compile Include="Controllers\CommonAuthentController.cs" />
     <Compile Include="DisableRedirectAttribute.cs" />
-    <Compile Include="Helpers\AuthentVarSession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SafranAuthorizationFilter.cs" />
   </ItemGroup>

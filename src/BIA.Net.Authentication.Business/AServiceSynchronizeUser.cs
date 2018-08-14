@@ -43,29 +43,6 @@
         }
 
         /// <summary>
-        /// Creates the user from ad.
-        /// </summary>
-        /// <param name="userName">Name of the user.</param>
-        /// <param name="insertInDB">if true insert in table ASPNetUser.</param>
-        /// <returns>Nothing: Function to override</returns>
-        /// <exception cref="System.Exception">Please overide CreateUserFromAD</exception>
-        public virtual IUserDB CreateUserFromAD(string userName, bool insertInDB)
-        {
-            throw new Exception("Please overide CreateUserFromAD");
-        }
-
-        /// <summary>
-        /// Creates the user from ad.
-        /// </summary>
-        /// <param name="userName">Name of the user.</param>
-        /// <returns>Nothing: Function to override</returns>
-        /// <exception cref="System.Exception">Please overide CreateUserFromAD</exception>
-        public virtual IUserDB CreateUserGenericFromAD(string userName)
-        {
-            throw new Exception("Please overide CreateUserGenericFromAD");
-        }
-
-        /// <summary>
         /// Synchronizes all user.
         /// </summary>
         /// <param name="adGroupsAsApplicationUsers">List of ad groups</param>
@@ -91,10 +68,10 @@
                     if (findedUser == null)
                     {
                         TUserInfo userInfo = new TUserInfo();
-                        userInfo.Login = userName;
+                        userInfo.Identities = new Dictionary<string, string>() { { "Login", userName } };
                         // Create the missing user
 
-                        IUserADinDB adUserCreated = Insert(userInfo.GetBasicProperties().UserAdInDB);
+                        IUserADinDB adUserCreated = Insert(userInfo.BuildProperties().UserAdInDB);
                         listUserName.Add(new TUserADinDB { Login = userName, DAIEnable = true });
                     }
                     else if (findedUser.DAIEnable == false)
