@@ -48,16 +48,16 @@
         /// <param name="adGroupsAsApplicationUsers">List of ad groups</param>
         /// <typeparam name="TUserADinDB">The type of the user DB table DTO.</typeparam>
         /// <returns>List of user deleted</returns>
-        public virtual List<string> SynchronizeUsers<TUserInfo, TUserDB, TUserADinDB>(List<string> adGroupsAsApplicationUsers)
+        public virtual List<string> SynchronizeUsers<TUserInfo, TUserDB, TUserADinDB>(List<ADGroup> adGroupsAsApplicationUsers)
                where TUserADinDB : IUserADinDB, new()
                where TUserInfo : AUserInfo<TUserDB>, new()
                where TUserDB : IUserDB, new()
         {
             List<string> listUserInGroup = new List<string>();
             List<IUserADinDB> listUserName = GetAllUsersInDB();
-            foreach (string groupName in adGroupsAsApplicationUsers)
+            foreach (ADGroup group in adGroupsAsApplicationUsers)
             {
-                List<UserPrincipal> listUsers = ADHelper.GetAllUsersInGroup(groupName);
+                List<UserPrincipal> listUsers = group.GetAllUsersInGroup();
 
                 foreach (UserPrincipal user in listUsers)
                 {
@@ -69,9 +69,10 @@
                     {
                         TUserInfo userInfo = new TUserInfo();
                         userInfo.Identities = new Dictionary<string, string>() { { "Login", userName } };
+                        userInfo.BaseRefreshProperties();
                         // Create the missing user
 
-                        IUserADinDB adUserCreated = Insert(userInfo.BuildProperties().UserAdInDB);
+                        IUserADinDB adUserCreated = Insert(userInfo.Properties.UserAdInDB);
                         listUserName.Add(new TUserADinDB { Login = userName, DAIEnable = true });
                     }
                     else if (findedUser.DAIEnable == false)

@@ -9,9 +9,133 @@
     using System.Reflection;
     using System.Security.Principal;
     using System.Text.RegularExpressions;
-    using static BIA.Net.Common.Configuration.AuthenticationElement.UserPropertiesElement;
-    using static BIA.Net.Common.Configuration.AuthenticationElement.UserPropertiesElement.ADFieldsCollection;
     using static BIA.Net.Common.Configuration.CommonElement;
+
+    public class ADGroup
+    {
+        public ADGroup(string groupName)
+        {
+            GroupName = groupName;
+            if (groupName.Contains('\\'))
+            {
+                string[] split = groupName.Split('\\');
+                GroupShortName = split[split.Length - 1];
+            }
+            else GroupShortName = groupName;
+            IsInit = false;
+            IsValid = false;
+            Domain = null;
+            Group = null;
+        }
+
+        public string GroupName { get; private set; }
+        public string GroupShortName { get; private set; }
+        public bool IsInit { get; private set; }
+        public bool IsValid { get; private set; }
+        public string Domain { get; private set; }
+        public GroupPrincipal Group { get; private set; }
+
+        public bool HasMember(List<string> userGroups, string userName)
+        {
+            if (userGroups != null)
+            {
+                return userGroups.Contains(GroupName);
+            }
+            else if (!string.IsNullOrEmpty(userName))
+            {
+                List<UserPrincipal> allUser = GetAllUsersInGroup();
+                return allUser.Any(u => u.Name == userName);
+            }
+
+            return false;
+        }
+
+
+
+        /// <summary>
+        /// Gets the user in group.
+        /// </summary>
+        /// <param name="groupName">Name of the group.</param>
+        /// <returns>List of user in group</returns>
+
+        public  List<UserPrincipal> GetAllUsersInGroup()
+        {
+            Init();
+            List<UserPrincipal> listUsers = new List<UserPrincipal>();
+            List<GroupPrincipal> listTreatedGroups = new List<GroupPrincipal>();
+            // if found....
+            if (IsValid)
+            {
+                GetAllUsersFromGroupRecursivly(Group, listUsers, listTreatedGroups);
+            }
+
+            return listUsers;
+        }
+
+        private static void GetAllUsersFromGroupRecursivly(GroupPrincipal group, List<UserPrincipal> listUsers, List<GroupPrincipal> listTreatedGroups)
+        {
+            listTreatedGroups.Add(group);
+            // iterate over members
+            foreach (Principal p in group.GetMembers())
+            {
+                Console.WriteLine("{0}: {1}", p.StructuralObjectClass, p.DisplayName);
+
+                // do whatever you need to do to those members
+
+
+                if (p is UserPrincipal)
+                {
+                    UserPrincipal theUser = p as UserPrincipal;
+                    if (!listUsers.Select(u => u.DistinguishedName).Contains(theUser.DistinguishedName))
+                    {
+                        listUsers.Add(theUser);
+                    }
+                }
+                else if (p is GroupPrincipal)
+                {
+                    GroupPrincipal theGroup = p as GroupPrincipal;
+                    if (!listTreatedGroups.Select(g => g.DistinguishedName).Contains(theGroup.DistinguishedName))
+                    {
+                        GetAllUsersFromGroupRecursivly(theGroup, listUsers, listTreatedGroups);
+                    }
+                }
+            }
+        }
+
+        private void Init()
+        {
+            if (!IsInit)
+            {
+                List<string> adDomains = BIASettingsReader.BIANetSection?.Authentication?.Parameters?.ADDomains;
+                GroupPrincipal group = null;
+
+                if (adDomains != null)
+                {
+                    foreach (string domain in adDomains)
+                    {
+                        try
+                        {
+                            PrincipalContext ctx = new PrincipalContext(ContextType.Domain, domain);
+                            group = GroupPrincipal.FindByIdentity(ctx, GroupName);
+                            if (group != null)
+                            {
+                                Domain = domain;
+                                Group = group;
+                                IsValid = true;
+                                break;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            TraceManager.Warn("ADHelper", "CreateUserFromAD", "Could not join Domain :" + domain, e);
+                        }
+                    }
+                }
+            }
+
+            IsInit = true;
+        }
+    }
 
     /// <summary>
     /// AuthHelper
@@ -46,82 +170,66 @@
             return userName;
         }
 
-        /// <summary>
-        /// Gets the user in group.
-        /// </summary>
-        /// <param name="groupName">Name of the group.</param>
-        /// <returns>List of user in group</returns>
-        public static List<UserPrincipal> GetAllUsersInGroup(string groupName)
-        {
-            List<string> adDomains = BIASettingsReader.BIANetSection?.Authentication?.Parameters?.ADDomains;
-            GroupPrincipal group = null;
 
-            if (adDomains != null)
+        private static Dictionary<string, List<ADGroup>> adRoles = null;
+        public static Dictionary<string, List<ADGroup>> ADRoles
+        {
+            get
             {
-                foreach (string domain in adDomains)
+                if (adRoles == null)
                 {
-                    try
+                    List<string> adDomains = BIASettingsReader.BIANetSection?.Authentication?.Parameters?.ADDomains;
+
+                    adRoles = new Dictionary<string, List<ADGroup>>();
+                    HeterogeneousCollection rolesValues = BIASettingsReader.BIANetSection?.Authentication?.Roles;
+                    if (rolesValues != null && rolesValues.Count > 0)
                     {
-                        PrincipalContext ctx = new PrincipalContext(ContextType.Domain, domain);
-                        group = GroupPrincipal.FindByIdentity(ctx, groupName);
-                        if (group != null)
+                        foreach (IHeterogeneousConfigurationElement heterogeneousElem in rolesValues)
                         {
-                            break;
+                            if (heterogeneousElem.TagName == "ADRole")
+                            {
+                                ValueElement ADRole = (ValueElement)heterogeneousElem;
+                                List<string> values = new List<string>(ADRole.Value.Split(',')).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+                                if (values != null && values.Any())
+                                {
+                                    List<ADGroup> groups = new List<ADGroup>();
+                                    
+                                    foreach(string value in values)
+                                    {
+                                        ADGroup group = new ADGroup(value);
+                                        groups.Add(group);
+                                    }
+                                    adRoles.Add(ADRole.Key, groups);
+                                }
+                            }
                         }
                     }
-                    catch (Exception e)
-                    {
-                        TraceManager.Warn("ADHelper", "CreateUserFromAD", "Could not join Domain :" + domain, e);
-                    }
                 }
+                return adRoles;
             }
-
-            if (group == null)
-            {
-                // Used on developement VM
-                PrincipalContext ctx = new PrincipalContext(ContextType.Domain);
-                group = GroupPrincipal.FindByIdentity(ctx, groupName);
-            }
-
-            List<UserPrincipal> listUsers = new List<UserPrincipal>();
-            List<GroupPrincipal> listTreatedGroups = new List<GroupPrincipal>();
-            // if found....
-            if (group != null)
-            {
-                GetAllUsersFromGroupRecursivly(group, listUsers, listTreatedGroups);
-            }
-
-            return listUsers;
         }
 
-        private static void GetAllUsersFromGroupRecursivly(GroupPrincipal group, List<UserPrincipal> listUsers, List<GroupPrincipal> listTreatedGroups)
+        public static bool HasRole(List<string> userGroups, string userName, string role)
         {
-            listTreatedGroups.Add(group);
-            // iterate over members
-            foreach (Principal p in group.GetMembers())
+            List<ADGroup> groups = GetADGroupsForRole(role);
+            foreach (ADGroup adgroup in groups)
             {
-                Console.WriteLine("{0}: {1}", p.StructuralObjectClass, p.DisplayName);
-
-                // do whatever you need to do to those members
-
-
-                if (p is UserPrincipal)
-                {
-                    UserPrincipal theUser = p as UserPrincipal;
-                    if (!listUsers.Select(u => u.DistinguishedName).Contains(theUser.DistinguishedName))
-                    {
-                        listUsers.Add(theUser);
-                    }
-                }
-                else if (p is GroupPrincipal)
-                {
-                    GroupPrincipal theGroup = p as GroupPrincipal;
-                    if (!listTreatedGroups.Select(g => g.DistinguishedName).Contains(theGroup.DistinguishedName))
-                    {
-                        GetAllUsersFromGroupRecursivly(theGroup, listUsers, listTreatedGroups);
-                    }
-                }
+                if (adgroup.HasMember(userGroups, userName)) return true;
             }
+            return false;
+        }
+
+        /// <summary>
+        /// Gets AD Groups As Application Users
+        /// </summary>
+        public static List<ADGroup> GetADGroupsForRole(string role)
+        {
+            List<ADGroup> value = null;
+            if (ADRoles.TryGetValue(role, out value))
+            {
+                return value;
+            }
+            return null;
         }
 
         /// <summary>
@@ -165,7 +273,7 @@
             return user;
         }
 
-
+        
         static Dictionary<string, string> CacheGroupName = new Dictionary<string, string>();
 
         /// <summary>
@@ -175,8 +283,9 @@
         /// </summary>
         /// <param name="userName">Name of the user.</param>
         /// <returns>the list of the group of the user</returns>
-        public static List<string> GetGroups(string userName, List<string> adDomains)
+        public static List<string> GetGroups(string userName)
         {
+            List<string> adDomains = BIASettingsReader.BIANetSection?.Authentication?.Parameters?.ADDomains;
             TraceManager.Debug("ADHelper", "GetGroups", "Begin for : " + userName);
 
             if (adDomains != null)
@@ -230,9 +339,9 @@
 
             result.Sort();
             TraceManager.Debug("ADHelper", "GetGroups", "End");
-            return FilterGroup(result);
+            return result;
         }
-
+        /*
         /// <summary>
         /// Filters the group.
         /// </summary>
@@ -289,6 +398,7 @@
 
             return result;
         }
+        */
         /// <summary>
         /// Gets the property.
         /// </summary>

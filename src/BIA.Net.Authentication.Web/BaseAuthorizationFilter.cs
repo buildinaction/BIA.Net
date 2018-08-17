@@ -3,23 +3,15 @@
 namespace BIA.Net.Authentication.Web
 {
     using BIA.Net.Common;
-    using BIA.Net.Web.Utility;
     using Business;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Security.Claims;
     using System.Security.Principal;
     using System.Web;
     using System.Web.SessionState;
     using System.Net.Http;
     using BIA.Net.Authentication.Business.Helpers;
-    using BIA.Net.Common.Helpers;
-    using System.Reflection;
-    using System.DirectoryServices.AccountManagement;
-    using static BIA.Net.Common.Configuration.CommonElement;
-    using static BIA.Net.Common.Configuration.AuthenticationElement.IdentitiesElement;
-    using static BIA.Net.Common.Configuration.AuthenticationElement.LanguageElement;
 
     public enum RolesRedirectAction
     {
@@ -66,6 +58,20 @@ namespace BIA.Net.Authentication.Web
 
         public static TUserInfo PrepareUserInfo()
         {
+            /*
+            var tests= BIASettingsReader.BIANetSection?.Authentication?.Tests;
+            foreach(HeterogeneousConfigurationElementBase test in tests)
+            {
+                if (test is Test1Element)
+                {
+                    string toto = ((Test1Element)test).KeyTest1;
+                }
+                if (test is Test2Element)
+                {
+                    string toto = ((Test2Element)test).KeyTest2;
+                }
+            }*/
+
 
             TUserInfo user = new TUserInfo();
             string cachingParameter = BIASettingsReader.BIANetSection?.Authentication?.Parameters?.Caching;

@@ -1,6 +1,7 @@
 ﻿using BIA.Net.Common.Helpers;
 using System;
 using System.Configuration;
+using System.Xml;
 
 namespace BIA.Net.Common.Configuration
 {
@@ -88,6 +89,151 @@ namespace BIA.Net.Common.Configuration
             }
         }
 
+        // Define the LayoutsCollection that contains the 
+        // UrlsConfigElement elements.
+        // This class shows how to use the ConfigurationElementCollection.
+        public class HeterogeneousCollection : ConfigurationElementCollection
+        {
+            protected override object GetElementKey(ConfigurationElement element)
+            {
+                return ((IHeterogeneousConfigurationElement)element).Key;
+            }
+
+            protected override ConfigurationElement CreateNewElement()
+            {
+                return null;
+            }
+
+            protected override bool OnDeserializeUnrecognizedElement(string elementName, XmlReader reader)
+            {
+                //if (elementName.("Test1") || elementName.Equals("Test2"))
+                {
+                    var element = (IHeterogeneousConfigurationElement)CreateNewElement(elementName);
+                    element.Deserialize(reader);
+                    BaseAdd((ConfigurationElement)element);
+
+                    return true;
+                }
+
+                //return base.OnDeserializeUnrecognizedElement(elementName, reader);
+            }
+
+            protected override ConfigurationElement CreateNewElement(string elementName)
+            {
+                switch (elementName)
+                {
+                    case "WindowsIdentity":
+                        return new WindowsIdentityElement(elementName);
+                    case "ObjectField":
+                        return new ObjectFieldElement(elementName);
+                    case "Parameter":
+                        return new ObjectFieldElement(elementName);
+                    case "Function":
+                        return new FunctionElement(elementName);
+                    case "ADField":
+                        return new ADFieldElement(elementName);
+                    case "Value":
+                        return new ValueElement(elementName);
+                    case "CustomCodeAD":
+                        return new CustomCodeElement(elementName);
+                    case "CustomCode":
+                        return new CustomCodeElement(elementName);
+                    case "WebService":
+                        return new WebServiceElement(elementName);
+                    case "ADRole":
+                        return new ValueElement(elementName);
+                    case "Mapping":
+                        return new MappingCollection(elementName);
+                }
+
+                throw new ConfigurationErrorsException("Unsupported element: " + elementName);
+            }
+        }
+
+        public interface IHeterogeneousConfigurationElement
+        {
+            void Deserialize(XmlReader reader);
+            string Key { get; set; }
+            string TagName { get; set; }
+        }
+
+        public abstract class HeterogeneousConfigurationElementBase : ConfigurationElement, IHeterogeneousConfigurationElement
+        {
+            public HeterogeneousConfigurationElementBase(string elementName) : base()
+            {
+                TagName = elementName;
+            }
+            public string TagName { get; set; }
+            [ConfigurationProperty("key", IsRequired = true, IsKey = true)]
+            public string Key
+            {
+                get { return (string)this["key"]; }
+                set { this["key"] = value; }
+            }
+            public void Deserialize(XmlReader reader)
+            {
+                base.DeserializeElement(reader, false);
+            }
+        }
+        public abstract class HeterogeneousCollectionBase : HeterogeneousCollection, IHeterogeneousConfigurationElement
+        {
+            public HeterogeneousCollectionBase(string elementName) : base()
+            {
+                TagName = elementName;
+            }
+            public string TagName { get; set; }
+            [ConfigurationProperty("key", IsRequired = true, IsKey = true)]
+            public string Key
+            {
+                get { return (string)this["key"]; }
+                set { this["key"] = value; }
+            }
+            public void Deserialize(XmlReader reader)
+            {
+                base.DeserializeElement(reader, false);
+            }
+        }
+
+
+        public class MappingCollection : KeyValueCollection, IHeterogeneousConfigurationElement
+        {
+            public MappingCollection(string elementName) : base()
+            {
+                TagName = elementName;
+            }
+            public string TagName { get; set; }
+            [ConfigurationProperty("key", IsRequired = true, IsKey = true)]
+            public string Key
+            {
+                get { return (string)this["key"]; }
+                set { this["key"] = value; }
+            }
+            public void Deserialize(XmlReader reader)
+            {
+                base.DeserializeElement(reader, false);
+            }
+        }
+
+        // Define the UrlsConfigElement elements that are contained 
+        // by the LayoutsCollection.
+        public class ValueElement : HeterogeneousConfigurationElementBase
+        {
+            public ValueElement(string elementName) : base(elementName) { }
+            [ConfigurationProperty("value", IsRequired = true, IsKey = false)]
+            public string Value
+            {
+                get
+                {
+                    return (string)this["value"];
+                }
+                set
+                {
+                    this["value"] = value;
+                }
+            }
+        }
+
+
         public class KeyCollection : ConfigCollection<KeyElement> { }
 
         // Define the UrlsConfigElement elements that are contained 
@@ -125,9 +271,9 @@ namespace BIA.Net.Common.Configuration
 
         // Define the UrlsConfigElement elements that are contained 
         // by the LayoutsCollection.
-        public class MethodFunctionElement : ConfigurationElement
+        public class MethodFunctionElement : HeterogeneousConfigurationElementBase
         {
-
+            public MethodFunctionElement(string elementName) : base(elementName) { }
             [ConfigurationProperty("type", IsRequired = true)]
             public string type
             {
@@ -161,9 +307,9 @@ namespace BIA.Net.Common.Configuration
             }
         }
 
-        public class CustomCodeElement : ConfigurationElement
+        public class CustomCodeElement : HeterogeneousConfigurationElementBase
         {
-
+            public CustomCodeElement(string elementName) : base(elementName) { }
             [ConfigurationProperty("function", IsRequired = true)]
             public string Function
             {
@@ -177,33 +323,20 @@ namespace BIA.Net.Common.Configuration
             < add key="Login" object="UserInfo" field="Login" />
           </Parameters>
         </WebService>*/
-        public class WebServicesCollection : ConfigCollection<WebServiceElement> { }
-        public class WebServiceElement : KeyElement
+        public class WebServiceElement : HeterogeneousCollectionBase
         {
-
+            public WebServiceElement(string elementName) : base(elementName) { }
             [ConfigurationProperty("URL", IsRequired = true)]
             public string URL
             {
                 get { return (string)this["URL"]; }
                 set { this["URL"] = value; }
             }
-
-
-            [ConfigurationProperty("Parameters", IsDefaultCollection = false)]
-            [ConfigurationCollection(typeof(ObjectFieldsCollection),
-            AddItemName = "add",
-            ClearItemsName = "clear",
-            RemoveItemName = "remove")]
-            public ObjectFieldsCollection Parameters
-            {
-                get { return (ObjectFieldsCollection)this["Parameters"]; }
-                set { this["Parameters"] = value; }
-            }
         }
 
-        public class ObjectFieldsCollection : ConfigCollection<ObjectFieldElement> {}
-        public class ObjectFieldElement : KeyElement
+        public class ObjectFieldElement : HeterogeneousConfigurationElementBase
         {
+            public ObjectFieldElement(string elementName) : base(elementName) { }
             [ConfigurationProperty("object", IsRequired = true, IsKey = false)]
             public string Object
             {
@@ -228,36 +361,11 @@ namespace BIA.Net.Common.Configuration
                     this["field"] = value;
                 }
             }
-            /*
-            [ConfigurationProperty("dictionary", IsRequired = false, IsKey = false)]
-            public string Dictionary
-            {
-                get
-                {
-                    return (string)this["dictionary"];
-                }
-                set
-                {
-                    this["dictionary"] = value;
-                }
-            }
-            [ConfigurationProperty("index", IsRequired = false, IsKey = false)]
-            public string Index
-            {
-                get
-                {
-                    return (string)this["index"];
-                }
-                set
-                {
-                    this["index"] = value;
-                }
-            }*/
         }
 
-        public class WindowsIdentityCollection : ConfigCollection<WindowsIdentityElement> { }
-        public class WindowsIdentityElement : KeyElement
+        public class WindowsIdentityElement : HeterogeneousConfigurationElementBase
         {
+            public WindowsIdentityElement(string elementName) : base(elementName) { }
             [ConfigurationProperty("identityField", IsRequired = false, IsKey = false)]
             public string IdentityField
             {
@@ -283,5 +391,66 @@ namespace BIA.Net.Common.Configuration
                 }
             }
         }
+
+        public class ADFieldElement : HeterogeneousConfigurationElementBase
+        {
+
+            public ADFieldElement(string elementName) : base(elementName) { }
+            [ConfigurationProperty("adfield", IsRequired = false, IsKey = false)]
+            public string Adfield
+            {
+                get
+                {
+                    return (string)this["adfield"];
+                }
+                set
+                {
+                    this["adfield"] = value;
+                }
+            }
+            [ConfigurationProperty("maxLenght", IsRequired = false, IsKey = false)]
+            public int MaxLenght
+            {
+                get
+                {
+                    return (int)this["maxLenght"];
+                }
+                set
+                {
+                    this["maxLenght"] = value;
+                }
+            }
+            [ConfigurationProperty("default", IsRequired = false, IsKey = false)]
+            public string Default
+            {
+                get
+                {
+                    return (string)this["default"];
+                }
+                set
+                {
+                    this["default"] = value;
+                }
+            }
+        }
+
+
+        public class FunctionElement : MethodFunctionElement
+        {
+            public FunctionElement(string elementName) : base(elementName) { }
+            [ConfigurationProperty("key", IsRequired = true, IsKey = true)]
+            public string Key
+            {
+                get
+                {
+                    return (string)this["key"];
+                }
+                set
+                {
+                    this["key"] = value;
+                }
+            }
+        }
+
     }
 }

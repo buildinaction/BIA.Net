@@ -5,16 +5,17 @@
     using Business;
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.DirectoryServices.AccountManagement;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Reflection;
     using System.Security.Claims;
     using System.Security.Principal;
     using System.Text;
+    using System.Text.RegularExpressions;
     using static BIA.Net.Common.Configuration.AuthenticationElement.LanguageElement;
-    using static BIA.Net.Common.Configuration.AuthenticationElement.UserPropertiesElement;
-    using static BIA.Net.Common.Configuration.AuthenticationElement.UserPropertiesElement.ADFieldsCollection;
     using static BIA.Net.Common.Configuration.CommonElement;
 
     /// <summary>
@@ -42,7 +43,37 @@
         /// </summary>
         public IIdentity Identity { get; set; }
 
-        protected UserPrincipal userPrincipal { get; set; }
+        private bool isUserPrincipalInit = false;
+        private UserPrincipal userPrincipal { get; set; }
+
+        protected UserPrincipal UserPrincipal
+        {
+            get
+            {
+                if (!isUserPrincipalInit)
+                {
+                    userPrincipal = ADHelper.GetUserFromADs(Login);
+                    isUserPrincipalInit = true;
+                }
+                return userPrincipal;
+            }
+        }
+
+        private bool isUserGroupsInit = false;
+        private List<string> userGroups = null;
+        protected List<string> UserGroups
+        {
+            get
+            {
+                if (!isUserGroupsInit)
+                {
+                    userGroups = ADHelper.GetGroups(Login);
+                    isUserGroupsInit = true;
+                }
+                return userGroups;
+            }
+        }
+
 
         private List<string> coreRoles = null;
         protected List<string> CoreRoles
@@ -57,7 +88,8 @@
         private string login = null;
         public virtual string Login
         {
-            get {
+            get
+            {
                 if (login == null)
                 {
                     login = Identities["Login"];
@@ -66,7 +98,7 @@
             }
         }
 
-        
+
         private string localUserID = null;
         public virtual string LocalUserID
         {
@@ -82,8 +114,11 @@
 
 
         Dictionary<string, string> identitiesInBuilding = null;
-        TUserDB propertiesInBuilding = default(TUserDB) ;
-
+        TUserDB propertiesInBuilding = default(TUserDB);
+        string languageInBuilding = null;
+        Dictionary<string, string> userProfileInBuilding = null;
+        List<string> rolesInBuilding = null;
+        List<string> coreRolesInBuilding = null;
         #endregion
 
         /// <summary>
@@ -92,14 +127,15 @@
         /// <value>
         /// The roles of the user.
         /// </value>
-        public virtual List<string> Roles 
+        public virtual List<string> Roles
         {
             get
             {
                 if (userInfoContainer.rolesShouldBeRefreshed) RefreshRoles();
                 return userInfoContainer.roles;
             }
-            set {
+            set
+            {
                 userInfoContainer.roles = value;
                 userInfoContainer.rolesShouldBeRefreshed = false;
                 userInfoContainer.rolesRefreshDate = DateTime.Now;
@@ -112,21 +148,23 @@
                 if (userInfoContainer.propertiesShouldBeRefreshed) RefreshProperties();
                 return userInfoContainer.properties;
             }
-            set {
+            set
+            {
                 userInfoContainer.properties = value;
                 userInfoContainer.propertiesShouldBeRefreshed = false;
                 userInfoContainer.propertiesRefreshDate = DateTime.Now;
             }
         }
 
-        public virtual Dictionary<string,string> Identities
+        public virtual Dictionary<string, string> Identities
         {
             get
             {
                 if (userInfoContainer.identitiesShouldBeRefreshed) RefreshIdentities();
                 return userInfoContainer.identities;
             }
-            set {
+            set
+            {
                 userInfoContainer.identities = value;
                 userInfoContainer.identitiesShouldBeRefreshed = false;
                 userInfoContainer.identitiesRefreshDate = DateTime.Now;
@@ -161,7 +199,8 @@
                 if (userInfoContainer.languageShouldBeRefreshed) RefreshLanguage();
                 return userInfoContainer.language;
             }
-            set {
+            set
+            {
                 userInfoContainer.language = value;
                 userInfoContainer.languageShouldBeRefreshed = false;
                 userInfoContainer.languageRefreshDate = DateTime.Now;
@@ -242,36 +281,43 @@
 
         protected virtual void RefreshIdentities()
         {
-            identitiesInBuilding = new Dictionary<string,string>();
+            BaseRefreshIdentities();
+        }
 
-            KeyValueCollection ValuesIdentities = BIASettingsReader.BIANetSection?.Authentication?.Identities?.Values;
-            if (ValuesIdentities != null && ValuesIdentities.Count >0)
+
+        public void BaseRefreshIdentities()
+        {
+            identitiesInBuilding = new Dictionary<string, string>();
+
+            HeterogeneousCollection identities = BIASettingsReader.BIANetSection?.Authentication?.Identities;
+            if (identities != null && identities.Count > 0)
             {
-                foreach (KeyValueElement value in ValuesIdentities)
+                foreach (IHeterogeneousConfigurationElement heterogeneousElem in identities)
                 {
-                    identitiesInBuilding.Add(value.Key, value.Value);
-                }
-            }
-            WindowsIdentityCollection WindowsIdentities = BIASettingsReader.BIANetSection?.Authentication?.Identities?.WindowsIdentities;
-            if (WindowsIdentities != null && WindowsIdentities.Count>0)
-            {
-                foreach (WindowsIdentityElement value in WindowsIdentities)
-                {
-                    if (value.IdentityField != null)
+                    if (heterogeneousElem is ValueElement)
                     {
-                        identitiesInBuilding.Add(value.Key, PreparePrincipalUserName(Identity, value.IdentityField, value.RemoveDomain));
+                        SetFromValueElement(identitiesInBuilding, heterogeneousElem);
                     }
-                }
-            }
-            ObjectFieldsCollection ObjectFields = BIASettingsReader.BIANetSection?.Authentication?.Identities?.Objects;
-            if (ObjectFields != null && ObjectFields.Count >0)
-            {
-                foreach (ObjectFieldElement value in ObjectFields)
-                {
-                    object result = ExtractObjectFieldValue(value);
-                    if (result != null)
+                    else if (heterogeneousElem is WindowsIdentityElement)
                     {
-                        identitiesInBuilding.Add(value.Key, result.ToString());
+                        WindowsIdentityElement value = (WindowsIdentityElement)heterogeneousElem;
+                        if (value.IdentityField != null)
+                        {
+                            identitiesInBuilding.Add(value.Key, PreparePrincipalUserName(Identity, value.IdentityField, value.RemoveDomain));
+                        }
+                    }
+                    else if (heterogeneousElem is ObjectFieldElement)
+                    {
+                        ObjectFieldElement value = (ObjectFieldElement)heterogeneousElem;
+                        object result = ExtractObjectFieldValue(value);
+                        if (result != null)
+                        {
+                            identitiesInBuilding.Add(value.Key, result.ToString());
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > Identities");
                     }
                 }
             }
@@ -297,14 +343,14 @@
             {
                 userName = (string)propertyInfo.GetValue(Identity);
             }
-
+            /*
             if (string.IsNullOrEmpty(userName))
             {
                 //SAML2
                 userName = ClaimsPrincipal.Current.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).FirstOrDefault();
                 TraceManager.Debug("SafranAuthorizationFilterApi", "OnAuthorization", "NameID SAML2 : " + userName);
             }
-
+            */
             if (removeDomain)
             {
                 userName = ADHelper.RemoveDomain(userName);
@@ -313,287 +359,261 @@
             return userName;
         }
 
+
+
         protected virtual void RefreshUserProfile()
         {
-            //Initialize User profile
-            Dictionary<string, string> userProfile = new Dictionary<string, string>();
-            string userProfileKey = "";
+            BaseRefreshUserProfile();
+        }
 
-            KeyValueCollection UserProfileValues = BIASettingsReader.BIANetSection?.Authentication?.UserProfile?.Values;
-            if (UserProfileValues != null)
+        public void BaseRefreshUserProfile()
+        {
+            if (userProfileInBuilding == null)
             {
-                foreach (KeyValueElement value in UserProfileValues)
+                //Initialize User profile
+                userProfileInBuilding = new Dictionary<string, string>();
+                string userProfileKey = "";
+
+                HeterogeneousCollection userProfileValues = BIASettingsReader.BIANetSection?.Authentication?.UserProfile;
+                if (userProfileValues != null && userProfileValues.Count > 0)
                 {
-                    userProfile.Add(value.Key, value.Value);
-                }
-            }
-
-            if (Roles != null)
-            {
-                //UserProfil refreshed when it is called (TODO: to Validate)
-                userProfileKey = Roles.Contains("Generic") ? null : Login;
-            }
-            else
-            {
-                userProfileKey = null;
-            }
-
-            if ((userProfileKey != null) && !(string.IsNullOrEmpty(BIASettingsReader.UrlRefreshProfile)))
-            {
-                TraceManager.Info("AUserInfo", "RefreshUserProfile", "Refresh profile for :" + userProfileKey);
-                string refreshProfilUrl = BIASettingsReader.UrlRefreshProfile.ToLower();
-                String profilURL = refreshProfilUrl + "?login=" + userProfileKey;
-
-                Uri address = new Uri(profilURL);
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(address);
-                request.Timeout = 200000;
-                request.Credentials = CredentialCache.DefaultCredentials;
-
-                HttpWebResponse response;
-
-                try
-                {
-                    response = (HttpWebResponse)request.GetResponse();
-                    var encoding = ASCIIEncoding.ASCII;
-                    string responseText = "";
-                    using (var reader = new System.IO.StreamReader(response.GetResponseStream(), encoding))
+                    foreach (IHeterogeneousConfigurationElement heterogeneousElem in userProfileValues)
                     {
-                        responseText = reader.ReadToEnd();
+                        if (heterogeneousElem is ValueElement)
+                        {
+                            SetFromValueElement(userProfileInBuilding, heterogeneousElem);
+                        }
+                        else if (heterogeneousElem is WebServiceElement)
+                        {
+                            if (!string.IsNullOrEmpty(userProfileKey)) userProfileKey += ",";
+                            userProfileKey += SetFromWebService(userProfileInBuilding, heterogeneousElem);
+                        }
+                        else
+                        {
+                            throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > UserProfile");
+                        }
                     }
-                    userProfile = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(responseText);
                 }
-                catch (WebException e)
-                {
-                    TraceManager.Error("AUserInfo", "RefreshUserProfile", "Service user profile do not work : " + address.AbsoluteUri + " Error : " + e.Message);
-                }
+
+                UserProfile = userProfileInBuilding;
+                userInfoContainer.userProfileKey = userProfileKey;
             }
-            UserProfile = userProfile;
-            userInfoContainer.userProfileKey = userProfileKey;
         }
 
         protected virtual void RefreshCoreRoles()
         {
-            //Initialize Roles
-            List<string> adUserGroups = new List<string>();
-
-            //TODO for ADadUserGroups = ADHelper.GetGroups(userLogin1stLevel);
-            KeyCollection ValuesRoles = BIASettingsReader.BIANetSection?.Authentication?.Roles?.Values;
-            if (ValuesRoles != null && ValuesRoles.Count >0)
+            BaseRefreshCoreRoles();
+        }
+        public void BaseRefreshCoreRoles()
+        {
+            if (coreRolesInBuilding == null)
             {
-                foreach (KeyElement value in ValuesRoles)
+                //Initialize Roles
+                coreRolesInBuilding = new List<string>();
+
+                HeterogeneousCollection rolesValues = BIASettingsReader.BIANetSection?.Authentication?.Roles;
+                if (rolesValues != null && rolesValues.Count > 0)
                 {
-                    adUserGroups.Add(value.Key);
+                    foreach (IHeterogeneousConfigurationElement heterogeneousElem in rolesValues)
+                    {
+                        if (heterogeneousElem.TagName == "Value")
+                        {
+                            SetFromKeyElement(coreRolesInBuilding, heterogeneousElem);
+                        }
+                        else if (heterogeneousElem.TagName == "ADRole")
+                        {
+                            ValueElement ADRole = (ValueElement)heterogeneousElem;
+                            if (ADHelper.HasRole(UserGroups, Login, ADRole.Key))
+                            {
+                                coreRolesInBuilding.Add(ADRole.Key);
+                            }
+                        }
+                        else if (heterogeneousElem is CustomCodeElement)
+                        {
+                        }
+                        else
+                        {
+                            throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > Role");
+                        }
+                    }
                 }
-            }
 
-            KeyValueCollection ADRoles = BIASettingsReader.BIANetSection?.Authentication?.Roles?.AD;
-            if (BIASettingsReader.ADRoles.Count>0)
-            {
-                adUserGroups.AddRange(ADHelper.GetGroups(Login, BIASettingsReader.BIANetSection?.Authentication?.Parameters?.ADDomains));
-            }
-
-            if (AdditionnalRoles != null)
-            {
-                foreach (string group in AdditionnalRoles)
+                if (AdditionnalRoles != null)
                 {
-                    if (!adUserGroups.Contains(group)) adUserGroups.Add(group);
+                    foreach (string group in AdditionnalRoles)
+                    {
+                        if (!coreRolesInBuilding.Contains(group)) coreRolesInBuilding.Add(group);
+                    }
                 }
+                coreRoles = coreRolesInBuilding;
+                coreRolesInBuilding = null;
             }
-            coreRoles = adUserGroups;
         }
 
         protected virtual void RefreshRoles()
         {
-            List<string> userRoles = new List<string>();
-            userRoles.AddRange(CoreRoles);
+            BaseRefreshRoles();
+        }
 
-            CustomCodeElement CustomCode = BIASettingsReader.BIANetSection?.Authentication?.Roles?.CustomCode;
-            if (!string.IsNullOrEmpty(CustomCode?.Function))
+        public void BaseRefreshRoles()
+        {
+            if (rolesInBuilding == null)
             {
-               this.GetType().GetMethod(CustomCode.Function).Invoke(this, new object[] { userRoles });
-            }
+                rolesInBuilding = new List<string>();
+                rolesInBuilding.AddRange(CoreRoles);
+                HeterogeneousCollection rolesValues = BIASettingsReader.BIANetSection?.Authentication?.Roles;
+                if (rolesValues != null && rolesValues.Count > 0)
+                {
+                    foreach (IHeterogeneousConfigurationElement heterogeneousElem in rolesValues)
+                    {
+                        if (heterogeneousElem is CustomCodeElement)
+                        {
+                            CustomCodeElement CustomCode = (CustomCodeElement)heterogeneousElem;
+                            this.GetType().GetMethod(CustomCode.Function).Invoke(this, new object[] { rolesInBuilding });
+                        }
+                    }
+                }
 
-            Roles = userRoles;
-            userInfoContainer.rolesKey = Login;
+                Roles = rolesInBuilding;
+                rolesInBuilding = null;
+                userInfoContainer.rolesKey = Login;
+            }
         }
 
 
         /// <summary>
-        /// Gets the user information.
+        /// Refresh the user properties
         /// </summary>
-        /// <param name="userName">Name of the user.</param>
-        /// <returns>The user information</returns>
-        /// <exception cref="System.Exception">You're not authorize to connect to this application: Your aren't in the AD user group.</exception>
         protected virtual void RefreshProperties()
         {
-            BuildProperties();
-            CustomCodeElement CustomCode = BIASettingsReader.BIANetSection?.Authentication?.Properties?.CustomCode;
-            if (!string.IsNullOrEmpty(CustomCode?.Function))
-            {
-                this.GetType().GetMethod(CustomCode.Function).Invoke(this, new object[] { propertiesInBuilding });
-            }
-
-            Properties = propertiesInBuilding;
-            propertiesInBuilding = default(TUserDB);
-            userInfoContainer.propertiesKey = Login;
+            BaseRefreshProperties();
         }
 
-        public virtual TUserDB BuildProperties()
+        /// <summary>
+        /// Refresh the user properties (not overidable)
+        /// </summary>
+        public void BaseRefreshProperties()
         {
-            if (propertiesInBuilding == null) propertiesInBuilding = new TUserDB();
-            KeyValueCollection UserPropertiesValues = BIASettingsReader.BIANetSection?.Authentication?.Properties?.Values;
-            if (UserPropertiesValues != null && UserPropertiesValues.Count > 0)
+            if (propertiesInBuilding == null)
             {
-                foreach (KeyValueElement value in UserPropertiesValues)
+                propertiesInBuilding = new TUserDB();
+                HeterogeneousCollection propertiesValues = BIASettingsReader.BIANetSection?.Authentication?.Properties;
+                if (propertiesValues != null && propertiesValues.Count > 0)
                 {
-                    PropertyInfo propertyInfo = propertiesInBuilding.GetType().GetProperty(value.Key);
-                    propertyInfo.SetValue(propertiesInBuilding, Convert.ChangeType(value.Value, propertyInfo.PropertyType));
-                }
-            }
-
-            SetPropertiesFromAD(Login, propertiesInBuilding.UserAdInDB);
-            ObjectFieldsCollection objects = BIASettingsReader.BIANetSection?.Authentication?.Properties?.Objects;
-            if (objects != null && objects.Count > 0)
-            {
-                foreach (ObjectFieldElement value in objects)
-                {
-                    PropertyInfo propertyInfo = propertiesInBuilding.GetType().GetProperty(value.Key);
-                    if (propertyInfo != null)
+                    foreach (IHeterogeneousConfigurationElement heterogeneousElem in propertiesValues)
                     {
-                        object result = ExtractObjectFieldValue(value);
-                        propertyInfo.SetValue(propertiesInBuilding, Convert.ChangeType(result, propertyInfo.PropertyType));
-                    }
-                }
-            }
-
-            FunctionsCollection functions = BIASettingsReader.BIANetSection?.Authentication?.Properties?.Functions;
-            if (functions != null && functions.Count > 0)
-            {
-                foreach (FunctionsCollection.FunctionElement value in functions)
-                {
-                    PropertyInfo propertyInfo = propertiesInBuilding.GetType().GetProperty(value.Key);
-                    if (propertyInfo != null)
-                    {
-                        if (value.Type != null)
+                        if (heterogeneousElem is ValueElement)
                         {
-                            if (!string.IsNullOrEmpty(value.Method))
-                            {
-                                object result = value.Type.GetMethod(value.Method).Invoke(null, null);
-                                propertyInfo.SetValue(propertiesInBuilding, Convert.ChangeType(result, propertyInfo.PropertyType));
-                            }
-                            else
-                            {
-                                object result = value.Type.GetProperty(value.Property).GetValue(null, null);
-                                propertyInfo.SetValue(propertiesInBuilding, Convert.ChangeType(result, propertyInfo.PropertyType));
-                            }
+                            SetFromValueElement(propertiesInBuilding, heterogeneousElem);
+                        }
+                        else if (heterogeneousElem is ADFieldElement)
+                        {
+                            SetFromADFieldElement(propertiesInBuilding, heterogeneousElem);
+                        }
+                        else if (heterogeneousElem is ObjectFieldElement)
+                        {
+                            SetFromObjectFieldElement(propertiesInBuilding, heterogeneousElem);
+                        }
+                        else if (heterogeneousElem is FunctionElement)
+                        {
+                            SetFromFunctionElement(propertiesInBuilding, heterogeneousElem);
+                        }
+                        else if (heterogeneousElem.TagName ==  "CustomCode")
+                        {
+                            SetFromCustomCodeElement(propertiesInBuilding, heterogeneousElem);
+                        }
+                        else if (heterogeneousElem.TagName == "CustomCodeAD")
+                        {
+                            SetFromCustomCodeADElement(propertiesInBuilding, heterogeneousElem);
+                        }
+                        else
+                        {
+                            throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > Properties");
                         }
                     }
                 }
 
+                Properties = propertiesInBuilding;
+                propertiesInBuilding = default(TUserDB);
+                userInfoContainer.propertiesKey = Login;
             }
-            return propertiesInBuilding;
         }
+
 
         protected virtual void RefreshLanguage()
         {
-            string languageCode = null;
-            ResolversCollection resolvers = BIASettingsReader.BIANetSection?.Authentication?.Language?.Resolvers;
+            BaseRefreshLanguage();
+        }
 
-            if (resolvers != null && resolvers.Count > 0)
+        public void BaseRefreshLanguage()
+        {
+            if (languageInBuilding == null)
             {
-                foreach (ResolversCollection.ResolverElement resolver in resolvers)
+                HeterogeneousCollection languageValues = BIASettingsReader.BIANetSection?.Authentication?.Language;
+                if (languageValues != null && languageValues.Count > 0)
                 {
-                    if (resolver.Key == "mapping")
+                    foreach (IHeterogeneousConfigurationElement heterogeneousElem in languageValues)
                     {
-                        PropertyInfo propertyInfo = null;
-
-                        if (resolver?.Mapping?.Property != null)
+                        if (heterogeneousElem.TagName == "Value")
                         {
-                            propertyInfo = Properties.GetType().GetProperty(resolver.Mapping.Property);
+                            ValueElement value = (ValueElement)heterogeneousElem;
+                            languageInBuilding = value.Value;
                         }
-
-                        if (propertyInfo != null)
+                        else if (heterogeneousElem.TagName == "Mapping")
                         {
-                            string propertyToMap = propertyInfo.GetValue(Properties).ToString();
-                            foreach (KeyValueElement mapping in resolver.Mapping)
+                            MappingCollection mappingCollection = (MappingCollection)heterogeneousElem;
+                            PropertyInfo propertyInfo = null;
+
+                            if (mappingCollection?.Key != null)
                             {
-                                if (mapping.Key == propertyToMap)
+                                propertyInfo = Properties.GetType().GetProperty(mappingCollection.Key);
+                            }
+
+                            if (propertyInfo != null)
+                            {
+                                string propertyToMap = propertyInfo.GetValue(Properties).ToString();
+                                foreach (KeyValueElement mapping in mappingCollection)
                                 {
-                                    languageCode = mapping.Value;
-                                    break;
+                                    if (mapping.Key == propertyToMap)
+                                    {
+                                        languageInBuilding = mapping.Value;
+                                        break;
+                                    }
                                 }
                             }
                         }
-                        if (languageCode != null) break;
-                    }
-                    if (resolver.Key == "customCode")
-                    {
-                        CustomCodeElement customCode = resolver?.CustomCode;
-                        if (resolver?.Mapping?.Property != null)
+                        else if (heterogeneousElem.TagName == "CustomCode")
                         {
+                            CustomCodeElement customCode = (CustomCodeElement) heterogeneousElem;
                             if (customCode != null && customCode.Function != null)
                             {
-                                languageCode = (string) this.GetType().GetMethod(customCode.Function).Invoke(this, null);
-                                if (languageCode != null) break;
+                                languageInBuilding = (string)this.GetType().GetMethod(customCode.Function).Invoke(this, null);
+                                if (languageInBuilding != null) break;
                             }
                         }
+                        else
+                        {
+                            throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > Language");
+                        }
+                        if (languageInBuilding != null) break;
                     }
                 }
-            }
-            if (languageCode == null)
-            {
-                languageCode = BIASettingsReader.BIANetSection?.Authentication?.Language?.Default;
-                if (languageCode == null)
+
+                if (languageInBuilding == null)
                 {
-                    languageCode = "en-US";
+                    languageInBuilding = "en-US";
                 }
+                Language = languageInBuilding;
+                languageInBuilding = null;
+                userInfoContainer.languageKey = Login;
             }
-            Language = languageCode;
-            userInfoContainer.languageKey = Login;
+
 
         }
 
         public virtual void FinalizePreparation()
         {
 
-        }
-
-
-        /// <summary>
-        /// Set Properties from AD conformly to the parameter in web.config
-        /// </summary>
-        /// <param name="userLogin"></param>
-        /// <param name="userProperties"></param>
-        /// <param name="adFieldsCollection"></param>
-        protected virtual void SetPropertiesFromAD<TUserADinDB>(string userLogin, TUserADinDB userProperties)
-        {
-            ADFieldsCollection adFieldsCollection = BIASettingsReader.BIANetSection?.Authentication?.Properties?.AD;
-            CustomCodeElement customCodeAD = BIASettingsReader.BIANetSection?.Authentication?.Properties?.AD?.CustomCode;
-
-            if ((adFieldsCollection != null && adFieldsCollection.Count > 0) || (customCodeAD != null))
-            {
-                userPrincipal = ADHelper.GetUserFromADs(userLogin);
-
-                if (adFieldsCollection != null && adFieldsCollection.Count > 0)
-                {
-
-                    if (userPrincipal != null)
-                    {
-                        foreach (ADFieldElement value in adFieldsCollection)
-                        {
-                            PropertyInfo propertyInfo = userProperties.GetType().GetProperty(value.Key);
-                            if (propertyInfo != null)
-                            {
-                                propertyInfo.SetValue(userProperties, Convert.ChangeType(ADHelper.GetProperty(userPrincipal, value.Adfield, value.MaxLenght, value.Default), propertyInfo.PropertyType));
-                            }
-                        }
-                    }
-                }
-            }
-            if (customCodeAD != null && customCodeAD.Function != null)
-            {
-                this.GetType().GetMethod(customCodeAD.Function).Invoke(this, new object[] { userProperties });
-            }
         }
 
         /// <summary>
@@ -676,7 +696,7 @@
                     }
 
                     if (srcObject != null)
-                    { 
+                    {
                         PropertyInfo propertyInfoSrc = srcObject.GetType().GetProperty(value.Field);
                         result = propertyInfoSrc.GetValue(srcObject);
                     }
@@ -685,12 +705,170 @@
             else if (value.Object == "Identities")
             {
                 string identity = null;
-                if (identitiesInBuilding!=null) identitiesInBuilding.TryGetValue(value.Field, out identity);
+                if (identitiesInBuilding != null) identitiesInBuilding.TryGetValue(value.Field, out identity);
                 else Identities.TryGetValue(value.Field, out identity);
                 result = identity;
             }
 
             return result;
         }
+        #region SetToObject
+
+        private void SetFromFunctionElement(object target, IHeterogeneousConfigurationElement heterogeneousElem)
+        {
+            FunctionElement value = (FunctionElement)heterogeneousElem;
+            PropertyInfo propertyInfo = target.GetType().GetProperty(value.Key);
+            if (propertyInfo != null)
+            {
+                if (value.Type != null)
+                {
+                    if (!string.IsNullOrEmpty(value.Method))
+                    {
+                        object result = value.Type.GetMethod(value.Method).Invoke(null, null);
+                        propertyInfo.SetValue(target, Convert.ChangeType(result, propertyInfo.PropertyType));
+                    }
+                    else
+                    {
+                        object result = value.Type.GetProperty(value.Property).GetValue(null, null);
+                        propertyInfo.SetValue(target, Convert.ChangeType(result, propertyInfo.PropertyType));
+                    }
+                }
+            }
+        }
+
+        private void SetFromCustomCodeElement(object target, IHeterogeneousConfigurationElement heterogeneousElem)
+        {
+            CustomCodeElement CustomCode = (CustomCodeElement)heterogeneousElem;
+            if (!string.IsNullOrEmpty(CustomCode?.Function))
+            {
+                this.GetType().GetMethod(CustomCode.Function).Invoke(this, new object[] { target });
+            }
+        }
+
+        private void SetFromCustomCodeADElement(object target, IHeterogeneousConfigurationElement heterogeneousElem)
+        {
+            CustomCodeElement customCodeAD = (CustomCodeElement)heterogeneousElem;
+
+            if (customCodeAD != null && customCodeAD.Function != null)
+            {
+                this.GetType().GetMethod(customCodeAD.Function).Invoke(this, new object[] { target });
+            }
+        }
+
+
+        private void SetFromADFieldElement(object target, IHeterogeneousConfigurationElement heterogeneousElem)
+        {
+            ADFieldElement value = (ADFieldElement)heterogeneousElem;
+            if (UserPrincipal != null)
+            {
+                PropertyInfo propertyInfo = target.GetType().GetProperty(value.Key);
+                if (propertyInfo != null)
+                {
+                    propertyInfo.SetValue(target, Convert.ChangeType(ADHelper.GetProperty(UserPrincipal, value.Adfield, value.MaxLenght, value.Default), propertyInfo.PropertyType));
+                }
+            }
+        }
+
+        private void SetFromValueElement(object target, IHeterogeneousConfigurationElement heterogeneousElem)
+        {
+            ValueElement value = (ValueElement)heterogeneousElem;
+            PropertyInfo propertyInfo = target.GetType().GetProperty(value.Key);
+            propertyInfo.SetValue(target, Convert.ChangeType(value.Value, propertyInfo.PropertyType));
+        }
+
+        private void SetFromObjectFieldElement(object target, IHeterogeneousConfigurationElement heterogeneousElem)
+        {
+            ObjectFieldElement value = (ObjectFieldElement)heterogeneousElem;
+            PropertyInfo propertyInfo = target.GetType().GetProperty(value.Key);
+            if (propertyInfo != null)
+            {
+                object result = ExtractObjectFieldValue(value);
+                propertyInfo.SetValue(target, Convert.ChangeType(result, propertyInfo.PropertyType));
+            }
+        }
+        #endregion
+        #region SetToDictionary
+        private void SetFromKeyElement(List<string> target, IHeterogeneousConfigurationElement heterogeneousElem)
+        {
+            ValueElement value = (ValueElement)heterogeneousElem;
+            target.Add(value.Value);
+        }
+        #endregion
+        #region SetToDictionary
+        private void SetFromValueElement(Dictionary<string, string> target, IHeterogeneousConfigurationElement heterogeneousElem)
+        {
+            ValueElement value = (ValueElement)heterogeneousElem;
+            target.Add(value.Key, value.Value);
+        }
+
+        private string SetFromWebService(Dictionary<string, string> target, IHeterogeneousConfigurationElement heterogeneousElem)
+        {
+            WebServiceElement webService = (WebServiceElement)heterogeneousElem;
+            string userProfileKey = "";
+            string parameters = "";
+            foreach (ObjectFieldElement parameter in webService)
+            {
+                object value = ExtractObjectFieldValue(parameter);
+                if (!string.IsNullOrEmpty(userProfileKey)) userProfileKey += ",";
+                userProfileKey += value;
+                if (!string.IsNullOrEmpty(parameters)) parameters += "&";
+                else parameters += "?";
+                parameters += parameter.Key + "=" + value;
+            }
+
+            TraceManager.Info("AUserInfo", "RefreshUserProfile", "Refresh profile from web service " + webService.URL + parameters);
+            string url = webService.URL;
+
+            if (url.Contains("$("))
+            {
+                string pat = @"\$\(([\w\d]+)\)";
+
+                // Instantiate the regular expression object.
+                Regex r = new Regex(pat, RegexOptions.IgnoreCase);
+
+                // Match the regular expression pattern against a text string.
+                Match m = r.Match(url);
+                while (m.Success)
+                {
+                    string appSetting = ConfigurationManager.AppSettings[m.Groups[1].Value];
+
+                    url = url.Replace(m.Value, appSetting);
+                    m = m.NextMatch();
+                }
+            }
+
+            String profilURL = url + parameters;
+
+            Uri address = new Uri(profilURL);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(address);
+            request.Timeout = 200000;
+            request.Credentials = CredentialCache.DefaultCredentials;
+
+            HttpWebResponse response;
+
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                string responseText = reader.ReadToEnd();
+                /*var encoding = ASCIIEncoding.ASCII;
+                string responseText = "";
+                using (var reader = new System.IO.StreamReader(response.GetResponseStream(), encoding))
+                {
+                    responseText = reader.ReadToEnd();
+                }*/
+                response.Close();
+                Dictionary<string, string> userProfileReturn = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(responseText);
+                foreach (var item in userProfileReturn)
+                    target.Add(item.Key, item.Value);
+            }
+            catch (WebException e)
+            {
+                TraceManager.Error("AUserInfo", "RefreshUserProfile", "Service user profile do not work : " + address.AbsoluteUri + " Error : " + e.Message);
+            }
+
+            return userProfileKey;
+        }
+        #endregion
     }
 }

@@ -73,11 +73,11 @@ namespace BIA.Net.Authentication.Controllers
         public virtual ActionResult RefreshUsersFromAD()
         {
             List<string> userDeleted = new List<string>();
-            if (BIASettingsReader.GetADGroupsForRole("User") != null)
+            if (ADHelper.GetADGroupsForRole("User") != null)
             {
                 using (TServiceSynchronizeUser serviceUserDB = new TServiceSynchronizeUser())
                 {
-                    userDeleted = serviceUserDB.SynchronizeUsers<TUserInfo, TUserDB, TUserADinDB>(BIASettingsReader.GetADGroupsForRole("User"));
+                    userDeleted = serviceUserDB.SynchronizeUsers<TUserInfo, TUserDB, TUserADinDB>(ADHelper.GetADGroupsForRole("User"));
                 }
             }
 

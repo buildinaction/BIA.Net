@@ -74,6 +74,8 @@ namespace BIA.Net.Common
         }
 
 
+        /*
+
         /// <summary>
 
         private static Dictionary<string, List<string>> adRoles = null;
@@ -101,6 +103,7 @@ namespace BIA.Net.Common
                 return adRoles;
             }
         }
+
         /// <summary>
         /// Gets AD Groups As Application Users
         /// </summary>
@@ -114,25 +117,7 @@ namespace BIA.Net.Common
 
             return null;
         }
-
-        /// <summary>
-        /// Gets AD Simulated User
-        /// </summary>
-        public static string UrlRefreshProfile
-        {
-            get
-            {
-
-                string value = ConfigurationManager.AppSettings["UrlRefreshProfile"];
-                if (string.IsNullOrEmpty(value))
-                {
-                    value = UrlDMIndex;
-                    if (string.IsNullOrEmpty(value)) return null;
-                    value = value + "/UserProfile/GetUserProfile";
-                }
-                return value;
-            }
-        }
+        */
 
         /// <summary>
         /// Gets AD Simulated User
