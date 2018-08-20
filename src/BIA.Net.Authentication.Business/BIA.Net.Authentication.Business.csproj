@@ -94,8 +94,8 @@
     <Compile Include="AServiceSynchronizeUser.cs" />
     <Compile Include="Helpers\AUserInfo.cs" />
     <Compile Include="Helpers\IUserInfo.cs" />
-    <Compile Include="IUserADinDB.cs" />
-    <Compile Include="IUserDB.cs" />
+    <Compile Include="IUserPropertiesInDB.cs" />
+    <Compile Include="IUserProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

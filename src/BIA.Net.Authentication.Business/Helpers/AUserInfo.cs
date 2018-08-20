@@ -21,8 +21,8 @@
     /// <summary>
     /// Class to define identity.
     /// </summary>
-    public abstract class AUserInfo<TUserDB> : IPrincipal, IUserInfo
-        where TUserDB : IUserDB, new()
+    public abstract class AUserInfo<TUserProperties> : IPrincipal, IUserInfo
+        where TUserProperties : IUserProperties, new()
     {
         #region Constructors
 
@@ -74,17 +74,6 @@
             }
         }
 
-
-        private List<string> coreRoles = null;
-        protected List<string> CoreRoles
-        {
-            get
-            {
-                if (coreRoles == null) RefreshCoreRoles();
-                return coreRoles;
-            }
-        }
-
         private string login = null;
         public virtual string Login
         {
@@ -114,11 +103,10 @@
 
 
         Dictionary<string, string> identitiesInBuilding = null;
-        TUserDB propertiesInBuilding = default(TUserDB);
+        TUserProperties propertiesInBuilding = default(TUserProperties);
         string languageInBuilding = null;
         Dictionary<string, string> userProfileInBuilding = null;
         List<string> rolesInBuilding = null;
-        List<string> coreRolesInBuilding = null;
         #endregion
 
         /// <summary>
@@ -131,7 +119,15 @@
         {
             get
             {
-                if (userInfoContainer.rolesShouldBeRefreshed) RefreshRoles();
+                if (userInfoContainer.rolesShouldBeRefreshed)
+                {
+                    if (rolesInBuilding != null)
+                    {
+                        TraceManager.Debug("Return the rolesInBuilding");
+                        return rolesInBuilding;
+                    }
+                    RefreshRoles();
+                }
                 return userInfoContainer.roles;
             }
             set
@@ -141,11 +137,19 @@
                 userInfoContainer.rolesRefreshDate = DateTime.Now;
             }
         }
-        public virtual TUserDB Properties
+        public virtual TUserProperties Properties
         {
             get
             {
-                if (userInfoContainer.propertiesShouldBeRefreshed) RefreshProperties();
+                if (userInfoContainer.propertiesShouldBeRefreshed)
+                {
+                    if (propertiesInBuilding != null)
+                    {
+                        TraceManager.Debug("Return the propertiesInBuilding");
+                        return propertiesInBuilding;
+                    }
+                    RefreshProperties();
+                }
                 return userInfoContainer.properties;
             }
             set
@@ -160,7 +164,15 @@
         {
             get
             {
-                if (userInfoContainer.identitiesShouldBeRefreshed) RefreshIdentities();
+                if (userInfoContainer.identitiesShouldBeRefreshed)
+                {
+                    if (identitiesInBuilding != null)
+                    {
+                        TraceManager.Debug("Return the identitiesInBuilding");
+                        return identitiesInBuilding;
+                    }
+                    RefreshIdentities();
+                }
                 return userInfoContainer.identities;
             }
             set
@@ -178,7 +190,15 @@
         {
             get
             {
-                if (userInfoContainer.userProfileShouldBeRefreshed) RefreshUserProfile();
+                if (userInfoContainer.userProfileShouldBeRefreshed)
+                {
+                    if (userProfileInBuilding != null)
+                    {
+                        TraceManager.Debug("Return the userProfileInBuilding");
+                        return userProfileInBuilding;
+                    }
+                    RefreshUserProfile();
+                }
                 return userInfoContainer.userProfile;
             }
             set
@@ -196,7 +216,15 @@
         {
             get
             {
-                if (userInfoContainer.languageShouldBeRefreshed) RefreshLanguage();
+                if (userInfoContainer.languageShouldBeRefreshed)
+                {
+                    if (languageInBuilding != null)
+                    {
+                        TraceManager.Debug("Return the languageInBuilding");
+                        return languageInBuilding;
+                    }
+                    RefreshLanguage();
+                }
                 return userInfoContainer.language;
             }
             set
@@ -251,7 +279,7 @@
             public bool propertiesShouldBeRefreshed = true;
             public string propertiesKey;
 
-            public TUserDB properties = default(TUserDB);
+            public TUserProperties properties = default(TUserProperties);
             #endregion
 
             #region userProfile
@@ -315,6 +343,13 @@
                             identitiesInBuilding.Add(value.Key, result.ToString());
                         }
                     }
+                    else if (heterogeneousElem.TagName == "CustomCode")
+                    {
+                        if (SetFromCustomCodeElement(identitiesInBuilding, heterogeneousElem))
+                        {
+                            CustomCodeIdentities(identitiesInBuilding);
+                        }
+                    }
                     else
                     {
                         throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > Identities");
@@ -326,14 +361,11 @@
             identitiesInBuilding = null;
         }
 
-        /// <summary>
-        /// Return true if find in cache
-        /// </summary>
-        /// <returns>True if find in cache</returns>
-        public virtual bool ResetUserInfoContainnerFromCache()
+        public virtual void CustomCodeIdentities(Dictionary<string, string> identities)
         {
-            return false;
+
         }
+
 
         private static string PreparePrincipalUserName(IIdentity Identity, string fromFieldName, bool removeDomain)
         {
@@ -388,6 +420,13 @@
                             if (!string.IsNullOrEmpty(userProfileKey)) userProfileKey += ",";
                             userProfileKey += SetFromWebService(userProfileInBuilding, heterogeneousElem);
                         }
+                        else if (heterogeneousElem.TagName == "CustomCode")
+                        {
+                            if (SetFromCustomCodeElement(userProfileInBuilding, heterogeneousElem))
+                            {
+                                CustomCodeUserProfile(userProfileInBuilding);
+                            }
+                        }
                         else
                         {
                             throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > UserProfile");
@@ -400,55 +439,11 @@
             }
         }
 
-        protected virtual void RefreshCoreRoles()
+        public virtual void CustomCodeUserProfile(Dictionary<string, string> userProfile)
         {
-            BaseRefreshCoreRoles();
-        }
-        public void BaseRefreshCoreRoles()
-        {
-            if (coreRolesInBuilding == null)
-            {
-                //Initialize Roles
-                coreRolesInBuilding = new List<string>();
 
-                HeterogeneousCollection rolesValues = BIASettingsReader.BIANetSection?.Authentication?.Roles;
-                if (rolesValues != null && rolesValues.Count > 0)
-                {
-                    foreach (IHeterogeneousConfigurationElement heterogeneousElem in rolesValues)
-                    {
-                        if (heterogeneousElem.TagName == "Value")
-                        {
-                            SetFromKeyElement(coreRolesInBuilding, heterogeneousElem);
-                        }
-                        else if (heterogeneousElem.TagName == "ADRole")
-                        {
-                            ValueElement ADRole = (ValueElement)heterogeneousElem;
-                            if (ADHelper.HasRole(UserGroups, Login, ADRole.Key))
-                            {
-                                coreRolesInBuilding.Add(ADRole.Key);
-                            }
-                        }
-                        else if (heterogeneousElem is CustomCodeElement)
-                        {
-                        }
-                        else
-                        {
-                            throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > Role");
-                        }
-                    }
-                }
-
-                if (AdditionnalRoles != null)
-                {
-                    foreach (string group in AdditionnalRoles)
-                    {
-                        if (!coreRolesInBuilding.Contains(group)) coreRolesInBuilding.Add(group);
-                    }
-                }
-                coreRoles = coreRolesInBuilding;
-                coreRolesInBuilding = null;
-            }
         }
+
 
         protected virtual void RefreshRoles()
         {
@@ -460,16 +455,40 @@
             if (rolesInBuilding == null)
             {
                 rolesInBuilding = new List<string>();
-                rolesInBuilding.AddRange(CoreRoles);
+                if (AdditionnalRoles != null)
+                {
+                    foreach (string group in AdditionnalRoles)
+                    {
+                        rolesInBuilding.Add(group);
+                    }
+                }
                 HeterogeneousCollection rolesValues = BIASettingsReader.BIANetSection?.Authentication?.Roles;
                 if (rolesValues != null && rolesValues.Count > 0)
                 {
                     foreach (IHeterogeneousConfigurationElement heterogeneousElem in rolesValues)
                     {
-                        if (heterogeneousElem is CustomCodeElement)
+                        if (heterogeneousElem.TagName == "Value")
                         {
-                            CustomCodeElement CustomCode = (CustomCodeElement)heterogeneousElem;
-                            this.GetType().GetMethod(CustomCode.Function).Invoke(this, new object[] { rolesInBuilding });
+                            SetFromKeyElement(rolesInBuilding, heterogeneousElem);
+                        }
+                        else if (heterogeneousElem.TagName == "ADRole")
+                        {
+                            ValueElement ADRole = (ValueElement)heterogeneousElem;
+                            if (ADHelper.HasRole(UserGroups, Login, ADRole.Key))
+                            {
+                                rolesInBuilding.Add(ADRole.Key);
+                            }
+                        }
+                        else if (heterogeneousElem is CustomCodeElement)
+                        {
+                            if (SetFromCustomCodeElement(rolesInBuilding, heterogeneousElem))
+                            {
+                                CustomCodeRoles(rolesInBuilding);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > Role");
                         }
                     }
                 }
@@ -478,6 +497,11 @@
                 rolesInBuilding = null;
                 userInfoContainer.rolesKey = Login;
             }
+        }
+
+        public virtual void CustomCodeRoles(List<string> basicRoles)
+        {
+
         }
 
 
@@ -496,7 +520,7 @@
         {
             if (propertiesInBuilding == null)
             {
-                propertiesInBuilding = new TUserDB();
+                propertiesInBuilding = new TUserProperties();
                 HeterogeneousCollection propertiesValues = BIASettingsReader.BIANetSection?.Authentication?.Properties;
                 if (propertiesValues != null && propertiesValues.Count > 0)
                 {
@@ -520,11 +544,10 @@
                         }
                         else if (heterogeneousElem.TagName ==  "CustomCode")
                         {
-                            SetFromCustomCodeElement(propertiesInBuilding, heterogeneousElem);
-                        }
-                        else if (heterogeneousElem.TagName == "CustomCodeAD")
-                        {
-                            SetFromCustomCodeADElement(propertiesInBuilding, heterogeneousElem);
+                            if (SetFromCustomCodeElement(propertiesInBuilding, heterogeneousElem))
+                            {
+                                CustomCodeProperties(propertiesInBuilding);
+                            }
                         }
                         else
                         {
@@ -534,9 +557,13 @@
                 }
 
                 Properties = propertiesInBuilding;
-                propertiesInBuilding = default(TUserDB);
+                propertiesInBuilding = default(TUserProperties);
                 userInfoContainer.propertiesKey = Login;
             }
+        }
+
+        public virtual void CustomCodeProperties(TUserProperties userProperties)
+        {
         }
 
 
@@ -585,10 +612,17 @@
                         else if (heterogeneousElem.TagName == "CustomCode")
                         {
                             CustomCodeElement customCode = (CustomCodeElement) heterogeneousElem;
-                            if (customCode != null && customCode.Function != null)
+                            if (customCode != null)
                             {
-                                languageInBuilding = (string)this.GetType().GetMethod(customCode.Function).Invoke(this, null);
-                                if (languageInBuilding != null) break;
+                                if (string.IsNullOrEmpty(customCode.Function))
+                                {
+                                    languageInBuilding = CustomCodeLanguage();
+                                }
+                                else
+                                {
+                                    languageInBuilding = (string)this.GetType().GetMethod(customCode.Function).Invoke(this, null);
+                                    if (languageInBuilding != null) break;
+                                }
                             }
                         }
                         else
@@ -598,7 +632,6 @@
                         if (languageInBuilding != null) break;
                     }
                 }
-
                 if (languageInBuilding == null)
                 {
                     languageInBuilding = "en-US";
@@ -607,8 +640,11 @@
                 languageInBuilding = null;
                 userInfoContainer.languageKey = Login;
             }
+        }
 
-
+        public virtual string CustomCodeLanguage()
+        {
+            return null;
         }
 
         public virtual void FinalizePreparation()
@@ -691,8 +727,8 @@
                     }
                     else if (value.Object == "Properties")
                     {
-                        if (propertiesInBuilding != null) srcObject = propertiesInBuilding;
-                        else srcObject = Properties;
+                        PropertyInfo propertySrcObject = srcObject.GetType().GetProperty(value.Object);
+                        srcObject = propertySrcObject.GetValue(srcObject);
                     }
 
                     if (srcObject != null)
@@ -736,25 +772,22 @@
             }
         }
 
-        private void SetFromCustomCodeElement(object target, IHeterogeneousConfigurationElement heterogeneousElem)
+        private bool SetFromCustomCodeElement(object target, IHeterogeneousConfigurationElement heterogeneousElem)
         {
             CustomCodeElement CustomCode = (CustomCodeElement)heterogeneousElem;
-            if (!string.IsNullOrEmpty(CustomCode?.Function))
+            if (CustomCode != null)
             {
-                this.GetType().GetMethod(CustomCode.Function).Invoke(this, new object[] { target });
+                if (string.IsNullOrEmpty(CustomCode.Function))
+                {
+                    return true;
+                }
+                else
+                {
+                    this.GetType().GetMethod(CustomCode.Function).Invoke(this, new object[] { target });
+                }
             }
+            return false;
         }
-
-        private void SetFromCustomCodeADElement(object target, IHeterogeneousConfigurationElement heterogeneousElem)
-        {
-            CustomCodeElement customCodeAD = (CustomCodeElement)heterogeneousElem;
-
-            if (customCodeAD != null && customCodeAD.Function != null)
-            {
-                this.GetType().GetMethod(customCodeAD.Function).Invoke(this, new object[] { target });
-            }
-        }
-
 
         private void SetFromADFieldElement(object target, IHeterogeneousConfigurationElement heterogeneousElem)
         {
@@ -787,7 +820,7 @@
             }
         }
         #endregion
-        #region SetToDictionary
+        #region SetToList
         private void SetFromKeyElement(List<string> target, IHeterogeneousConfigurationElement heterogeneousElem)
         {
             ValueElement value = (ValueElement)heterogeneousElem;

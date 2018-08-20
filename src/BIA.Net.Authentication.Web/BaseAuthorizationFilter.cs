@@ -27,9 +27,9 @@ namespace BIA.Net.Authentication.Web
         public HttpResponseMessage HttpResponseMessage { get; set; }
     }
 
-    public class BaseAuthorizationFilter<TUserInfo, TUserDB>
-        where TUserInfo : AUserInfo<TUserDB>, new()
-        where TUserDB : IUserDB, new()
+    public class BaseAuthorizationFilter<TUserInfo, TUserProperties>
+        where TUserInfo : AUserInfo<TUserProperties>, new()
+        where TUserProperties : IUserProperties, new()
     {
         /// <summary>
         /// Gets or sets role at format :  Role1,Role1bis:~/Controller1/Action1;Role2:~/Controller1/Action1
@@ -81,7 +81,7 @@ namespace BIA.Net.Authentication.Web
                 HttpSessionState Session = HttpContext.Current.Session;
                 if (Session != null)
                 {
-                    AUserInfo<TUserDB>.UserInfoContainer container = (AUserInfo<TUserDB>.UserInfoContainer)Session[AuthenticationConstants.SessionUserInfo];
+                    AUserInfo<TUserProperties>.UserInfoContainer container = (AUserInfo<TUserProperties>.UserInfoContainer)Session[AuthenticationConstants.SessionUserInfo];
                     if (Session[AuthenticationConstants.SessionUserInfo] != null)
                     {
                         user.userInfoContainer = container;
@@ -139,10 +139,10 @@ namespace BIA.Net.Authentication.Web
             user.userInfoContainer.rolesShouldBeRefreshed = shouldRefreshUserRoles;
         }
 
-        static protected TUserInfo ConnectUser(HttpSessionState Session, TUserDB aspNetUser, string localUserId)
+        static protected TUserInfo ConnectUser(HttpSessionState Session, TUserProperties aspNetUser, string localUserId)
         {
             TUserInfo user = new TUserInfo();
-            user.userInfoContainer = (AUserInfo<TUserDB>.UserInfoContainer) Session[AuthenticationConstants.SessionUserInfo];
+            user.userInfoContainer = (AUserInfo<TUserProperties>.UserInfoContainer) Session[AuthenticationConstants.SessionUserInfo];
             user.Properties = aspNetUser;
             if (user.Identities.Keys.Contains("LocalUserID")) user.Identities.Remove("LocalUserID");
             user.Identities.Add("LocalUserID", localUserId);
@@ -154,8 +154,8 @@ namespace BIA.Net.Authentication.Web
         static protected TUserInfo DisconnectUser(HttpSessionState Session)
         {
             TUserInfo user = new TUserInfo();
-            user.userInfoContainer = (AUserInfo<TUserDB>.UserInfoContainer)Session[AuthenticationConstants.SessionUserInfo];
-            user.Properties = default(TUserDB);
+            user.userInfoContainer = (AUserInfo<TUserProperties>.UserInfoContainer)Session[AuthenticationConstants.SessionUserInfo];
+            user.Properties = default(TUserProperties);
             if (user.Identities.Keys.Contains("LocalUserID")) user.Identities.Remove("LocalUserID");
             user.AdditionnalRoles = null;
             RefreshUser(user);

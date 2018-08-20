@@ -25,7 +25,7 @@
         /// <param name="userName">Name of the user.</param>
         /// <returns>Nothing: Function to override</returns>
         /// <exception cref="System.Exception">Please overide GetAspNetUserByName</exception>
-        public virtual IUserDB GetAspNetUserByName(string userName)
+        public virtual IUserProperties GetAspNetUserByName(string userName)
         {
             throw new Exception("Please overide GetAspNetUserByName");
         }
@@ -36,25 +36,25 @@
         /// <param name="aspNetUser">The ASP net user.</param>
         /// <param name="value">if set to <c>true</c> [value].</param>
         /// <returns>Nothing: Function to override</returns>
-        /// <exception cref="System.Exception">Please overide ResetDAIEnable</exception>
-        public virtual IUserADinDB ResetDAIEnable(IUserADinDB aspNetUser, bool value)
+        /// <exception cref="System.Exception">Please overide SetUserValidity</exception>
+        public virtual IUserPropertiesInDB SetUserValidity(IUserPropertiesInDB aspNetUser, bool value)
         {
-            throw new Exception("Please overide ResetDAIEnable");
+            throw new Exception("Please overide SetUserValidity");
         }
 
         /// <summary>
         /// Synchronizes all user.
         /// </summary>
         /// <param name="adGroupsAsApplicationUsers">List of ad groups</param>
-        /// <typeparam name="TUserADinDB">The type of the user DB table DTO.</typeparam>
+        /// <typeparam name="TUserPropertiesInDB">The type of the user DB table DTO.</typeparam>
         /// <returns>List of user deleted</returns>
-        public virtual List<string> SynchronizeUsers<TUserInfo, TUserDB, TUserADinDB>(List<ADGroup> adGroupsAsApplicationUsers)
-               where TUserADinDB : IUserADinDB, new()
-               where TUserInfo : AUserInfo<TUserDB>, new()
-               where TUserDB : IUserDB, new()
+        public virtual List<string> SynchronizeUsers<TUserInfo, TUserProperties, TUserPropertiesInDB>(List<ADGroup> adGroupsAsApplicationUsers)
+               where TUserPropertiesInDB : IUserPropertiesInDB, new()
+               where TUserInfo : AUserInfo<TUserProperties>, new()
+               where TUserProperties : IUserProperties, new()
         {
             List<string> listUserInGroup = new List<string>();
-            List<IUserADinDB> listUserName = GetAllUsersInDB();
+            List<IUserPropertiesInDB> listUserName = GetAllUsersInDB();
             foreach (ADGroup group in adGroupsAsApplicationUsers)
             {
                 List<UserPrincipal> listUsers = group.GetAllUsersInGroup();
@@ -63,7 +63,7 @@
                 {
                     string userName = ADHelper.GetUserName(user);
                     listUserInGroup.Add(userName);
-                    IUserADinDB findedUser = listUserName.Where(a => a.Login == userName).FirstOrDefault();
+                    IUserPropertiesInDB findedUser = listUserName.Where(a => a.BusinessID == userName).FirstOrDefault();
 
                     if (findedUser == null)
                     {
@@ -72,13 +72,13 @@
                         userInfo.BaseRefreshProperties();
                         // Create the missing user
 
-                        IUserADinDB adUserCreated = Insert(userInfo.Properties.UserAdInDB);
-                        listUserName.Add(new TUserADinDB { Login = userName, DAIEnable = true });
+                        IUserPropertiesInDB adUserCreated = Insert(userInfo.Properties.UserPropertiesInDB);
+                        listUserName.Add(new TUserPropertiesInDB { BusinessID = userName, IsValid = true });
                     }
-                    else if (findedUser.DAIEnable == false)
+                    else if (findedUser.IsValid == false)
                     {
-                        findedUser.DAIEnable = true;
-                        IUserADinDB updatedAspNetUser = ResetDAIEnable(findedUser, true);
+                        findedUser.IsValid = true;
+                        IUserPropertiesInDB updatedAspNetUser = SetUserValidity(findedUser, true);
                     }
                 }
             }
@@ -86,13 +86,13 @@
             List<string> usersDeleted = new List<string>();
 
             // check users to unactive
-            foreach (TUserADinDB aspNetUser in listUserName)
+            foreach (TUserPropertiesInDB aspNetUser in listUserName)
             {
-                if (!listUserInGroup.Contains(aspNetUser.Login) && aspNetUser.DAIEnable == true)
+                if (!listUserInGroup.Contains(aspNetUser.BusinessID) && aspNetUser.IsValid == true)
                 {
-                    usersDeleted.Add(aspNetUser.Login);
-                    aspNetUser.DAIEnable = false;
-                    IUserADinDB updatedAspNetUser = ResetDAIEnable(aspNetUser, false);
+                    usersDeleted.Add(aspNetUser.BusinessID);
+                    aspNetUser.IsValid = false;
+                    IUserPropertiesInDB updatedAspNetUser = SetUserValidity(aspNetUser, false);
                 }
             }
 
@@ -105,7 +105,7 @@
         /// <param name="aspUser">The ASP user.</param>
         /// <returns>Nothing: Function to override</returns>
         /// <exception cref="System.Exception">Please overide Insert</exception>
-        protected virtual IUserADinDB Insert(IUserADinDB aspUser)
+        protected virtual IUserPropertiesInDB Insert(IUserPropertiesInDB aspUser)
         {
             throw new Exception("Please overide Insert");
         }
@@ -115,7 +115,7 @@
         /// </summary>
         /// <returns>Nothing: Function to override</returns>
         /// <exception cref="System.Exception">Please overide GetAllUsersInDB</exception>
-        protected virtual List<IUserADinDB> GetAllUsersInDB()
+        protected virtual List<IUserPropertiesInDB> GetAllUsersInDB()
         {
             throw new Exception("Please overide GetAllUsersInDB");
         }

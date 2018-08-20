@@ -17,11 +17,11 @@ namespace BIA.Net.Authentication.Controllers
     /// Common controller for the whole application
     /// </summary>
     /// <seealso cref="System.Web.Mvc.Controller" />
-    public class CommonAuthentController<TServiceSynchronizeUser, TUserInfo, TUserDB, TUserADinDB> : Controller
+    public class CommonAuthentController<TServiceSynchronizeUser, TUserInfo, TUserProperties, TUserPropertiesInDB> : Controller
         where TServiceSynchronizeUser : AServiceSynchronizeUser, new()
-        where TUserInfo : AUserInfo<TUserDB>, new()
-        where TUserDB : IUserDB, new()
-        where TUserADinDB : IUserADinDB, new()
+        where TUserInfo : AUserInfo<TUserProperties>, new()
+        where TUserProperties : IUserProperties, new()
+        where TUserPropertiesInDB : IUserPropertiesInDB, new()
     {
         /// <summary>
         /// Changes the session language according to the language selected by user
@@ -49,7 +49,7 @@ namespace BIA.Net.Authentication.Controllers
         [HttpPost]
         public virtual void RefreshUserInfo()
         {
-            SafranAuthorizationFilter<TUserInfo, TUserDB>.RefreshAllUserInfo(((TUserInfo)User).Login);
+            SafranAuthorizationFilter<TUserInfo, TUserProperties>.RefreshAllUserInfo(((TUserInfo)User).Login);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace BIA.Net.Authentication.Controllers
         [System.Web.Mvc.Authorize(Roles = BIAConstantes.RoleInternal)]
         public virtual ActionResult RefreshUserProfile(string login)
         {
-            SafranAuthorizationFilter<TUserInfo, TUserDB>.RefreshUserProfile(login);
+            SafranAuthorizationFilter<TUserInfo, TUserProperties>.RefreshUserProfile(login);
             return Content("User " + login + " is refreshed.");
         }
 
@@ -77,13 +77,13 @@ namespace BIA.Net.Authentication.Controllers
             {
                 using (TServiceSynchronizeUser serviceUserDB = new TServiceSynchronizeUser())
                 {
-                    userDeleted = serviceUserDB.SynchronizeUsers<TUserInfo, TUserDB, TUserADinDB>(ADHelper.GetADGroupsForRole("User"));
+                    userDeleted = serviceUserDB.SynchronizeUsers<TUserInfo, TUserProperties, TUserPropertiesInDB>(ADHelper.GetADGroupsForRole("User"));
                 }
             }
 
             foreach (string userName in userDeleted)
             {
-                SafranAuthorizationFilter<TUserInfo, TUserDB>.RefreshUserRoles(userName);
+                SafranAuthorizationFilter<TUserInfo, TUserProperties>.RefreshUserRoles(userName);
             }
 
             return this.Json(string.Empty);

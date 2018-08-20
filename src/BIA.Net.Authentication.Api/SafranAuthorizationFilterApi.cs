@@ -26,9 +26,9 @@ namespace BIA.Net.Authentication.Api
     /// <seealso cref="System.Web.Mvc.IAuthorizationFilter" />
     /// <typeparam name="TServiceSynchronizeUser">The type of the service to synchronize users in DB.</typeparam>
     /// <typeparam name="TUserInfo">The type of the format stocked in session variable.</typeparam>
-    public class SafranAuthorizationFilterApi<TUserInfo, TUserDB> : BaseAuthorizationFilter<TUserInfo, TUserDB>, IAuthorizationFilter
-        where TUserInfo : AUserInfo<TUserDB>, new()
-        where TUserDB : IUserDB, new()
+    public class SafranAuthorizationFilterApi<TUserInfo, TUserProperties> : BaseAuthorizationFilter<TUserInfo, TUserProperties>, IAuthorizationFilter
+        where TUserInfo : AUserInfo<TUserProperties>, new()
+        where TUserProperties : IUserProperties, new()
     {
         public bool AllowMultiple
         {
@@ -55,7 +55,7 @@ namespace BIA.Net.Authentication.Api
             user = PrepareUserInfo(principal, Session);
             actionContext.RequestContext.Principal = (IPrincipal) user;*/
 
-            TUserInfo user = (TUserInfo)AUserInfo<TUserDB>.GetCurrentUserInfo();
+            TUserInfo user = (TUserInfo)AUserInfo<TUserProperties>.GetCurrentUserInfo();
 
             RolesRedirectURL roleRedirect;
             RolesRedirectAction action = CheckAuthorize(user, out roleRedirect, IsAllowAnonymous, DisableRedirectRoles, actionContext);
@@ -106,7 +106,7 @@ namespace BIA.Net.Authentication.Api
             return null;
         }
 
-        static public void ConnectUser(TUserDB aspNetUser, string localUserId)
+        static public void ConnectUser(TUserProperties aspNetUser, string localUserId)
         {
             HttpContext.Current.User = (IPrincipal)ConnectUser(HttpContext.Current.Session, aspNetUser, localUserId);
         }

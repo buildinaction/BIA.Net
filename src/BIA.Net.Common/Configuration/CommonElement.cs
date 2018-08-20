@@ -134,8 +134,6 @@ namespace BIA.Net.Common.Configuration
                         return new ADFieldElement(elementName);
                     case "Value":
                         return new ValueElement(elementName);
-                    case "CustomCodeAD":
-                        return new CustomCodeElement(elementName);
                     case "CustomCode":
                         return new CustomCodeElement(elementName);
                     case "WebService":
@@ -310,7 +308,7 @@ namespace BIA.Net.Common.Configuration
         public class CustomCodeElement : HeterogeneousConfigurationElementBase
         {
             public CustomCodeElement(string elementName) : base(elementName) { }
-            [ConfigurationProperty("function", IsRequired = true)]
+            [ConfigurationProperty("function", IsRequired = false)]
             public string Function
             {
                 get { return (string)this["function"]; }
