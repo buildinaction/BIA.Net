@@ -85,6 +85,12 @@
         static MainDialogDiv = null;
 
         public dialogElem: JQuery;
+        private events: JQuery;
+        get Events(): JQuery {
+            if (this.events == null) this.events = $('<events/>');
+            return this.events;
+        }
+
         public children: DialogDiv[];
         public parent: DialogDiv;
         public type: DialogDivType;
@@ -103,6 +109,7 @@
 
         constructor(dialogElem: JQuery, parent: DialogDiv, type: DialogDivType) {
             this.dialogElem = dialogElem;
+            this.events = null;
             this.children = [];
             if (parent != null) parent.AddDialogToChildList(this);
             this.parent = parent;
@@ -254,6 +261,10 @@
                     entry.DisposeDialog();
                     //entry.dialogElem.remove();
                 });
+            }
+            if (this.events != null) {
+                this.events.remove();
+                this.events = null;
             }
             this.children = [];
         }

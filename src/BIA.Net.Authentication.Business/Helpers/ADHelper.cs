@@ -9,133 +9,9 @@
     using System.Reflection;
     using System.Security.Principal;
     using System.Text.RegularExpressions;
+    using static BIA.Net.Common.Configuration.AuthenticationElement.ParametersElement;
     using static BIA.Net.Common.Configuration.CommonElement;
 
-    public class ADGroup
-    {
-        public ADGroup(string groupName)
-        {
-            GroupName = groupName;
-            if (groupName.Contains('\\'))
-            {
-                string[] split = groupName.Split('\\');
-                GroupShortName = split[split.Length - 1];
-            }
-            else GroupShortName = groupName;
-            IsInit = false;
-            IsValid = false;
-            Domain = null;
-            Group = null;
-        }
-
-        public string GroupName { get; private set; }
-        public string GroupShortName { get; private set; }
-        public bool IsInit { get; private set; }
-        public bool IsValid { get; private set; }
-        public string Domain { get; private set; }
-        public GroupPrincipal Group { get; private set; }
-
-        public bool HasMember(List<string> userGroups, string userName)
-        {
-            if (userGroups != null)
-            {
-                return userGroups.Contains(GroupName);
-            }
-            else if (!string.IsNullOrEmpty(userName))
-            {
-                List<UserPrincipal> allUser = GetAllUsersInGroup();
-                return allUser.Any(u => u.Name == userName);
-            }
-
-            return false;
-        }
-
-
-
-        /// <summary>
-        /// Gets the user in group.
-        /// </summary>
-        /// <param name="groupName">Name of the group.</param>
-        /// <returns>List of user in group</returns>
-
-        public  List<UserPrincipal> GetAllUsersInGroup()
-        {
-            Init();
-            List<UserPrincipal> listUsers = new List<UserPrincipal>();
-            List<GroupPrincipal> listTreatedGroups = new List<GroupPrincipal>();
-            // if found....
-            if (IsValid)
-            {
-                GetAllUsersFromGroupRecursivly(Group, listUsers, listTreatedGroups);
-            }
-
-            return listUsers;
-        }
-
-        private static void GetAllUsersFromGroupRecursivly(GroupPrincipal group, List<UserPrincipal> listUsers, List<GroupPrincipal> listTreatedGroups)
-        {
-            listTreatedGroups.Add(group);
-            // iterate over members
-            foreach (Principal p in group.GetMembers())
-            {
-                Console.WriteLine("{0}: {1}", p.StructuralObjectClass, p.DisplayName);
-
-                // do whatever you need to do to those members
-
-
-                if (p is UserPrincipal)
-                {
-                    UserPrincipal theUser = p as UserPrincipal;
-                    if (!listUsers.Select(u => u.DistinguishedName).Contains(theUser.DistinguishedName))
-                    {
-                        listUsers.Add(theUser);
-                    }
-                }
-                else if (p is GroupPrincipal)
-                {
-                    GroupPrincipal theGroup = p as GroupPrincipal;
-                    if (!listTreatedGroups.Select(g => g.DistinguishedName).Contains(theGroup.DistinguishedName))
-                    {
-                        GetAllUsersFromGroupRecursivly(theGroup, listUsers, listTreatedGroups);
-                    }
-                }
-            }
-        }
-
-        private void Init()
-        {
-            if (!IsInit)
-            {
-                List<string> adDomains = BIASettingsReader.BIANetSection?.Authentication?.Parameters?.ADDomains;
-                GroupPrincipal group = null;
-
-                if (adDomains != null)
-                {
-                    foreach (string domain in adDomains)
-                    {
-                        try
-                        {
-                            PrincipalContext ctx = new PrincipalContext(ContextType.Domain, domain);
-                            group = GroupPrincipal.FindByIdentity(ctx, GroupName);
-                            if (group != null)
-                            {
-                                Domain = domain;
-                                Group = group;
-                                IsValid = true;
-                                break;
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            TraceManager.Warn("ADHelper", "CreateUserFromAD", "Could not join Domain :" + domain, e);
-                        }
-                    }
-                }
-            }
-
-            IsInit = true;
-        }
-    }
 
     /// <summary>
     /// AuthHelper
@@ -207,16 +83,6 @@
                 }
                 return adRoles;
             }
-        }
-
-        public static bool HasRole(List<string> userGroups, string userName, string role)
-        {
-            List<ADGroup> groups = GetADGroupsForRole(role);
-            foreach (ADGroup adgroup in groups)
-            {
-                if (adgroup.HasMember(userGroups, userName)) return true;
-            }
-            return false;
         }
 
         /// <summary>
@@ -307,9 +173,11 @@
                     }
                 }
             }
-
             return new List<string>();
         }
+
+
+
 
         public static List<string> GetGroups(WindowsIdentity wi)
         {
@@ -325,15 +193,18 @@
                     string groupValue = group.Value;
                     if (!CacheGroupName.TryGetValue(groupValue, out groupName))
                     {
+                        TraceManager.Debug("Try resolve name : " + groupValue);
                         groupName = group.Translate(typeof(NTAccount)).ToString();
                         CacheGroupName.Add(groupValue, groupName);
+                        TraceManager.Debug("Name resolve : " + groupName);
                     }
 
                     result.Add(groupName);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    TraceManager.Debug("ADHelper", "GetGroups", "Error");
+                    TraceManager.Debug("Error");
+                    TraceManager.Warn("Error when treat " + group.Value, e);
                 }
             }
 

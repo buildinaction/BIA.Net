@@ -382,6 +382,7 @@ var BIA;
             var DialogDiv = (function () {
                 function DialogDiv(dialogElem, parent, type) {
                     this.dialogElem = dialogElem;
+                    this.events = null;
                     this.children = [];
                     if (parent != null)
                         parent.AddDialogToChildList(this);
@@ -395,6 +396,15 @@ var BIA;
                         dialogElem.addClass("BiaNetDialogDiv");
                     }
                 }
+                Object.defineProperty(DialogDiv.prototype, "Events", {
+                    get: function () {
+                        if (this.events == null)
+                            this.events = $('<events/>');
+                        return this.events;
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
                 DialogDiv.prototype.IsMainDialogDiv = function () {
                     return (this.parent == null);
                 };
@@ -535,6 +545,10 @@ var BIA;
                             //entry.dialogElem.remove();
                         });
                     }
+                    if (this.events != null) {
+                        this.events.remove();
+                        this.events = null;
+                    }
                     this.children = [];
                 };
                 DialogDiv.prototype.DisposeDialog = function () {
@@ -671,7 +685,7 @@ var BIA;
                     evt.BIANetDialogData.eventData = eventData;
                     evt.BIANetDialogData.targetElem = targetElem;
                     $(window).trigger(evt);
-                    dialogDiv.dialogElem.trigger(evt);
+                    dialogDiv.Events.trigger(evt);
                 };
                 return DialogEvent;
             }());

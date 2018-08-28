@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
+using System.Web.Http.Filters;
 
-namespace BIA.Net.Authentication
+namespace BIA.Net.Authentication.WebAPI
 {
-    public class DisableRedirectAttribute : FilterAttribute
+    public class DisableRedirectAttribute : AuthorizationFilterAttribute
     {
         //
         // Summary:
@@ -14,6 +14,7 @@ namespace BIA.Net.Authentication
         // Returns:
         //     The user roles that are authorized to access the controller or action method.
         public string Roles { get; set; }
+
         public List<string> GetRoles()
         {
             return Roles.Split(',').ToList(); ;

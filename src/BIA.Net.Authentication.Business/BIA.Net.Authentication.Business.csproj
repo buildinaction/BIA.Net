@@ -90,6 +90,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\ADGroup.cs" />
     <Compile Include="Helpers\ADHelper.cs" />
     <Compile Include="AServiceSynchronizeUser.cs" />
     <Compile Include="Helpers\AUserInfo.cs" />

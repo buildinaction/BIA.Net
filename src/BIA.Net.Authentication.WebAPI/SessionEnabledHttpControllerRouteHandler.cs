@@ -1,4 +1,4 @@
-﻿namespace BIA.Net.Authentication.Api
+﻿namespace BIA.Net.Authentication.WebAPI
 {
     using System.Web;
     using System.Web.Http.WebHost;

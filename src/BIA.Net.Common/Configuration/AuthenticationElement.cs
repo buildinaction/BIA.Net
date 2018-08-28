@@ -82,6 +82,49 @@ namespace BIA.Net.Common.Configuration
                 set { this["Values"] = value; }
             }
 
+            public enum ADRolesModes
+            {
+                IISGroup=1,
+                ADUserFirst=2,
+                ADGroupFirst=3,
+            }
+
+            private ADRolesModes _adRolesMode = 0;
+            /// <summary>
+            /// Return the mode to use to determine if user have a role with tag ADRole
+            /// </summary>
+            public ADRolesModes ADRolesMode
+            {
+                get
+                {
+                    if (_adRolesMode == 0)
+                    {
+                        KeyValueElement adRolesMode = Values?.GetElemByKey("ADRolesMode");
+                        if (adRolesMode != null)
+                        {
+                            switch (adRolesMode.Value)
+                            {
+                                case "IISGroup":
+                                    _adRolesMode = ADRolesModes.IISGroup;
+                                    break;
+                                case "ADUserFirst":
+                                    _adRolesMode = ADRolesModes.ADUserFirst;
+                                    break;
+                                case "ADGroupFirst":
+                                    _adRolesMode = ADRolesModes.ADGroupFirst;
+                                    break;
+                                default:
+                                    throw new ConfigurationErrorsException("ADRolesMode not managed :" + adRolesMode.Value + ". Authorized values are IISGroup, ADUserFirst or ADGroupFirst.");
+                            }
+                        }
+                        else
+                        {
+                            _adRolesMode = ADRolesModes.IISGroup;
+                        }
+                    }
+                    return _adRolesMode;
+                }
+            }
             private List<string> _adDomaines = null;
             public List<string> ADDomains
             {

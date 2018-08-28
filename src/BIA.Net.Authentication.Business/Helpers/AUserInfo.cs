@@ -16,6 +16,7 @@
     using System.Text;
     using System.Text.RegularExpressions;
     using static BIA.Net.Common.Configuration.AuthenticationElement.LanguageElement;
+    using static BIA.Net.Common.Configuration.AuthenticationElement.ParametersElement;
     using static BIA.Net.Common.Configuration.CommonElement;
 
     /// <summary>
@@ -59,18 +60,32 @@
             }
         }
 
-        private bool isUserGroupsInit = false;
-        private List<string> userGroups = null;
-        protected List<string> UserGroups
+        private bool isUserGroupsFromIISInit = false;
+        private List<string> userGroupsFromIIS = null;
+        public  List<string> UserGroupsFromIIS
         {
             get
             {
-                if (!isUserGroupsInit)
+                if (!isUserGroupsFromIISInit)
                 {
-                    userGroups = ADHelper.GetGroups(Login);
-                    isUserGroupsInit = true;
+                    userGroupsFromIIS = ADHelper.GetGroups((WindowsIdentity) Identity);
+                    isUserGroupsFromIISInit = true;
                 }
-                return userGroups;
+                return userGroupsFromIIS;
+            }
+        }
+        private bool isUserGroupsFromADInit = false;
+        private List<string> userGroupsFromAD = null;
+        public List<string> UserGroupsFromAD
+        {
+            get
+            {
+                if (!isUserGroupsFromADInit)
+                {
+                    userGroupsFromAD = ADHelper.GetGroups(Login);
+                    isUserGroupsFromADInit = true;
+                }
+                return userGroupsFromAD;
             }
         }
 
@@ -474,7 +489,7 @@
                         else if (heterogeneousElem.TagName == "ADRole")
                         {
                             ValueElement ADRole = (ValueElement)heterogeneousElem;
-                            if (ADHelper.HasRole(UserGroups, Login, ADRole.Key))
+                            if (HasRole(ADRole.Key))
                             {
                                 rolesInBuilding.Add(ADRole.Key);
                             }
@@ -498,6 +513,30 @@
                 userInfoContainer.rolesKey = Login;
             }
         }
+
+        private bool HasRole(string role)
+        {
+            ADRolesModes? mode = BIASettingsReader.BIANetSection?.Authentication?.Parameters?.ADRolesMode;
+            if (mode == null) mode = ADRolesModes.IISGroup;
+            List<ADGroup> groups = ADHelper.GetADGroupsForRole(role);
+            foreach (ADGroup adgroup in groups)
+            {
+                switch (mode)
+                {
+                    case ADRolesModes.IISGroup:
+                        return UserGroupsFromIIS.Contains(adgroup.GroupName);
+                    case ADRolesModes.ADUserFirst:
+                        return UserGroupsFromAD.Contains(adgroup.GroupName);
+                    case ADRolesModes.ADGroupFirst:
+                        return adgroup.IsUserInGroup(Login);
+                    default:
+                        return false;
+                }
+
+            }
+            return false;
+        }
+
 
         public virtual void CustomCodeRoles(List<string> basicRoles)
         {
@@ -541,6 +580,10 @@
                         else if (heterogeneousElem is FunctionElement)
                         {
                             SetFromFunctionElement(propertiesInBuilding, heterogeneousElem);
+                        }
+                        else if (heterogeneousElem is WindowsIdentityElement)
+                        {
+                            SetFromWindowsIdentityElement(propertiesInBuilding, heterogeneousElem);
                         }
                         else if (heterogeneousElem.TagName ==  "CustomCode")
                         {
@@ -768,6 +811,18 @@
                         object result = value.Type.GetProperty(value.Property).GetValue(null, null);
                         propertyInfo.SetValue(target, Convert.ChangeType(result, propertyInfo.PropertyType));
                     }
+                }
+            }
+        }
+        private void SetFromWindowsIdentityElement(object target, IHeterogeneousConfigurationElement heterogeneousElem)
+        {
+            WindowsIdentityElement value = (WindowsIdentityElement)heterogeneousElem;
+            if (value.IdentityField != null)
+            {
+                PropertyInfo propertyInfo = target.GetType().GetProperty(value.Key);
+                if (propertyInfo != null)
+                {
+                    propertyInfo.SetValue(target, Convert.ChangeType(PreparePrincipalUserName(Identity, value.IdentityField, value.RemoveDomain), propertyInfo.PropertyType));
                 }
             }
         }

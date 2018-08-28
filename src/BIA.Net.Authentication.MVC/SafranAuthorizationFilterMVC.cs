@@ -2,7 +2,7 @@
 // Copyright (c) Safran. All rights reserved.
 // </copyright>
 
-namespace BIA.Net.Authentication
+namespace BIA.Net.Authentication.MVC
 {
     using Business;
     using Web;
@@ -23,14 +23,14 @@ namespace BIA.Net.Authentication
     /// <typeparam name="TServiceSynchronizeUser">The type of the service to synchronize users in DB.</typeparam>
     /// <typeparam name="TUserInfo">The type of the format stocked in session variable.</typeparam>
     /// <typeparam name="TUserProperties">The type of the user stocked in db.</typeparam>
-    public class SafranAuthorizationFilter<TUserInfo, TUserProperties> : BaseAuthorizationFilter<TUserInfo, TUserProperties>, IAuthorizationFilter
+    public class SafranAuthorizationFilterMVC<TUserInfo, TUserProperties> : BaseAuthorizationFilter<TUserInfo, TUserProperties>, IAuthorizationFilter
         where TUserInfo : AUserInfo<TUserProperties>, new()
         where TUserProperties : IUserProperties, new()
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SafranAuthorizationFilter{TServiceSynchronizeUser, TUserInfo}"/> class.
+        /// Initializes a new instance of the <see cref="SafranAuthorizationFilterMVC{TServiceSynchronizeUser, TUserInfo}"/> class.
         /// </summary>
-        public SafranAuthorizationFilter(string roles = null, List<RolesRedirectURL> rolesRedirect = null, string rolesAllowAnonymous = null) 
+        public SafranAuthorizationFilterMVC(string roles = null, List<RolesRedirectURL> rolesRedirect = null, string rolesAllowAnonymous = null) 
             : base (roles,rolesRedirect,rolesAllowAnonymous)
         { }
 

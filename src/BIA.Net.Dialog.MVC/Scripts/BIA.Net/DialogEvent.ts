@@ -16,7 +16,7 @@ module BIA.Net.Dialog {
             evt.BIANetDialogData.targetElem = targetElem;
 
             $(window).trigger(evt);
-            dialogDiv.dialogElem.trigger(evt);
+            dialogDiv.Events.trigger(evt);
         }
     }
 }

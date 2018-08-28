@@ -45,13 +45,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Business", "BIA.Net
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Api", "BIA.Net.Api\BIA.Net.Api.csproj", "{830D2015-2332-4B37-8A3E-19B807B5876D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Authentication.Api", "BIA.Net.Authentication.Api\BIA.Net.Authentication.Api.csproj", "{9A663C5A-AA29-4D50-A70A-008B1F3181FC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Authentication.Business", "BIA.Net.Authentication.Business\BIA.Net.Authentication.Business.csproj", "{81B573D0-3FBA-4378-A63B-CECEDFC11A16}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Authentication.Web", "BIA.Net.Authentication.Web\BIA.Net.Authentication.Web.csproj", "{0E47F422-94B5-46AB-BB28-6334CAEDEC8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Authentication", "BIA.Net.Authentication\BIA.Net.Authentication.csproj", "{52F0EC27-F6EC-43F5-8188-C5FEC2569A76}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Authentication.WebAPI", "BIA.Net.Authentication.WebAPI\BIA.Net.Authentication.WebAPI.csproj", "{9A663C5A-AA29-4D50-A70A-008B1F3181FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Authentication.MVC", "BIA.Net.Authentication.MVC\BIA.Net.Authentication.MVC.csproj", "{52F0EC27-F6EC-43F5-8188-C5FEC2569A76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,10 +127,6 @@ Global
 		{830D2015-2332-4B37-8A3E-19B807B5876D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{830D2015-2332-4B37-8A3E-19B807B5876D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{830D2015-2332-4B37-8A3E-19B807B5876D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9A663C5A-AA29-4D50-A70A-008B1F3181FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A663C5A-AA29-4D50-A70A-008B1F3181FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A663C5A-AA29-4D50-A70A-008B1F3181FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9A663C5A-AA29-4D50-A70A-008B1F3181FC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{81B573D0-3FBA-4378-A63B-CECEDFC11A16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{81B573D0-3FBA-4378-A63B-CECEDFC11A16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81B573D0-3FBA-4378-A63B-CECEDFC11A16}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -139,6 +135,10 @@ Global
 		{0E47F422-94B5-46AB-BB28-6334CAEDEC8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E47F422-94B5-46AB-BB28-6334CAEDEC8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E47F422-94B5-46AB-BB28-6334CAEDEC8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A663C5A-AA29-4D50-A70A-008B1F3181FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A663C5A-AA29-4D50-A70A-008B1F3181FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A663C5A-AA29-4D50-A70A-008B1F3181FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A663C5A-AA29-4D50-A70A-008B1F3181FC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{52F0EC27-F6EC-43F5-8188-C5FEC2569A76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{52F0EC27-F6EC-43F5-8188-C5FEC2569A76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52F0EC27-F6EC-43F5-8188-C5FEC2569A76}.Release|Any CPU.ActiveCfg = Release|Any CPU

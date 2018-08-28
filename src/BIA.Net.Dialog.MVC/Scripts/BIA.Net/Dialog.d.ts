@@ -50,6 +50,8 @@ declare module BIA.Net.Dialog {
         static AllDialogDiv: DialogDiv[];
         static MainDialogDiv: any;
         dialogElem: JQuery;
+        private events;
+        Events: JQuery;
         children: DialogDiv[];
         parent: DialogDiv;
         type: DialogDivType;
