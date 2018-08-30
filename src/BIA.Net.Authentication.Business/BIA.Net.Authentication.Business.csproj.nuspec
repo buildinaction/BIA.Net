@@ -1,20 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
-    <metadata>
-        <id>$id$</id>
-        <version>1.9.0.0</version>
-        <title>$title$</title>
-        <authors>$author$</authors>
-        <owners>Safran</owners>
-        <projectUrl>http://www.safran-cgs.com/</projectUrl>
-        <iconUrl>http://www.safran-cgs.com/sites/safran-cgs/files/favicon_0.ico</iconUrl>
-        <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Authentication function for Safran Framework: 
-        - Authentification</description>
-        <copyright>Safran</copyright>
-        <tags>Safran Authentication MVC .Net</tags>
-        <dependencies>
-          <dependency id="BIA.Net.Common" version="1.9.0.0" />
-        </dependencies>
-    </metadata>
+  <metadata>
+    <id>$id$</id>
+    <version>1.9.0.0</version>
+    <title>$title$</title>
+    <authors>BIA Team (Leader: Gwenael Fillon)</authors>
+    <owners>BIA</owners>
+    <projectUrl>https://github.com/BIAdotNet/BIA.Net/wiki/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/BIAdotNet/BIA.Net/master/img/LogoBIA.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      Authentication function for BIA.Net Framework:
+      - Authentification
+    </description>
+    <copyright>Copyright © BIA 2018</copyright>
+    <tags>BIA Authentication MVC .Net</tags>
+    <dependencies>
+      <dependency id="BIA.Net.Common" version="1.9.0.0" />
+    </dependencies>
+  </metadata>
 </package>

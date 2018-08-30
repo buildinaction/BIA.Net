@@ -101,14 +101,16 @@
   <ItemGroup>
     <Compile Include="DisableRedirectAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SafranAuthorizationFilterWebAPI.cs" />
+    <Compile Include="BIAAuthorizationFilterWebAPI.cs" />
     <Compile Include="SessionEnabledControllerHandler.cs" />
     <Compile Include="SessionEnabledHttpControllerRouteHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="BIA.Net.Authentication.WebAPI.csproj.nuspec" />
+    <None Include="BIA.Net.Authentication.WebAPI.csproj.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="_CreateNewNuGetPackage\Config.ps1" />
     <None Include="_CreateNewNuGetPackage\DoNotModify\CreateNuGetPackage.ps1" />
     <None Include="_CreateNewNuGetPackage\DoNotModify\New-NuGetPackage.ps1" />

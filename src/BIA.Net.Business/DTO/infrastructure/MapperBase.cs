@@ -1,5 +1,5 @@
-﻿// <copyright file="MapperBase.cs" company="Safran">
-// Copyright (c) Safran. All rights reserved.
+﻿// <copyright file="MapperBase.cs" company="BIA.NET">
+// Copyright (c) BIA.NET. All rights reserved.
 // </copyright>
 
 namespace BIA.Net.Business.DTO.Infrastructure

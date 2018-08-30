@@ -395,7 +395,7 @@
             {
                 //SAML2
                 userName = ClaimsPrincipal.Current.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).FirstOrDefault();
-                TraceManager.Debug("SafranAuthorizationFilterApi", "OnAuthorization", "NameID SAML2 : " + userName);
+                TraceManager.Debug("BIAAuthorizationFilterApi", "OnAuthorization", "NameID SAML2 : " + userName);
             }
             */
             if (removeDomain)

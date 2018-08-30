@@ -1,5 +1,5 @@
-﻿// <copyright file="MyAuthorizationFilter.cs" company="Safran">
-// Copyright (c) Safran. All rights reserved.
+﻿// <copyright file="MyAuthorizationFilter.cs" company="BIA.Net">
+// Copyright (c) BIA.Net. All rights reserved.
 // </copyright>
 
 namespace BIA.Net.Authentication.WebAPI
@@ -26,7 +26,7 @@ namespace BIA.Net.Authentication.WebAPI
     /// <seealso cref="System.Web.Mvc.IAuthorizationFilter" />
     /// <typeparam name="TServiceSynchronizeUser">The type of the service to synchronize users in DB.</typeparam>
     /// <typeparam name="TUserInfo">The type of the format stocked in session variable.</typeparam>
-    public class SafranAuthorizationFilterWebAPI<TUserInfo, TUserProperties> : BaseAuthorizationFilter<TUserInfo, TUserProperties>, IAuthorizationFilter
+    public class BIAAuthorizationFilterWebAPI<TUserInfo, TUserProperties> : BaseAuthorizationFilter<TUserInfo, TUserProperties>, IAuthorizationFilter
         where TUserInfo : AUserInfo<TUserProperties>, new()
         where TUserProperties : IUserProperties, new()
     {
@@ -39,9 +39,9 @@ namespace BIA.Net.Authentication.WebAPI
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SafranAuthorizationFilterWebAPI{TServiceSynchronizeUser, TUserInfo}"/> class.
+        /// Initializes a new instance of the <see cref="BIAAuthorizationFilterWebAPI{TServiceSynchronizeUser, TUserInfo}"/> class.
         /// </summary>
-        public SafranAuthorizationFilterWebAPI(string roles = null, List<RolesRedirectURL> rolesRedirect = null, string rolesAllowAnonymous = null) 
+        public BIAAuthorizationFilterWebAPI(string roles = null, List<RolesRedirectURL> rolesRedirect = null, string rolesAllowAnonymous = null) 
             : base(roles, rolesRedirect, rolesAllowAnonymous)
         { }
 

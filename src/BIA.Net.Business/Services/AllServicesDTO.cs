@@ -1,5 +1,5 @@
-﻿// <copyright file="AllServicesDTO.cs" company="Safran">
-// Copyright (c) Safran. All rights reserved.
+﻿// <copyright file="AllServicesDTO.cs" company="BIA.NET">
+// Copyright (c) BIA.NET. All rights reserved.
 // </copyright>
 
 namespace BIA.Net.Business.Services

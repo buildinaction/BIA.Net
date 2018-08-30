@@ -47,7 +47,7 @@ namespace BIA.Net.Authentication.Web
         private List<string> rolesAllowAnonymous { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SafranAuthorizationFilter{TServiceSynchronizeUser, TUserInfo}"/> class.
+        /// Initializes a new instance of the <see cref="BaseAuthorizationFilter{TServiceSynchronizeUser, TUserInfo}"/> class.
         /// </summary>
         public BaseAuthorizationFilter(string roles = null, List<RolesRedirectURL> rolesRedirect = null, string rolesAllowAnonymous = null)
         {

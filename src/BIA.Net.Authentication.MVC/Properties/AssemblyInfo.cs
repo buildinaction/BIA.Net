@@ -4,14 +4,15 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BIA.Net.Authentication")]
+[assembly: AssemblyTitle("BIA.Net.Authentication.MVC")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Safran Digital Manufacturing")]
-[assembly: AssemblyProduct("BIA.Net.Authentication")]
-[assembly: AssemblyCopyright("Copyright © Safran 2017")]
+[assembly: AssemblyCompany("BIA")]
+[assembly: AssemblyProduct("BIA.Net.Authentication.MVC")]
+[assembly: AssemblyCopyright("Copyright © BIA 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

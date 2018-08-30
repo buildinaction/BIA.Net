@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("BIA.Net.Authentication.Web")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Safran Digital Manufacturing")]
+[assembly: AssemblyCompany("BIA")]
 [assembly: AssemblyProduct("BIA.Net.Authentication.Web")]
-[assembly: AssemblyCopyright("Copyright © Safran 2018")]
+[assembly: AssemblyCopyright("Copyright © BIA 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

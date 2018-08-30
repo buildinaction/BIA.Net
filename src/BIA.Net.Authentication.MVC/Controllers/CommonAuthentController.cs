@@ -1,5 +1,5 @@
-﻿// <copyright file="CommonController.cs" company="Safran">
-// Copyright (c) Safran. All rights reserved.
+﻿// <copyright file="CommonController.cs" company="BIA.Net">
+// Copyright (c) BIA.Net. All rights reserved.
 // </copyright>
 
 namespace BIA.Net.Authentication.MVC.Controllers
@@ -49,7 +49,7 @@ namespace BIA.Net.Authentication.MVC.Controllers
         [HttpPost]
         public virtual void RefreshUserInfo()
         {
-            SafranAuthorizationFilterMVC<TUserInfo, TUserProperties>.RefreshAllUserInfo(((TUserInfo)User).Login);
+            BIAAuthorizationFilterMVC<TUserInfo, TUserProperties>.RefreshAllUserInfo(((TUserInfo)User).Login);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace BIA.Net.Authentication.MVC.Controllers
         [System.Web.Mvc.Authorize(Roles = BIAConstantes.RoleInternal)]
         public virtual ActionResult RefreshUserProfile(string login)
         {
-            SafranAuthorizationFilterMVC<TUserInfo, TUserProperties>.RefreshUserProfile(login);
+            BIAAuthorizationFilterMVC<TUserInfo, TUserProperties>.RefreshUserProfile(login);
             return Content("User " + login + " is refreshed.");
         }
 
@@ -83,7 +83,7 @@ namespace BIA.Net.Authentication.MVC.Controllers
 
             foreach (string userName in userDeleted)
             {
-                SafranAuthorizationFilterMVC<TUserInfo, TUserProperties>.RefreshUserRoles(userName);
+                BIAAuthorizationFilterMVC<TUserInfo, TUserProperties>.RefreshUserRoles(userName);
             }
 
             return this.Json(string.Empty);
