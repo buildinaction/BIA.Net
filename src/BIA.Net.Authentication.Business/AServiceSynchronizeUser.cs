@@ -37,7 +37,7 @@
         /// <param name="value">if set to <c>true</c> [value].</param>
         /// <returns>Nothing: Function to override</returns>
         /// <exception cref="System.Exception">Please overide SetUserValidity</exception>
-        public virtual IUserPropertiesInDB SetUserValidity(IUserPropertiesInDB userProperties, bool value)
+        public virtual ILinkedUserProperties SetUserValidity(ILinkedUserProperties userProperties, bool value)
         {
             throw new Exception("Please overide SetUserValidity");
         }
@@ -46,15 +46,15 @@
         /// Synchronizes all user.
         /// </summary>
         /// <param name="adGroupsAsApplicationUsers">List of ad groups</param>
-        /// <typeparam name="TUserPropertiesInDB">The type of the user DB table DTO.</typeparam>
+        /// <typeparam name="TLinkedUserProperties">The type of the user DB table DTO.</typeparam>
         /// <returns>List of user deleted</returns>
-        public virtual List<string> SynchronizeUsers<TUserInfo, TUserProperties, TUserPropertiesInDB>(List<ADGroup> adGroupsAsApplicationUsers)
-               where TUserPropertiesInDB : IUserPropertiesInDB, new()
+        public virtual List<string> SynchronizeUsers<TUserInfo, TUserProperties, TLinkedUserProperties>(List<ADGroup> adGroupsAsApplicationUsers)
+               where TLinkedUserProperties : ILinkedUserProperties, new()
                where TUserInfo : AUserInfo<TUserProperties>, new()
                where TUserProperties : IUserProperties, new()
         {
             List<string> listUserInGroup = new List<string>();
-            List<IUserPropertiesInDB> listUserName = GetAllUsersInDB();
+            List<ILinkedUserProperties> listUserName = GetAllUsersInDB();
             foreach (ADGroup group in adGroupsAsApplicationUsers)
             {
                 List<UserPrincipal> listUsers = group.GetAllUsersInGroup();
@@ -63,7 +63,7 @@
                 {
                     string userName = ADHelper.GetUserName(user);
                     listUserInGroup.Add(userName);
-                    IUserPropertiesInDB findedUser = listUserName.Where(a => a.BusinessID == userName).FirstOrDefault();
+                    ILinkedUserProperties findedUser = listUserName.Where(a => a.BusinessID == userName).FirstOrDefault();
 
                     if (findedUser == null)
                     {
@@ -72,13 +72,13 @@
                         userInfo.BaseRefreshProperties();
                         // Create the missing user
 
-                        IUserPropertiesInDB adUserCreated = Insert(userInfo.Properties.UserPropertiesInDB);
-                        listUserName.Add(new TUserPropertiesInDB { BusinessID = userName, IsValid = true });
+                        ILinkedUserProperties adUserCreated = Insert(userInfo.Properties.LinkedUserProperties);
+                        listUserName.Add(new TLinkedUserProperties { BusinessID = userName, IsValid = true });
                     }
                     else if (findedUser.IsValid == false)
                     {
                         findedUser.IsValid = true;
-                        IUserPropertiesInDB updatedUserProperties = SetUserValidity(findedUser, true);
+                        ILinkedUserProperties updatedUserProperties = SetUserValidity(findedUser, true);
                     }
                 }
             }
@@ -86,13 +86,13 @@
             List<string> usersDeleted = new List<string>();
 
             // check users to unactive
-            foreach (TUserPropertiesInDB userProperties in listUserName)
+            foreach (TLinkedUserProperties userProperties in listUserName)
             {
                 if (!listUserInGroup.Contains(userProperties.BusinessID) && userProperties.IsValid == true)
                 {
                     usersDeleted.Add(userProperties.BusinessID);
                     userProperties.IsValid = false;
-                    IUserPropertiesInDB updatedUserProperties = SetUserValidity(userProperties, false);
+                    ILinkedUserProperties updatedUserProperties = SetUserValidity(userProperties, false);
                 }
             }
 
@@ -105,7 +105,7 @@
         /// <param name="aspUser">The ASP user.</param>
         /// <returns>Nothing: Function to override</returns>
         /// <exception cref="System.Exception">Please overide Insert</exception>
-        protected virtual IUserPropertiesInDB Insert(IUserPropertiesInDB aspUser)
+        protected virtual ILinkedUserProperties Insert(ILinkedUserProperties aspUser)
         {
             throw new Exception("Please overide Insert");
         }
@@ -115,7 +115,7 @@
         /// </summary>
         /// <returns>Nothing: Function to override</returns>
         /// <exception cref="System.Exception">Please overide GetAllUsersInDB</exception>
-        protected virtual List<IUserPropertiesInDB> GetAllUsersInDB()
+        protected virtual List<ILinkedUserProperties> GetAllUsersInDB()
         {
             throw new Exception("Please overide GetAllUsersInDB");
         }

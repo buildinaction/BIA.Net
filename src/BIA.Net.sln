@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Authentication.WebA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Authentication.MVC", "BIA.Net.Authentication.MVC\BIA.Net.Authentication.MVC.csproj", "{52F0EC27-F6EC-43F5-8188-C5FEC2569A76}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetPackage", "NuGetPackage\NuGetPackage.csproj", "{1DD5FB6A-EF31-4A33-9401-5E510B9882E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -143,6 +145,10 @@ Global
 		{52F0EC27-F6EC-43F5-8188-C5FEC2569A76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52F0EC27-F6EC-43F5-8188-C5FEC2569A76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52F0EC27-F6EC-43F5-8188-C5FEC2569A76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DD5FB6A-EF31-4A33-9401-5E510B9882E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DD5FB6A-EF31-4A33-9401-5E510B9882E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DD5FB6A-EF31-4A33-9401-5E510B9882E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DD5FB6A-EF31-4A33-9401-5E510B9882E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
