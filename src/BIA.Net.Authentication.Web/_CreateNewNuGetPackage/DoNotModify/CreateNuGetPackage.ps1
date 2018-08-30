@@ -41,18 +41,18 @@ else { Write-Warning "Could not find Config file at '$CONFIG_FILE_PATH'. Default
 # NuGet version number guidance: https://docs.nuget.org/docs/reference/versioning and the Semantic Versioning spec: http://semver.org/
 # e.g. "" (use assembly's version), "1.2.3" (stable version), "1.2.3-alpha" (prerelease version).
 if (!(Test-Path Variable:Private:versionNumber) -or (Test-StringIsNullOrWhitespace $versionNumber)) { $versionNumber = ""; Write-Output "Using default Version Number value."  }
-else { Write-Output "Using user-specified Version Number value '$versionNumber'." }
+else { Write-Output "Using userProperties-specified Version Number value '$versionNumber'." }
 
 # Specify any release notes for this package. 
 # These will only be included in the package if you have a .nuspec file for the project in the same directory as the project file.
 if (!(Test-Path Variable:Private:releaseNotes) -or (Test-StringIsNullOrWhitespace $releaseNotes)) { $releaseNotes = ""; Write-Output "Using default Release Notes value."  }
-else { Write-Output "Using user-specified Release Notes value '$releaseNotes'." }
+else { Write-Output "Using userProperties-specified Release Notes value '$releaseNotes'." }
 
 # Make sure we pack the assemblies of the currently selected Configuration (e.g. Debug, Release) and Platform (e.g. x86, x64, Any CPU).
 if (!(Test-Path Variable:Private:configuration) -or (Test-StringIsNullOrWhitespace $configuration)) { $configuration = $BuildConfiguration; Write-Output "Using default Configuration value."  }
-else { Write-Output "Using user-specified Configuration value '$configuration'." }
+else { Write-Output "Using userProperties-specified Configuration value '$configuration'." }
 if (!(Test-Path Variable:Private:platform) -or (Test-StringIsNullOrWhitespace $platform)) { $platform = $BuildPlatform; Write-Output "Using default Platform value."  }
-else { Write-Output "Using user-specified Platform value '$platform'." }
+else { Write-Output "Using userProperties-specified Platform value '$platform'." }
 $packPropertiesConfigurationAndPlatform = "Configuration=""$BuildConfiguration"";Platform=""$BuildPlatform"";"
 
 # Specify any NuGet Pack Properties to pass to MsBuild.
@@ -60,7 +60,7 @@ $packPropertiesConfigurationAndPlatform = "Configuration=""$BuildConfiguration""
 # Do not specify the "Configuration" or "Platform" here (the $BuildConfiguration and $BuildPlatform values will be used).
 # MsBuild Properties that can be specified: http://msdn.microsoft.com/en-us/library/vstudio/bb629394.aspx
 if (!(Test-Path Variable:Private:packProperties) -or (Test-StringIsNullOrWhitespace $packProperties)) { $packProperties = ""; Write-Output "Using default Pack Properties value."  }
-else { Write-Output "Using user-specified Pack Properties value '$packProperties'." }
+else { Write-Output "Using userProperties-specified Pack Properties value '$packProperties'." }
 
 # Specify any NuGet Pack options to pass to nuget.exe.
 #	e.g. $packOptions = "-IncludeReferencedProjects"
@@ -69,18 +69,18 @@ else { Write-Output "Using user-specified Pack Properties value '$packProperties
 # Do not specify "-Build", as this may result in an infinite build loop.
 # NuGet Pack options that can be specified: http://docs.nuget.org/docs/reference/command-line-reference#Pack_Command_Options
 if (!(Test-Path Variable:Private:packOptions) -or (Test-StringIsNullOrWhitespace $packOptions)) { $packOptions = ""; Write-Output "Using default Pack Options value."  }
-else { Write-Output "Using user-specified Pack Options value '$packOptions'." }
+else { Write-Output "Using userProperties-specified Pack Options value '$packOptions'." }
 
 # Join the Configuration and Platform into the rest of the pack Properties.
 $packProperties = ($packPropertiesConfigurationAndPlatform + $packProperties).TrimEnd(';')
 
-# If the user-specified Configuration and Platform do not match the Configuration and Platform the project was just built with.
+# If the userProperties-specified Configuration and Platform do not match the Configuration and Platform the project was just built with.
 if ($BuildConfiguration -ne $configuration -or $BuildPlatform -ne $platform)
 {
 	# Display that the Configuration or Platform does not match and exit this function before creating the NuGet package.
-	Write-Output "Project was not built with the Configuration or Platform that the user has specified should be used to create NuGet packages, so exiting without creating a NuGet package."
+	Write-Output "Project was not built with the Configuration or Platform that the userProperties has specified should be used to create NuGet packages, so exiting without creating a NuGet package."
 	Write-Output "Configuration and Platform used by build was '$BuildConfiguration','$BuildPlatform'."
-	Write-Output "Configuration and Platform specified by user is '$configuration','$platform'."
+	Write-Output "Configuration and Platform specified by userProperties is '$configuration','$platform'."
 	break
 }
 
@@ -135,7 +135,7 @@ function Get-XmlElementsTextValue([xml]$XmlDocument, [string]$ElementPath, [stri
 }
 
 # Makes sure the assembly exists in the directory defined by the Project File (this is where NuGet.exe will expect it to be in order to pack it).
-# This is required in case the user is building with MsBuild and has provided an alternative output directory (e.g. /p:OutDir="Some\Other\Path").
+# This is required in case the userProperties is building with MsBuild and has provided an alternative output directory (e.g. /p:OutDir="Some\Other\Path").
 function Ensure-AssemblyFileExistsWhereNuGetExpectsItToBe([string]$ProjectFilePath, [string]$OutputDirectory, [string]$Configuration, [string]$Platform)
 {
 	# Display the time that the pre-processing started running.

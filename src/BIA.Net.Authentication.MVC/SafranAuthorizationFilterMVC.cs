@@ -139,9 +139,9 @@ namespace BIA.Net.Authentication.MVC
             return null;
         }
 
-        static public void ConnectUser(TUserProperties aspNetUser, string localUserId)
+        static public void ConnectUser(TUserProperties user, string localUserId)
         {
-            HttpContext.Current.User = (IPrincipal)ConnectUser(HttpContext.Current.Session, aspNetUser, localUserId);
+            HttpContext.Current.User = (IPrincipal)ConnectUser(HttpContext.Current.Session, user, localUserId);
         }
 
         static public void DisconnectUser()

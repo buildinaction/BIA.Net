@@ -24,20 +24,20 @@
         /// </summary>
         /// <param name="userName">Name of the user.</param>
         /// <returns>Nothing: Function to override</returns>
-        /// <exception cref="System.Exception">Please overide GetAspNetUserByName</exception>
-        public virtual IUserProperties GetAspNetUserByName(string userName)
+        /// <exception cref="System.Exception">Please overide GetUserPropertiesByName</exception>
+        public virtual IUserProperties GetUserPropertiesByName(string userName)
         {
-            throw new Exception("Please overide GetAspNetUserByName");
+            throw new Exception("Please overide GetUserPropertiesByName");
         }
 
         /// <summary>
         /// Resets the dai enable.
         /// </summary>
-        /// <param name="aspNetUser">The ASP net user.</param>
+        /// <param name="userProperties">The ASP net user.</param>
         /// <param name="value">if set to <c>true</c> [value].</param>
         /// <returns>Nothing: Function to override</returns>
         /// <exception cref="System.Exception">Please overide SetUserValidity</exception>
-        public virtual IUserPropertiesInDB SetUserValidity(IUserPropertiesInDB aspNetUser, bool value)
+        public virtual IUserPropertiesInDB SetUserValidity(IUserPropertiesInDB userProperties, bool value)
         {
             throw new Exception("Please overide SetUserValidity");
         }
@@ -78,7 +78,7 @@
                     else if (findedUser.IsValid == false)
                     {
                         findedUser.IsValid = true;
-                        IUserPropertiesInDB updatedAspNetUser = SetUserValidity(findedUser, true);
+                        IUserPropertiesInDB updatedUserProperties = SetUserValidity(findedUser, true);
                     }
                 }
             }
@@ -86,13 +86,13 @@
             List<string> usersDeleted = new List<string>();
 
             // check users to unactive
-            foreach (TUserPropertiesInDB aspNetUser in listUserName)
+            foreach (TUserPropertiesInDB userProperties in listUserName)
             {
-                if (!listUserInGroup.Contains(aspNetUser.BusinessID) && aspNetUser.IsValid == true)
+                if (!listUserInGroup.Contains(userProperties.BusinessID) && userProperties.IsValid == true)
                 {
-                    usersDeleted.Add(aspNetUser.BusinessID);
-                    aspNetUser.IsValid = false;
-                    IUserPropertiesInDB updatedAspNetUser = SetUserValidity(aspNetUser, false);
+                    usersDeleted.Add(userProperties.BusinessID);
+                    userProperties.IsValid = false;
+                    IUserPropertiesInDB updatedUserProperties = SetUserValidity(userProperties, false);
                 }
             }
 

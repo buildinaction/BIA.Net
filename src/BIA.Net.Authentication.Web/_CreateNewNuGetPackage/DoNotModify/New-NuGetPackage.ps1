@@ -48,29 +48,29 @@
     If this switch is provided and the package is successfully pushed to a NuGet gallery, the NuGet package file will then be deleted.
 	
 	.PARAMETER NoPrompt
-	If this switch is provided the user will not be prompted for the version number or release notes; the current ones in the .nuspec file will be used (if available).
-	The user will not be prompted for any other form of input either, such as if they want to push the package to a gallery, or to give input before the script exits when an error occurs.
+	If this switch is provided the userProperties will not be prompted for the version number or release notes; the current ones in the .nuspec file will be used (if available).
+	The userProperties will not be prompted for any other form of input either, such as if they want to push the package to a gallery, or to give input before the script exits when an error occurs.
     This parameter should be provided when an automated mechanism is running this script (e.g. an automated build system).
 	
 	.PARAMETER NoPromptExceptOnError
-	The same as NoPrompt except if an error occurs the user will be prompted for input before the script exists, making sure they are notified that an error occurred.
+	The same as NoPrompt except if an error occurs the userProperties will be prompted for input before the script exists, making sure they are notified that an error occurred.
 	If both this and the NoPrompt switch are provided, the NoPrompt switch will be used.
 	If both this and the NoPromptForInputOnError switch are provided, it is the same as providing the NoPrompt switch.
 	
 	.PARAMETER NoPromptForVersionNumber
-	If this switch is provided the user will not be prompted for the version number; the one in the .nuspec file will be used (if available).
+	If this switch is provided the userProperties will not be prompted for the version number; the one in the .nuspec file will be used (if available).
 	
 	.PARAMETER NoPromptForReleaseNotes
-	If this switch is provided the user will not be prompted for the release notes; the ones in the .nuspec file will be used (if available).
+	If this switch is provided the userProperties will not be prompted for the release notes; the ones in the .nuspec file will be used (if available).
 	
 	.PARAMETER NoPromptForPushPackageToNuGetGallery
-	If this switch is provided the user will not be asked if they want to push the new package to the NuGet Gallery when the PushPackageToNuGetGallery switch is not provided.	
+	If this switch is provided the userProperties will not be asked if they want to push the new package to the NuGet Gallery when the PushPackageToNuGetGallery switch is not provided.	
 	
 	.PARAMETER NoPromptForInputOnError
-	If this switch is provided the user will not be prompted for input before the script exits when an error occurs, so they may not notice than an error occurred.	
+	If this switch is provided the userProperties will not be prompted for input before the script exits when an error occurs, so they may not notice than an error occurred.	
 	
 	.PARAMETER UsePowerShellPrompts
-	If this switch is provided any prompts for user input will be made via the PowerShell console, rather than the regular GUI components.
+	If this switch is provided any prompts for userProperties input will be made via the PowerShell console, rather than the regular GUI components.
 	This may be preferable when attempting to pipe input into the cmdlet.
 	
 	.PARAMETER DoNotUpdateNuSpecFile
@@ -89,7 +89,7 @@
 	& .\New-NuGetPackage.ps1
 
 	Run the script without any parameters (e.g. as if it was ran directly from Windows Explorer).
-	This will prompt the user for a .nuspec, project, or .nupkg file if one is not found in the same directory as the script, as well as for any other input that is required.
+	This will prompt the userProperties for a .nuspec, project, or .nupkg file if one is not found in the same directory as the script, as well as for any other input that is required.
 	This assumes that you are currently in the same directory as the New-NuGetPackage.ps1 script, since a relative path is supplied.
 
 	.EXAMPLE
@@ -103,7 +103,7 @@
 	& .\New-NuGetPackage.ps1 -ProjectFilePath "C:\Some Folder\TestProject.csproj" -VersionNumber "1.1" -ReleaseNotes "Version 1.1 contains many bug fixes."
 
 	Create a new package from the TestProject.csproj file.
-	Because the VersionNumber and ReleaseNotes parameters are provided, the user will not be prompted for them.
+	Because the VersionNumber and ReleaseNotes parameters are provided, the userProperties will not be prompted for them.
 	If "C:\Some Folder\TestProject.nuspec" exists, it will automatically be picked up and used when creating the package; if it contained a version number or release notes, they will be overwritten with the ones provided.
 
 	.EXAMPLE
@@ -115,7 +115,7 @@
 	.EXAMPLE
 	& .\New-NuGetPackage.ps1 -NuSpecFilePath "C:\Some Folder\SomeNuSpecFile.nuspec" -NoPrompt
 	
-	Create a new package from SomeNuSpecFile.nuspec without prompting the user for anything, so the existing version number and release notes in the .nuspec file will be used.
+	Create a new package from SomeNuSpecFile.nuspec without prompting the userProperties for anything, so the existing version number and release notes in the .nuspec file will be used.
 	
 	.EXAMPLE	
 	& .\New-NuGetPackage.ps1 -NuSpecFilePath ".\Some Folder\SomeNuSpecFile.nuspec" -VersionNumber "9.9.9.9" -DoNotUpdateNuSpecFile
@@ -125,12 +125,12 @@
 	.EXAMPLE
 	& .\New-NuGetPackage.ps1 -NuSpecFilePath "C:\Some Folder\SomeNuSpecFile.nuspec" -PushPackageToNuGetGallery -PushOptions "-Source ""http://my.server.com/MyNuGetGallery"" -ApiKey ""EAE1E980-5ECB-4453-9623-F0A0250E3A57"""
 	
-	Create a new package from SomeNuSpecFile.nuspec and push it to a custom NuGet gallery using the user's unique Api Key.
+	Create a new package from SomeNuSpecFile.nuspec and push it to a custom NuGet gallery using the userProperties's unique Api Key.
 	
 	.EXAMPLE
 	& .\New-NuGetPackage.ps1 -NuSpecFilePath "C:\Some Folder\SomeNuSpecFile.nuspec" -NuGetExecutableFilePath "C:\Utils\NuGet.exe"
 
-	Create a new package from SomeNuSpecFile.nuspec by specifying the path to the NuGet executable (required when NuGet.exe is not in the user's PATH).
+	Create a new package from SomeNuSpecFile.nuspec by specifying the path to the NuGet executable (required when NuGet.exe is not in the userProperties's PATH).
 
     .EXAMPLE
     & New-NuGetPackage.ps1 -PackageFilePath "C:\Some Folder\MyPackage.nupkg"
@@ -142,7 +142,7 @@
 	& .\New-NuGetPackage.ps1 -NoPromptForInputOnError -UpdateNuGetExecutable
 
 	Create a new package or push an existing package by auto-finding the .nuspec, project, or .nupkg file to use, and prompting for one if none are found.
-	Will not prompt the user for input before exitting the script when an error occurs.
+	Will not prompt the userProperties for input before exitting the script when an error occurs.
 
 	.OUTPUTS
 	Returns the full path to the NuGet package that was created.
@@ -158,7 +158,7 @@
 	
 	This script is designed to be called from PowerShell or ran directly from Windows Explorer.
 	If this script is ran without the $NuSpecFilePath, $ProjectFilePath, and $PackageFilePath parameters, it will automatically search for a .nuspec, project, or package file in the 
-	same directory as the script and use it if one is found. If none or more than one are found, the user will be prompted to specify the file to use.
+	same directory as the script and use it if one is found. If none or more than one are found, the userProperties will be prompted to specify the file to use.
 #>
 [CmdletBinding(DefaultParameterSetName="PackUsingNuSpec")]
 param
@@ -385,7 +385,7 @@ function Update-NuSpecFile
 		{
 			$VersionNumber = $currentVersionNumber
 		}
-		# Else prompt the user for the version number to use.
+		# Else prompt the userProperties for the version number to use.
 		else
 		{
 			$promptMessage = 'Enter the NuGet package version number to use (x.x[.x.x] or $version$ if packing a project file)'
@@ -405,7 +405,7 @@ function Update-NuSpecFile
 		# The script's parameter validation does not seem to be enforced (probably because this is inside a function), so re-enforce it here.
 		$rxVersionNumberValidation = [regex] '(?i)(^(\d+(\.\d+){1,3})$)|(^(\d+\.\d+\.\d+-[a-zA-Z0-9\-\.\+]+)$)|(^(\$version\$)$)|(^$)'	# This validation is duplicated in the Update-NuSpecFile function, so update it in both places. This regex does not represent Sematic Versioning, but the versioning that NuGet.exe allows.
 
-		# If the user cancelled the prompt or did not provide a valid version number, exit the script.
+		# If the userProperties cancelled the prompt or did not provide a valid version number, exit the script.
 		if ((Test-StringIsNullOrWhitespace $VersionNumber) -or !$rxVersionNumberValidation.IsMatch($VersionNumber))
 		{
 			throw "A valid version number to use for the NuGet package was not provided, so exiting script. The version number provided was '$VersionNumber', which does not conform to the Semantic Versioning guidelines specified at http://semver.org."
@@ -429,7 +429,7 @@ function Update-NuSpecFile
 		{
 			$ReleaseNotes = $currentReleaseNotes
 		}
-		# Else prompt the user for the Release Notes to add to the .nuspec file.
+		# Else prompt the userProperties for the Release Notes to add to the .nuspec file.
 		else
 		{
 			$promptMessage = "Please enter the release notes to include in the new NuGet package"
@@ -445,7 +445,7 @@ function Update-NuSpecFile
 				$ReleaseNotes = Read-MultiLineInputBoxDialog -Message "$promptMessage`:" -WindowTitle "Enter Release Notes For New Package" -DefaultText $currentReleaseNotes
 			}
 			
-			# If the user cancelled the release notes prompt, exit the script.
+			# If the userProperties cancelled the release notes prompt, exit the script.
 			if ($ReleaseNotes -eq $null)
 			{ 
 				throw "User cancelled the Release Notes prompt, so exiting script."
@@ -575,7 +575,7 @@ function Set-XmlElementsTextValue([xml]$XmlDocument, [string]$ElementPath, [stri
 	}
 }
 
-# Show an Open File Dialog and return the file selected by the user.
+# Show an Open File Dialog and return the file selected by the userProperties.
 function Read-OpenFileDialog([string]$WindowTitle, [string]$InitialDirectory, [string]$Filter = "All files (*.*)|*.*", [switch]$AllowMultiSelect)
 {  
 	Add-Type -AssemblyName System.Windows.Forms
@@ -589,14 +589,14 @@ function Read-OpenFileDialog([string]$WindowTitle, [string]$InitialDirectory, [s
 	if ($AllowMultiSelect) { return $openFileDialog.Filenames } else { return $openFileDialog.Filename }
 }
 
-# Show message box popup and return the button clicked by the user.
+# Show message box popup and return the button clicked by the userProperties.
 function Read-MessageBoxDialog([string]$Message, [string]$WindowTitle, [System.Windows.Forms.MessageBoxButtons]$Buttons = [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]$Icon = [System.Windows.Forms.MessageBoxIcon]::None)
 {
 	Add-Type -AssemblyName System.Windows.Forms
 	return [System.Windows.Forms.MessageBox]::Show($Message, $WindowTitle, $Buttons, $Icon)
 }
 
-# Show input box popup and return the value entered by the user.
+# Show input box popup and return the value entered by the userProperties.
 function Read-InputBoxDialog([string]$Message, [string]$WindowTitle, [string]$DefaultText)
 {
 	Add-Type -AssemblyName Microsoft.VisualBasic
@@ -607,13 +607,13 @@ function Read-MultiLineInputBoxDialog([string]$Message, [string]$WindowTitle, [s
 {
 <#
     .SYNOPSIS
-    Prompts the user with a multi-line input box and returns the text they enter, or null if they cancelled the prompt.
+    Prompts the userProperties with a multi-line input box and returns the text they enter, or null if they cancelled the prompt.
      
     .DESCRIPTION
-    Prompts the user with a multi-line input box and returns the text they enter, or null if they cancelled the prompt.
+    Prompts the userProperties with a multi-line input box and returns the text they enter, or null if they cancelled the prompt.
      
     .PARAMETER Message
-    The message to display to the user explaining what text we are asking them to enter.
+    The message to display to the userProperties explaining what text we are asking them to enter.
      
     .PARAMETER WindowTitle
     The text to display on the prompt window's title.
@@ -622,9 +622,9 @@ function Read-MultiLineInputBoxDialog([string]$Message, [string]$WindowTitle, [s
     The default text to show in the input box.
      
     .EXAMPLE
-    $userText = Read-MultiLineInputDialog "Input some text please:" "Get User's Input"
+    $userPropertiesText = Read-MultiLineInputDialog "Input some text please:" "Get User's Input"
      
-    Shows how to create a simple prompt to get mutli-line input from a user.
+    Shows how to create a simple prompt to get mutli-line input from a userProperties.
      
     .EXAMPLE
     # Setup the default multi-line address to fill the input box with.
@@ -641,8 +641,8 @@ function Read-MultiLineInputBoxDialog([string]$Message, [string]$WindowTitle, [s
         Write-Error "You pressed the Cancel button on the multi-line input box."
     }
      
-    Prompts the user for their address and stores it in a variable, pre-filling the input box with a default multi-line address.
-    If the user pressed the Cancel button an error is written to the console.
+    Prompts the userProperties for their address and stores it in a variable, pre-filling the input box with a default multi-line address.
+    If the userProperties pressed the Cancel button an error is written to the console.
      
     .EXAMPLE
     $inputText = Read-MultiLineInputDialog -Message "If you have a really long message you can break it apart`nover two lines with the powershell newline character:" -WindowTitle "Window Title" -DefaultText "Default text for the input box."
@@ -665,7 +665,7 @@ function Read-MultiLineInputBoxDialog([string]$Message, [string]$WindowTitle, [s
     $label.AutoSize = $true
     $label.Text = $Message
      
-    # Create the TextBox used to capture the user's text.
+    # Create the TextBox used to capture the userProperties's text.
     $textBox = New-Object System.Windows.Forms.TextBox
     $textBox.Location = New-Object System.Drawing.Size(10,40)
     $textBox.Size = New-Object System.Drawing.Size(575,200)
@@ -711,7 +711,7 @@ function Read-MultiLineInputBoxDialog([string]$Message, [string]$WindowTitle, [s
     $form.Add_Shown({$form.Activate()})
     $form.ShowDialog() > $null   # Trash the text of the button that was clicked.
      
-    # Return the text that the user entered.
+    # Return the text that the userProperties entered.
     return $form.Tag
 }
 
@@ -990,7 +990,7 @@ try
 				$filePathToUse = Read-OpenFileDialog -WindowTitle "Select the .nuspec or project file to pack, or the package file (.nupkg) to push..." -InitialDirectory $THIS_SCRIPTS_DIRECTORY_PATH -Filter $filter
 			}
 			
-			# If the user cancelled the file dialog, throw an error since we don't have a .nuspec file to use.
+			# If the userProperties cancelled the file dialog, throw an error since we don't have a .nuspec file to use.
 			if (Test-StringIsNullOrWhitespace $filePathToUse)
 			{
 				throw "No .nuspec, project, or package file was specified. You must specify a valid file to use."
@@ -1003,12 +1003,12 @@ try
 				$projectPath = Get-NuSpecsAssociatedProjectFilePath -NuSpecFilePath $filePathToUse
 				if (!(Test-StringIsNullOrWhitespace $projectPath))
 				{
-                    # If we are not allowed to prompt the user, just assume we should only use the .nuspec file.
+                    # If we are not allowed to prompt the userProperties, just assume we should only use the .nuspec file.
                     if ($NoPrompt)
                     {
                         $answer = "No"
                     }
-                    # Else prompt the user if they want to pack the project file instead.
+                    # Else prompt the userProperties if they want to pack the project file instead.
                     else
                     {
 					    $promptMessage = "The selected .nuspec file appears to be associated with the project file:`n`n$projectPath`n`nIt is generally preferred to pack the project file, and the .nuspec file will automatically get picked up.`nDo you want to pack the project file instead?"
@@ -1026,17 +1026,17 @@ try
 					    }
                     }
 					
-					# If the user wants to use the Project file, use it.
+					# If the userProperties wants to use the Project file, use it.
 					if (($answer -is [string] -and $answer.StartsWith("Y", [System.StringComparison]::InvariantCultureIgnoreCase)) -or $answer -eq [System.Windows.Forms.DialogResult]::Yes)
 					{
 						$ProjectFilePath = $projectPath
 					}
-					# Else if the user wants to use the .nuspec file, use it.
+					# Else if the userProperties wants to use the .nuspec file, use it.
 					elseif (($answer -is [string] -and $answer.StartsWith("N", [System.StringComparison]::InvariantCultureIgnoreCase)) -or $answer -eq [System.Windows.Forms.DialogResult]::No)
 					{
 						$NuSpecFilePath = $filePathToUse
 					}
-					# Else the user cancelled the prompt, so exit the script.
+					# Else the userProperties cancelled the prompt, so exit the script.
 					else
 					{
 						throw "User cancelled the .nuspec or project file prompt, so exiting script."
@@ -1176,7 +1176,7 @@ try
 		    # If this Project has a .nuspec that will be used to package with.
 		    if (!(Test-StringIsNullOrWhitespace $projectNuSpecFilePath))
 		    {
-			    # Update .nuspec file based on user input.
+			    # Update .nuspec file based on userProperties input.
 			    $NuSpecFilePath = $projectNuSpecFilePath
 			    Update-NuSpecFile
 		    }
@@ -1195,7 +1195,7 @@ try
 	    # Else we are supposed to package using just a NuSpec.
 	    else
 	    {	
-		    # Update .nuspec file based on user input.
+		    # Update .nuspec file based on userProperties input.
 		    Update-NuSpecFile
 		
 		    # Save the directory that the .nuspec file is in as the directory to create the package in.
@@ -1214,7 +1214,7 @@ try
 		# When an Output Directory is not explicitly provided, we want to put generated packages into their own directory.
         $defaultDirectoryPathToPutNuGetPackageIn = Join-Path $defaultDirectoryPathToPutNuGetPackageIn $DEFAULT_DIRECTORY_TO_PUT_NUGET_PACKAGES_IN
 	
-	    # If the user did not specify an Output Directory.
+	    # If the userProperties did not specify an Output Directory.
 	    if ($PackOptions -notmatch '-OutputDirectory')
 	    {
             # Insert our default Output Directory into the Additional Pack Options.
@@ -1262,7 +1262,7 @@ try
     }
 
     # Get the Source to push the package to.
-    # If the user explicitly provided the Source to push the package to, get it.
+    # If the userProperties explicitly provided the Source to push the package to, get it.
 	$rxSourceToPushPackageTo = [regex] "(?i)((-Source|-src)\s+(?<Source>.*?)(\s+|$))"
 	$match = $rxSourceToPushPackageTo.Match($PushOptions)
 	if ($match.Success)
@@ -1282,7 +1282,7 @@ try
 		$PushOptions += " -Source $sourceToPushPackageTo"
 	}
 
-	# If the switch to push the package to the gallery was not provided and we are allowed to prompt, prompt the user if they want to push the package.
+	# If the switch to push the package to the gallery was not provided and we are allowed to prompt, prompt the userProperties if they want to push the package.
 	if (!$PushPackageToNuGetGallery -and !$NoPromptForPushPackageToNuGetGallery)
 	{
 		$promptMessage = "Do you want to push this package:`n'$nuGetPackageFilePath'`nto the NuGet Gallery '$sourceToPushPackageTo'?"
@@ -1299,7 +1299,7 @@ try
 			$answer = Read-MessageBoxDialog -Message $promptMessage -WindowTitle "Push Package To Gallery?" -Buttons YesNo -Icon Question
 		}
 		
-		# If the user wants to push the new package, record it.
+		# If the userProperties wants to push the new package, record it.
 		if (($answer -is [string] -and $answer.StartsWith("Y", [System.StringComparison]::InvariantCultureIgnoreCase)) -or $answer -eq [System.Windows.Forms.DialogResult]::Yes)
 		{
 			$PushPackageToNuGetGallery = $true
@@ -1309,7 +1309,7 @@ try
 	# If we should push the Nuget package to the gallery.
 	if ($PushPackageToNuGetGallery)
 	{
-        # If the user has not provided an API key.
+        # If the userProperties has not provided an API key.
         $UserProvidedApiKeyUsingPrompt = $false
         if ($PushOptions -notmatch '-ApiKey')
         {
@@ -1317,7 +1317,7 @@ try
             $nuGetConfigXml = New-Object System.Xml.XmlDocument
             $nuGetConfigXml.Load($NUGET_CONFIG_FILE_PATH)
 
-            # If the user does not have an API key saved on this PC for the Source to push to, and prompts are allowed, prompt them for one.
+            # If the userProperties does not have an API key saved on this PC for the Source to push to, and prompts are allowed, prompt them for one.
             if (((Get-XmlNodes -XmlDocument $nuGetConfigXml -NodePath "configuration.apikeys.add" | Where-Object { $_.key -eq $sourceToPushPackageTo }) -eq $null) -and !$NoPrompt)
             {
                 $promptMessage = "It appears that you do not have an API key saved on this PC for the source to push the package to '$sourceToPushPackageTo'.`n`nYou must provide an API key to push this package to the NuGet Gallery.`n`nPlease enter your API key"
@@ -1333,13 +1333,13 @@ try
 			        $apiKey = Read-InputBoxDialog -Message "$promptMessage`:" -WindowTitle "Enter Your API Key"
 		        }
 		
-		        # If the user supplied an Api Key.
+		        # If the userProperties supplied an Api Key.
                 if (!(Test-StringIsNullOrWhitespace $apiKey))
                 {
                     # Add the given Api Key to the Push Options.
                     $PushOptions += " -ApiKey $apiKey"
 
-                    # Record that the user provided the Api Key via a prompt.
+                    # Record that the userProperties provided the Api Key via a prompt.
                     $UserProvidedApiKeyUsingPrompt = $true
                 }
             }
@@ -1381,15 +1381,15 @@ try
             }
         }
 
-        # If the user provided the Api Key via a prompt from this script, prompt them for if they want to save the given API key on this PC.
+        # If the userProperties provided the Api Key via a prompt from this script, prompt them for if they want to save the given API key on this PC.
         if ($UserProvidedApiKeyUsingPrompt)
         {
-	        # If we are not allowed to prompt the user, just assume they don't want to save the key on this PC.
+	        # If we are not allowed to prompt the userProperties, just assume they don't want to save the key on this PC.
             if ($NoPrompt)
             {
                 $answer = "No"
             }
-            # Else prompt the user if they want to save the given API key on this PC.
+            # Else prompt the userProperties if they want to save the given API key on this PC.
             else
             {
 				$promptMessage = "Do you want to save the API key you provided on this PC so that you don't have to enter it again next time?"
@@ -1407,7 +1407,7 @@ try
 				}
             }
 			
-			# If the user wants to save the API key.
+			# If the userProperties wants to save the API key.
 			if (($answer -is [string] -and $answer.StartsWith("Y", [System.StringComparison]::InvariantCultureIgnoreCase)) -or $answer -eq [System.Windows.Forms.DialogResult]::Yes)
 			{
 				# Create the command to use to save the Api key on this PC.
