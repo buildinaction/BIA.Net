@@ -19,10 +19,11 @@
     using static BIA.Net.Common.Configuration.AuthenticationElement.ParametersElement;
     using static BIA.Net.Common.Configuration.CommonElement;
 
+
     /// <summary>
     /// Class to define identity.
     /// </summary>
-    public abstract class AUserInfo<TUserProperties> : IPrincipal, IUserInfo
+    public abstract class AUserInfo<TUserProperties> : AUserInfoCommon, IPrincipal, IUserInfo
         where TUserProperties : IUserProperties, new()
     {
         #region Constructors
@@ -39,26 +40,7 @@
         #region Properties
 
         #region TemporaryWorkingValues
-        /// <summary>
-        /// Gets the current identity.
-        /// </summary>
-        public IIdentity Identity { get; set; }
 
-        private bool isUserPrincipalInit = false;
-        private UserPrincipal userPrincipal { get; set; }
-
-        protected UserPrincipal UserPrincipal
-        {
-            get
-            {
-                if (!isUserPrincipalInit)
-                {
-                    userPrincipal = ADHelper.GetUserFromADs(Login);
-                    isUserPrincipalInit = true;
-                }
-                return userPrincipal;
-            }
-        }
 
         private bool isUserGroupsFromIISInit = false;
         private List<string> userGroupsFromIIS = null;
@@ -89,7 +71,6 @@
             }
         }
 
-        private string login = null;
         public virtual string Login
         {
             get
@@ -174,7 +155,6 @@
                 userInfoContainer.propertiesRefreshDate = DateTime.Now;
             }
         }
-
         public virtual Dictionary<string, string> Identities
         {
             get
@@ -250,10 +230,7 @@
             }
         }
 
-        /// <summary>
-        /// Additionnal Role added by custom connect
-        /// </summary>
-        public List<string> AdditionnalRoles { get; set; }
+
 
 
         public UserInfoContainer userInfoContainer;
@@ -287,6 +264,10 @@
             public string rolesKey;
 
             public List<string> roles = null;
+            /// <summary>
+            /// Additionnal Role added by custom connect
+            /// </summary>
+            public List<string> AdditionnalRoles { get; set; }
             #endregion
 
             #region properties
@@ -381,33 +362,6 @@
 
         }
 
-
-        private static string PreparePrincipalUserName(IIdentity Identity, string fromFieldName, bool removeDomain)
-        {
-            string userName = null;
-            PropertyInfo propertyInfo = Identity.GetType().GetProperty(fromFieldName);
-            if (propertyInfo != null)
-            {
-                userName = (string)propertyInfo.GetValue(Identity);
-            }
-            /*
-            if (string.IsNullOrEmpty(userName))
-            {
-                //SAML2
-                userName = ClaimsPrincipal.Current.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).FirstOrDefault();
-                TraceManager.Debug("BIAAuthorizationFilterApi", "OnAuthorization", "NameID SAML2 : " + userName);
-            }
-            */
-            if (removeDomain)
-            {
-                userName = ADHelper.RemoveDomain(userName);
-            }
-
-            return userName;
-        }
-
-
-
         protected virtual void RefreshUserProfile()
         {
             BaseRefreshUserProfile();
@@ -470,9 +424,9 @@
             if (rolesInBuilding == null)
             {
                 rolesInBuilding = new List<string>();
-                if (AdditionnalRoles != null)
+                if (userInfoContainer.AdditionnalRoles != null)
                 {
-                    foreach (string group in AdditionnalRoles)
+                    foreach (string group in userInfoContainer.AdditionnalRoles)
                     {
                         rolesInBuilding.Add(group);
                     }
@@ -609,7 +563,6 @@
         {
         }
 
-
         protected virtual void RefreshLanguage()
         {
             BaseRefreshLanguage();
@@ -632,22 +585,19 @@
                         else if (heterogeneousElem.TagName == "Mapping")
                         {
                             MappingCollection mappingCollection = (MappingCollection)heterogeneousElem;
-                            PropertyInfo propertyInfo = null;
-
                             if (mappingCollection?.Key != null)
                             {
-                                propertyInfo = Properties.GetType().GetProperty(mappingCollection.Key);
-                            }
-
-                            if (propertyInfo != null)
-                            {
-                                string propertyToMap = propertyInfo.GetValue(Properties).ToString();
-                                foreach (KeyValueElement mapping in mappingCollection)
+                                object objectValueToMap = GetObjectValue(this, mappingCollection?.Key);
+                                if (objectValueToMap != null)
                                 {
-                                    if (mapping.Key == propertyToMap)
+                                    string sObjectValueToMap = objectValueToMap.ToString();
+                                    foreach (KeyValueElement mapping in mappingCollection)
                                     {
-                                        languageInBuilding = mapping.Value;
-                                        break;
+                                        if (mapping.Key == sObjectValueToMap)
+                                        {
+                                            languageInBuilding = mapping.Value;
+                                            break;
+                                        }
                                     }
                                 }
                             }
@@ -754,209 +704,5 @@
             return ret;
         }
 
-        private object ExtractObjectFieldValue(ObjectFieldElement value)
-        {
-            object result = null;
-
-
-            if (value.Object == "UserInfo" || value.Object == "Properties")
-            {
-                if (!string.IsNullOrEmpty(value.Field))
-                {
-                    object srcObject = null;
-                    if (value.Object == "UserInfo")
-                    {
-                        srcObject = this;
-                    }
-                    else if (value.Object == "Properties")
-                    {
-                        PropertyInfo propertySrcObject = srcObject.GetType().GetProperty(value.Object);
-                        srcObject = propertySrcObject.GetValue(srcObject);
-                    }
-
-                    if (srcObject != null)
-                    {
-                        PropertyInfo propertyInfoSrc = srcObject.GetType().GetProperty(value.Field);
-                        result = propertyInfoSrc.GetValue(srcObject);
-                    }
-                }
-            }
-            else if (value.Object == "Identities")
-            {
-                string identity = null;
-                if (identitiesInBuilding != null) identitiesInBuilding.TryGetValue(value.Field, out identity);
-                else Identities.TryGetValue(value.Field, out identity);
-                result = identity;
-            }
-
-            return result;
-        }
-        #region SetToObject
-
-        private void SetFromFunctionElement(object target, IHeterogeneousConfigurationElement heterogeneousElem)
-        {
-            FunctionElement value = (FunctionElement)heterogeneousElem;
-            PropertyInfo propertyInfo = target.GetType().GetProperty(value.Key);
-            if (propertyInfo != null)
-            {
-                if (value.Type != null)
-                {
-                    if (!string.IsNullOrEmpty(value.Method))
-                    {
-                        object result = value.Type.GetMethod(value.Method).Invoke(null, null);
-                        propertyInfo.SetValue(target, Convert.ChangeType(result, propertyInfo.PropertyType));
-                    }
-                    else
-                    {
-                        object result = value.Type.GetProperty(value.Property).GetValue(null, null);
-                        propertyInfo.SetValue(target, Convert.ChangeType(result, propertyInfo.PropertyType));
-                    }
-                }
-            }
-        }
-        private void SetFromWindowsIdentityElement(object target, IHeterogeneousConfigurationElement heterogeneousElem)
-        {
-            WindowsIdentityElement value = (WindowsIdentityElement)heterogeneousElem;
-            if (value.IdentityField != null)
-            {
-                PropertyInfo propertyInfo = target.GetType().GetProperty(value.Key);
-                if (propertyInfo != null)
-                {
-                    propertyInfo.SetValue(target, Convert.ChangeType(PreparePrincipalUserName(Identity, value.IdentityField, value.RemoveDomain), propertyInfo.PropertyType));
-                }
-            }
-        }
-
-        private bool SetFromCustomCodeElement(object target, IHeterogeneousConfigurationElement heterogeneousElem)
-        {
-            CustomCodeElement CustomCode = (CustomCodeElement)heterogeneousElem;
-            if (CustomCode != null)
-            {
-                if (string.IsNullOrEmpty(CustomCode.Function))
-                {
-                    return true;
-                }
-                else
-                {
-                    this.GetType().GetMethod(CustomCode.Function).Invoke(this, new object[] { target });
-                }
-            }
-            return false;
-        }
-
-        private void SetFromADFieldElement(object target, IHeterogeneousConfigurationElement heterogeneousElem)
-        {
-            ADFieldElement value = (ADFieldElement)heterogeneousElem;
-            if (UserPrincipal != null)
-            {
-                PropertyInfo propertyInfo = target.GetType().GetProperty(value.Key);
-                if (propertyInfo != null)
-                {
-                    propertyInfo.SetValue(target, Convert.ChangeType(ADHelper.GetProperty(UserPrincipal, value.Adfield, value.MaxLenght, value.Default), propertyInfo.PropertyType));
-                }
-            }
-        }
-
-        private void SetFromValueElement(object target, IHeterogeneousConfigurationElement heterogeneousElem)
-        {
-            ValueElement value = (ValueElement)heterogeneousElem;
-            PropertyInfo propertyInfo = target.GetType().GetProperty(value.Key);
-            propertyInfo.SetValue(target, Convert.ChangeType(value.Value, propertyInfo.PropertyType));
-        }
-
-        private void SetFromObjectFieldElement(object target, IHeterogeneousConfigurationElement heterogeneousElem)
-        {
-            ObjectFieldElement value = (ObjectFieldElement)heterogeneousElem;
-            PropertyInfo propertyInfo = target.GetType().GetProperty(value.Key);
-            if (propertyInfo != null)
-            {
-                object result = ExtractObjectFieldValue(value);
-                propertyInfo.SetValue(target, Convert.ChangeType(result, propertyInfo.PropertyType));
-            }
-        }
-        #endregion
-        #region SetToList
-        private void SetFromKeyElement(List<string> target, IHeterogeneousConfigurationElement heterogeneousElem)
-        {
-            ValueElement value = (ValueElement)heterogeneousElem;
-            target.Add(value.Value);
-        }
-        #endregion
-        #region SetToDictionary
-        private void SetFromValueElement(Dictionary<string, string> target, IHeterogeneousConfigurationElement heterogeneousElem)
-        {
-            ValueElement value = (ValueElement)heterogeneousElem;
-            target.Add(value.Key, value.Value);
-        }
-
-        private string SetFromWebService(Dictionary<string, string> target, IHeterogeneousConfigurationElement heterogeneousElem)
-        {
-            WebServiceElement webService = (WebServiceElement)heterogeneousElem;
-            string userProfileKey = "";
-            string parameters = "";
-            foreach (ObjectFieldElement parameter in webService)
-            {
-                object value = ExtractObjectFieldValue(parameter);
-                if (!string.IsNullOrEmpty(userProfileKey)) userProfileKey += ",";
-                userProfileKey += value;
-                if (!string.IsNullOrEmpty(parameters)) parameters += "&";
-                else parameters += "?";
-                parameters += parameter.Key + "=" + value;
-            }
-
-            TraceManager.Info("AUserInfo", "RefreshUserProfile", "Refresh profile from web service " + webService.URL + parameters);
-            string url = webService.URL;
-
-            if (url.Contains("$("))
-            {
-                string pat = @"\$\(([\w\d]+)\)";
-
-                // Instantiate the regular expression object.
-                Regex r = new Regex(pat, RegexOptions.IgnoreCase);
-
-                // Match the regular expression pattern against a text string.
-                Match m = r.Match(url);
-                while (m.Success)
-                {
-                    string appSetting = ConfigurationManager.AppSettings[m.Groups[1].Value];
-
-                    url = url.Replace(m.Value, appSetting);
-                    m = m.NextMatch();
-                }
-            }
-
-            String profilURL = url + parameters;
-
-            Uri address = new Uri(profilURL);
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(address);
-            request.Timeout = 200000;
-            request.Credentials = CredentialCache.DefaultCredentials;
-
-            HttpWebResponse response;
-
-            try
-            {
-                response = (HttpWebResponse)request.GetResponse();
-                StreamReader reader = new StreamReader(response.GetResponseStream());
-                string responseText = reader.ReadToEnd();
-                /*var encoding = ASCIIEncoding.ASCII;
-                string responseText = "";
-                using (var reader = new System.IO.StreamReader(response.GetResponseStream(), encoding))
-                {
-                    responseText = reader.ReadToEnd();
-                }*/
-                response.Close();
-                Dictionary<string, string> userProfileReturn = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(responseText);
-                foreach (var item in userProfileReturn)
-                    target.Add(item.Key, item.Value);
-            }
-            catch (WebException e)
-            {
-                TraceManager.Error("AUserInfo", "RefreshUserProfile", "Service user profile do not work : " + address.AbsoluteUri + " Error : " + e.Message);
-            }
-
-            return userProfileKey;
-        }
-        #endregion
     }
 }

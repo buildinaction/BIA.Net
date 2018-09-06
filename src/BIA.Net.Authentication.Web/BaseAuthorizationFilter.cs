@@ -27,6 +27,7 @@ namespace BIA.Net.Authentication.Web
         public HttpResponseMessage HttpResponseMessage { get; set; }
     }
 
+
     public class BaseAuthorizationFilter<TUserInfo, TUserProperties>
         where TUserInfo : AUserInfo<TUserProperties>, new()
         where TUserProperties : IUserProperties, new()
@@ -146,8 +147,8 @@ namespace BIA.Net.Authentication.Web
             user.Properties = aspNetUser;
             if (user.Identities.Keys.Contains("LocalUserID")) user.Identities.Remove("LocalUserID");
             user.Identities.Add("LocalUserID", localUserId);
-            user.AdditionnalRoles = new List<string> { "User" };
-            RefreshUser( user, shouldRefreshUserProperties: false );
+            user.userInfoContainer.AdditionnalRoles = new List<string> { "User" };
+            RefreshUser( user, shouldRefreshIdentities: false, shouldRefreshUserProperties: false );
             return user;
         }
 
@@ -157,7 +158,7 @@ namespace BIA.Net.Authentication.Web
             user.userInfoContainer = (AUserInfo<TUserProperties>.UserInfoContainer)Session[AuthenticationConstants.SessionUserInfo];
             user.Properties = default(TUserProperties);
             if (user.Identities.Keys.Contains("LocalUserID")) user.Identities.Remove("LocalUserID");
-            user.AdditionnalRoles = null;
+            user.userInfoContainer.AdditionnalRoles = null;
             RefreshUser(user);
             return user;
         }

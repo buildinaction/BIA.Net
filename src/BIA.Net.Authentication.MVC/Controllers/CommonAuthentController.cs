@@ -17,11 +17,12 @@ namespace BIA.Net.Authentication.MVC.Controllers
     /// Common controller for the whole application
     /// </summary>
     /// <seealso cref="System.Web.Mvc.Controller" />
-    public class CommonAuthentController<TServiceSynchronizeUser, TUserInfo, TUserProperties, TLinkedUserProperties> : Controller
+    public class CommonAuthentController<TServiceSynchronizeUser, TUserInfo, TUserProperties, TUserLinkedInfo, TLinkedProperties> : Controller
         where TServiceSynchronizeUser : AServiceSynchronizeUser, new()
         where TUserInfo : AUserInfo<TUserProperties>, new()
         where TUserProperties : IUserProperties, new()
-        where TLinkedUserProperties : ILinkedUserProperties, new()
+        where TUserLinkedInfo : ALinkedUserInfo<TLinkedProperties>, new()
+        where TLinkedProperties : ILinkedProperties, new()
     {
         /// <summary>
         /// Changes the session language according to the language selected by user
@@ -77,7 +78,7 @@ namespace BIA.Net.Authentication.MVC.Controllers
             {
                 using (TServiceSynchronizeUser serviceUserDB = new TServiceSynchronizeUser())
                 {
-                    userDeleted = serviceUserDB.SynchronizeUsers<TUserInfo, TUserProperties, TLinkedUserProperties>(ADHelper.GetADGroupsForRole("User"));
+                    userDeleted = serviceUserDB.SynchronizeUsers<TUserLinkedInfo, TLinkedProperties>(ADHelper.GetADGroupsForRole("User"));
                 }
             }
 

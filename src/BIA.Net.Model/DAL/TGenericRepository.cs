@@ -249,6 +249,10 @@ namespace BIA.Net.Model
                 {
                     searchIdentity = searchIdentity + prop.name + "==" + keyValues[countkey];
                 }
+                else if (prop.typeName == "Guid")
+                {
+                    searchIdentity = searchIdentity + prop.name + ".ToString() ==\"" + keyValues[countkey] + "\"";
+                }
                 else
                 {
                     searchIdentity = searchIdentity + prop.name + "==\"" + keyValues[countkey] + "\"";

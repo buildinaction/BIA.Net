@@ -93,6 +93,8 @@
     <Compile Include="Helpers\ADGroup.cs" />
     <Compile Include="Helpers\ADHelper.cs" />
     <Compile Include="AServiceSynchronizeUser.cs" />
+    <Compile Include="Helpers\AUserInfoCommon.cs" />
+    <Compile Include="Helpers\ALinkedUserInfo.cs" />
     <Compile Include="Helpers\AUserInfo.cs" />
     <Compile Include="Helpers\IUserInfo.cs" />
     <Compile Include="ILinkedUserProperties.cs" />

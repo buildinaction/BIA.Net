@@ -16,6 +16,7 @@ namespace BIA.Net.Authentication.MVC
     using BIA.Net.Authentication.Business.Helpers;
 
 
+
     /// <summary>
     /// Authorization Filter
     /// </summary>
@@ -24,8 +25,8 @@ namespace BIA.Net.Authentication.MVC
     /// <typeparam name="TUserInfo">The type of the format stocked in session variable.</typeparam>
     /// <typeparam name="TUserProperties">The type of the user stocked in db.</typeparam>
     public class BIAAuthorizationFilterMVC<TUserInfo, TUserProperties> : BaseAuthorizationFilter<TUserInfo, TUserProperties>, IAuthorizationFilter
-        where TUserInfo : AUserInfo<TUserProperties>, new()
-        where TUserProperties : IUserProperties, new()
+    where TUserInfo : AUserInfo<TUserProperties>, new()
+    where TUserProperties : IUserProperties, new()
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BIAAuthorizationFilterMVC{TServiceSynchronizeUser, TUserInfo}"/> class.

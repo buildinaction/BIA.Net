@@ -335,28 +335,17 @@ namespace BIA.Net.Common.Configuration
         public class ObjectFieldElement : HeterogeneousConfigurationElementBase
         {
             public ObjectFieldElement(string elementName) : base(elementName) { }
-            [ConfigurationProperty("object", IsRequired = true, IsKey = false)]
-            public string Object
+
+            [ConfigurationProperty("source", IsRequired = true, IsKey = false)]
+            public string Source
             {
                 get
                 {
-                    return (string)this["object"];
+                    return (string)this["source"];
                 }
                 set
                 {
-                    this["object"] = value;
-                }
-            }
-            [ConfigurationProperty("field", IsRequired = true, IsKey = false)]
-            public string Field
-            {
-                get
-                {
-                    return (string)this["field"];
-                }
-                set
-                {
-                    this["field"] = value;
+                    this["source"] = value;
                 }
             }
         }

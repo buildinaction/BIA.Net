@@ -20,6 +20,7 @@ namespace BIA.Net.Authentication.WebAPI
     using System.Web.Http.Filters;
     using BIA.Net.Authentication.Business.Helpers;
 
+
     /// <summary>
     /// Authorization Filter
     /// </summary>
@@ -27,7 +28,7 @@ namespace BIA.Net.Authentication.WebAPI
     /// <typeparam name="TServiceSynchronizeUser">The type of the service to synchronize users in DB.</typeparam>
     /// <typeparam name="TUserInfo">The type of the format stocked in session variable.</typeparam>
     public class BIAAuthorizationFilterWebAPI<TUserInfo, TUserProperties> : BaseAuthorizationFilter<TUserInfo, TUserProperties>, IAuthorizationFilter
-        where TUserInfo : AUserInfo<TUserProperties>, new()
+    where TUserInfo : AUserInfo<TUserProperties>, new()
         where TUserProperties : IUserProperties, new()
     {
         public bool AllowMultiple

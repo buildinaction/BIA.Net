@@ -38,6 +38,18 @@ namespace BIA.Net.Common.Configuration
             get { return (HeterogeneousCollection)this["Properties"]; }
             set { this["Properties"] = value; }
         }
+
+        [ConfigurationProperty("LinkedProperties", IsDefaultCollection = false)]
+        [ConfigurationCollection(typeof(HeterogeneousCollection),
+             AddItemName = "add",
+             ClearItemsName = "clear",
+             RemoveItemName = "remove")]
+        public HeterogeneousCollection LinkedProperties
+        {
+            get { return (HeterogeneousCollection)this["LinkedProperties"]; }
+            set { this["LinkedProperties"] = value; }
+        }
+
         [ConfigurationProperty("Language", IsDefaultCollection = false)]
         [ConfigurationCollection(typeof(HeterogeneousCollection),
              AddItemName = "add",
