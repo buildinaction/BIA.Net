@@ -11,9 +11,10 @@ namespace BIA.Net.Authentication.Business.Helpers
 
     public class ADGroup
     {
-        public ADGroup(string groupName)
+        public ADGroup(string groupName, string role)
         {
             GroupName = groupName;
+            Role = role;
             if (groupName.Contains('\\'))
             {
                 string[] split = groupName.Split('\\');
@@ -27,6 +28,7 @@ namespace BIA.Net.Authentication.Business.Helpers
         }
 
         public string GroupName { get; }
+        public string Role { get; }
         public string GroupShortName { get; }
         private bool IsInit { get; set; }
         private bool IsValid { get; set; }

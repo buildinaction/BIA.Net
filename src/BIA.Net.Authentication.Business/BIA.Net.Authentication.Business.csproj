@@ -92,14 +92,15 @@
   <ItemGroup>
     <Compile Include="Helpers\ADGroup.cs" />
     <Compile Include="Helpers\ADHelper.cs" />
-    <Compile Include="AServiceSynchronizeUser.cs" />
+    <Compile Include="Synchronize\AServiceSynchronizeUser.cs" />
     <Compile Include="Helpers\AUserInfoCommon.cs" />
-    <Compile Include="Helpers\ALinkedUserInfo.cs" />
+    <Compile Include="Synchronize\ALinkedUserInfo.cs" />
     <Compile Include="Helpers\AUserInfo.cs" />
     <Compile Include="Helpers\IUserInfo.cs" />
-    <Compile Include="ILinkedUserProperties.cs" />
+    <Compile Include="Synchronize\ILinkedUserProperties.cs" />
     <Compile Include="IUserProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Synchronize\IServiceSynchronizeUser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -121,6 +122,7 @@
       <Name>BIA.Net.Common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>REM Create a NuGet package for this project and place the .nupkg file in the project's output directory.

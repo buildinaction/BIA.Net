@@ -72,7 +72,7 @@
                                     
                                     foreach(string value in values)
                                     {
-                                        ADGroup group = new ADGroup(value);
+                                        ADGroup group = new ADGroup(value, ADRole.Key);
                                         groups.Add(group);
                                     }
                                     adRoles.Add(ADRole.Key, groups);

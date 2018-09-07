@@ -131,38 +131,6 @@ namespace BIA.Net.Authentication.Web
             }
         }
 
-        static private void RefreshUser(TUserInfo user, bool shouldRefreshIdentities = true, bool shouldRefreshUserProperties =true, bool shouldRefreshUserProfile = true, bool shouldRefreshUserLangage = true, bool shouldRefreshUserRoles = true)
-        {
-            user.userInfoContainer.identitiesShouldBeRefreshed = shouldRefreshIdentities;
-            user.userInfoContainer.propertiesShouldBeRefreshed = shouldRefreshUserProperties;
-            user.userInfoContainer.userProfileShouldBeRefreshed = shouldRefreshUserProfile;
-            user.userInfoContainer.languageShouldBeRefreshed = shouldRefreshUserLangage;
-            user.userInfoContainer.rolesShouldBeRefreshed = shouldRefreshUserRoles;
-        }
-
-        static protected TUserInfo ConnectUser(HttpSessionState Session, TUserProperties aspNetUser, string localUserId)
-        {
-            TUserInfo user = new TUserInfo();
-            user.userInfoContainer = (AUserInfo<TUserProperties>.UserInfoContainer) Session[AuthenticationConstants.SessionUserInfo];
-            user.Properties = aspNetUser;
-            if (user.Identities.Keys.Contains("LocalUserID")) user.Identities.Remove("LocalUserID");
-            user.Identities.Add("LocalUserID", localUserId);
-            user.userInfoContainer.AdditionnalRoles = new List<string> { "User" };
-            RefreshUser( user, shouldRefreshIdentities: false, shouldRefreshUserProperties: false );
-            return user;
-        }
-
-        static protected TUserInfo DisconnectUser(HttpSessionState Session)
-        {
-            TUserInfo user = new TUserInfo();
-            user.userInfoContainer = (AUserInfo<TUserProperties>.UserInfoContainer)Session[AuthenticationConstants.SessionUserInfo];
-            user.Properties = default(TUserProperties);
-            if (user.Identities.Keys.Contains("LocalUserID")) user.Identities.Remove("LocalUserID");
-            user.userInfoContainer.AdditionnalRoles = null;
-            RefreshUser(user);
-            return user;
-        }
-
         private static bool ShouldRefresh(string RefreshKey, HttpSessionState Session, string userName)
         {
             if (Session[RefreshKey] == null) return true;

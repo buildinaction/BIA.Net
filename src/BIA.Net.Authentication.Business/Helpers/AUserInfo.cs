@@ -71,7 +71,7 @@
             }
         }
 
-        public virtual string Login
+        public override string Login
         {
             get
             {
@@ -83,26 +83,11 @@
             }
         }
 
-
-        private string localUserID = null;
-        public virtual string LocalUserID
-        {
-            get
-            {
-                if (localUserID == null)
-                {
-                    localUserID = Identities["LocalUserID"];
-                }
-                return localUserID;
-            }
-        }
-
-
-        Dictionary<string, string> identitiesInBuilding = null;
-        TUserProperties propertiesInBuilding = default(TUserProperties);
-        string languageInBuilding = null;
-        Dictionary<string, string> userProfileInBuilding = null;
-        List<string> rolesInBuilding = null;
+        protected Dictionary<string, string> identitiesInBuilding = null;
+        protected TUserProperties propertiesInBuilding = default(TUserProperties);
+        protected string languageInBuilding = null;
+        protected Dictionary<string, string> userProfileInBuilding = null;
+        protected List<string> rolesInBuilding = null;
         #endregion
 
         /// <summary>
@@ -122,17 +107,22 @@
                         TraceManager.Debug("Return the rolesInBuilding");
                         return rolesInBuilding;
                     }
-                    RefreshRoles();
+                    rolesInBuilding = new List<string>();
+                    RefreshRolesInBuilding();
+                    Roles = rolesInBuilding;
                 }
                 return userInfoContainer.roles;
             }
             set
             {
                 userInfoContainer.roles = value;
+                rolesInBuilding = null;
                 userInfoContainer.rolesShouldBeRefreshed = false;
                 userInfoContainer.rolesRefreshDate = DateTime.Now;
             }
         }
+
+
         public virtual TUserProperties Properties
         {
             get
@@ -144,13 +134,16 @@
                         TraceManager.Debug("Return the propertiesInBuilding");
                         return propertiesInBuilding;
                     }
-                    RefreshProperties();
+                    propertiesInBuilding = new TUserProperties();
+                    RefreshPropertiesInBuilding();
+                    Properties = propertiesInBuilding;
                 }
                 return userInfoContainer.properties;
             }
             set
             {
                 userInfoContainer.properties = value;
+                propertiesInBuilding = default(TUserProperties);
                 userInfoContainer.propertiesShouldBeRefreshed = false;
                 userInfoContainer.propertiesRefreshDate = DateTime.Now;
             }
@@ -166,13 +159,16 @@
                         TraceManager.Debug("Return the identitiesInBuilding");
                         return identitiesInBuilding;
                     }
-                    RefreshIdentities();
+                    identitiesInBuilding = new Dictionary<string, string>();
+                    RefreshIdentitiesInBuilding();
+                    Identities = identitiesInBuilding;
                 }
                 return userInfoContainer.identities;
             }
             set
             {
                 userInfoContainer.identities = value;
+                identitiesInBuilding = null;
                 userInfoContainer.identitiesShouldBeRefreshed = false;
                 userInfoContainer.identitiesRefreshDate = DateTime.Now;
             }
@@ -192,13 +188,16 @@
                         TraceManager.Debug("Return the userProfileInBuilding");
                         return userProfileInBuilding;
                     }
-                    RefreshUserProfile();
+                    userProfileInBuilding = new Dictionary<string, string>();
+                    RefreshUserProfileInBuilding();
+                    UserProfile = userProfileInBuilding;
                 }
                 return userInfoContainer.userProfile;
             }
             set
             {
                 userInfoContainer.userProfile = value;
+                userProfileInBuilding = null;
                 userInfoContainer.userProfileShouldBeRefreshed = false;
                 userInfoContainer.userProfileRefreshDate = DateTime.Now;
             }
@@ -218,13 +217,17 @@
                         TraceManager.Debug("Return the languageInBuilding");
                         return languageInBuilding;
                     }
-                    RefreshLanguage();
+                    languageInBuilding = "en-US";
+                    RefreshLanguageInBuilding();
+                    Language = languageInBuilding;
+ 
                 }
                 return userInfoContainer.language;
             }
             set
             {
                 userInfoContainer.language = value;
+                languageInBuilding = null;
                 userInfoContainer.languageShouldBeRefreshed = false;
                 userInfoContainer.languageRefreshDate = DateTime.Now;
             }
@@ -264,10 +267,6 @@
             public string rolesKey;
 
             public List<string> roles = null;
-            /// <summary>
-            /// Additionnal Role added by custom connect
-            /// </summary>
-            public List<string> AdditionnalRoles { get; set; }
             #endregion
 
             #region properties
@@ -303,16 +302,24 @@
 
         #endregion Methods
 
-        protected virtual void RefreshIdentities()
+        public void RefreshUser(bool shouldRefreshIdentities = true, bool shouldRefreshUserProperties = true, bool shouldRefreshUserProfile = true, bool shouldRefreshUserLangage = true, bool shouldRefreshUserRoles = true)
         {
-            BaseRefreshIdentities();
+            userInfoContainer.identitiesShouldBeRefreshed = shouldRefreshIdentities;
+            userInfoContainer.propertiesShouldBeRefreshed = shouldRefreshUserProperties;
+            userInfoContainer.userProfileShouldBeRefreshed = shouldRefreshUserProfile;
+            userInfoContainer.languageShouldBeRefreshed = shouldRefreshUserLangage;
+            userInfoContainer.rolesShouldBeRefreshed = shouldRefreshUserRoles;
         }
 
 
-        public void BaseRefreshIdentities()
+        protected virtual void RefreshIdentitiesInBuilding()
         {
-            identitiesInBuilding = new Dictionary<string, string>();
+            BaseRefreshIdentitiesInBuilding();
+        }
 
+
+        public void BaseRefreshIdentitiesInBuilding()
+        {
             HeterogeneousCollection identities = BIASettingsReader.BIANetSection?.Authentication?.Identities;
             if (identities != null && identities.Count > 0)
             {
@@ -352,9 +359,6 @@
                     }
                 }
             }
-
-            Identities = identitiesInBuilding;
-            identitiesInBuilding = null;
         }
 
         public virtual void CustomCodeIdentities(Dictionary<string, string> identities)
@@ -362,48 +366,42 @@
 
         }
 
-        protected virtual void RefreshUserProfile()
+        protected virtual void RefreshUserProfileInBuilding()
         {
-            BaseRefreshUserProfile();
+            BaseRefreshUserProfileInBuilding();
         }
 
-        public void BaseRefreshUserProfile()
+        public void BaseRefreshUserProfileInBuilding()
         {
-            if (userProfileInBuilding == null)
-            {
-                //Initialize User profile
-                userProfileInBuilding = new Dictionary<string, string>();
-                string userProfileKey = "";
+            //Initialize User profile
+            string userProfileKey = "";
 
-                HeterogeneousCollection userProfileValues = BIASettingsReader.BIANetSection?.Authentication?.UserProfile;
-                if (userProfileValues != null && userProfileValues.Count > 0)
+            HeterogeneousCollection userProfileValues = BIASettingsReader.BIANetSection?.Authentication?.UserProfile;
+            if (userProfileValues != null && userProfileValues.Count > 0)
+            {
+                foreach (IHeterogeneousConfigurationElement heterogeneousElem in userProfileValues)
                 {
-                    foreach (IHeterogeneousConfigurationElement heterogeneousElem in userProfileValues)
+                    if (heterogeneousElem is ValueElement)
                     {
-                        if (heterogeneousElem is ValueElement)
+                        SetFromValueElement(userProfileInBuilding, heterogeneousElem);
+                    }
+                    else if (heterogeneousElem is WebServiceElement)
+                    {
+                        if (!string.IsNullOrEmpty(userProfileKey)) userProfileKey += ",";
+                        userProfileKey += SetFromWebService(userProfileInBuilding, heterogeneousElem);
+                    }
+                    else if (heterogeneousElem.TagName == "CustomCode")
+                    {
+                        if (SetFromCustomCodeElement(userProfileInBuilding, heterogeneousElem))
                         {
-                            SetFromValueElement(userProfileInBuilding, heterogeneousElem);
-                        }
-                        else if (heterogeneousElem is WebServiceElement)
-                        {
-                            if (!string.IsNullOrEmpty(userProfileKey)) userProfileKey += ",";
-                            userProfileKey += SetFromWebService(userProfileInBuilding, heterogeneousElem);
-                        }
-                        else if (heterogeneousElem.TagName == "CustomCode")
-                        {
-                            if (SetFromCustomCodeElement(userProfileInBuilding, heterogeneousElem))
-                            {
-                                CustomCodeUserProfile(userProfileInBuilding);
-                            }
-                        }
-                        else
-                        {
-                            throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > UserProfile");
+                            CustomCodeUserProfile(userProfileInBuilding);
                         }
                     }
+                    else
+                    {
+                        throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > UserProfile");
+                    }
                 }
-
-                UserProfile = userProfileInBuilding;
                 userInfoContainer.userProfileKey = userProfileKey;
             }
         }
@@ -414,58 +412,44 @@
         }
 
 
-        protected virtual void RefreshRoles()
+        protected virtual void RefreshRolesInBuilding()
         {
-            BaseRefreshRoles();
+            BaseRefreshRolesInBuilding();
         }
 
-        public void BaseRefreshRoles()
+        public void BaseRefreshRolesInBuilding()
         {
-            if (rolesInBuilding == null)
+            HeterogeneousCollection rolesValues = BIASettingsReader.BIANetSection?.Authentication?.Roles;
+            if (rolesValues != null && rolesValues.Count > 0)
             {
-                rolesInBuilding = new List<string>();
-                if (userInfoContainer.AdditionnalRoles != null)
+                foreach (IHeterogeneousConfigurationElement heterogeneousElem in rolesValues)
                 {
-                    foreach (string group in userInfoContainer.AdditionnalRoles)
+                    if (heterogeneousElem.TagName == "Value")
                     {
-                        rolesInBuilding.Add(group);
+                        SetFromKeyElement(rolesInBuilding, heterogeneousElem);
                     }
-                }
-                HeterogeneousCollection rolesValues = BIASettingsReader.BIANetSection?.Authentication?.Roles;
-                if (rolesValues != null && rolesValues.Count > 0)
-                {
-                    foreach (IHeterogeneousConfigurationElement heterogeneousElem in rolesValues)
+                    else if (heterogeneousElem.TagName == "ADRole")
                     {
-                        if (heterogeneousElem.TagName == "Value")
+                        ValueElement ADRole = (ValueElement)heterogeneousElem;
+                        if (HasRole(ADRole.Key))
                         {
-                            SetFromKeyElement(rolesInBuilding, heterogeneousElem);
-                        }
-                        else if (heterogeneousElem.TagName == "ADRole")
-                        {
-                            ValueElement ADRole = (ValueElement)heterogeneousElem;
-                            if (HasRole(ADRole.Key))
-                            {
-                                rolesInBuilding.Add(ADRole.Key);
-                            }
-                        }
-                        else if (heterogeneousElem is CustomCodeElement)
-                        {
-                            if (SetFromCustomCodeElement(rolesInBuilding, heterogeneousElem))
-                            {
-                                CustomCodeRoles(rolesInBuilding);
-                            }
-                        }
-                        else
-                        {
-                            throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > Role");
+                            rolesInBuilding.Add(ADRole.Key);
                         }
                     }
+                    else if (heterogeneousElem is CustomCodeElement)
+                    {
+                        if (SetFromCustomCodeElement(rolesInBuilding, heterogeneousElem))
+                        {
+                            CustomCodeRoles(rolesInBuilding);
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > Role");
+                    }
                 }
-
-                Roles = rolesInBuilding;
-                rolesInBuilding = null;
-                userInfoContainer.rolesKey = Login;
             }
+            userInfoContainer.rolesKey = Login;
         }
 
         private bool HasRole(string role)
@@ -501,61 +485,54 @@
         /// <summary>
         /// Refresh the user properties
         /// </summary>
-        protected virtual void RefreshProperties()
+        protected virtual void RefreshPropertiesInBuilding()
         {
-            BaseRefreshProperties();
+            BaseRefreshPropertiesInBuilding();
         }
 
         /// <summary>
         /// Refresh the user properties (not overidable)
         /// </summary>
-        public void BaseRefreshProperties()
+        public void BaseRefreshPropertiesInBuilding()
         {
-            if (propertiesInBuilding == null)
+               
+            HeterogeneousCollection propertiesValues = BIASettingsReader.BIANetSection?.Authentication?.Properties;
+            if (propertiesValues != null && propertiesValues.Count > 0)
             {
-                propertiesInBuilding = new TUserProperties();
-                HeterogeneousCollection propertiesValues = BIASettingsReader.BIANetSection?.Authentication?.Properties;
-                if (propertiesValues != null && propertiesValues.Count > 0)
+                foreach (IHeterogeneousConfigurationElement heterogeneousElem in propertiesValues)
                 {
-                    foreach (IHeterogeneousConfigurationElement heterogeneousElem in propertiesValues)
+                    if (heterogeneousElem is ValueElement)
                     {
-                        if (heterogeneousElem is ValueElement)
+                        SetFromValueElement(propertiesInBuilding, heterogeneousElem);
+                    }
+                    else if (heterogeneousElem is ADFieldElement)
+                    {
+                        SetFromADFieldElement(propertiesInBuilding, heterogeneousElem);
+                    }
+                    else if (heterogeneousElem is ObjectFieldElement)
+                    {
+                        SetFromObjectFieldElement(propertiesInBuilding, heterogeneousElem);
+                    }
+                    else if (heterogeneousElem is FunctionElement)
+                    {
+                        SetFromFunctionElement(propertiesInBuilding, heterogeneousElem);
+                    }
+                    else if (heterogeneousElem is WindowsIdentityElement)
+                    {
+                        SetFromWindowsIdentityElement(propertiesInBuilding, heterogeneousElem);
+                    }
+                    else if (heterogeneousElem.TagName ==  "CustomCode")
+                    {
+                        if (SetFromCustomCodeElement(propertiesInBuilding, heterogeneousElem))
                         {
-                            SetFromValueElement(propertiesInBuilding, heterogeneousElem);
-                        }
-                        else if (heterogeneousElem is ADFieldElement)
-                        {
-                            SetFromADFieldElement(propertiesInBuilding, heterogeneousElem);
-                        }
-                        else if (heterogeneousElem is ObjectFieldElement)
-                        {
-                            SetFromObjectFieldElement(propertiesInBuilding, heterogeneousElem);
-                        }
-                        else if (heterogeneousElem is FunctionElement)
-                        {
-                            SetFromFunctionElement(propertiesInBuilding, heterogeneousElem);
-                        }
-                        else if (heterogeneousElem is WindowsIdentityElement)
-                        {
-                            SetFromWindowsIdentityElement(propertiesInBuilding, heterogeneousElem);
-                        }
-                        else if (heterogeneousElem.TagName ==  "CustomCode")
-                        {
-                            if (SetFromCustomCodeElement(propertiesInBuilding, heterogeneousElem))
-                            {
-                                CustomCodeProperties(propertiesInBuilding);
-                            }
-                        }
-                        else
-                        {
-                            throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > Properties");
+                            CustomCodeProperties(propertiesInBuilding);
                         }
                     }
+                    else
+                    {
+                        throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > Properties");
+                    }
                 }
-
-                Properties = propertiesInBuilding;
-                propertiesInBuilding = default(TUserProperties);
-                userInfoContainer.propertiesKey = Login;
             }
         }
 
@@ -563,76 +540,71 @@
         {
         }
 
-        protected virtual void RefreshLanguage()
+        protected virtual void RefreshLanguageInBuilding()
         {
-            BaseRefreshLanguage();
+            BaseRefreshLanguageInBuilding();
         }
 
-        public void BaseRefreshLanguage()
+        public void BaseRefreshLanguageInBuilding()
         {
-            if (languageInBuilding == null)
+            HeterogeneousCollection languageValues = BIASettingsReader.BIANetSection?.Authentication?.Language;
+            if (languageValues != null && languageValues.Count > 0)
             {
-                HeterogeneousCollection languageValues = BIASettingsReader.BIANetSection?.Authentication?.Language;
-                if (languageValues != null && languageValues.Count > 0)
+                foreach (IHeterogeneousConfigurationElement heterogeneousElem in languageValues)
                 {
-                    foreach (IHeterogeneousConfigurationElement heterogeneousElem in languageValues)
+                    if (heterogeneousElem.TagName == "Value")
                     {
-                        if (heterogeneousElem.TagName == "Value")
+                        ValueElement value = (ValueElement)heterogeneousElem;
+                        languageInBuilding = value.Value;
+                    }
+                    else if (heterogeneousElem.TagName == "Mapping")
+                    {
+                        MappingCollection mappingCollection = (MappingCollection)heterogeneousElem;
+                        if (mappingCollection?.Key != null)
                         {
-                            ValueElement value = (ValueElement)heterogeneousElem;
-                            languageInBuilding = value.Value;
-                        }
-                        else if (heterogeneousElem.TagName == "Mapping")
-                        {
-                            MappingCollection mappingCollection = (MappingCollection)heterogeneousElem;
-                            if (mappingCollection?.Key != null)
+                            object objectValueToMap = GetObjectValue(this, mappingCollection?.Key);
+                            if (objectValueToMap != null)
                             {
-                                object objectValueToMap = GetObjectValue(this, mappingCollection?.Key);
-                                if (objectValueToMap != null)
+                                string sObjectValueToMap = objectValueToMap.ToString();
+                                foreach (KeyValueElement mapping in mappingCollection)
                                 {
-                                    string sObjectValueToMap = objectValueToMap.ToString();
-                                    foreach (KeyValueElement mapping in mappingCollection)
+                                    if (mapping.Key == sObjectValueToMap)
                                     {
-                                        if (mapping.Key == sObjectValueToMap)
-                                        {
-                                            languageInBuilding = mapping.Value;
-                                            break;
-                                        }
+                                        languageInBuilding = mapping.Value;
+                                        break;
                                     }
                                 }
                             }
                         }
-                        else if (heterogeneousElem.TagName == "CustomCode")
+                    }
+                    else if (heterogeneousElem.TagName == "CustomCode")
+                    {
+                        CustomCodeElement customCode = (CustomCodeElement) heterogeneousElem;
+                        if (customCode != null)
                         {
-                            CustomCodeElement customCode = (CustomCodeElement) heterogeneousElem;
-                            if (customCode != null)
+                            if (string.IsNullOrEmpty(customCode.Function))
                             {
-                                if (string.IsNullOrEmpty(customCode.Function))
-                                {
-                                    languageInBuilding = CustomCodeLanguage();
-                                }
-                                else
-                                {
-                                    languageInBuilding = (string)this.GetType().GetMethod(customCode.Function).Invoke(this, null);
-                                    if (languageInBuilding != null) break;
-                                }
+                                languageInBuilding = CustomCodeLanguage();
+                            }
+                            else
+                            {
+                                languageInBuilding = (string)this.GetType().GetMethod(customCode.Function).Invoke(this, null);
+                                if (languageInBuilding != null) break;
                             }
                         }
-                        else
-                        {
-                            throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > Language");
-                        }
-                        if (languageInBuilding != null) break;
                     }
+                    else
+                    {
+                        throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > Language");
+                    }
+                    if (languageInBuilding != null) break;
                 }
-                if (languageInBuilding == null)
-                {
-                    languageInBuilding = "en-US";
-                }
-                Language = languageInBuilding;
-                languageInBuilding = null;
-                userInfoContainer.languageKey = Login;
             }
+            if (languageInBuilding == null)
+            {
+                languageInBuilding = "en-US";
+            }
+            userInfoContainer.languageKey = Login;
         }
 
         public virtual string CustomCodeLanguage()

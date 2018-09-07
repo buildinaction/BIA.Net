@@ -9,8 +9,13 @@ namespace BIA.Net.Common
     public class BIAConstantes
     {
         /// <summary>
-        /// The ad group of application administrators
+        /// The role Internal user (other digital manufacturing app pool) of the application
         /// </summary>
         public const string RoleInternal = "Internal";
+
+        /// <summary>
+        /// The role User of the application
+        /// </summary>
+        public const string RoleUser = "User";
     }
 }
