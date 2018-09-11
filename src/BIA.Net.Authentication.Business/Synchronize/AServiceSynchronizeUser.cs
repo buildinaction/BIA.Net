@@ -1,4 +1,4 @@
-﻿namespace BIA.Net.Authentication.Business
+﻿namespace BIA.Net.Authentication.Business.Synchronize
 {
     using BIA.Net.Authentication.Business.Helpers;
     using BIA.Net.Common;
@@ -8,7 +8,9 @@
     using System.DirectoryServices.AccountManagement;
     using System.Linq;
 
-    public abstract class AServiceSynchronizeUser : IDisposable
+    public abstract class AServiceSynchronizeUser<TLinkedUserInfo, TLinkedProperties> : IServiceSynchronizeUser, IDisposable
+               where TLinkedProperties : ILinkedProperties, new()
+               where TLinkedUserInfo : ALinkedUserInfo<TLinkedProperties>, new()
     {
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -17,17 +19,6 @@
         public virtual void Dispose()
         {
             throw new Exception("Please overide Dispose");
-        }
-
-        /// <summary>
-        /// Gets the name of the ASP net user by.
-        /// </summary>
-        /// <param name="userName">Name of the user.</param>
-        /// <returns>Nothing: Function to override</returns>
-        /// <exception cref="System.Exception">Please overide GetUserPropertiesByName</exception>
-        public virtual IUserProperties GetUserPropertiesByName(string userName)
-        {
-            throw new Exception("Please overide GetUserPropertiesByName");
         }
 
         /// <summary>
@@ -48,9 +39,7 @@
         /// <param name="adGroupsAsApplicationUsers">List of ad groups</param>
         /// <typeparam name="TLinkedUserProperties">The type of the user DB table DTO.</typeparam>
         /// <returns>List of user deleted</returns>
-        public virtual List<string> SynchronizeUsers<TUserInfo, TLinkedProperties>(List<ADGroup> adGroupsAsApplicationUsers)
-               where TLinkedProperties : ILinkedProperties, new()
-               where TUserInfo : ALinkedUserInfo<TLinkedProperties>, new()
+        public virtual List<string> SynchronizeUsers(List<ADGroup> adGroupsAsApplicationUsers)
         {
             List<string> listUserInGroup = new List<string>();
             List<ILinkedProperties> listUserName = GetAllUsersInDB();
@@ -66,9 +55,9 @@
 
                     if (findedUser == null)
                     {
-                        TUserInfo userInfo = new TUserInfo();
+                        TLinkedUserInfo userInfo = new TLinkedUserInfo();
                         userInfo.Login = userName ;
-                        userInfo.BaseRefreshLinkedProperties();
+                        userInfo.Roles = new List<string> { group.Role };
                         // Create the missing user
 
                         ILinkedProperties adUserCreated = Insert(userInfo.LinkedProperties);

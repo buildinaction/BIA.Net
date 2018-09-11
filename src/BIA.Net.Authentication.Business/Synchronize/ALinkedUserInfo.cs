@@ -1,25 +1,13 @@
-﻿namespace BIA.Net.Authentication.Business.Helpers
+﻿namespace BIA.Net.Authentication.Business.Synchronize
 {
+    using BIA.Net.Authentication.Business.Helpers;
     using BIA.Net.Common;
     using BIA.Net.Common.Helpers;
-    using Business;
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
-    using System.DirectoryServices.AccountManagement;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Reflection;
-    using System.Security.Claims;
-    using System.Security.Principal;
-    using System.Text;
-    using System.Text.RegularExpressions;
     using static BIA.Net.Common.Configuration.AuthenticationElement.LanguageElement;
     using static BIA.Net.Common.Configuration.AuthenticationElement.ParametersElement;
     using static BIA.Net.Common.Configuration.CommonElement;
-
-
 
     /// <summary>
     /// Class to define identity.
@@ -27,6 +15,9 @@
     public abstract class ALinkedUserInfo<TLinkedProperties> : AUserInfoCommon
         where TLinkedProperties : ILinkedProperties, new()
     {
+        protected TLinkedProperties linkedPropertiesInBuilding = default(TLinkedProperties);
+        TLinkedProperties linkedProperties = default(TLinkedProperties);
+
         #region Constructors
 
         /// <summary>
@@ -38,11 +29,33 @@
         #endregion Constructors
 
         #region Properties
-
-        public virtual TLinkedProperties LinkedProperties
+        public virtual List<string> Roles
         {
             get; set;
         }
+
+        public virtual TLinkedProperties LinkedProperties
+        {
+            get
+            {
+                if (linkedPropertiesInBuilding != null)
+                {
+                    TraceManager.Debug("Return the linkedPropertiesInBuilding");
+                    return linkedPropertiesInBuilding;
+                }
+                linkedPropertiesInBuilding = new TLinkedProperties();
+                RefreshLinkedPropertiesInBuilding();
+                LinkedProperties = linkedPropertiesInBuilding;
+
+                return linkedProperties;
+            }
+            set
+            {
+                linkedProperties = value;
+                linkedPropertiesInBuilding = default(TLinkedProperties);
+            }
+        }
+
 
         #endregion Properties
 
@@ -62,17 +75,16 @@
         /// <summary>
         /// Refresh the user properties
         /// </summary>
-        protected virtual void RefreshLinkedProperties()
+        protected virtual void RefreshLinkedPropertiesInBuilding()
         {
-            BaseRefreshLinkedProperties();
+            BaseRefreshLinkedPropertiesInBuilding();
         }
 
         /// <summary>
         /// Refresh the user properties (not overidable)
         /// </summary>
-        public void BaseRefreshLinkedProperties()
+        public void BaseRefreshLinkedPropertiesInBuilding()
         {
-            TLinkedProperties linkedPropertiesInBuilding = new TLinkedProperties();
             HeterogeneousCollection linkedPropertiesValues = BIASettingsReader.BIANetSection?.Authentication?.LinkedProperties;
             if (linkedPropertiesValues != null && linkedPropertiesValues.Count > 0)
             {
@@ -110,8 +122,6 @@
                         throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > Properties");
                     }
                 }
-
-                LinkedProperties = linkedPropertiesInBuilding;
             }
         }
 

@@ -10,19 +10,19 @@ namespace BIA.Net.Authentication.MVC.Controllers
     using BIA.Net.Authentication.MVC;
     using Newtonsoft.Json;
     using BIA.Net.Authentication.Business.Helpers;
+    using BIA.Net.Authentication.Business.Synchronize;
     using System.Collections.Generic;
     using System.Web.Mvc;
+    using BIA.Net.Common.Helpers;
 
     /// <summary>
     /// Common controller for the whole application
     /// </summary>
     /// <seealso cref="System.Web.Mvc.Controller" />
-    public class CommonAuthentController<TServiceSynchronizeUser, TUserInfo, TUserProperties, TUserLinkedInfo, TLinkedProperties> : Controller
-        where TServiceSynchronizeUser : AServiceSynchronizeUser, new()
+    public class CommonAuthentController<TServiceSynchronizeUser, TUserInfo, TUserProperties> : Controller
+        where TServiceSynchronizeUser : IServiceSynchronizeUser
         where TUserInfo : AUserInfo<TUserProperties>, new()
         where TUserProperties : IUserProperties, new()
-        where TUserLinkedInfo : ALinkedUserInfo<TLinkedProperties>, new()
-        where TLinkedProperties : ILinkedProperties, new()
     {
         /// <summary>
         /// Changes the session language according to the language selected by user
@@ -76,10 +76,8 @@ namespace BIA.Net.Authentication.MVC.Controllers
             List<string> userDeleted = new List<string>();
             if (ADHelper.GetADGroupsForRole("User") != null)
             {
-                using (TServiceSynchronizeUser serviceUserDB = new TServiceSynchronizeUser())
-                {
-                    userDeleted = serviceUserDB.SynchronizeUsers<TUserLinkedInfo, TLinkedProperties>(ADHelper.GetADGroupsForRole("User"));
-                }
+                IServiceSynchronizeUser serviceUserDB = BIAUnity.Resolve<IServiceSynchronizeUser>();
+                userDeleted = serviceUserDB.SynchronizeUsers(ADHelper.GetADGroupsForRole("User"));
             }
 
             foreach (string userName in userDeleted)
