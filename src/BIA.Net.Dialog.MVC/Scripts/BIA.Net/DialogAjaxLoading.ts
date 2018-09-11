@@ -107,19 +107,22 @@ module BIA.Net.Dialog {
             return base + sep + key + '=' + value;
         };
 
-        public static AjaxLoadDialog(dialogDiv: DialogDiv, url: string, addHistory: boolean) {
+        public static AjaxLoadDialog(dialogDiv: DialogDiv, url: string, addHistory: boolean, dataToPost: any = null, refreshEvent: boolean = false) {
             var DialogType = dialogDiv.type;
             var url_timed = AjaxLoading.buildUrl(url, 'BIANetDialogDisplayFlag', DialogType.toString());
             url_timed = AjaxLoading.buildUrl(url_timed, 'BIANetDialogUrlParent', dialogDiv.GetParentUrl());
+            if (refreshEvent != undefined && refreshEvent) Dialog.DialogEvent.Send(dialogDiv, 'OnBIADialogRefreshing', null, dialogDiv.dialogElem);
 
             var ajaxSettings = {
                 url: url_timed,
                 urlOrigin: url,
                 dialogDiv: dialogDiv,
                 cache: false,
+                data: dataToPost,
                 success: function (data: any, textStatus: string, xhr: XMLHttpRequest) {
                     //alert(xhr.getAllResponseHeaders());
                     AjaxLoading.SuccesAjaxReplaceInCurrentDialog(data, this.dialogDiv, this.urlOrigin, this.url, AjaxLoading.getResponseURL(xhr), addHistory);
+                    if (refreshEvent != undefined && refreshEvent) Dialog.DialogEvent.Send(dialogDiv, 'OnBIADialogRefreshed', null, dialogDiv.dialogElem);
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     AjaxLoading.ErrorAjaxReplaceInCurrentDialog(xhr.responseText, this.dialogDiv, this.urlOrigin, this.url, AjaxLoading.getResponseURL(xhr), xhr.getResponseHeader('location'), addHistory)

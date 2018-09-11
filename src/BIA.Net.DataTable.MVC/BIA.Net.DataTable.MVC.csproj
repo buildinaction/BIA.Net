@@ -33,11 +33,11 @@
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
-    <TypeScriptOutFile>$(SolutionDir)\ZZProjectNameZZ\Safran.ZZProjectNameZZ\Scripts\BIA.Net\DataTable.js</TypeScriptOutFile>
+    <TypeScriptOutFile>$(SolutionDir)\BIA.Net.DataTable.MVC\Scripts\BIA.Net\DataTable.js</TypeScriptOutFile>
     <TypeScriptOutDir />
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
-    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
     <TypeScriptMapRoot />
     <TypeScriptSourceRoot />
   </PropertyGroup>

@@ -168,7 +168,7 @@
         }
 
 
-        public ReplaceInCurrentDialog(url, addHistory) {
+        public ReplaceInCurrentDialog(url, addHistory, dataToPost?, refreshEvent?) {
             var urlsParent = this.GetParentUrl();
             if (urlsParent != null) {
                 var aUrlsParent = urlsParent.split(';');
@@ -180,7 +180,7 @@
                     }
                 }
             }
-            BIA.Net.Dialog.AjaxLoading.AjaxLoadDialog(this, url, addHistory);
+            BIA.Net.Dialog.AjaxLoading.AjaxLoadDialog(this, url, addHistory, dataToPost, refreshEvent);
         }
 
 

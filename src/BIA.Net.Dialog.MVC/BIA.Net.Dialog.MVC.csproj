@@ -33,7 +33,7 @@
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
-    <TypeScriptOutFile>$(SolutionDir)\ZZProjectNameZZ\Safran.ZZProjectNameZZ\Scripts\BIA.Net\Dialog.js</TypeScriptOutFile>
+    <TypeScriptOutFile>$(SolutionDir)\BIA.Net.Dialog.MVC\Scripts\BIA.Net\Dialog.js</TypeScriptOutFile>
     <TypeScriptOutDir />
     <TypeScriptGeneratesDeclarations>True</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>

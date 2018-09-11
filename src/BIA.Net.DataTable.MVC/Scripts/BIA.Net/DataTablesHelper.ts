@@ -131,6 +131,14 @@
         $(dataTableId).DataTable().ajax.reload(null, false);
     }
 
+    export function InitWithFullCustomisableOptions(dataTableId, dataTableOptions) {
+        dataTableOptions.language = DataTable.cultureDataTable;
+        $(dataTableId).DataTable(dataTableOptions);
+        $(window).on('OnBIADialogRefreshed', function () {
+            $(dataTableId).DataTable(dataTableOptions);
+        });
+    }
+
     // ExportButtons can be : ['copy', 'csv', 'excel', 'print'] or null
     export function InitStandard(dataTableId, exportButtons) {
         if (exportButtons == null) {

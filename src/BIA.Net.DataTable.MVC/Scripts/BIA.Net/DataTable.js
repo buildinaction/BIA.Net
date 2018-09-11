@@ -122,6 +122,14 @@ var BIA;
                 $(dataTableId).DataTable().ajax.reload(null, false);
             }
             DataTable.ReloadAjax = ReloadAjax;
+            function InitWithFullCustomisableOptions(dataTableId, dataTableOptions) {
+                dataTableOptions.language = DataTable.cultureDataTable;
+                $(dataTableId).DataTable(dataTableOptions);
+                $(window).on('OnBIADialogRefreshed', function () {
+                    $(dataTableId).DataTable(dataTableOptions);
+                });
+            }
+            DataTable.InitWithFullCustomisableOptions = InitWithFullCustomisableOptions;
             // ExportButtons can be : ['copy', 'csv', 'excel', 'print'] or null
             function InitStandard(dataTableId, exportButtons) {
                 if (exportButtons == null) {
