@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static BIA.Net.Common.Configuration.CommonElement;
-
-namespace BIA.Net.Common.Configuration
+﻿namespace BIA.Net.Common.Configuration
 {
+    using System.Collections.Generic;
+    using System.Configuration;
+    using static BIA.Net.Common.Configuration.CommonElement;
+
     public class LanguageElement : ConfigurationElement
     {
         // Declare the LayoutsCollection collection property.
@@ -49,15 +45,21 @@ namespace BIA.Net.Common.Configuration
                 }
             }
         }
-        List<string> _applicationLanguages = null;
-        public List<string> GetApplicationLanguages()
+
+        List<LanguageInfo> _applicationLanguages = null;
+
+        /// <summary>
+        /// Get all application language.
+        /// </summary>
+        /// <returns>The list of language info.</returns>
+        public List<LanguageInfo> GetApplicationLanguages()
         {
             if (_applicationLanguages == null)
             {
-                _applicationLanguages = new List<string>();
+                _applicationLanguages = new List<LanguageInfo>();
                 foreach (ApplicationLanguagesColection.ApplicationLanguageElement language in ApplicationLanguages)
                 {
-                    _applicationLanguages.Add(language.Key);
+                    _applicationLanguages.Add(new LanguageInfo { Code = language.Key, Name = language.Name, ShortName = language.ShortName });
                 }
             }
             return _applicationLanguages;

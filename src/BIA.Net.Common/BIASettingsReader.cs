@@ -147,9 +147,37 @@ namespace BIA.Net.Common
             }
         }
 
-        ///End TMP
+        /// <summary>
+        /// Gets Static URL for resources.
+        /// </summary>
+        public static string UrlStatic
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["UrlStatic"];
+            }
+        }
 
+        /// <summary>
+        /// Gets the project title.
+        /// </summary>
+        public static string ProjectTitle
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["ProjectTitle"];
+            }
+        }
 
-
+        /// <summary>
+        /// Gets the project short name.
+        /// </summary>
+        public static string ProjectShortName
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["ProjectShortName"];
+            }
+        }
     }
 }

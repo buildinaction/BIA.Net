@@ -59,7 +59,7 @@ namespace BIA.Net.Authentication.MVC.Controllers
         /// <param name="login">login of the user to refresh</param>
         /// <returns>Empty</returns>
         [HttpGet]
-        [System.Web.Mvc.Authorize(Roles = BIAConstantes.RoleInternal)]
+        [System.Web.Mvc.Authorize(Roles = BIAConstants.RoleInternal)]
         public virtual ActionResult RefreshUserProfile(string login)
         {
             BIAAuthorizationFilterMVC<TUserInfo, TUserProperties>.RefreshUserProfile(login);

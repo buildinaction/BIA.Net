@@ -1,0 +1,145 @@
+﻿@{
+    BIA.Net.Design.SiteMap.CustomSiteMapProvider siteMapProvider = SiteMap.Provider as BIA.Net.Design.SiteMap.CustomSiteMapProvider;
+    if (siteMapProvider == null)
+    {
+        <div>
+            You should precise the defaultProvider in your Web.config:<br />
+            &lt;system.web &gt;<br />
+            &emsp;    &lt;siteMap enabled = "true" defaultProvider = "CustomSiteMapProvider" &gt;<br />
+            &emsp;&emsp;       &lt;providers&gt;<br />
+            &emsp;&emsp;&emsp;           &lt;add name = "CustomSiteMapProvider" siteMapFile = "~/SiteMap/SiteMap.sitemap" type = "Safran.Net.SiteMap.CustomSiteMapProvider" securityTrimmingEnabled = "true" /&gt;<br />
+            &emsp;&emsp;       &lt;/providers&gt;<br />
+            &emsp;     &lt;/siteMap&gt;<br />
+            &lt;/system.web &gt;<br />
+        </div>
+    }
+    else
+    {
+        SiteMapNode ParentLevel1 = null;
+        SiteMapNode ParentLevel2 = null;
+        SiteMapNode currentNode = siteMapProvider.CurrentNode;
+        if (currentNode != null)
+        {
+            if (currentNode.ParentNode == null)
+            {
+                // NavigationLevel2.Visible = false;
+                // BreadCrump.Visible = false;
+            }
+            else
+            {
+                if (currentNode.ParentNode == siteMapProvider.RootNode)
+                {
+                    ParentLevel1 = currentNode;
+                }
+                else
+                {
+                    SiteMapNode currentN = currentNode;
+                    while (currentN.ParentNode.ParentNode != siteMapProvider.RootNode)
+                    {
+                        currentN = currentN.ParentNode;
+                    }
+                    ParentLevel2 = currentN;
+                    ParentLevel1 = currentN.ParentNode;
+                }
+            }
+        }
+        var topLevelNodes = SiteMap.RootNode.ChildNodes;
+        <ul class="navigation menu-list">
+            @DisplayChildrenAsLi(topLevelNodes, ParentLevel1, 1)
+
+        </ul>
+    }
+}
+
+@helper DisplayChildrenAsLi(SiteMapNodeCollection Children, SiteMapNode ParentLevel1, int level)
+{
+
+string liClass = "dropdown dropdown-toggle";
+string aClass = "page-link";
+
+if (level == 2) { liClass = "lvl2"; aClass = "title"; }
+if (level == 3) { liClass = "lvl3"; aClass = "title"; }
+foreach (SiteMapNode node in Children)
+{
+
+    if (node == ParentLevel1) { liClass += "active-trail"; }
+    @DisplayNode(node, liClass, aClass, level)
+}
+}
+
+@helper DisplayNode(SiteMapNode node, string liClass, string aClass, int level)
+{
+bool hasChildren = (node.ChildNodes != null) && (node.ChildNodes.Count > 0);
+string title = "";
+if (node.Title.IndexOf("|") > 0)
+{
+    var splited = node.Title.Split('|');
+    foreach (var partTitle in splited)
+    {
+        if (string.IsNullOrEmpty(partTitle))
+        {
+            title += '|';
+        }
+        else
+        {
+            var partTitleTranslated = new System.Resources.ResourceManager(typeof(TextResources)).GetString(partTitle);
+            if (string.IsNullOrEmpty(partTitleTranslated))
+            {
+                partTitleTranslated = new System.Resources.ResourceManager(typeof(AppliResources)).GetString(partTitle);
+                if (string.IsNullOrEmpty(partTitleTranslated))
+                {
+                    title += partTitle;
+                }
+                else
+                {
+                    title += partTitleTranslated;
+                }
+            }
+            else
+            {
+                title += partTitleTranslated;
+            }
+        }
+    }
+
+}
+if (string.IsNullOrEmpty(title))
+{
+    title = new System.Resources.ResourceManager(typeof(TextResources)).GetString(node.Title);
+    if (string.IsNullOrEmpty(title))
+    {
+        title = new System.Resources.ResourceManager(typeof(AppliResources)).GetString(node.Title);
+        if (string.IsNullOrEmpty(title))
+        {
+            title = node.Title;
+        }
+    }
+}
+    <li class="@liClass">
+        @if (string.IsNullOrEmpty(node.Url))
+        {
+            if (string.IsNullOrEmpty(node["js"]))
+            {
+                <span class="@aClass">@title</span>
+            }
+            else
+            {
+                <a style="cursor:pointer" onClick="@node["js"]" class="@aClass">@title</a>
+            }
+        }
+        else
+        {
+            <a href="@node.Url" class="@aClass" BIADialogLink="Type:MainPageContent;DivContent:#PageContent;DivScript:#PageScript" onclick="$('.navbar-static-top.open').removeClass('open')">@title</a>
+        }
+        @if (hasChildren)
+        {
+            <a href="#" class="dropdown-toggle visible-xs icon-caret-right pull-right" data-toggle="dropdown"></a>
+            <div class="dropdown-menu">
+                <ul>
+                    <li class="aside pull-right hidden-xs"></li>
+                    @DisplayChildrenAsLi(node.ChildNodes, null, level + 1)
+                </ul>
+            </div>
+        }
+    </li>
+}

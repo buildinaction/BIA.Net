@@ -99,7 +99,7 @@
       <Link>CustomDictionary.xml</Link>
       <SubType>Designer</SubType>
     </CodeAnalysisDictionary>
-    <Compile Include="BIAConstantes.cs" />
+    <Compile Include="BIAConstants.cs" />
     <Compile Include="Configuration\BIANetSection.cs" />
     <Compile Include="Configuration\AuthenticationElement.cs" />
     <Compile Include="Configuration\CommonElement.cs" />
@@ -110,6 +110,7 @@
     <Compile Include="Helpers\OpenXmlExcelHelper.cs" />
     <Compile Include="Helpers\SerializationHelper.cs" />
     <Compile Include="Helpers\BIAUnity.cs" />
+    <Compile Include="LanguageInfo.cs" />
     <Compile Include="Log\CustomRollingFileAppender.cs" />
     <Compile Include="Helpers\ListHelper.cs" />
     <Compile Include="Helpers\StopWatchHelper.cs" />
