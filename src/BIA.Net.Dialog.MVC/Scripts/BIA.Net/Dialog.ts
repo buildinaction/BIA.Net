@@ -8,6 +8,11 @@
         currentDialogDiv.LinkToDialog(scopeElem);
     };
 
+    export function FormInDialog(scopeElem: JQuery) {
+        let currentDialogDiv = GetParentDialogDiv(scopeElem);
+        currentDialogDiv.FormInDialog(scopeElem);
+    };
+
     export function LinkInDialog(scopeElem) {
         let currentDialogDiv = GetParentDialogDiv(scopeElem);
         currentDialogDiv.LinkInDialog(scopeElem);
@@ -80,6 +85,8 @@
     $(document).ready(function () {
         BIA.Net.Dialog.AjaxLoading.Init();
         BIA.Net.Dialog.LinkToDialog($(document));
+        BIA.Net.Dialog.LinkInDialog($(".BiaNetMainPageContent"));
+        BIA.Net.Dialog.FormInDialog($(".BiaNetMainPageContent"));
         BIA.Net.Dialog.AddRefreshAction($(document));
     });
 }

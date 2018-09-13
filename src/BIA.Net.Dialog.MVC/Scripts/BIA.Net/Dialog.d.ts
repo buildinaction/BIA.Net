@@ -1,6 +1,7 @@
 declare module BIA.Net.Dialog {
     function Close(linkElem: JQuery): void;
     function LinkToDialog(scopeElem: JQuery): void;
+    function FormInDialog(scopeElem: JQuery): void;
     function LinkInDialog(scopeElem: any): void;
     function AddRefreshAction(scopeElem: any): void;
     function GetParentDialogDiv(linkElem: JQuery): DialogDiv;

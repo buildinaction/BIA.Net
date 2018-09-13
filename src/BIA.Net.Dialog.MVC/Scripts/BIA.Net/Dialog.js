@@ -14,6 +14,12 @@ var BIA;
             }
             Dialog.LinkToDialog = LinkToDialog;
             ;
+            function FormInDialog(scopeElem) {
+                var currentDialogDiv = GetParentDialogDiv(scopeElem);
+                currentDialogDiv.FormInDialog(scopeElem);
+            }
+            Dialog.FormInDialog = FormInDialog;
+            ;
             function LinkInDialog(scopeElem) {
                 var currentDialogDiv = GetParentDialogDiv(scopeElem);
                 currentDialogDiv.LinkInDialog(scopeElem);
@@ -89,6 +95,8 @@ var BIA;
             $(document).ready(function () {
                 BIA.Net.Dialog.AjaxLoading.Init();
                 BIA.Net.Dialog.LinkToDialog($(document));
+                BIA.Net.Dialog.LinkInDialog($(".BiaNetMainPageContent"));
+                BIA.Net.Dialog.FormInDialog($(".BiaNetMainPageContent"));
                 BIA.Net.Dialog.AddRefreshAction($(document));
             });
         })(Dialog = Net.Dialog || (Net.Dialog = {}));
@@ -233,6 +241,9 @@ var BIA;
                             if (dialogDiv.parent.type == Dialog.DialogDivType.Popup) {
                                 dialogDiv.parent.dialogElem.dialog("close");
                             }
+                        }
+                        else if (dialogEventContainer.EventName == "BIA.Net.Dialog.Redirect") {
+                            window.location = dialogEventContainer.EventData;
                         }
                         else {
                             Dialog.DialogEvent.Send(dialogDiv, dialogEventContainer.EventName, dialogEventContainer.EventData, null);
@@ -935,3 +946,4 @@ var BIA;
         })(Dialog = Net.Dialog || (Net.Dialog = {}));
     })(Net = BIA.Net || (BIA.Net = {}));
 })(BIA || (BIA = {}));
+//# sourceMappingURL=Dialog.js.map

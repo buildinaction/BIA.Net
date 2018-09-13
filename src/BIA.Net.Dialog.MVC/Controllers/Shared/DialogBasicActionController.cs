@@ -8,9 +8,6 @@ namespace BIA.Net.Dialog.MVC.Controllers
 {
     public class DialogBasicActionController : Controller
     {
-
-
-
         // GET: Dialog
         public ActionResult CloseDialog()
         {
@@ -22,7 +19,7 @@ namespace BIA.Net.Dialog.MVC.Controllers
             return SendEvent("BIA.Net.Dialog.CloseParent", null);
         }
 
-        private class DialogEventContainer
+        public class DialogEventContainer
         {
             public bool IsBiaNetDialogEvent = true;
             public string EventName;

@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using static BIA.Net.Dialog.MVC.Controllers.DialogBasicActionController;
 
 namespace BIA.Net.Dialog.MVC.Controllers
 {
@@ -38,6 +39,16 @@ namespace BIA.Net.Dialog.MVC.Controllers
             return rgx.Replace(url.ToLower().Replace("#", ""),"");
         }
 
+        protected ActionResult BIARedirect(string url)
+        {
+            DialogEventContainer evtContainer = new DialogEventContainer
+            {
+                EventName = "BIA.Net.Dialog.Redirect",
+                EventData = url
+            };
+            return Json(evtContainer, JsonRequestBehavior.AllowGet);
+        }
+
         protected override RedirectToRouteResult RedirectToAction(string actionName, string controllerName, RouteValueDictionary routeValues)
         {
             DisplayFlag displayFlag = 0;
@@ -65,11 +76,12 @@ namespace BIA.Net.Dialog.MVC.Controllers
                             return base.RedirectToAction("CloseDialog", "DialogBasicAction", null);
                         }
                     }
-                //Not parent page continue
-                if (routeValues == null)
-                    routeValues = new RouteValueDictionary();
-                routeValues.Add("BIANetDialogDisplayFlag", (int)displayFlag);
-                routeValues.Add("BIANetDialogRedirectedUrl", Url.Action(actionName, routeValues));                }
+                     //Not parent page continue
+                    if (routeValues == null)
+                        routeValues = new RouteValueDictionary();
+                    routeValues.Add("BIANetDialogDisplayFlag", (int)displayFlag);
+                    routeValues.Add("BIANetDialogRedirectedUrl", Url.Action(actionName, routeValues));
+                }
             }
 
             return base.RedirectToAction(actionName, controllerName, routeValues);
@@ -86,11 +98,15 @@ namespace BIA.Net.Dialog.MVC.Controllers
             {
                 HttpContext.Response.AddHeader("BIANetDialogRedirectedUrl", HttpContext.Request["BIANetDialogRedirectedUrl"]);
             }
-           /* if (HttpContext.Request["DialogRefreshPartialView"] != null)
+            if (HttpContext.Request["BIANetDialogRedirect"] != null)
             {
-                viewName = HttpContext.Request["DialogRefreshPartialView"];
-                return PartialViewConverter.Convert(base.PartialView(viewName, model));
-            }*/
+                HttpContext.Response.AddHeader("BIANetDialogRedirect", HttpContext.Request["BIANetDialogRedirect"]);
+            }
+            /* if (HttpContext.Request["DialogRefreshPartialView"] != null)
+             {
+                 viewName = HttpContext.Request["DialogRefreshPartialView"];
+                 return PartialViewConverter.Convert(base.PartialView(viewName, model));
+             }*/
             if (displayFlag == DisplayFlag.Popup)
             {
                 ViewResult myView = base.View(viewName, masterName, model);
