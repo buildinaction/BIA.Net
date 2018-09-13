@@ -31,7 +31,7 @@
         return DialogDiv.GetDialogDivByJQuery(dialog);
     }
 
-    export function ChangeContent(parent: DialogDiv, addHistory: boolean, url: string, DivContent: string, DivScript: string = "", DivType: DialogDivType = DialogDivType.Content, dataToPost?: object, refreshEvent?: boolean) {
+    export function ChangeContent(parent: DialogDiv, addHistory: boolean, url: string, DivContent: string, DivScript: string = "", DivType: DialogDivType = DialogDivType.Content, dataToPost?: any, refreshEvent?: boolean) {
         let dialogDiv: DialogDiv = DialogDiv.PrepareContentDiv(parent, DivContent, DivScript, DivType)
         dialogDiv.ReplaceInCurrentDialog(url, addHistory, dataToPost, refreshEvent);
     }
