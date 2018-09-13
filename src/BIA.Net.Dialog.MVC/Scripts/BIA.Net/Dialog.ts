@@ -31,9 +31,9 @@
         return DialogDiv.GetDialogDivByJQuery(dialog);
     }
 
-    export function ChangeContent(parent: DialogDiv, addHistory: boolean, url: string, DivContent: string, DivScript: string = "", DivType: DialogDivType = DialogDivType.Content) {
+    export function ChangeContent(parent: DialogDiv, addHistory: boolean, url: string, DivContent: string, DivScript: string = "", DivType: DialogDivType = DialogDivType.Content, dataToPost?: object, refreshEvent?: boolean) {
         let dialogDiv: DialogDiv = DialogDiv.PrepareContentDiv(parent, DivContent, DivScript, DivType)
-        dialogDiv.ReplaceInCurrentDialog(url, addHistory);
+        dialogDiv.ReplaceInCurrentDialog(url, addHistory, dataToPost, refreshEvent);
     }
 
     export function DoActionAndRefresh(linkElem: JQuery, urlAction: string) {
@@ -58,7 +58,7 @@
 
     export function RefreshCurrentDialog(linkElem: JQuery) {
         var dialogDiv = BIA.Net.Dialog.GetParentDialogDiv(linkElem);
-        dialogDiv.ReplaceInCurrentDialog(dialogDiv.urlCurrent, false);
+        dialogDiv.ReplaceInCurrentDialog(dialogDiv.urlCurrent, false, null, false);
     }
 
     export function RefreshContent(elemToRefresh: JQuery) {
