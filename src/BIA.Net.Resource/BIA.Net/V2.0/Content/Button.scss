@@ -1,0 +1,165 @@
+﻿
+/*Button action bar*/
+.btn-action-bottom {
+    background-color: rgba(51,51,51,.97);
+    width: 100%;
+    /*height: 66px;*/
+    bottom: 0;
+}
+
+.btn-action {
+    display: inline-block;
+    padding: 0px 10px 14px 10px;
+}
+
+.btn-action-container {
+    margin: auto;
+    display: table;
+    padding: 14px 0px 0px 0px;
+    text-align: center;
+}
+
+/*Btn-1 style*/
+.btn-1 {
+    color: #fff;
+    background-color: #4C87C6;
+    height: 38px;
+    border-radius: 38px;
+    border: none;
+    line-height: 19px;
+    font-size: 16px;
+    text-align: left;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+    .btn-1 .icone {
+        margin-right: 10px;
+    }
+
+    .btn-1:hover {
+        background-color: #6E4573;
+        color: #fff;
+    }
+
+    .btn-1:focus, .btn-1:active, .btn-1:active:focus {
+        outline: none;
+        box-shadow: none;
+        color: #fff;
+        border: none;
+    }
+
+    .btn-1.disable {
+        background-color: #E8EBED;
+    }
+
+        .btn-1.disable:hover {
+            cursor: default;
+        }
+
+/*Btn-2 style*/
+.btn-2 {
+    height: 40px;
+    background-color: transparent;
+    border: 1px solid #fff;
+    border-radius: 40px;
+    color: #fff;
+    min-width: 135px;
+    margin: auto;
+}
+
+    .btn-2:hover {
+        color: #333;
+        background-color: #fff;
+    }
+
+    .btn-2:focus, .btn-2:active, .btn-2:active:focus {
+        outline: none;
+        box-shadow: none;
+        color: #333;
+    }
+
+    .btn-2:focus {
+        color: #fff;
+    }
+
+    /*a2btn style*/
+a.a2btn {
+    color: #fff;
+    background-color: #4C87C6;
+    border-radius: 38px;
+    border: none;
+    padding: 6px 12px;
+    text-decoration:none;
+}
+
+a.a2btn:hover {
+    background-color: #6E4573;
+    color: #fff;
+    text-decoration:none;
+}
+
+/*a2btn-small style*/
+a.a2btn-small {
+    color:#4C87C6;
+    font-size:18px;
+    width:18px;
+    height:23px;
+}
+
+a.a2btn-small:hover {
+    color: #6E4573;
+    text-decoration:none;
+}
+
+/*a[datatitle] style*/
+[datatitle]:after {
+  visibility:hidden;
+  opacity : 0;
+  transition: opacity 0s 0s;
+  content: attr(datatitle);
+  font-family:Arial;
+  font-size:16px;
+  padding: 4px 8px;
+  color: #333;
+  position: absolute;
+  right: 28px;
+  bottom: 2px;
+  z-index: 10000;
+  white-space: nowrap;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  background-image: -moz-linear-gradient(top, #84CEE9, #fff);
+  background-image: -webkit-linear-gradient(top, #84CEE9, #fff);
+  background-image: -ms-linear-gradient(top, #84CEE9, #fff);
+  background-image: -o-linear-gradient(top, #84CEE9, #fff);
+}
+
+[datatitle]:hover:after {
+  opacity: 1;
+  visibility:visible;
+  transition: opacity 500ms 500ms;
+}
+
+[datainfo]:hover:after {
+  content: attr(datainfo);
+  font-family:Arial;
+  font-size:16px;
+  padding: 4px 8px;
+  color: #333;
+  position: absolute;
+  left: 28px;
+  top: 0px;
+  z-index: 10000;
+  white-space: nowrap;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  background-image: -moz-linear-gradient(top, #84CEE9, #fff);
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0.5, #84CEE9),color-stop(1, #fff));
+  background-image: -webkit-linear-gradient(top, #84CEE9, #fff);
+  background-image: -moz-linear-gradient(top, #84CEE9, #fff);
+  background-image: -ms-linear-gradient(top, #84CEE9, #fff);
+  background-image: -o-linear-gradient(top, #84CEE9, #fff);
+}

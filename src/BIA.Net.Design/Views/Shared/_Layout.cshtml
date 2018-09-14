@@ -4,18 +4,22 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="@Url.Content(BIA.Net.Common.BIASettingsReader.UrlStatic + "/BIA.Net/V2.0/img/favicon_0.ico")" type="image/vnd.microsoft.icon">
+    <link rel="shortcut icon" href="@Url.Content(BIA.Net.Common.BIASettingsReader.UrlStatic + "/BIA.Net/V2.0/Img/favicon.ico")" type="image/vnd.microsoft.icon">
     <title>@ViewBag.Title - @BIA.Net.Common.BIASettingsReader.ProjectTitle</title>
     <version style="display:none">@(new BIA.Net.Common.BIAConstants().Version)</version>
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/themes/base/css")
     @Styles.Render("~/Content/DataTables/css/css")
 
-    @Styles.Render(BIA.Net.Common.BIASettingsReader.UrlStatic + "/BIA.Net/V2.0/css/global.min.css")
+    @Styles.Render(BIA.Net.Common.BIASettingsReader.UrlStatic + "/BIA.Net/V2.0/Content/global.min.css")
+    @if (PageData["theme"] != null)
+    {
+        @Styles.Render(BIA.Net.Common.BIASettingsReader.UrlStatic + "/BIA.Net/V2.0/Content/Themes/" + PageData["theme"] + "global." + PageData["theme"].ToString().ToLower() + ".min.css")
+    }
     @RenderSection("headerLayout", required: false)
 </head>
 <body class="@("BIANetTheme" + PageData["theme"])">
-    <div class="navbar navbar-safran navbar-static-top">
+    <div class="navbar navbar-bia navbar-static-top">
         <div class="secondary-navbar hidden-xs">
             <div class="left-header-menu">
                 <div class="language">
@@ -32,7 +36,7 @@
                 </div>
             </div>
             <div style="float: right;padding: 0px;padding-right: 20px;">
-                <img alt="Home @BIA.Net.Common.BIASettingsReader.ProjectTitle" src="@Url.Content(BIA.Net.Common.BIASettingsReader.UrlStatic + "/BIA.Net/V2.0/img/Themes/" + PageData["theme"]+"/logo.png")" style="padding-right:5px;padding-top:2px">
+                <img id="logo">
                 <a id="linkFullScreen" class="glyphicon glyphicon-resize-full" datatitle="fullscreen" style="cursor:pointer" onclick="toogleFullScreen()"> </a>
             </div>
             @Html.Partial("_LoginPartial")
@@ -48,7 +52,7 @@
             <div class="navbar-header visible-xs" style="overflow: hidden">
                 <div style="float: left;display:inline-block;">
                     <a class="navbar-logo" href="@Url.Action("Index","Home")">
-                        <img alt="Home" src="@Url.Content(BIA.Net.Common.BIASettingsReader.UrlStatic + "/BIA.Net/V2.0/img/Themes/" + PageData["theme"] + "/logo_DM_small.gif")">
+                        <img class="@("logo" + PageData["theme"])">
                     </a>
                 </div>
             </div>
@@ -68,9 +72,7 @@
             </nav>
             <div class="navbar-header hidden-xs" style="overflow: hidden;padding-right: 24px;">
                 <a alt="Home @BIA.Net.Common.BIASettingsReader.ProjectTitle" href="@Url.Action("Index","Home")">
-                    <img src="@Url.Content(BIA.Net.Common.BIASettingsReader.UrlStatic + "/BIA.Net/V2.0/img/Themes/" + PageData["theme"]+"/icons/" + BIA.Net.Common.BIASettingsReader.ProjectShortName + ".png")"
-                         onerror="this.onerror=null; this.src='@Url.Content(BIA.Net.Common.BIASettingsReader.UrlStatic + "/BIA.Net/V2.0/img/Themes/" + PageData["theme"]+"/icons/Default.png")';"
-                         style="float:right" />
+                    <img class="@("project-icon-" + PageData["theme"])" />
                 </a>
             </div>
         </div>

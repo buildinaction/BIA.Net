@@ -2,16 +2,16 @@
     BIA.Net.Design.SiteMap.CustomSiteMapProvider siteMapProvider = SiteMap.Provider as BIA.Net.Design.SiteMap.CustomSiteMapProvider;
     if (siteMapProvider == null)
     {
-        <div>
-            You should precise the defaultProvider in your Web.config:<br />
-            &lt;system.web &gt;<br />
-            &emsp;    &lt;siteMap enabled = "true" defaultProvider = "CustomSiteMapProvider" &gt;<br />
-            &emsp;&emsp;       &lt;providers&gt;<br />
-            &emsp;&emsp;&emsp;           &lt;add name = "CustomSiteMapProvider" siteMapFile = "~/SiteMap/SiteMap.sitemap" type = "Safran.Net.SiteMap.CustomSiteMapProvider" securityTrimmingEnabled = "true" /&gt;<br />
-            &emsp;&emsp;       &lt;/providers&gt;<br />
-            &emsp;     &lt;/siteMap&gt;<br />
-            &lt;/system.web &gt;<br />
-        </div>
+<div>
+    You should precise the defaultProvider in your Web.config:<br />
+    &lt;system.web &gt;<br />
+    &emsp;    &lt;siteMap enabled = "true" defaultProvider = "CustomSiteMapProvider" &gt;<br />
+    &emsp;&emsp;       &lt;providers&gt;<br />
+    &emsp;&emsp;&emsp;           &lt;add name = "CustomSiteMapProvider" siteMapFile = "~/SiteMap/SiteMap.sitemap" type = "BIA.Net.Design.SiteMap.CustomSiteMapProvider" securityTrimmingEnabled = "true" /&gt;<br />
+    &emsp;&emsp;       &lt;/providers&gt;<br />
+    &emsp;     &lt;/siteMap&gt;<br />
+    &lt;/system.web &gt;<br />
+</div>
     }
     else
     {

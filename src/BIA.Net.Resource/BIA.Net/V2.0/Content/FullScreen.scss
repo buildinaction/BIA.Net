@@ -1,0 +1,44 @@
+﻿@media all and (min-width:767px) {
+    .fullscreen .navbar {
+        min-height: inherit;
+        opacity: 0;
+    }
+
+        .fullscreen .navbar:hover {
+            opacity: 1;
+        }
+
+            .fullscreen .navbar:hover .main-navbar {
+                visibility: visible;
+            }
+
+    .fullscreen .main-navbar {
+        position: absolute;
+        width: 100%;
+        visibility: hidden;
+    }
+}
+
+.fullscreen #content .container-fluid {
+	max-width:none;
+}
+
+.fullscreen .wrapper {
+    background: transparent !important;
+}
+
+.fullscreen #pusher {
+    background: transparent !important;
+}
+
+.fullscreen #content {
+    background-image: none !important;
+}
+
+.fullscreen .content-body {
+    background: transparent !important;
+}
+
+.fullscreen #divTime {
+    display: none;
+}

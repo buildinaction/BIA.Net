@@ -97,6 +97,7 @@
     <None Include="BIA.Net.NuGet\BIA.Net.MVC\BIA.Net.MVC.1.8.0.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.MVC\BIA.Net.MVC.1.8.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.MVC\BIA.Net.MVC.1.9.0.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.Resource\BIA.Net.Resource.2.0.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.SSDLToSQL\BIA.Net.SSDLToSQL.1.7.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.SSDLToSQL\BIA.Net.SSDLToSQL.1.7.2.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.SSDLToSQL\BIA.Net.SSDLToSQL.1.7.3.nupkg" />

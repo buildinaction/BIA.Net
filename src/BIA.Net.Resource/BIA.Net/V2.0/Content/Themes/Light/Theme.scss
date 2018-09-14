@@ -1,0 +1,60 @@
+﻿/*Override from Content\Site.css*/
+
+.BIANetThemeLight .navbar-bia, .BIANetThemeLight .main-navbar {
+	background: rgb(255, 255, 255);
+}
+/*
+.BIANetThemeLight .subpage#content {
+    background: rgb(222, 229, 235);
+}*/
+.BIANetThemeLight .navbar-bia .secondary-navbar {
+    color: rgb(64, 64, 64);
+}
+@media all and (min-width:768px)
+{
+    .BIANetThemeLight .main-navbar .dropdown-menu {
+	    background: rgb(241, 241, 241);
+    }
+}
+.BIANetThemeLight .main-navbar .dropdown-menu .lvl2 a {
+	color: rgb(51, 51, 51);
+}
+.BIANetThemeLight .main-navbar .dropdown-menu .lvl2 a:hover {
+	color: rgb(76, 135, 198);
+}
+.BIANetThemeLight .main-navbar .navigation > li > .page-link {
+    color: rgb(76, 135, 198);
+}
+.BIANetThemeLight .main-navbar .navigation > li:hover {
+	background: rgb(241, 241, 241);
+}
+.BIANetThemeLight .language-menu {
+	background: rgb(255, 255, 255);
+}
+.BIANetThemeLight .user-menu{
+    background: rgb(255, 255, 255);
+}
+.BIANetThemeLight .content-body.article {
+	background: rgb(255, 255, 255);
+}
+
+.BIANetThemeLight #divLoading {
+    display: block;
+    position: absolute;
+    z-index: 100;
+    background: #aaaaaa;
+    opacity: 0.3;
+    background-image: url('../../../Img/Themes/Light/ajax-loader.gif');
+    /*background-color:#666;
+opacity : 0.4;*/
+    background-repeat: no-repeat;
+    background-position: center;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    top: 0;
+}
+
+.field-validation-error {
+    color: #580687;
+}
