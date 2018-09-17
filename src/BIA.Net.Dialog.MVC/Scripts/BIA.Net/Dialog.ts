@@ -8,6 +8,11 @@
         currentDialogDiv.LinkToDialog(scopeElem);
     };
 
+    export function FormInDialog(scopeElem: JQuery) {
+        let currentDialogDiv = GetParentDialogDiv(scopeElem);
+        currentDialogDiv.FormInDialog(scopeElem);
+    };
+
     export function LinkInDialog(scopeElem) {
         let currentDialogDiv = GetParentDialogDiv(scopeElem);
         currentDialogDiv.LinkInDialog(scopeElem);
@@ -26,7 +31,7 @@
         return DialogDiv.GetDialogDivByJQuery(dialog);
     }
 
-    export function ChangeContent(parent: DialogDiv, addHistory: boolean, url: string, DivContent: string, DivScript: string = "", DivType: DialogDivType = DialogDivType.Content, dataToPost?: object, refreshEvent?: boolean) {
+    export function ChangeContent(parent: DialogDiv, addHistory: boolean, url: string, DivContent: string, DivScript: string = "", DivType: DialogDivType = DialogDivType.Content, dataToPost?: any, refreshEvent?: boolean) {
         let dialogDiv: DialogDiv = DialogDiv.PrepareContentDiv(parent, DivContent, DivScript, DivType)
         dialogDiv.ReplaceInCurrentDialog(url, addHistory, dataToPost, refreshEvent);
     }
@@ -80,6 +85,8 @@
     $(document).ready(function () {
         BIA.Net.Dialog.AjaxLoading.Init();
         BIA.Net.Dialog.LinkToDialog($(document));
+        BIA.Net.Dialog.LinkInDialog($(".BiaNetMainPageContent"));
+        BIA.Net.Dialog.FormInDialog($(".BiaNetMainPageContent"));
         BIA.Net.Dialog.AddRefreshAction($(document));
     });
 }

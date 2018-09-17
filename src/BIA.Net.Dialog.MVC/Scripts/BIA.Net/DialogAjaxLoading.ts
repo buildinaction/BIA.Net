@@ -153,6 +153,9 @@ module BIA.Net.Dialog {
                     //dialogDiv.dialogElem.html("");
                     //dialogDiv.dialogElem.dialog("close");
                 }
+                else if (dialogEventContainer.EventName == "BIA.Net.Dialog.Redirect") {
+                    window.location = dialogEventContainer.EventData;
+                }
                 else {
                     DialogEvent.Send(dialogDiv, dialogEventContainer.EventName, dialogEventContainer.EventData, null)
                 }

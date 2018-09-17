@@ -99,6 +99,27 @@
         }
 
         /// <summary>
+        /// Gets AD Groups As Application Users
+        /// </summary>
+        public static List<ADGroup> GetADGroupsForRoleOrCreate(string role,List<string> adGroupsName)
+        {
+            List<ADGroup> value = null;
+            if (ADRoles.TryGetValue(role, out value))
+            {
+                return value;
+            }
+            List<ADGroup> groups = new List<ADGroup>();
+            foreach (string groupName in adGroupsName)
+            {
+                ADGroup group = new ADGroup(groupName, role);
+                groups.Add(group);
+            }
+            adRoles.Add(role, groups);
+            return groups;
+        }
+
+
+        /// <summary>
         /// Gets the user from ad.
         /// </summary>
         /// <param name="userName">Name of the user.</param>

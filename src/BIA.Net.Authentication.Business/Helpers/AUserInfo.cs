@@ -452,21 +452,35 @@
             userInfoContainer.rolesKey = Login;
         }
 
+        public bool HasRole(string role, List<string> adGroupName)
+        {
+            List<ADGroup> groups = ADHelper.GetADGroupsForRoleOrCreate(role, adGroupName);
+            return IsInOneOfThoseGroups(groups);
+        }
+
         private bool HasRole(string role)
+        {
+            List<ADGroup> groups = ADHelper.GetADGroupsForRole(role);
+            return IsInOneOfThoseGroups(groups);
+        }
+
+        private bool IsInOneOfThoseGroups(List<ADGroup> groups)
         {
             ADRolesModes? mode = BIASettingsReader.BIANetSection?.Authentication?.Parameters?.ADRolesMode;
             if (mode == null) mode = ADRolesModes.IISGroup;
-            List<ADGroup> groups = ADHelper.GetADGroupsForRole(role);
             foreach (ADGroup adgroup in groups)
             {
                 switch (mode)
                 {
                     case ADRolesModes.IISGroup:
-                        return UserGroupsFromIIS.Contains(adgroup.GroupName);
+                        if (UserGroupsFromIIS.Contains(adgroup.GroupName)) return true;
+                        break;
                     case ADRolesModes.ADUserFirst:
-                        return UserGroupsFromAD.Contains(adgroup.GroupName);
+                        if (UserGroupsFromAD.Contains(adgroup.GroupName)) return true;
+                        break;
                     case ADRolesModes.ADGroupFirst:
-                        return adgroup.IsUserInGroup(Login);
+                        if (adgroup.IsUserInGroup(Login)) return true;
+                        break;
                     default:
                         return false;
                 }
@@ -474,7 +488,6 @@
             }
             return false;
         }
-
 
         public virtual void CustomCodeRoles(List<string> basicRoles)
         {
