@@ -1,0 +1,77 @@
+﻿/*h2, h3 & h4 design */
+.body-content h2:after {
+    position: absolute;
+    content: "";
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    border-radius: 2px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.5), 0 1px 1px rgba(255,255,255,0.3);
+}
+
+.body-content h3:after,
+.body-content h4:after {
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    border-radius: 2px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.5), 0 1px 1px rgba(255,255,255,0.3);
+}
+
+.body-content h2:after {
+    background: #4C87C6;
+}
+
+.body-content h3:after {
+    background: #4C87C6;
+}
+
+.body-content h4:after {
+    background: #33BBFF;
+}
+
+.body-content h2 {
+    margin: 1em 0 1em 0;
+    font-weight: normal;
+    text-shadow: 0 -1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    font-size: 36px;
+    line-height: 60px;
+    color: #4C87C6;
+}
+
+.body-content h3 {
+    margin: 1em 0 .6em 0;
+    padding: 0 0 0 20px;
+    font-weight: normal;
+    text-shadow: 0 -1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    font-size: 30px;
+    line-height: 40px;
+    color: #4C87C6;
+}
+
+.body-content h4 {
+    margin: 1em 0 .6em 0;
+    padding: 0 0 0 20px;
+    font-weight: normal;
+    text-shadow: 0 -1px 0 rgba(255,255,255,0.4);
+    position: relative;
+    font-size: 24px;
+    line-height: 40px;
+    color: #33BBFF;
+}
+
+/*allow space under row div*/
+.row {
+    padding-bottom: 10px;
+}
+
+/*Pass datepicker front*/
+.datepicker {
+    z-index : 1000 !important;
+}
