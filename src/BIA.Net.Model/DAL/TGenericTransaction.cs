@@ -25,7 +25,7 @@ namespace BIA.Net.Model.DAL
         }
 
         // set in Transaction if not set and return the rootModeInTransaction
-        public static bool BeginTransaction(Guid contextGuid)
+        public static bool BeginTransaction()
         {
             TDBContainer<ProjectDBContext> dbContainer = BIAUnity.Resolve<TDBContainer<ProjectDBContext>>();
             if (dbContainer.IsInTransaction)
