@@ -44,6 +44,7 @@
     <None Include="BIA.Net.NuGet\BIA.Net.Business\BIA.Net.Business.1.7.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Business\BIA.Net.Business.1.7.2.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Business\BIA.Net.Business.1.8.0.1.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.Business\BIA.Net.Business.1.8.0.2.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Business\BIA.Net.Business.1.8.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Common\BIA.Net.Common.1.7.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Common\BIA.Net.Common.1.7.2.nupkg" />

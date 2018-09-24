@@ -301,7 +301,7 @@ namespace BIA.Net.Business.Services
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns>The DTO full with entity fileds values</returns>
-        private DTO ToDTO(Entity entity)
+        protected DTO ToDTO(Entity entity)
         {
             if (entity == null)
             {

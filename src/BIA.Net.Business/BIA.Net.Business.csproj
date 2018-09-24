@@ -95,10 +95,6 @@
       <Project>{27c61a0b-d29f-4b28-a1ea-ed1a42d2cf71}</Project>
       <Name>BIA.Net.DataTable.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BIA.Net.Model\BIA.Net.Model.csproj">
-      <Project>{e366dad2-d95c-44f9-9215-6ccc912574dd}</Project>
-      <Name>BIA.Net.Model</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
