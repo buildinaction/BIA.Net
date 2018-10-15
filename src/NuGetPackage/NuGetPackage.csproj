@@ -70,6 +70,7 @@
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog.DT\BIA.Net.Dialog.DT.1.8.0.2.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog.DT\BIA.Net.Dialog.DT.1.8.0.3.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog.DT\BIA.Net.Dialog.DT.1.8.0.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.Dialog.DT\BIA.Net.Dialog.DT.1.9.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog.MVC\BIA.Net.Dialog.MVC.1.2.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog.MVC\BIA.Net.Dialog.MVC.1.7.2.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog.MVC\BIA.Net.Dialog.MVC.1.7.5.nupkg" />
@@ -79,6 +80,7 @@
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog.MVC\BIA.Net.Dialog.MVC.1.8.0.4.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog.MVC\BIA.Net.Dialog.MVC.1.8.0.5.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog.MVC\BIA.Net.Dialog.MVC.1.8.0.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.Dialog.MVC\BIA.Net.Dialog.MVC.1.9.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog\BIA.Net.Dialog.1.7.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog\BIA.Net.Dialog.1.7.2.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Helpers.MVC\BIA.Net.Helpers.MVC.1.7.3.nupkg" />

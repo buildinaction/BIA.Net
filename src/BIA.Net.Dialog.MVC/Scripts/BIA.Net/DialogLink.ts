@@ -1,5 +1,4 @@
 ﻿module BIA.Net.Dialog {
-
     ///let TestLink = new DialogLink($(document));
 
     enum DialogLinkTarget {
@@ -21,7 +20,6 @@
             this.dialogDiv = null;
             this.target = DialogLinkTarget.None;
         }
-
 
         public static PrepareLinkElement(linkElem: JQuery, parent: DialogDiv) {
             var url = linkElem.attr('href');
@@ -50,7 +48,7 @@
             }
             else {
                 //To avoid change on the this.url in case of use "mailto"
-                if ((url.substr(0, 7) != "mailto:") && (url.substr(0, 11) != "javascript:")) {
+                if ((url.substr(0, 7) != "mailto:") && (url.substr(0, 11) != "javascript:") && (url.substr(0, 1) != "#")) {
                     containLink = true;
                     linkElem.removeAttr("href");
                     linkElem.attr("style", "cursor:pointer");
@@ -69,7 +67,6 @@
         public ReplaceInRelatedDialog() {
             this.dialogDiv.ReplaceInCurrentDialog(this.url, false);
         }
-
 
         public PrepareDialogDiv() {
             const parentDialogDiv = this.parent;
@@ -208,7 +205,6 @@
                     close: function (event, ui) {
                         dialogDiv.DisposeDialog();
                     }
-
                 });
                 if (Id != "") {
                     dialog.prop("DialogByIds", Id);
@@ -224,7 +220,6 @@
                 this.dialogDiv = DialogDiv.PrepareContentDiv(parentDialogDiv, DivContent, DivScript, dialogDivType)
             }
         }
-
 
         public ActionClick() {
             //let dialog = this.linkElem.prop("dialogDiv");
