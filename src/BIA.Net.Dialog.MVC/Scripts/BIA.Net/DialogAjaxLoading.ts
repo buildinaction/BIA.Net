@@ -1,5 +1,4 @@
-﻿
-module BIA.Net.Dialog {
+﻿module BIA.Net.Dialog {
     var xhr;
     var _orgAjax = jQuery.ajaxSettings.xhr;
     jQuery.ajaxSettings.xhr = function () {
@@ -10,18 +9,20 @@ module BIA.Net.Dialog {
     //format send by DialogBasicActionController.SendEvent
     export class DialogEventContainer {
         IsBiaNetDialogEvent: boolean;
-        EventName : string;
-        EventData : any;
+        EventName: string;
+        EventData: any;
     }
     export class AjaxLoading {
-
         static initialAppliVersion: string;
+        static initialApplication: string;
 
         public static Init() {
-            let VersionElems = $('version');
+            let VersionElems = $('div.version');
             let currentAppliVersion = "";
+            let currentApplication = "";
             if (VersionElems != null && VersionElems.length > 0) {
-                AjaxLoading.initialAppliVersion = VersionElems[0].innerHTML;
+                AjaxLoading.initialAppliVersion = $(VersionElems[0]).attr('data-version');
+                AjaxLoading.initialApplication = $(VersionElems[0]).attr('data-application');
             }
         }
 
@@ -131,15 +132,12 @@ module BIA.Net.Dialog {
             dialogDiv.dialogElem.append("<div id=\"divLoading\"></div>");
             dialogDiv.dialogElem.css("cursor", "progress");
             $.ajax(ajaxSettings);
-
-
         };
 
         public static SuccesAjaxReplaceInCurrentDialog(data: any, dialogDiv: DialogDiv, urlorigin: string, url: string, responseURL: string, addHistory: boolean) {
             //console.log("SuccesAjaxReplaceInCurrentDialog");
-            if (data.IsBiaNetDialogEvent)
-            {
-                let dialogEventContainer : DialogEventContainer = <DialogEventContainer>data;
+            if (data.IsBiaNetDialogEvent) {
+                let dialogEventContainer: DialogEventContainer = <DialogEventContainer>data;
                 if (dialogEventContainer.EventName == "BIA.Net.Dialog.Close") {
                     //console.log("close detected");
                     //dialogDiv.dialogElem.html("");
@@ -169,11 +167,13 @@ module BIA.Net.Dialog {
                 else newUrl = urlorigin;
 
                 dialogDiv.OnDialogLoaded(data, newUrl);
-                let VersionElems = dialogDiv.dialogElem.find('version');
-                let currentAppliVersion :string = "";
+                let VersionElems = dialogDiv.dialogElem.find('div.version');
+                let currentAppliVersion: string = "";
+                let currentApplication: string = "";
                 if (VersionElems != null && VersionElems.length > 0) {
-                    currentAppliVersion = VersionElems[0].innerHTML;
-                    if (currentAppliVersion != AjaxLoading.initialAppliVersion) {
+                    currentAppliVersion = $(VersionElems[0]).attr('data-version');
+                    currentApplication = $(VersionElems[0]).attr('data-application');
+                    if (currentApplication === AjaxLoading.initialApplication && currentAppliVersion !== AjaxLoading.initialAppliVersion) {
                         if (addHistory) location.href = newUrl;
                         else location.reload(true);
                     }

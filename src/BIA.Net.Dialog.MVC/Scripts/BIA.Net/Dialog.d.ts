@@ -18,6 +18,7 @@ declare module BIA.Net.Dialog {
     }
     class AjaxLoading {
         static initialAppliVersion: string;
+        static initialApplication: string;
         static Init(): void;
         static removeParam(keys: any, sourceURL: any): any;
         static getResponseURL(xhr: any): any;
@@ -25,7 +26,7 @@ declare module BIA.Net.Dialog {
         static getAbsoluteUrl(url: string): string;
         static UniformmizeUrl(url: any): any;
         static ManageSubmitFormInDialog(dialogDiv: DialogDiv, formElem: JQuery): void;
-        private static buildUrl(base, key, value);
+        private static buildUrl;
         static AjaxLoadDialog(dialogDiv: DialogDiv, url: string, addHistory: boolean, dataToPost?: any, refreshEvent?: boolean): void;
         static SuccesAjaxReplaceInCurrentDialog(data: any, dialogDiv: DialogDiv, urlorigin: string, url: string, responseURL: string, addHistory: boolean): void;
         static ErrorAjaxReplaceInCurrentDialog(data: any, dialogDiv: DialogDiv, urlorigin: any, url: any, responseURL: any, redirectURL: any, addHistory: any): void;
@@ -36,7 +37,7 @@ declare module BIA.Net.Dialog {
         Popup = 1,
         MainPageContent = 2,
         Document = 3,
-        Content = 4,
+        Content = 4
     }
     class RefreshAction {
         elemToRefresh: JQuery;
@@ -52,7 +53,7 @@ declare module BIA.Net.Dialog {
         static MainDialogDiv: any;
         dialogElem: JQuery;
         private events;
-        Events: JQuery;
+        readonly Events: JQuery;
         children: DialogDiv[];
         parent: DialogDiv;
         type: DialogDivType;
@@ -66,7 +67,7 @@ declare module BIA.Net.Dialog {
         constructor(dialogElem: JQuery, parent: DialogDiv, type: DialogDivType);
         GetParentUrl(): string;
         static GetDialogDivByJQuery(dialog: JQuery): DialogDiv;
-        private static RemoveDialogfromArrayByJQuery(dialog);
+        private static RemoveDialogfromArrayByJQuery;
         static PrepareContentDiv(parent: DialogDiv, DivContent: string, DivScript: string, DivType: DialogDivType): DialogDiv;
         ReplaceInCurrentDialog(url: any, addHistory: any, dataToPost?: any, refreshEvent?: any): void;
         GetViewPort(): any;
@@ -80,7 +81,7 @@ declare module BIA.Net.Dialog {
         DisposeDialog(): void;
         AddDialogToChildList(child: DialogDiv): void;
         static refreshIfRequiered(urlValidated: any): void;
-        private refreshIfRequiered(urlValidated);
+        private refreshIfRequiered;
         AddRefreshAction(scopeElem?: JQuery): void;
         CleanRefreshAction(scopeElem: JQuery): void;
     }
