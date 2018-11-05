@@ -36,6 +36,7 @@
     <None Include="App.config" />
     <None Include="BIA.Net.NuGet\BIA.Net.Api\BIA.Net.Api.1.8.0.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Api\BIA.Net.Api.1.8.0.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.Authentication.Business\BIA.Net.Authentication.Business.1.9.0.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.Business\BIA.Net.Authentication.Business.1.9.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.MVC\BIA.Net.Authentication.MVC.1.9.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.WebAPI\BIA.Net.Authentication.WebAPI.1.9.0.nupkg" />
@@ -69,6 +70,7 @@
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog.DT\BIA.Net.Dialog.DT.1.8.0.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog.DT\BIA.Net.Dialog.DT.1.8.0.2.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog.DT\BIA.Net.Dialog.DT.1.8.0.3.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.Dialog.DT\BIA.Net.Dialog.DT.1.8.0.5.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog.DT\BIA.Net.Dialog.DT.1.8.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog.DT\BIA.Net.Dialog.DT.1.9.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog.MVC\BIA.Net.Dialog.MVC.1.2.0.nupkg" />

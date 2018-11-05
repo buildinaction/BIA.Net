@@ -473,10 +473,10 @@
                 switch (mode)
                 {
                     case ADRolesModes.IISGroup:
-                        if (UserGroupsFromIIS.Contains(adgroup.GroupName)) return true;
+                        if (IsGroupInList(adgroup.GroupName,UserGroupsFromIIS)) return true;
                         break;
                     case ADRolesModes.ADUserFirst:
-                        if (UserGroupsFromAD.Contains(adgroup.GroupName)) return true;
+                        if (IsGroupInList(adgroup.GroupName,UserGroupsFromAD)) return true;
                         break;
                     case ADRolesModes.ADGroupFirst:
                         if (adgroup.IsUserInGroup(Login)) return true;
@@ -485,6 +485,23 @@
                         return false;
                 }
 
+            }
+            return false;
+        }
+
+        private static bool IsGroupInList(string groupToFind, List<string> groupList)
+        {
+            if (groupToFind.IndexOfAny(new char[] { '*', '.', '(', ')', '+', '[', ']' }) != -1)
+            {
+                Regex regex = new Regex("^" + groupToFind + "$");
+                foreach (string group in groupList)
+                {
+                    if (regex.IsMatch(group)) return true;
+                }
+            }
+            else
+            {
+                return groupList.Contains(groupToFind);
             }
             return false;
         }
