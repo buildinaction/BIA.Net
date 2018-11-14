@@ -24,7 +24,7 @@ namespace BIA.Net.Business.Services
     /// <typeparam name="DTO">The type of to.</typeparam>
     /// <typeparam name="Entity">The type of the entity.</typeparam>
     /// <typeparam name="DBContext">The Entity framework DB context of the entity.</typeparam>
-    public class TServiceDTO<DTO, Entity, DBContext> 
+    public class TServiceDTO<DTO, Entity, DBContext>
         where Entity : ObjectRemap, new()
         where DBContext : DbContext, new()
     {
@@ -152,6 +152,28 @@ namespace BIA.Net.Business.Services
         }
 
         /// <summary>
+        /// BulkCopy
+        /// </summary>
+        /// <param name="itemToInserts">list items to insert.</param>
+        /// <param name="tableName">table name</param>
+        public virtual void BulkCopy(List<DTO> itemToInserts, string tableName = null)
+        {
+            if (itemToInserts != null && itemToInserts.Any())
+            {
+                List<Entity> entities = new List<Entity>();
+
+                foreach (DTO itemToInsert in itemToInserts)
+                {
+                    Entity entity = new Entity();
+                    GetMapper().MapToModel(itemToInsert, entity);
+                    entities.Add(entity);
+                }
+
+                Repository.BulkCopy(entities, tableName);
+            }
+        }
+
+        /// <summary>
         /// Inserts the specified item to insert.
         /// </summary>
         /// <param name="itemToInsert">The item to insert.</param>
@@ -203,55 +225,55 @@ namespace BIA.Net.Business.Services
             return await query.Select(GetSelectorExpression()).ToListAsync();
         }
 
-/*
-        /// <summary>
-        /// Finds the DTO asynchronous.
-        /// </summary>
-        /// <param name="keyValue_s">The key value_s.</param>
-        /// <param name="smode">The smode.</param>
-        /// <param name="expFieldsToInclude">The exp fields to include.</param>
-        /// <param name="sFieldsToInclude">The s fields to include.</param>
-        /// <returns>the DTO</returns>
-        public async Task<DTO> FindAsync(object keyValue_s, ServiceAccessMode smode = ServiceAccessMode.Read, List<Expression<Func<Entity, dynamic>>> expFieldsToInclude = null, List<string> sFieldsToInclude = null)
-        {
-            return Find(keyValue_s, smode, expFieldsToInclude, sFieldsToInclude);
-        }
+        /*
+                /// <summary>
+                /// Finds the DTO asynchronous.
+                /// </summary>
+                /// <param name="keyValue_s">The key value_s.</param>
+                /// <param name="smode">The smode.</param>
+                /// <param name="expFieldsToInclude">The exp fields to include.</param>
+                /// <param name="sFieldsToInclude">The s fields to include.</param>
+                /// <returns>the DTO</returns>
+                public async Task<DTO> FindAsync(object keyValue_s, ServiceAccessMode smode = ServiceAccessMode.Read, List<Expression<Func<Entity, dynamic>>> expFieldsToInclude = null, List<string> sFieldsToInclude = null)
+                {
+                    return Find(keyValue_s, smode, expFieldsToInclude, sFieldsToInclude);
+                }
 
-        /// <summary>
-        /// Inserts the DTO asynchronous.
-        /// </summary>
-        /// <param name="itemToInsert">The item to insert.</param>
-        /// <returns>the DTO inserted</returns>
-        public async Task<DTO> InsertAsync(DTO itemToInsert)
-        {
-            Entity entity = new Entity();
-            GetMapper().MapToModel(itemToInsert, entity);
-            return ToDTO(Repository.Insert(entity));
-        }
+                /// <summary>
+                /// Inserts the DTO asynchronous.
+                /// </summary>
+                /// <param name="itemToInsert">The item to insert.</param>
+                /// <returns>the DTO inserted</returns>
+                public async Task<DTO> InsertAsync(DTO itemToInsert)
+                {
+                    Entity entity = new Entity();
+                    GetMapper().MapToModel(itemToInsert, entity);
+                    return ToDTO(Repository.Insert(entity));
+                }
 
-        /// <summary>
-        /// Updates the values asynchronous.
-        /// </summary>
-        /// <param name="itemToInsert">The item to insert.</param>
-        /// <param name="values">The values.</param>
-        /// <returns>the DTO updated</returns>
-        public async Task<DTO> UpdateValuesAsync(DTO itemToInsert, List<string> values)
-        {
-            Entity entity = new Entity();
-            GetMapper().MapToModel(itemToInsert, entity);
-            return ToDTO(Repository.UpdateValues(entity, values));
-        }
+                /// <summary>
+                /// Updates the values asynchronous.
+                /// </summary>
+                /// <param name="itemToInsert">The item to insert.</param>
+                /// <param name="values">The values.</param>
+                /// <returns>the DTO updated</returns>
+                public async Task<DTO> UpdateValuesAsync(DTO itemToInsert, List<string> values)
+                {
+                    Entity entity = new Entity();
+                    GetMapper().MapToModel(itemToInsert, entity);
+                    return ToDTO(Repository.UpdateValues(entity, values));
+                }
 
-        /// <summary>
-        /// Deletes the by identifier asynchronous.
-        /// </summary>
-        /// <param name="keyValues">The key values.</param>
-        /// <returns>0 if OK, -1 if KO</returns>
-        public async Task<int> DeleteByIdAsync(params object[] keyValues)
-        {
-            return Repository.DeleteById(keyValues);
-        }
-*/
+                /// <summary>
+                /// Deletes the by identifier asynchronous.
+                /// </summary>
+                /// <param name="keyValues">The key values.</param>
+                /// <returns>0 if OK, -1 if KO</returns>
+                public async Task<int> DeleteByIdAsync(params object[] keyValues)
+                {
+                    return Repository.DeleteById(keyValues);
+                }
+        */
 
         /// <summary>
         /// Gets the selector expression.

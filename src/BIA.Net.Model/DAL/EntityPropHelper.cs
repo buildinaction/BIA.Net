@@ -46,14 +46,7 @@ namespace BIA.Net.Model.DAL
                     return properties;
                 }
 
-                if (!isMock)
-                {
-                    properties = context.Entry(dbobj).CurrentValues.PropertyNames.ToArray();
-                }
-                else
-                {
-                    properties = dbobj.GetType().GetProperties().Select(x => x.Name).ToArray();
-                }
+                properties = dbobj.GetType().GetProperties().Select(x => x.Name).ToArray();
 
                 Dict.Add(t, properties);
             }

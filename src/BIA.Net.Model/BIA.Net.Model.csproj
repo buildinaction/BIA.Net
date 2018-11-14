@@ -91,6 +91,7 @@
     <Compile Include="Model\ObjectRemap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\DBUtil.cs" />
+    <Compile Include="Utility\EntityDataReader.cs" />
     <Compile Include="Utility\GenericModelHelper.cs" />
     <Compile Include="Utility\ObjUtil.cs" />
     <Compile Include="Utility\SearchUtil.cs" />

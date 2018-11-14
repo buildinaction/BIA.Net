@@ -4,6 +4,10 @@
 
 namespace BIA.Net.Model
 {
+    using BIA.Net.Common.Helpers;
+    using Common;
+    using DAL;
+    using Microsoft.Samples.EntityDataReader;
     using System;
     using System.Collections.Generic;
     using System.Data;
@@ -12,14 +16,12 @@ namespace BIA.Net.Model
     using System.Data.Entity.Core.Objects;
     using System.Data.Entity.Core.Objects.DataClasses;
     using System.Data.Entity.Infrastructure;
+    using System.Data.SqlClient;
     using System.Diagnostics;
     using System.Linq;
     using System.Linq.Dynamic;
     using System.Linq.Expressions;
     using System.Reflection;
-    using BIA.Net.Common.Helpers;
-    using Common;
-    using DAL;
     using Utility;
 
     /// <summary>
@@ -447,10 +449,11 @@ namespace BIA.Net.Model
                 TraceManager.Debug("GenericRepository", "Insert", "Insert begin for element " + typeof(Entity).Name);
                 EntityKeyHelper.AutoPrepareKeysIfRequiered(entity, this.Db, this.DbSet, this.MinInsertKeysValue);
 
-                Entity newObj = this.DbSet.Add(new Entity());
+                Entity newObj = new Entity();
                 entity.dbCreatedObject = newObj;
                 newObj.dbCreatedObject = newObj;
                 this.RemapReferences(newObj, entity, param);
+                this.DbSet.Add(newObj);
                 this.SaveChange();
                 TraceManager.Debug("GenericRepository", "Insert", "Insert Finish for element " + typeof(Entity).Name);
                 return newObj;
@@ -464,6 +467,34 @@ namespace BIA.Net.Model
             {
                 DBUtil.ReformatDBUpdateError(dbEx);
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Bulk copy list of entities.
+        /// </summary>
+        /// <param name="entities">list of entities to inserts</param>
+        /// <param name="tableName">Name of the table in database. If tableName is null, tableName = Entity name</param>
+        public virtual void BulkCopy(List<Entity> entities, string tableName = null)
+        {
+            if (entities != null && entities.Any())
+            {
+                DateTime beginDate = DateTime.Now;
+
+                if (string.IsNullOrWhiteSpace(tableName))
+                {
+                    tableName = typeof(Entity).Name;
+                }
+
+                using (SqlBulkCopy bulkCopy = new SqlBulkCopy(this.DbContainer.db.Database.Connection.ConnectionString))
+                {
+                    bulkCopy.DestinationTableName = tableName;
+                    ObjectContext objectContext = ((IObjectContextAdapter)this.DbContainer.db).ObjectContext;
+                    IDataReader dr = entities.AsDataReader(objectContext);
+                    bulkCopy.WriteToServer(dr);
+                }
+
+                TraceManager.Debug("GenericRepository", "BulkCopy", string.Format("End BulkCopy ({0} {1}) time = {2} ms", entities.Count, typeof(Entity).Name, Math.Floor((DateTime.Now - beginDate).TotalMilliseconds)));
             }
         }
 
@@ -1012,11 +1043,13 @@ namespace BIA.Net.Model
                 return (T2)targetItem.dbCreatedObject;
             }
 
-            T2 newObj = (T2)this.Db.Set(noProxyT2).Add(new T2());
+            T2 newObj = new T2();
 
             targetItem.dbCreatedObject = newObj;
             newObj.dbCreatedObject = newObj;
             this.CascadeRemap(newObj, targetItem, targetParentObj, childItemListName, param);
+            this.Db.Set(noProxyT2).Add(newObj);
+
             if (!forceCreate && (!AreKeysNull(keys)))
             {
                 Debug.Assert(this.AreKeysEquals(this.GetPrimaryKeys(newObj), keys), "The key should be initialized.");
