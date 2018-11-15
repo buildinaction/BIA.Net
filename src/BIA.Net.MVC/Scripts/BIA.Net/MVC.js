@@ -44,6 +44,18 @@ var BIA;
                 $(window).on('OnBIADialogResize', function (e) {
                     ResizeDialog(e.BIANetDialogData.dialogDiv.dialogElem);
                 });
+                $(document).on('keydown', 'input[pattern]', function (e) {
+                    var input = $(this);
+                    var oldVal = input.val();
+                    var regex = new RegExp(input.attr('pattern'), 'g');
+
+                    setTimeout(function () {
+                        var newVal = input.val();
+                        if (!regex.test(newVal)) {
+                            input.val(oldVal);
+                        }
+                    }, 0);
+                });
             });
         })(MVC = Net.MVC || (Net.MVC = {}));
     })(Net = BIA.Net || (BIA.Net = {}));

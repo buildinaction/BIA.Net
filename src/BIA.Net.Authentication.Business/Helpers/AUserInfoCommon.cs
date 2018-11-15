@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -24,7 +25,6 @@ namespace BIA.Net.Authentication.Business.Helpers
         /// Gets the current identity.
         /// </summary>
         public IIdentity Identity { get; set; }
-
         protected bool isUserPrincipalInit = false;
         protected UserPrincipal userPrincipal { get; set; }
 

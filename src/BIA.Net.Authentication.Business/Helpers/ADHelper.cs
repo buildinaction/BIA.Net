@@ -202,35 +202,38 @@
 
         public static List<string> GetGroups(WindowsIdentity wi)
         {
-            TraceManager.Debug("ADHelper", "GetGroups", "Nb group in AD : " + wi.Groups.Count);
-
             List<string> result = new List<string>();
-
-            foreach (IdentityReference group in wi.Groups)
+            if (wi != null)
             {
-                try
-                {
-                    string groupName = "";
-                    string groupValue = group.Value;
-                    if (!CacheGroupName.TryGetValue(groupValue, out groupName))
-                    {
-                        TraceManager.Debug("Try resolve name : " + groupValue);
-                        groupName = group.Translate(typeof(NTAccount)).ToString();
-                        CacheGroupName.Add(groupValue, groupName);
-                        TraceManager.Debug("Name resolve : " + groupName);
-                    }
+                TraceManager.Debug("ADHelper", "GetGroups", "Nb group in AD : " + wi.Groups.Count);
 
-                    result.Add(groupName);
-                }
-                catch (Exception e)
+                foreach (IdentityReference group in wi.Groups)
                 {
-                    TraceManager.Debug("Error");
-                    TraceManager.Warn("Error when treat " + group.Value, e);
+                    try
+                    {
+                        string groupName = "";
+                        string groupValue = group.Value;
+                        if (!CacheGroupName.TryGetValue(groupValue, out groupName))
+                        {
+                            TraceManager.Debug("Try resolve name : " + groupValue);
+                            groupName = group.Translate(typeof(NTAccount)).ToString();
+                            CacheGroupName.Add(groupValue, groupName);
+                            TraceManager.Debug("Name resolve : " + groupName);
+                        }
+
+                        result.Add(groupName);
+                    }
+                    catch (Exception e)
+                    {
+                        TraceManager.Debug("Error");
+                        TraceManager.Warn("Error when treat " + group.Value, e);
+                    }
                 }
+
+                result.Sort();
+                TraceManager.Debug("ADHelper", "GetGroups", "End");
             }
 
-            result.Sort();
-            TraceManager.Debug("ADHelper", "GetGroups", "End");
             return result;
         }
         /*

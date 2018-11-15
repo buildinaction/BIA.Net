@@ -1,13 +1,17 @@
 ﻿<script language="javascript">
-    @{var culture = System.Globalization.CultureInfo.CurrentCulture.Name; }
+    @{
+        var currentCulture = System.Globalization.CultureInfo.CurrentCulture;
+        var culture = currentCulture.Name;
+        var cultureShort = culture.Split('-')[0];
+        var cultureFormatDate = currentCulture.DateTimeFormat.ShortDatePattern.Replace("M","m");
+    }
     var culture = '@culture';
     var cultureDisplayName = '@System.Globalization.CultureInfo.CurrentCulture.DisplayName';
-
+    BIA.Net.MVC.Localisation.cultureShort = "@cultureShort";
+    BIA.Net.MVC.Localisation.cultureFormatDate = "@cultureFormatDate";
     //DataTable
-    @if (culture == "fr-FR"){
+    @if (cultureShort == "fr"){
         <text>
-    BIA.Net.MVC.Localisation.cultureFormatDate = "dd/mm/yyyy";
-    var cultureShort = "fr";
     BIA.Net.DataTable.cultureDataTable = {
         "sProcessing": "Traitement en cours...",
         "sSearch": "Rechercher&nbsp;:",
@@ -34,11 +38,9 @@
     }
     </text>
     }
-    else if (culture == "es-ES")
+    else if (cultureShort == "es")
     {
         <text>
-    BIA.Net.MVC.Localisation.cultureFormatDate = "dd/mm/yyyy";
-    var cultureShort = "es";
     BIA.Net.DataTable.cultureDataTable = {
         "sEmptyTable": "No hay datos disponibles en la tabla",
         "sInfo": "Mostrando de _START_ a _END_ de un total de _TOTAL_ entradas",
@@ -66,43 +68,9 @@
     }
     </text>
     }
-    else if (culture == "en-GB")
-    {
-        <text>
-    BIA.Net.MVC.Localisation.cultureFormatDate = "dd/mm/yyyy";
-    var cultureShort = "en";
-    BIA.Net.DataTable.cultureDataTable = {
-        "sEmptyTable":     "No data available in table",
-	    "sInfo":           "Showing _START_ to _END_ of _TOTAL_ entries",
-	    "sInfoEmpty":      "Showing 0 to 0 of 0 entries",
-	    "sInfoFiltered":   "(filtered from _MAX_ total entries)",
-	    "sInfoPostFix":    "",
-	    "sInfoThousands":  ",",
-	    "sLengthMenu":     "Show _MENU_ entries",
-	    "sLoadingRecords": "Loading...",
-	    "sProcessing":     "Processing...",
-	    "sSearch":         "Search:",
-	    "sZeroRecords":    "No matching records found",
-	    "oPaginate": {
-                    "sFirst":    "First",
-		    "sLast":     "Last",
-		    "sNext":     "Next",
-		    "sPrevious": "Previous"
-
-        },
-	    "oAria": {
-                    "sSortAscending":  ": activate to sort column ascending",
-		    "sSortDescending": ": activate to sort column descending"
-
-        }
-    }
-        </text>
-    }
     else //en-US
     {
         <text>
-    BIA.Net.MVC.Localisation.cultureFormatDate = "mm/dd/yyyy";
-    var cultureShort = "en";
     BIA.Net.DataTable.cultureDataTable = {
         "sEmptyTable": "No data available in table",
         "sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",

@@ -142,9 +142,34 @@ namespace BIA.Net.Common.Configuration
                         return new ValueElement(elementName);
                     case "Mapping":
                         return new MappingCollection(elementName);
+                    case "ClientCertificateInHeader":
+                        return new ClientCertificateInHeaderCollection(elementName);
                 }
 
                 throw new ConfigurationErrorsException("Unsupported element: " + elementName);
+            }
+        }
+
+        public class ClientCertificateInHeaderCollection : HeterogeneousCollectionBase, IHeterogeneousConfigurationElement
+        {
+            public ClientCertificateInHeaderCollection(string elementName) : base(elementName) { }
+            [ConfigurationProperty("windowsIdentity", IsRequired = true, IsKey = true)]
+            public string WindowsIdentity
+            {
+                get { return (string)this["windowsIdentity"]; }
+                set { this["windowsIdentity"] = value; }
+            }
+            protected override ConfigurationElement CreateNewElement(string elementName)
+            {
+                switch (elementName)
+                {
+                    case "Validation":
+                        return new ValidationCollection(elementName);
+                    case "CertField":
+                        return new CertFieldElement(elementName);
+                }
+
+                throw new ConfigurationErrorsException("Unsupported element in ClientCertificate: " + elementName);
             }
         }
 
@@ -350,6 +375,27 @@ namespace BIA.Net.Common.Configuration
             }
         }
 
+        public class ValidationCollection : KeyValueCollection, IHeterogeneousConfigurationElement
+        {
+            public ValidationCollection(string elementName) : base()
+            {
+                TagName = elementName;
+            }
+            public string TagName { get; set; }
+            [ConfigurationProperty("key", IsRequired = true, IsKey = true)]
+            public string Key
+            {
+                get { return (string)this["key"]; }
+                set { this["key"] = value; }
+            }
+            public void Deserialize(XmlReader reader)
+            {
+                base.DeserializeElement(reader, false);
+            }
+        }
+
+
+
         public class WindowsIdentityElement : HeterogeneousConfigurationElementBase
         {
             public WindowsIdentityElement(string elementName) : base(elementName) { }
@@ -378,7 +424,47 @@ namespace BIA.Net.Common.Configuration
                 }
             }
         }
+        public class CertFieldElement : HeterogeneousConfigurationElementBase
+        {
 
+            public CertFieldElement(string elementName) : base(elementName) { }
+            [ConfigurationProperty("certfield", IsRequired = false, IsKey = false)]
+            public string CertField
+            {
+                get
+                {
+                    return (string)this["certfield"];
+                }
+                set
+                {
+                    this["certfield"] = value;
+                }
+            }
+            [ConfigurationProperty("maxLenght", IsRequired = false, IsKey = false)]
+            public int MaxLenght
+            {
+                get
+                {
+                    return (int)this["maxLenght"];
+                }
+                set
+                {
+                    this["maxLenght"] = value;
+                }
+            }
+            [ConfigurationProperty("default", IsRequired = false, IsKey = false)]
+            public string Default
+            {
+                get
+                {
+                    return (string)this["default"];
+                }
+                set
+                {
+                    this["default"] = value;
+                }
+            }
+        }
         public class ADFieldElement : HeterogeneousConfigurationElementBase
         {
 

@@ -77,13 +77,62 @@
             {
                 if (login == null)
                 {
-                    login = Identities["Login"];
+                    login = Identities.Get("Login");
+                    /*if (login == null)
+                    {
+                        login = "";
+                    }*/
                 }
                 return login;
             }
         }
 
-        protected Dictionary<string, string> identitiesInBuilding = null;
+        public class IdentityManager
+        {
+            Dictionary<string, string> IdentitiesContainer = null;
+            public IdentityManager()
+            {
+                IdentitiesContainer = new Dictionary<string, string>();
+            }
+            public void Set(string key, string value, UserInfoContainer userInfoContainer)
+            {
+                bool identityChange = false;
+                if (!IdentitiesContainer.Keys.Contains(key))
+                {
+                    IdentitiesContainer.Add(key, value);
+                    identityChange = true;
+                }
+                else
+                {
+                    if (IdentitiesContainer[key] != value)
+                    {
+                        IdentitiesContainer[key] = value;
+                        identityChange = true;
+                    }
+
+                }
+                if (identityChange)
+                {
+                    userInfoContainer.languageShouldBeRefreshed = true;
+                    userInfoContainer.propertiesShouldBeRefreshed = true;
+                    userInfoContainer.rolesShouldBeRefreshed = true;
+                    userInfoContainer.userProfileShouldBeRefreshed = true;
+                }
+
+            }
+            public string Get (string key)
+            {
+                string value = null;
+                if (value == null)
+                {
+                        IdentitiesContainer.TryGetValue("Login", out value);
+                }
+                return value;
+            }
+        }
+
+
+        protected IdentityManager identitiesInBuilding = null;
         protected TUserProperties propertiesInBuilding = default(TUserProperties);
         protected string languageInBuilding = null;
         protected Dictionary<string, string> userProfileInBuilding = null;
@@ -148,7 +197,7 @@
                 userInfoContainer.propertiesRefreshDate = DateTime.Now;
             }
         }
-        public virtual Dictionary<string, string> Identities
+        public virtual IdentityManager Identities
         {
             get
             {
@@ -159,7 +208,7 @@
                         TraceManager.Debug("Return the identitiesInBuilding");
                         return identitiesInBuilding;
                     }
-                    identitiesInBuilding = new Dictionary<string, string>();
+                    identitiesInBuilding = new IdentityManager();
                     RefreshIdentitiesInBuilding();
                     Identities = identitiesInBuilding;
                 }
@@ -250,7 +299,7 @@
             public bool identitiesShouldBeRefreshed = true;
             public string identitiesKey;
 
-            public Dictionary<string, string> identities = null;
+            public IdentityManager identities = null;
             #endregion
 
             #region language
@@ -332,9 +381,9 @@
                     else if (heterogeneousElem is WindowsIdentityElement)
                     {
                         WindowsIdentityElement value = (WindowsIdentityElement)heterogeneousElem;
-                        if (value.IdentityField != null)
+                        if (Identity != null && Identity.IsAuthenticated && value.IdentityField != null)
                         {
-                            identitiesInBuilding.Add(value.Key, PreparePrincipalUserName(Identity, value.IdentityField, value.RemoveDomain));
+                            identitiesInBuilding.Set(value.Key, PreparePrincipalUserName(Identity, value.IdentityField, value.RemoveDomain), userInfoContainer);
                         }
                     }
                     else if (heterogeneousElem is ObjectFieldElement)
@@ -343,7 +392,7 @@
                         object result = ExtractObjectFieldValue(value);
                         if (result != null)
                         {
-                            identitiesInBuilding.Add(value.Key, result.ToString());
+                            identitiesInBuilding.Set(value.Key, result.ToString(), userInfoContainer);
                         }
                     }
                     else if (heterogeneousElem.TagName == "CustomCode")
@@ -353,6 +402,9 @@
                             CustomCodeIdentities(identitiesInBuilding);
                         }
                     }
+                    else if (heterogeneousElem is ClientCertificateInHeaderCollection)
+                    {
+                    }
                     else
                     {
                         throw new Exception("Tag " + heterogeneousElem.TagName + " not implemented for Authentication > Identities");
@@ -361,7 +413,7 @@
             }
         }
 
-        public virtual void CustomCodeIdentities(Dictionary<string, string> identities)
+        public virtual void CustomCodeIdentities(IdentityManager identities)
         {
 
         }

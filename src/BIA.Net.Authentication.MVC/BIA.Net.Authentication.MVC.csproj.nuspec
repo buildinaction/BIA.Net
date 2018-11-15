@@ -19,8 +19,8 @@
       <dependency id="BIA.Net.Common" version="2.0.0.0" />
       <dependency id="BIA.Net.Web" version="1.9.0.0" />
       <dependency id="BIA.Net.MVC" version="1.9.0.0" />
-      <dependency id="BIA.Net.Authentication.Business" version="1.9.0.0" />
-      <dependency id="BIA.Net.Authentication.Web" version="1.9.0.0" />
+      <dependency id="BIA.Net.Authentication.Business" version="2.0.0.0" />
+      <dependency id="BIA.Net.Authentication.Web" version="2.0.0.0" />
     </dependencies>
   </metadata>
 </package>

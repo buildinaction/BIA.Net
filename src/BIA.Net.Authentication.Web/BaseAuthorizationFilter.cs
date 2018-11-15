@@ -12,6 +12,11 @@ namespace BIA.Net.Authentication.Web
     using System.Web.SessionState;
     using System.Net.Http;
     using BIA.Net.Authentication.Business.Helpers;
+    using System.Collections.Specialized;
+    using System.Security.Cryptography.X509Certificates;
+    using static BIA.Net.Common.Configuration.AuthenticationElement;
+    using static BIA.Net.Common.Configuration.CommonElement;
+    using System.Reflection;
 
     public enum RolesRedirectAction
     {
@@ -76,15 +81,17 @@ namespace BIA.Net.Authentication.Web
 
             TUserInfo user = new TUserInfo();
             string cachingParameter = BIASettingsReader.BIANetSection?.Authentication?.Parameters?.Caching;
+            bool manageSession = false;
 
             if (cachingParameter == "Session")
             {
                 HttpSessionState Session = HttpContext.Current.Session;
                 if (Session != null)
                 {
-                    AUserInfo<TUserProperties>.UserInfoContainer container = (AUserInfo<TUserProperties>.UserInfoContainer)Session[AuthenticationConstants.SessionUserInfo];
+                    manageSession = true;
                     if (Session[AuthenticationConstants.SessionUserInfo] != null)
                     {
+                        AUserInfo<TUserProperties>.UserInfoContainer container = (AUserInfo<TUserProperties>.UserInfoContainer)Session[AuthenticationConstants.SessionUserInfo];
                         user.userInfoContainer = container;
                         CheckInfoToRefresh(user);
                     }
@@ -97,15 +104,133 @@ namespace BIA.Net.Authentication.Web
 
 
             IPrincipal principal = HttpContext.Current.User;
-            WindowsIdentity windowsIdentity = (WindowsIdentity)principal.Identity;
-            if (windowsIdentity != null && windowsIdentity.IsAuthenticated)
+            user.Identity = (WindowsIdentity)principal.Identity;
+
+            if (!user.Identity.IsAuthenticated)
             {
-                user.Identity = windowsIdentity;
+                ClientCertificateInHeaderCollection clientCertificateInHeader = BIASettingsReader.BIANetSection?.Authentication?.Identities?.OfType<ClientCertificateInHeaderCollection>().FirstOrDefault();
+                if (clientCertificateInHeader != null && !user.Identity.IsAuthenticated)
+                {
+                    NameValueCollection headers = HttpContext.Current.Request.Headers;
+                    string certHeader = headers[clientCertificateInHeader.Key];
+                    if (!String.IsNullOrEmpty(certHeader))
+                    {
+                        try
+                        {
+                            byte[] clientCertBytes = Convert.FromBase64String(certHeader);
+                            X509Certificate2 Certificate = new X509Certificate2(clientCertBytes);
+                            if (Certificate != null)
+                            {
+                                bool isValid = true;
+                                isValid = IsCertificatValid(Certificate, clientCertificateInHeader, isValid);
+                                if (isValid)
+                                {
+                                    user.Identity = new WindowsIdentity(GetCertificatValue(Certificate, clientCertificateInHeader.WindowsIdentity));
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            TraceManager.Error("Error when analyse certificat.", ex);
+                        }
+                    }
+                    else
+                    {
+                        certHeader = "";
+                    }
+                }
             }
+
+            /*
+            if (((user.Identity == null || user.Identity.IsAuthenticated==false) && (windowsIdentity != null && windowsIdentity.IsAuthenticated)) || (user.Certificate == null && certificat != null))
+            {
+                if (retrivedFromSession)
+                {
+                    user = new TUserInfo();
+                    HttpContext.Current.Session[AuthenticationConstants.SessionUserInfo] = user.userInfoContainer;
+                }
+                user.Identity = windowsIdentity;
+                user.Certificate = certificat;
+            }
+            if (user.Identity == null) user.Identity = windowsIdentity;*/
+
+            /*if (retrivedFromSession && user.Identity.IsAuthenticated && user.Login == null)
+            {
+                user.userInfoContainer.identitiesShouldBeRefreshed = true;
+            }*/
 
             user.FinalizePreparation();
 
+            if (manageSession && (user.Login == null))
+            {
+                HttpContext.Current.Session[AuthenticationConstants.SessionUserInfo] = null;
+            }
+
             return user;
+        }
+
+
+        private static bool IsCertificatValid(X509Certificate2 Certificate, ClientCertificateInHeaderCollection clientCertificationCollection, bool isValid)
+        {
+            if (Certificate == null) return false;
+
+            // 1. Check time validity of certificate
+            if (DateTime.Compare(DateTime.Now, Certificate.NotBefore) < 0 || DateTime.Compare(DateTime.Now, Certificate.NotAfter) > 0) return false;
+
+            foreach (ValidationCollection validationCollection in clientCertificationCollection.OfType<ValidationCollection>())
+            {
+                isValid = false; //reset to false if bad member.
+                bool validation_rejected = false;
+                foreach (KeyValueElement keyValue in validationCollection)
+                {
+                    string value = GetCertificatValue(Certificate, keyValue.Key);
+                    if (value != keyValue.Value)
+                    {
+                        validation_rejected = true;
+                        break;
+                    }
+                }
+                if (!validation_rejected)
+                {
+                    isValid = true;
+                    break;
+                }
+            }
+
+            return isValid;
+        }
+
+        private static string GetCertificatValue(X509Certificate2 Certificate, string key)
+        {
+            string value = null;
+            string[] keys = key.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+            PropertyInfo propertyInfo = Certificate.GetType().GetProperty(keys[0]);
+            if (propertyInfo != null)
+            {
+                value = (string)propertyInfo.GetValue(Certificate);
+            }
+            if (keys.Length > 1)
+            {
+                string[] certSubjectData = value.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                bool foundKey = false;
+                foreach (string s in certSubjectData)
+                {
+                    string[] subValues = s.Trim().Split(new char[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (subValues.Length == 2)
+                    {
+                        if (subValues[0] == keys[1])
+                        {
+                            value = subValues[1];
+                            foundKey = true;
+                            break;
+                        }
+
+                    }
+                }
+                if (!foundKey) value = null;
+            }
+
+            return value;
         }
 
         public static void CheckInfoToRefresh(TUserInfo user)

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>$id$</id>
-    <version>1.9.0.0</version>
+    <version>2.0.0.0</version>
     <title>$title$</title>
     <authors>BIA Team (Leader: Gwenael Fillon)</authors>
     <owners>BIA</owners>
@@ -16,9 +16,9 @@
     <copyright>Copyright © BIA 2018</copyright>
     <tags>BIA Authentication MVC .Net</tags>
     <dependencies>
-      <dependency id="BIA.Net.Common" version="1.9.0.0" />
+      <dependency id="BIA.Net.Common" version="2.0.0.0" />
       <dependency id="BIA.Net.Web" version="1.9.0.0" />
-      <dependency id="BIA.Net.Authentication.Business" version="1.9.0.0" />
+      <dependency id="BIA.Net.Authentication.Business" version="2.0.0.0" />
     </dependencies>
   </metadata>
 </package>

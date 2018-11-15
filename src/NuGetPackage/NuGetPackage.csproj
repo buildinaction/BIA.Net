@@ -38,9 +38,12 @@
     <None Include="BIA.Net.NuGet\BIA.Net.Api\BIA.Net.Api.1.8.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.Business\BIA.Net.Authentication.Business.1.9.0.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.Business\BIA.Net.Authentication.Business.1.9.0.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.Authentication.Business\BIA.Net.Authentication.Business.2.0.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.MVC\BIA.Net.Authentication.MVC.1.9.0.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.Authentication.MVC\BIA.Net.Authentication.MVC.2.0.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.WebAPI\BIA.Net.Authentication.WebAPI.1.9.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.Web\BIA.Net.Authentication.Web.1.9.0.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.Authentication.Web\BIA.Net.Authentication.Web.2.0.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Business\BIA.Net.Business.0.1.5.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Business\BIA.Net.Business.1.7.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Business\BIA.Net.Business.1.7.2.nupkg" />
