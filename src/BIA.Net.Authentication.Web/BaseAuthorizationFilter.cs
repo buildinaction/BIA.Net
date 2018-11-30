@@ -121,9 +121,7 @@ namespace BIA.Net.Authentication.Web
                             X509Certificate2 Certificate = new X509Certificate2(clientCertBytes);
                             if (Certificate != null)
                             {
-                                bool isValid = true;
-                                isValid = IsCertificatValid(Certificate, clientCertificateInHeader, isValid);
-                                if (isValid)
+                                if (IsCertificatValid(Certificate, clientCertificateInHeader))
                                 {
                                     user.Identity = new WindowsIdentity(GetCertificatValue(Certificate, clientCertificateInHeader.WindowsIdentity));
                                 }
@@ -170,13 +168,14 @@ namespace BIA.Net.Authentication.Web
         }
 
 
-        private static bool IsCertificatValid(X509Certificate2 Certificate, ClientCertificateInHeaderCollection clientCertificationCollection, bool isValid)
+        private static bool IsCertificatValid(X509Certificate2 Certificate, ClientCertificateInHeaderCollection clientCertificationCollection)
         {
             if (Certificate == null) return false;
 
             // 1. Check time validity of certificate
             if (DateTime.Compare(DateTime.Now, Certificate.NotBefore) < 0 || DateTime.Compare(DateTime.Now, Certificate.NotAfter) > 0) return false;
 
+            bool isValid = true;
             foreach (ValidationCollection validationCollection in clientCertificationCollection.OfType<ValidationCollection>())
             {
                 isValid = false; //reset to false if bad member.
