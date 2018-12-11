@@ -9,7 +9,7 @@
         var cultureFormatDateTimeSecMoment = cultureFormatDateMoment + " " + currentCulture.DateTimeFormat.LongTimePattern.Replace("M", "m").Replace("tt", "A");
         var cultureFormatTimeMoment = currentCulture.DateTimeFormat.ShortTimePattern.Replace("M", "m").Replace("tt", "A");
         var cultureFormatTimeSecMoment = currentCulture.DateTimeFormat.LongTimePattern.Replace("M", "m").Replace("tt", "A");
-    } 
+    }
     var culture = '@culture';
     var cultureDisplayName = '@System.Globalization.CultureInfo.CurrentCulture.DisplayName';
     BIA.Net.MVC.Localisation.cultureShort = "@cultureShort";
