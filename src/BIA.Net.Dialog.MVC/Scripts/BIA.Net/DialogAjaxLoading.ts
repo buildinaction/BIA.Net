@@ -124,6 +124,7 @@
                     //alert(xhr.getAllResponseHeaders());
                     AjaxLoading.SuccesAjaxReplaceInCurrentDialog(data, this.dialogDiv, this.urlOrigin, this.url, AjaxLoading.getResponseURL(xhr), addHistory);
                     if (refreshEvent != undefined && refreshEvent) Dialog.DialogEvent.Send(dialogDiv, 'OnBIADialogRefreshed', null, dialogDiv.dialogElem);
+                    else Dialog.DialogEvent.Send(dialogDiv, 'OnBIADialogLoaded', null, dialogDiv.dialogElem);
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     AjaxLoading.ErrorAjaxReplaceInCurrentDialog(xhr.responseText, this.dialogDiv, this.urlOrigin, this.url, AjaxLoading.getResponseURL(xhr), xhr.getResponseHeader('location'), addHistory)
@@ -188,6 +189,7 @@
                     }
                     window.history.pushState({ ajaxUrl: newUrl, ajaxDivContent: dialogDiv.divContent, ajaxDivScript: dialogDiv.divScript, ajaxDivType: dialogDiv.type }, title, newUrl);
                 }
+                Dialog.DialogEvent.Send(dialogDiv, 'OnBIADialogLoaded', null, dialogDiv.dialogElem);
             }
             if (dialogDiv.dialogElem != null) dialogDiv.dialogElem.css("cursor", "default");
         }
