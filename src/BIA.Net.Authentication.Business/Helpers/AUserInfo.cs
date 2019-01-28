@@ -376,7 +376,8 @@
                 {
                     if (heterogeneousElem is ValueElement)
                     {
-                        SetFromValueElement(identitiesInBuilding, heterogeneousElem);
+                        ValueElement value = (ValueElement)heterogeneousElem;
+                        identitiesInBuilding.Set(value.Key, value.Value, userInfoContainer);
                     }
                     else if (heterogeneousElem is WindowsIdentityElement)
                     {
