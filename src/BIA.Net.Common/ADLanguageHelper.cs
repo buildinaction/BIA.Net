@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Safran.Net.Common
+namespace BIA.Net.Common
 {
     public class ADLanguageHelper
     {

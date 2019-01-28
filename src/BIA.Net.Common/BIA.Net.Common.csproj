@@ -138,13 +138,6 @@
   <ItemGroup>
     <None Include="_CreateNewNuGetPackage\DoNotModify\NuGet.exe" />
   </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\TextResources.de.resx" />
-    <EmbeddedResource Include="Resources\TextResources.es.resx" />
-    <EmbeddedResource Include="Resources\TextResources.fr.resx" />
-    <EmbeddedResource Include="Resources\TextResources.resx" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

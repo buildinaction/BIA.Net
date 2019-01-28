@@ -122,11 +122,11 @@ namespace BIA.Net.Common
         /// <summary>
         /// Gets AD Simulated User
         /// </summary>
-        public static string UrlDMIndex
+        public static string UrlIndexDivision
         {
             get
             {
-                return ConfigurationManager.AppSettings["UrlDMIndex"];
+                return ConfigurationManager.AppSettings["UrlIndexDivision"];
             }
         }
 
@@ -155,6 +155,27 @@ namespace BIA.Net.Common
             get
             {
                 return ConfigurationManager.AppSettings["UrlStatic"];
+            }
+        }
+
+        /// <summary>
+        /// Gets the company name.
+        /// </summary>
+        public static string CompanyName
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["CompanyName"];
+            }
+        }
+        /// <summary>
+        /// Gets the division name.
+        /// </summary>
+        public static string DivisionName
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["DivisionName"];
             }
         }
 
