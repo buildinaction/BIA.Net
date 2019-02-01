@@ -131,7 +131,6 @@
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\BIA.Net\Dialog.css" />
     <Content Include="Scripts\BIA.Net\Dialog.js" />
   </ItemGroup>
   <ItemGroup>

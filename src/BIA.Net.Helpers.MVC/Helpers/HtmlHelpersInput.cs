@@ -170,10 +170,10 @@ namespace BIA.Net.Helpers
 
             StringBuilder script = new StringBuilder();
             script.Append("<script type=\"text/javascript\">$('#").Append(idSelect)
-                .Append("').multiselect({ ")
+                .Append("').multiselect({ buttonClass: 'btn btn-default form-control',")
                 .Append("selectAllText : '" + HtmlHelpersTranslate.TranslateString("SelectAll") + "',")
                 .Append("filterPlaceholder : '" + HtmlHelpersTranslate.TranslateString("Search") + "',")
-                .Append("nonSelectedText : '" + HtmlHelpersTranslate.TranslateString("NonSelected") + "',")
+                .Append("nonSelectedText : '" + /*HtmlHelpersTranslate.TranslateString("NonSelected") +*/ "',")
                 .Append("nSelectedText : '" + HtmlHelpersTranslate.TranslateString("nSelected") + "',")
                 .Append("allSelectedText : '" + HtmlHelpersTranslate.TranslateString("AllSelected") + "',")
                 .Append(multiselectParameter);

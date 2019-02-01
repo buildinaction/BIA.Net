@@ -115,7 +115,6 @@
     <Compile Include="ViewModel\JQueryDataTableParamModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\BIA.Net\FilterDataTable.css" />
     <TypeScriptCompile Include="..\BIA.Net.Dialog.MVC\Scripts\BIA.Net\Dialog.d.ts">
       <Link>Scripts\typings\BIA.Net\Dialog.d.ts</Link>
     </TypeScriptCompile>
