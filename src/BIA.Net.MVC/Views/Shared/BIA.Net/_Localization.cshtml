@@ -9,7 +9,7 @@
         var cultureFormatDateTimeSecMoment = cultureFormatDateMoment + " " + currentCulture.DateTimeFormat.LongTimePattern.Replace("M", "m").Replace("tt", "A");
         var cultureFormatTimeMoment = currentCulture.DateTimeFormat.ShortTimePattern.Replace("M", "m").Replace("tt", "A");
         var cultureFormatTimeSecMoment = currentCulture.DateTimeFormat.LongTimePattern.Replace("M", "m").Replace("tt", "A");
-    } 
+    }
     var culture = '@culture';
     var cultureDisplayName = '@System.Globalization.CultureInfo.CurrentCulture.DisplayName';
     BIA.Net.MVC.Localisation.cultureShort = "@cultureShort";
@@ -29,7 +29,7 @@
         <text>
     BIA.Net.DataTable.cultureDataTable = {
         "sProcessing": "Traitement en cours...",
-        "sSearch": "Rechercher&nbsp;:",
+        "sSearch": "Rechercher dans la liste",
         "sLengthMenu": "Afficher _MENU_ &eacute;l&eacute;ments",
         "sInfo": "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
         "sInfoEmpty": "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
@@ -40,16 +40,21 @@
         "sEmptyTable": "Aucune donn&eacute;e disponible dans le tableau",
         "oPaginate": {
             "sFirst": "Premier",
-            "sPrevious": "Pr&eacute;c&eacute;dent",
-            "sNext": "Suivant",
+            "sNext": "<svg class='pagination-follow' viewBox='0 0 16 16'><use xlink:href='#follow-right'/></svg>",
+            "sPrevious": "<svg class='pagination-follow'viewBox='0 0 16 16'><use xlink:href='#follow-left'/></svg>",
             "sLast": "Dernier"
-
         },
         "oAria": {
             "sSortAscending": ": activer pour trier la colonne par ordre croissant",
             "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
-
         }
+    }
+    BIA.Net.Design.cultureDesign = {
+        "showOptions": "Afficher les options",
+        "hideOptions": "Masquer les options",
+        "show": "Afficher",
+        "elements": "éléments",
+        "result": "résultat"
     }
     </text>
     }
@@ -66,26 +71,68 @@
         "sLengthMenu": "Mostrar _MENU_ entradas",
         "sLoadingRecords": "Cargando...",
         "sProcessing": "Procesando...",
-        "sSearch": "Buscar:",
+        "sSearch": "Buscar en la lista",
         "sZeroRecords": "No se encontraron registros coincidentes",
         "oPaginate": {
             "sFirst": "Primero",
             "sLast": "Ultimo",
-            "sNext": "Siguiente",
-            "sPrevious": "Anterior"
-
+            "sNext": "<svg class='pagination-follow' viewBox='0 0 16 16'><use xlink:href='#follow-right'/></svg>",
+            "sPrevious": "<svg class='pagination-follow'viewBox='0 0 16 16'><use xlink:href='#follow-left'/></svg>",
         },
         "oAria": {
             "sSortAscending": ": activar para ordenar la columna ascendente",
             "sSortDescending": ": activar para ordenar la columna descendente"
-
         }
+    }
+    BIA.Net.Design.cultureDesign = {
+        "showOptions": "Mostrar opciones",
+        "hideOptions": "Ocultar opciones",
+        "show": "Mostrar",
+        "elements": "elementos",
+        "result": "resultado"
     }
     </text>
     }
-    else //en-US
+
+    else if (cultureShort == "de")
     {
         <text>
+    var cultureDataTable = {
+        "sEmptyTable": "Keine Daten in der Tabelle verfügbar",
+        "sInfo": "Anzeigen _START_ bis _END_ von _TOTAL_ Einträgen",
+        "sInfoEmpty": "Anzeigen 0 bis 0 von 0 Einträgen",
+        "sInfoFiltered": "(Gefiltert von _MAX_ totalen Einträgen)",
+        "sInfoPostFix": "",
+        "sInfoThousands": ",",
+        "sLengthMenu": "Zeige _MENU_ Einträge",
+        "sLoadingRecords": "Laden…",
+        "sProcessing": "Bearbeite…",
+        "sSearch": "Suchen:",
+        "sZeroRecords": "Keine Treffer gefunden",
+        "oPaginate": {
+            "sFirst": "Erste",
+            "sLast": "Letzte",
+            "sNext": "<svg class='pagination-follow' viewBox='0 0 16 16'><use xlink:href='#follow-right'/></svg>",
+            "sPrevious": "<svg class='pagination-follow'viewBox='0 0 16 16'><use xlink:href='#follow-left'/></svg>",
+        },
+        "oAria": {
+            "sSortAscending": ": Aktiviere um Spalte aufsteigend zu sortieren",
+            "sSortDescending": ": Aktiviere um Spalte absteigend zu sortieren"
+        }
+    }
+    BIA.Net.Design.cultureDesign = {
+        "showOptions": "Optionen anzeigen",
+        "hideOptions": "Optionen ausblenden",
+        "show": "Zeigen Sie die",
+        "elements": "elemente an",
+        "result": "ergebnisse"
+    }
+    </text>
+    }
+    else //en ...
+    {
+        <text>
+
     BIA.Net.DataTable.cultureDataTable = {
         "sEmptyTable": "No data available in table",
         "sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
@@ -96,20 +143,25 @@
         "sLengthMenu": "Show _MENU_ entries",
         "sLoadingRecords": "Loading...",
         "sProcessing": "Processing...",
-        "sSearch": "Search:",
+        "sSearch": "Search in the list",
         "sZeroRecords": "No matching records found",
         "oPaginate": {
             "sFirst": "First",
             "sLast": "Last",
-            "sNext": "Next",
-            "sPrevious": "Previous"
-
+            "sNext": "<svg class='pagination-follow' viewBox='0 0 16 16'><use xlink:href='#follow-right'/></svg>",
+            "sPrevious": "<svg class='pagination-follow'viewBox='0 0 16 16'><use xlink:href='#follow-left'/></svg>",
         },
         "oAria": {
             "sSortAscending": ": activate to sort column ascending",
             "sSortDescending": ": activate to sort column descending"
-
         }
+    }
+    BIA.Net.Design.cultureDesign = {
+        "showOptions": "Show options",
+        "hideOptions": "Hide options",
+        "show": "Show",
+        "elements": "elements",
+        "result": "result"
     }
     </text>
     }

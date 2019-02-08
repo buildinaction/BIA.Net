@@ -22,6 +22,8 @@ var BIA;
                     last: "Last",
                     next: "Next",
                     previous: "Previous"
+                    /*next: '<svg class="pagination-follow" viewBox="0 0 16 16"><use xlink:href="#follow-right"/></svg>',
+                    previous: '<svg class="pagination-follow" viewBox="0 0 16 16"><use xlink:href="#follow-left"/></svg>'*/
                 },
                 aria: {
                     sortAscending: ": activate to sort column ascending",
@@ -29,10 +31,10 @@ var BIA;
                 }
             };
             function InitFullAjax(dataTableId, url_GetListData, columns, displayExportButton, getDataExtend, url_OnClickRow, rowCallback) {
-                var dom = 'lfrtip';
+                var dom = 'ltSpr';
                 var button = null;
                 if (displayExportButton === true) {
-                    dom = 'Bfrtip';
+                    dom = 'BltSpr';
                     button = [{
                             text: 'Export',
                             action: function (e, dt, node, config) {
@@ -78,9 +80,9 @@ var BIA;
             }
             DataTable.InitFullAjax = InitFullAjax;
             function InitAjax(dataTableId, url_GetListData, columns, exportButtons, formId, url_OnClickRow, rowCallback) {
-                var dom = 'lfrtip';
+                var dom = 'ltSpr';
                 if (exportButtons != null) {
-                    dom = 'Bfrtip';
+                    dom = 'BltSpr';
                 }
                 $(window).on('OnBIADialogRefresh', function (e) {
                     ReloadAjax(dataTableId);
@@ -135,19 +137,22 @@ var BIA;
                 if (exportButtons == null) {
                     $(document).ready(function () {
                         var dataTableOption = {
-                            "language": DataTable.cultureDataTable
+                            "language": DataTable.cultureDataTable,
+                            "dom": 'BtSpr'
                         };
-                        $(dataTableId).DataTable(dataTableOption);
+                        var table = $(dataTableId).DataTable(dataTableOption);
+                        //BIA.Net.Design.DataTable.InitDataTableDesign(table);
                     });
                 }
                 else {
                     $(document).ready(function () {
                         var dataTableOption = {
                             "language": DataTable.cultureDataTable,
-                            "dom": 'Bfrtip',
+                            "dom": 'BltSpr',
                             "buttons": exportButtons
                         };
-                        $(dataTableId).DataTable(dataTableOption);
+                        var table = $(dataTableId).DataTable(dataTableOption);
+                        //BIA.Net.Design.DataTable.InitDataTableDesign(table);
                     });
                 }
                 DataTableSettings[dataTableId] = null;
@@ -183,7 +188,7 @@ var BIA;
                         e.BIANetDialogData.targetElem.find(dataTableId).each(function () {
                             var dataTableOption = {
                                 "language": DataTable.cultureDataTable,
-                                "dom": 'Bfrtip',
+                                "dom": 'BltSpr',
                                 "buttons": exportButtons,
                                 "pageLength": settings.pageLength,
                                 "displayStart": settings.displayStart,
@@ -191,7 +196,8 @@ var BIA;
                                 "order": settings.order,
                                 retrieve: true
                             };
-                            $(this).DataTable(dataTableOption);
+                            var table = $(this).DataTable(dataTableOption);
+                            //BIA.Net.Design.DataTable.InitDataTableDesign(table);
                         });
                     });
                 }

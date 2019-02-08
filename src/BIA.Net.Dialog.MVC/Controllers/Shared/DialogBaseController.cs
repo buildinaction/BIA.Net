@@ -30,7 +30,8 @@ namespace BIA.Net.Dialog.MVC.Controllers
             Popup = 1,
             MainPageContent = 2,
             Document = 3,
-            Content = 4
+            Content = 4,
+            Refresh = 5
         };
 
         private string UniformizeUrl(string url)
