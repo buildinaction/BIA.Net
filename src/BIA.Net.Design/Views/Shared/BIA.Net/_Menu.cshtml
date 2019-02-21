@@ -1,0 +1,145 @@
+﻿@{
+    BIA.Net.Design.SiteMap.CustomSiteMapProvider siteMapProvider = SiteMap.Provider as BIA.Net.Design.SiteMap.CustomSiteMapProvider;
+    if (siteMapProvider == null)
+    {
+<div>
+    You should precise the defaultProvider in your Web.config:<br />
+    &lt;system.web &gt;<br />
+    &emsp;    &lt;siteMap enabled = "true" defaultProvider = "CustomSiteMapProvider" &gt;<br />
+    &emsp;&emsp;       &lt;providers&gt;<br />
+    &emsp;&emsp;&emsp;           &lt;add name = "CustomSiteMapProvider" siteMapFile = "~/SiteMap/SiteMap.sitemap" type = "BIA.Net.Design.SiteMap.CustomSiteMapProvider" securityTrimmingEnabled = "true" /&gt;<br />
+    &emsp;&emsp;       &lt;/providers&gt;<br />
+    &emsp;     &lt;/siteMap&gt;<br />
+    &lt;/system.web &gt;<br />
+</div>
+    }
+    else
+    {
+        SiteMapNode ParentLevel1 = null;
+        SiteMapNode ParentLevel2 = null;
+        SiteMapNode currentNode = siteMapProvider.CurrentNode;
+        if (currentNode != null)
+        {
+            if (currentNode.ParentNode == null)
+            {
+                // NavigationLevel2.Visible = false;
+                // BreadCrump.Visible = false;
+            }
+            else
+            {
+                if (currentNode.ParentNode == siteMapProvider.RootNode)
+                {
+                    ParentLevel1 = currentNode;
+                }
+                else
+                {
+                    SiteMapNode currentN = currentNode;
+                    while (currentN.ParentNode.ParentNode != siteMapProvider.RootNode)
+                    {
+                        currentN = currentN.ParentNode;
+                    }
+                    ParentLevel2 = currentN;
+                    ParentLevel1 = currentN.ParentNode;
+                }
+            }
+        }
+        var topLevelNodes = SiteMap.RootNode.ChildNodes;
+<ul class="navigation menu-list">
+    <div class="cross" onclick="$('.navbar-static-top.open').removeClass('open')">
+        <svg class="crossIcon d-none d-sm-block" viewBox="0 0 16 16"><use href="#cross" /></svg>
+        <span class="crossPolice">fermer</span>
+    </div>
+    @DisplayChildrenAsLi(topLevelNodes, ParentLevel1, 1)
+
+</ul>
+    }
+}
+
+@helper DisplayChildrenAsLi(SiteMapNodeCollection Children, SiteMapNode ParentLevel1, int level)
+{
+
+string liClass = "nav-item dropdown";
+string aClass = "nav-link";
+
+if (level == 2) { liClass = "lvl2"; aClass = "title"; }
+if (level == 3) { liClass = "lvl3"; aClass = "title"; }
+foreach (SiteMapNode node in Children)
+{
+    @DisplayNode(node, liClass, aClass, level)
+}
+}
+
+@helper DisplayNode(SiteMapNode node, string liClass, string aClass, int level)
+{
+bool hasChildren = (node.ChildNodes != null) && (node.ChildNodes.Count > 0);
+string title = "";
+if (node.Title.IndexOf("|") > 0)
+{
+    var splited = node.Title.Split('|');
+    foreach (var partTitle in splited)
+    {
+        if (string.IsNullOrEmpty(partTitle))
+        {
+            title += '|';
+        }
+        else
+        {
+            var partTitleTranslated = new System.Resources.ResourceManager(typeof(TextResources)).GetString(partTitle);
+            if (string.IsNullOrEmpty(partTitleTranslated))
+            {
+                partTitleTranslated = new System.Resources.ResourceManager(typeof(AppliResources)).GetString(partTitle);
+                if (string.IsNullOrEmpty(partTitleTranslated))
+                {
+                    title += partTitle;
+                }
+                else
+                {
+                    title += partTitleTranslated;
+                }
+            }
+            else
+            {
+                title += partTitleTranslated;
+            }
+        }
+    }
+}
+if (string.IsNullOrEmpty(title))
+{
+    title = new System.Resources.ResourceManager(typeof(TextResources)).GetString(node.Title);
+    if (string.IsNullOrEmpty(title))
+    {
+        title = new System.Resources.ResourceManager(typeof(AppliResources)).GetString(node.Title);
+        if (string.IsNullOrEmpty(title))
+        {
+            title = node.Title;
+        }
+    }
+}
+
+    <li class="@liClass">
+        @if (string.IsNullOrEmpty(node.Url))
+        {
+            if (string.IsNullOrEmpty(node["js"]))
+            {
+                <a class="@aClass" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@title</a>
+            }
+            else
+            {
+                <a onClick="@node["js"]" class="@aClass" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@title</a>
+            }
+        }
+        else
+        {
+            <a href="@node.Url" class="@aClass" BIADialogLinkToContent="DivContent:#BiaNetMainPageContent" onclick="$('.dropdown-menu.show').removeClass('show')">@title</a>
+        }
+        @if (hasChildren)
+        {
+            <div class="dropdown-menu">
+                <ul>
+                    @DisplayChildrenAsLi(node.ChildNodes, null, level + 1)
+                </ul>
+            </div>
+        }
+    </li>
+}

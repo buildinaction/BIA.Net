@@ -77,6 +77,15 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Menu.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
+    <None Include="Views\Shared\BIA.Net\_BIALayout.cshtml" />
+    <None Include="Views\Shared\BIA.Net\_BIALayout_Content.cshtml" />
+    <None Include="Views\Shared\BIA.Net\_BIALayout_Dialog.cshtml" />
+    <None Include="Views\Shared\BIA.Net\_BIALayout_Dialog_Infos.cshtml" />
+    <None Include="Views\Shared\BIA.Net\_BIALayout_MainPageContent.cshtml" />
+    <None Include="Views\Shared\BIA.Net\_Localization.cshtml" />
+    <None Include="Views\Shared\BIA.Net\_LoginPartial.cshtml" />
+    <None Include="Views\Shared\BIA.Net\_Menu.cshtml" />
+    <None Include="Views\Shared\BIA.Net\_Navigation.cshtml" />
     <None Include="_CreateNewNuGetPackage\Config.ps1" />
     <None Include="_CreateNewNuGetPackage\DoNotModify\CreateNuGetPackage.ps1" />
     <None Include="_CreateNewNuGetPackage\DoNotModify\New-NuGetPackage.ps1" />
