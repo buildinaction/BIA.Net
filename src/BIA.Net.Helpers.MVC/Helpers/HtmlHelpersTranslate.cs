@@ -132,6 +132,25 @@ namespace BIA.Net.Helpers
         /// </summary>
         /// <param name="originString">The origin string.</param>
         /// <returns>the translated string</returns>
+        public static string TranslateStringOrOriginal(string originString)
+        {
+            string translated = TranslateString(originString);
+
+            if (string.IsNullOrEmpty(translated))
+            {
+                return originString;
+            }
+            else
+            {
+                return translated;
+            }
+        }
+
+        /// <summary>
+        /// Translates the string.
+        /// </summary>
+        /// <param name="originString">The origin string.</param>
+        /// <returns>the translated string</returns>
         public static string TranslateString(string originString)
         {
             string translated = null;

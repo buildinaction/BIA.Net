@@ -1,5 +1,6 @@
-﻿namespace BIA.Net.Helpers
+﻿namespace BIA.Net.Design.Helpers
 {
+    using BIA.Net.Helpers;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -8,7 +9,7 @@
     /// <summary>
     /// Generation of Breadcrumb
     /// </summary>
-    public static class Helper
+    public static class SiteMapHelper
     {
         /// <summary>
         /// Get beradcrumb content
@@ -68,7 +69,7 @@
             return breadcrumbContent;
         }
 
-        private static string TranslateTitle(string  nodeTitle)
+        public static string TranslateTitle(string  nodeTitle)
         {
             var title = "";
             if (nodeTitle.IndexOf("|") > 0)
@@ -82,14 +83,14 @@
                     }
                     else
                     {
-                        title += HtmlHelpersTranslate.TranslateString(partTitle);
+                        title += HtmlHelpersTranslate.TranslateStringOrOriginal(partTitle);
                     }
                 }
             }
 
             if (string.IsNullOrEmpty(title))
             {
-                title = HtmlHelpersTranslate.TranslateString(nodeTitle);
+                title = HtmlHelpersTranslate.TranslateStringOrOriginal(nodeTitle);
             }
 
             return title;

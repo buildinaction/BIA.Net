@@ -7,7 +7,7 @@
         @:$(".breadcrumb").removeClass("homePage");
     }
 
-    var content = "@Html.Raw(BIA.Net.Design.Helper.GetBreadcrumbContent())";
+    var content = "@Html.Raw(BIA.Net.Design.Helpers.SiteMapHelper.GetBreadcrumbContent())";
 
     $(".content-breadcrumb").html(content);
     BIA.Net.Dialog.LinkToContent($(".content-breadcrumb"));

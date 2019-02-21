@@ -72,50 +72,7 @@ foreach (SiteMapNode node in Children)
 @helper DisplayNode(SiteMapNode node, string liClass, string aClass, int level)
 {
 bool hasChildren = (node.ChildNodes != null) && (node.ChildNodes.Count > 0);
-string title = "";
-if (node.Title.IndexOf("|") > 0)
-{
-    var splited = node.Title.Split('|');
-    foreach (var partTitle in splited)
-    {
-        if (string.IsNullOrEmpty(partTitle))
-        {
-            title += '|';
-        }
-        else
-        {
-            var partTitleTranslated = new System.Resources.ResourceManager(typeof(TextResources)).GetString(partTitle);
-            if (string.IsNullOrEmpty(partTitleTranslated))
-            {
-                partTitleTranslated = new System.Resources.ResourceManager(typeof(AppliResources)).GetString(partTitle);
-                if (string.IsNullOrEmpty(partTitleTranslated))
-                {
-                    title += partTitle;
-                }
-                else
-                {
-                    title += partTitleTranslated;
-                }
-            }
-            else
-            {
-                title += partTitleTranslated;
-            }
-        }
-    }
-}
-if (string.IsNullOrEmpty(title))
-{
-    title = new System.Resources.ResourceManager(typeof(TextResources)).GetString(node.Title);
-    if (string.IsNullOrEmpty(title))
-    {
-        title = new System.Resources.ResourceManager(typeof(AppliResources)).GetString(node.Title);
-        if (string.IsNullOrEmpty(title))
-        {
-            title = node.Title;
-        }
-    }
-}
+string title = BIA.Net.Design.Helpers.SiteMapHelper.TranslateTitle(node.Title);
 
     <li class="@liClass">
         @if (string.IsNullOrEmpty(node.Url))

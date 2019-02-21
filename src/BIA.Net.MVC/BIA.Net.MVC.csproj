@@ -108,6 +108,7 @@
   <ItemGroup>
     <Compile Include="Filter\PreventDuplicateRequestAttribute.cs" />
     <Compile Include="Utility\ErrorHandler.cs" />
+    <Compile Include="Utility\FlashMessageExtension.cs" />
     <Compile Include="Utility\ValidatorUtility.cs" />
     <Compile Include="ViewModel\DataTableColumnDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -14,6 +14,7 @@
         <iconUrl>https://raw.githubusercontent.com/BIAdotNet/BIA.Net/master/img/LogoBIA.png</iconUrl>
         <dependencies>
           <dependency id="BIA.Net.Common" version="2.0.0.0" />
+          <dependency id="BIA.Net.Helpers.MVC" version="2.0.0.0" />
         </dependencies>
     </metadata>
 </package>
