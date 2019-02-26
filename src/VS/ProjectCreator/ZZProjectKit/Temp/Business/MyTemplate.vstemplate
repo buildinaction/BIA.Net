@@ -1,0 +1,55 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>BIA V2.0.0 &gt; Business</Name>
+    <Description>Project For BIA &gt; Business</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>4</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ZZCompanyNameZZ.ZZProjectNameZZ.Business</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.jpg</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="ZZCompanyNameZZ.ZZProjectNameZZ.Business.csproj" File="ZZCompanyNameZZ.ZZProjectNameZZ.Business.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
+      <Folder Name="DTO" TargetFolderName="DTO">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AdminDTO.cs">AdminDTO.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="ExampleTable3DTO.cs">ExampleTable3DTO.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="MemberDTO.cs">MemberDTO.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="MemberRoleDTO.cs">MemberRoleDTO.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="SiteAdminsDTO.cs">SiteAdminsDTO.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="SiteDTO.cs">SiteDTO.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="UserDTO.cs">UserDTO.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Helpers" TargetFolderName="Helpers">
+        <ProjectItem ReplaceParameters="true" TargetFileName="ADUserInfo.cs">ADUserInfo.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="UnityConfigBusiness.cs">UnityConfigBusiness.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="UserInfo.cs">UserInfo.cs</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">packages.config</ProjectItem>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Services" TargetFolderName="Services">
+        <Folder Name="Authentication" TargetFolderName="Authentication">
+          <ProjectItem ReplaceParameters="true" TargetFileName="ServiceSynchronizeUser.cs">ServiceSynchronizeUser.cs</ProjectItem>
+        </Folder>
+        <ProjectItem ReplaceParameters="true" TargetFileName="MapperService.cs">MapperService.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="ServiceExampleForStoredProcedure.cs">ServiceExampleForStoredProcedure.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="ServiceExampleForWindowsService.cs">ServiceExampleForWindowsService.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="ServiceMember.cs">ServiceMember.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="ServiceSite.cs">ServiceSite.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="ServiceUser.cs">ServiceUser.cs</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="stylecop.json">stylecop.json</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>ZZProjectInstallerWizards, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>ZZProjectInstallerWizards.ChildWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

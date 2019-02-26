@@ -1,0 +1,45 @@
+﻿<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>BIA Template V2.0.0</Name>
+    <Description>Project Template For BIA</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ProjectName</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.jpg</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="ZZProjectNameZZ.ZZProjectNameZZ.Template.csproj" File="ZZCompanyNameZZ.ZZProjectNameZZ.Template.csproj" ReplaceParameters="true">
+      <Folder Name="App_Browsers" TargetFolderName="App_Browsers">
+        <ProjectItem ReplaceParameters="false" TargetFileName="qt.browser">qt.browser</ProjectItem>
+      </Folder>
+      <Folder Name="Internal" TargetFolderName="Internal">
+        <ProjectItem ReplaceParameters="true" TargetFileName="RazorTemplate.cs">RazorTemplate.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Models" TargetFolderName="Models">
+        <Folder Name="Base" TargetFolderName="Base">
+          <ProjectItem ReplaceParameters="true" TargetFileName="TemplateModelBase.cs">TemplateModelBase.cs</ProjectItem>
+        </Folder>
+        <ProjectItem ReplaceParameters="true" TargetFileName="ZZTemplateModel.cs">ZZTemplateModel.cs</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">packages.config</ProjectItem>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Rotativa" TargetFolderName="Rotativa">
+        <ProjectItem ReplaceParameters="false" TargetFileName="wkhtmltopdf.exe">wkhtmltopdf.exe</ProjectItem>
+      </Folder>
+      <Folder Name="Services" TargetFolderName="Services">
+        <ProjectItem ReplaceParameters="true" TargetFileName="TemplateService.cs">TemplateService.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Templates" TargetFolderName="Templates">
+        <ProjectItem ReplaceParameters="true" TargetFileName="ZZTemplate.cshtml">ZZTemplate.cshtml</ProjectItem>
+      </Folder>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

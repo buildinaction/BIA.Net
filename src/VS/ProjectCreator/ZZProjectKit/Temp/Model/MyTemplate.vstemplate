@@ -1,0 +1,62 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>BIA V2.0.0 &gt; Model</Name>
+    <Description>Project For BIA &gt; Model</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>6</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ZZCompanyNameZZ.ZZProjectNameZZ.Model</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.jpg</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="ZZCompanyNameZZ.ZZProjectNameZZ.Model.csproj" File="ZZCompanyNameZZ.ZZProjectNameZZ.Model.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="App.Config">App.Config</ProjectItem>
+      <Folder Name="DAL" TargetFolderName="DAL">
+        <ProjectItem ReplaceParameters="true" TargetFileName="GenericTransaction.cs">GenericTransaction.cs</ProjectItem>
+        <Folder Name="StoredProcedure" TargetFolderName="StoredProcedure">
+          <ProjectItem ReplaceParameters="true" TargetFileName="GetExampleUsersByCompany.cs">GetExampleUsersByCompany.cs</ProjectItem>
+        </Folder>
+      </Folder>
+      <Folder Name="Helpers" TargetFolderName="Helpers">
+        <ProjectItem ReplaceParameters="true" TargetFileName="UnityConfigModel.cs">UnityConfigModel.cs</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">packages.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ProjectDB.edmx">ProjectDB.edmx</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ProjectDB.Context.tt">ProjectDB.Context.tt</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ProjectDB.Context.cs">ProjectDB.Context.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ProjectDB.Designer.cs">ProjectDB.Designer.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="ProjectDB.edmx.diagram">ProjectDB.edmx.diagram</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ProjectDB.tt">ProjectDB.tt</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ExampleTable1.cs">ExampleTable1.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ExampleTable2.cs">ExampleTable2.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ExampleTable3.cs">ExampleTable3.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Member.cs">Member.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="MemberRole.cs">MemberRole.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ProjectDB.cs">ProjectDB.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Site.cs">Site.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="User.cs">User.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Version.cs">Version.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ProjectDB.edmx.sql">ProjectDB.edmx.sql</ProjectItem>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Sql" TargetFolderName="Sql">
+        <ProjectItem ReplaceParameters="true" TargetFileName="create_index.sql">create_index.sql</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="stylecop.json">stylecop.json</ProjectItem>
+      <Folder Name="Template" TargetFolderName="Template">
+        <ProjectItem ReplaceParameters="true" TargetFileName="BIA_Post_SSDLToSQL.tt">BIA_Post_SSDLToSQL.tt</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="BIA_SSDLToSQL.tt">BIA_SSDLToSQL.tt</ProjectItem>
+      </Folder>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>ZZProjectInstallerWizards, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>ZZProjectInstallerWizards.ChildWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

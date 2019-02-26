@@ -1,0 +1,46 @@
+@model $companyName$.$saferootprojectname$.Business.DTO.MemberDTO
+
+@{
+    ViewBag.Title = TextResources.Edit + " " + TextResources.Member;
+    Layout = "~/Views/Shared/BIA.Net/_BIALayout_Dialog_Infos.cshtml";
+}
+
+<h2>@TextResources.Edit @TextResources.Member</h2>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "MemberEditForm"+ Model.Id, @class = "PreventDuplicateRequest" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.SiteId)
+
+        <div class="form-group">
+            @Html.T_LabelFor(model => model.User, htmlAttributes: new { @class = "bmd-label-floating" })
+            <div class="field">
+                @Html.DisplayFor(model => model.User.DisplayFullName)
+           </div>
+        </div> 
+
+        <div class="form-group">
+            @Html.T_LabelFor(model => model.MemberRole, htmlAttributes: new { @class = "bmd-label-floating" })
+            <div class="field">
+                @Html.CheckBoxListFor(model => model.MemberRoleIds, (IEnumerable<SelectListItem>)ViewBag.MemberRoleDTOIds, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.MemberRoleIds, @TextResources.PleaseSelect + Html.T_DisplayNameFor(m => m.MemberRole ) + ".", new { @class = "text-danger" })
+            </div>
+        </div> 
+    </div>
+}
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" onclick="location.href='@Url.Action("Edit", "Site", new { id = Model.SiteId })'" class="btn btn-second">@TextResources.BackToList</button>
+        </div>
+        <div class="btn-action">
+            <button onclick="$('#MemberEditForm@(Model.Id)').submit();" class="btn btn-main">@TextResources.Save</button>
+        </div>
+    </div>
+}

@@ -1,0 +1,10 @@
+Exported template are in :
+	C:\Users\*User*\Documents\Visual Studio 2015\My Exported Templates
+
+2 Projects:
+	clean : C:\Users\Administrator\Documents\Visual Studio 2015\Templates\ProjectTemplates\*.zip
+
+Cannot rebuild the VSIX package (error "Extension '...' could not be found. Please make sure the extension has been installed."):
+=> https://github.com/zpqrtbnk/Zbu.ModelsBuilder/issues/52#issuecomment-171639289
+	There is an easier solution. Delete this folder and VS will be recreated with default settings. 
+	C:\Users\*User*\AppData\Local\Microsoft\VisualStudio\14.0Exp

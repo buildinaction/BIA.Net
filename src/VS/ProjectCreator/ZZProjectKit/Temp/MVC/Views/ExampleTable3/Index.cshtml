@@ -1,0 +1,23 @@
+@model IEnumerable<$companyName$.$saferootprojectname$.Business.DTO.ExampleTable3DTO>
+
+@{    ViewBag.Title = @TextResources.ListOf + " " + @Html.TranslateAndPlurialize("ExampleTable3");
+}
+
+<h2>@TextResources.ListOf @Html.TranslateAndPlurialize("ExampleTable3")</h2>
+
+<p>
+    @Html.ActionLink(@TextResources.CreateNew, "Create", new { }, new { @class = "a2btn", BIADialogLink = "Type:Modal" })
+</p>
+
+<div BIADialogRefresh="Url:@Url.Action("_List");OnFormValidated:@Url.Action("Create")|@Url.Action("Edit")|@Url.Action("Delete")" style="overflow: auto;">
+    @Html.Partial("_List", Model)
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+
+			BIA.Net.DataTable.InitStandard('#ExampleTable3Table');
+    </script>
+}
+

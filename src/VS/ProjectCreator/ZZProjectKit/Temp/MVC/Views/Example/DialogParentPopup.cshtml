@@ -1,0 +1,53 @@
+@model $companyName$.$saferootprojectname$.Business.DTO.SiteDTO
+
+@{
+    ViewBag.Title = "Dialog Parent Popup";
+}
+
+<h2>@TextResources.Edit @TextResources.Site</h2>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "DialogParentPopup", @class = "PreventDuplicateRequest" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row col-sm-12">
+        <input name="actionJS" hidden />
+        <div class="row">
+            <button type="button" style="margin: auto;" class="btn btn-1" onclick="window.location='@Url.Action("DialogChildPopup","Example",null)'" BIADialogLink="Type:Modal">Open Dialog Child Popup</button>
+        </div>
+        test line1 <br />
+        test line2 <br />
+        test line3 <br />
+        test line4 <br />
+        test line5 <br />
+        test line6 <br />
+        test line7 <br />
+        test line8 <br />
+        test line9 <br />
+        test line10<br />
+        test line11<br />
+    </div>
+
+}
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" onclick="location.href='@Url.Action("CloseDialog", "DialogBasicAction")'" class="btn btn-2">Close from server</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" onclick="BIA.Net.Dialog.GetParentDialogDiv($(this)).dialogElem.dialog('close')" class="btn btn-2">Close direct JS</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" onclick="BIA.Net.Dialog.Close($(this))" class="btn btn-2">Close direct JS (short syntax) </button>
+        </div>
+        <div class="btn-action">
+            <button onclick="$('#DialogParentPopup').submit();" class="btn btn-2">@TextResources.Save</button>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    <script src="~/Scripts/app/modules/Example/DialogParentPopup.js"></script>
+}

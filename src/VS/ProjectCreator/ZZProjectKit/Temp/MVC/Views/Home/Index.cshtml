@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<h2 class="text-left">@BIA.Net.Common.BIASettingsReader.ProjectTitle</h2>
+<h4 class="mb-5">@BIA.Net.Common.BIASettingsReader.ProjectTitle @MsgResources.ProjectDescription</h4>
+
+<div class="row">
+    @if (User.IsInRole(Constants.RoleAdmin) || User.IsInRole(Constants.RoleSiteAdmin))
+    {
+    <div class="col-lg panel-desc-app">
+        <div class="defaultPanel">
+            <div class="titlePanel">
+                @MsgResources.GettingStarted
+            </div>
+            <div class="descPanel">
+                @MsgResources.GettingStartedDesc
+            </div>
+            <div class="btn-grp">
+                <a class="btn btn-default btn-main w-50" href="@Url.Action("Index", "Site")">@TextResources.ListOf @Html.TranslateAndPlurialize("Site")</a>
+                <a class="btn btn-default btn-follow" href="@Url.Action("Index", "Site")"><svg viewBox="0 0 16 16"><use xlink:href="#follow-right" /></svg></a>
+            </div>
+        </div>
+    </div>
+    }
+    <div class="col-lg panel-desc-app">
+        <div class="defaultPanel">
+            <div class="titlePanel">
+                @MsgResources.AccessExample
+            </div>
+            <div class="descPanel">
+                @MsgResources.AccessExampleDesc
+            </div>
+            <div class="btn-grp">
+                <a class="btn btn-main w-50" href="@Url.Action("ExamplePage", "Example")">@AppliResources.ExamplePage</a>
+                <a class="btn btn-follow" href="@Url.Action("ExamplePage", "Example")"><svg viewBox="0 0 16 16"><use xlink:href="#follow-right" /></svg></a>
+            </div>
+        </div>
+    </div>
+    <div class="col col-lg-3 panel-desc-app">
+        <div class="defaultPanel">
+            <div class="titlePanel">
+                @MsgResources.ManageMyProfile
+            </div>
+            <div class="descPanel">
+                @MsgResources.ManageMyProfileDesc
+            </div>
+            <div class="btn-grp">
+                <a class="btn btn-default btn-main w-50" target="_self" href="@Url.Content(BIASettingsReader.UrlIndexDivision + "/UserProfile/EditMyProfile?UrlReturn=" + Request.Url.ToString())">@TextResources.Profile</a>
+                <a class="btn btn-default btn-follow" target="_self" href="@Url.Content(BIASettingsReader.UrlIndexDivision + "/UserProfile/EditMyProfile?UrlReturn=" + Request.Url.ToString())"><svg viewBox="0 0 16 16"><use xlink:href="#follow-right" /></svg></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+        function TriggerVoice(message, language) {
+            var url = '@Html.Raw("DMServiceSpeech/" + Url.Action("TextToMp3", "Voice"))' + "?word=" + message + "&language=" + language;
+            debugger;
+            var audio = new Audio(url); // the above
+            audio.play();
+            }
+</script>

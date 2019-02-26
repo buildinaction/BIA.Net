@@ -1,0 +1,82 @@
+@model IEnumerable<$companyName$.$saferootprojectname$.Business.DTO.ExampleTable3DTO>
+    
+    <table class="dataTable stripe table flat-row"  id="ExampleTable3Table">
+        <thead>
+        <tr>
+            <th>
+                @Html.T_DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.Value)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.Decimal)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.Double)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.DateOnly)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.DateAndTime)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.TimeOnly)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.TimeSpan)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.TimeSpanOver24H)
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+    @{ var odd = false; }
+    @foreach (var item in Model) {
+        odd = !odd;
+        <tr class="@(odd ? "odd": "even")">
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Value)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Decimal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Double)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateOnly)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateAndTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeOnly)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeSpan)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeSpanOver24H)
+            </td>
+            <td style="text-align: center;white-space:nowrap">
+    			@Html.ActionLink(" ", "Edit", new { id = item.Id }, new { dataTitle = TextResources.Edit, @class = "a2btn-small glyphicon glyphicon-pencil", BIADialogLink = "Type:Modal" }) |
+                @Html.ActionLink(" ", "Details", new { id = item.Id }, new { dataTitle = TextResources.Details, @class = "a2btn-small glyphicon glyphicon-list-alt", BIADialogLink = "Type:Modal" }) |
+    			@Html.ActionLink(" ", "Delete", new { id = item.Id }, new { dataTitle = TextResources.Delete, @class = "a2btn-small glyphicon glyphicon-trash", BIADialogLink = "Type:Modal" })
+            </td>
+        </tr>
+    }
+    
+    
+    </table>

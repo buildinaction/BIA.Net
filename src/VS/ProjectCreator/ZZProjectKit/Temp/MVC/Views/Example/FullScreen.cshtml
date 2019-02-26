@@ -1,0 +1,77 @@
+@model $companyName$.$saferootprojectname$.Business.DTO.SiteDTO
+
+@{
+    ViewBag.Title = AppliResources.ExamplePage + " FullScreen Dark";
+    ViewBag.FullScreen = true; /*Mode FullScreen*/
+    //ViewBag.HiddeFullScreenIcon = true; /*hidden the button to escape FullScreen mode*/
+    //ViewBag.HiddeBreadCrumb = true; /*hidden the button to escape FullScreen mode*/
+    PageData["theme"] = "Dark"; /*Force the theme to Dark*/
+}
+
+
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-sm-4">
+        <label>TextBox1</label>
+        <input class="form-control" type="text" />
+    </div>
+    <div class="col-sm-4">
+        <label>Date</label>
+        <input class="form-control calendarPicker" type="text" />
+    </div>
+    <div class="col-sm-4">
+        <label>DropDownList1</label>
+        <select class="form-control">
+            <option></option>
+            <option>Item1</option>
+            <option>Item2</option>
+            <option>Item3</option>
+            <option>Item4</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <label>TextBox3</label>
+        <input class="form-control" type="text" />
+    </div>
+    <div class="col-sm-4">
+        <label>DropDownList2</label>
+        <select class="form-control">
+            <option></option>
+            <option value="No">@TextResources.Yes</option>
+            <option value="Yes">@TextResources.No</option>
+        </select>
+    </div>
+    <div class="col-sm-4">
+        <label>Multiselect</label>
+        <div>
+            @Html.MultiselectFor(model => model.MembersIds, (IEnumerable<SelectListItem>)ViewBag.MembersIds, null)
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <label>Text area</label>
+        <textarea class="form-control" rows="5"></textarea>
+    </div>
+    <div class="col-sm-8">
+        <label>MultiSelect2Lists</label>
+        @Html.Multiselect2ListsFor(model => model.Members, (IEnumerable<SelectListItem>)ViewBag.MembersIds, null)
+    </div>
+</div>
+<div class="row">
+        <button type="button" class="btn btn-1 pull-right">@TextResources.Button</button>
+</div>
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" id="btn1" class="btn btn-2">@TextResources.Cancel</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn2" class="btn btn-2">@TextResources.Save</button>
+        </div>
+    </div>
+}
