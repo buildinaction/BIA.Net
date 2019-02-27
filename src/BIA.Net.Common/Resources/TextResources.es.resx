@@ -252,4 +252,7 @@
   <data name="Validate" xml:space="preserve">
     <value>Validar</value>
   </data>
+  <data name="GeneralInfos" xml:space="preserve">
+    <value>Informaciones generales</value>
+  </data>
 </root>
