@@ -24,6 +24,47 @@ namespace BIA.Net.Helpers
         /// </summary>
         /// <typeparam name="TModel">The type of the model.</typeparam>
         /// <param name="htmlHelper">The HTML helper.</param>
+        /// <param name="type">The type of the field</param>
+        /// <param name="precision">The precision of the field</param>
+        /// <returns>escaped string</returns>
+        public static string PatternNumber<TModel>(this HtmlHelper<TModel> htmlHelper, string type, int? precision = null)
+        {
+            string patternNumber = "^\\d*";
+            if (type.ToLower().IndexOf("double") == 0 || type.ToLower().IndexOf("decimal") == 0 || type.ToLower().IndexOf("float") == 0)
+            {
+                patternNumber += "(";
+                string separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+                if (separator == ".")
+                {
+                    patternNumber += "\\.";
+                }
+                else
+                {
+                    patternNumber += separator;
+                }
+
+                patternNumber += "\\d";
+                if (precision == null)
+                {
+                    patternNumber += "*";
+                }
+                else
+                {
+                    patternNumber += "{0," + precision + "}";
+                }
+
+                patternNumber += ")?";
+            }
+
+            patternNumber += "$";
+            return patternNumber;
+        }
+
+        /// <summary>
+        /// Replace unauthorized char by underscore and first char by Z if not authorize
+        /// </summary>
+        /// <typeparam name="TModel">The type of the model.</typeparam>
+        /// <param name="htmlHelper">The HTML helper.</param>
         /// <param name="id">The id to secure</param>
         /// <returns>escaped string</returns>
         public static string SafeStringForId<TModel>(this HtmlHelper<TModel> htmlHelper, string id)

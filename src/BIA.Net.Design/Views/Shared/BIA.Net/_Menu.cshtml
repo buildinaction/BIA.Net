@@ -46,11 +46,10 @@
         var topLevelNodes = SiteMap.RootNode.ChildNodes;
 <ul class="navigation menu-list">
     <div class="cross" onclick="$('.navbar-static-top.open').removeClass('open')">
-        <svg class="crossIcon d-none d-sm-block" viewBox="0 0 16 16"><use href="#cross" /></svg>
-        <span class="crossPolice">fermer</span>
+        <div class="svgIcon cross-menu d-inline-block"></div><!-- crossIcon d-none d-sm-block -->
+        <span class="crossPolice">@TextResources.Close</span>
     </div>
     @DisplayChildrenAsLi(topLevelNodes, ParentLevel1, 1)
-
 </ul>
     }
 }

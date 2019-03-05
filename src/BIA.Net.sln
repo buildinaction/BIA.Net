@@ -51,8 +51,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetPackage", "NuGetPackag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Design", "BIA.Net.Design\BIA.Net.Design.csproj", "{7D9F0003-0901-4E80-8041-2CBAAF1D190D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Resource", "BIA.Net.Resource\BIA.Net.Resource.csproj", "{C282DA47-AF18-460B-809A-490944EAF7A3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,10 +137,6 @@ Global
 		{7D9F0003-0901-4E80-8041-2CBAAF1D190D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D9F0003-0901-4E80-8041-2CBAAF1D190D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D9F0003-0901-4E80-8041-2CBAAF1D190D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C282DA47-AF18-460B-809A-490944EAF7A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C282DA47-AF18-460B-809A-490944EAF7A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C282DA47-AF18-460B-809A-490944EAF7A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C282DA47-AF18-460B-809A-490944EAF7A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
