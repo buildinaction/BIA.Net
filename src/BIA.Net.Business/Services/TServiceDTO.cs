@@ -75,8 +75,14 @@ namespace BIA.Net.Business.Services
         /// <returns>all DTO of a Type corresponding to the acces mode</returns>
         public virtual List<DTO> GetAll(ServiceAccessMode smode = ServiceAccessMode.Read)
         {
-            IQueryable<Entity> query = Repository.GetStandardQuery(TranslateAccess(smode));
-            List<DTO> list = query.Select(GetSelectorExpression()).ToList();
+            List<DTO> list = null;
+
+            using (var dbContextReadPerformance = new Helpers.DbContextReadPerformance(this.Repository.GetProjectDBContextForOptim()))
+            {
+                IQueryable<Entity> query = Repository.GetStandardQuery(TranslateAccess(smode));
+                list = query.AsNoTracking().Select(GetSelectorExpression()).ToList();
+            }
+
             return list;
         }
 
@@ -88,8 +94,14 @@ namespace BIA.Net.Business.Services
         /// <returns>all DTO of a Type corresponding to the acces mode</returns>
         public virtual List<DTO> GetAllWhere(Expression<Func<Entity, bool>> where, ServiceAccessMode smode = ServiceAccessMode.Read)
         {
-            IQueryable<Entity> query = Repository.GetStandardQuery(TranslateAccess(smode));
-            List<DTO> list = query.Where(where).Select(GetSelectorExpression()).ToList();
+            List<DTO> list = null;
+
+            using (var dbContextReadPerformance = new Helpers.DbContextReadPerformance(this.Repository.GetProjectDBContextForOptim()))
+            {
+                IQueryable<Entity> query = Repository.GetStandardQuery(TranslateAccess(smode));
+                list = query.Where(where).AsNoTracking().Select(GetSelectorExpression()).ToList();
+            }
+
             return list;
         }
 
@@ -104,6 +116,8 @@ namespace BIA.Net.Business.Services
         /// <returns>list of objects</returns>
         public virtual List<DTO> GetAllWhereForAjaxDataTable(DataTableAjaxPostDTO datatableDTO, out int filteredResultsCount, out int totalResultsCount, Expression<Func<Entity, bool>> where = default(Expression<Func<Entity, bool>>), ServiceAccessMode smode = ServiceAccessMode.Read)
         {
+            List<DTO> result = null;
+
             if (datatableDTO == null)
             {
                 throw new ArgumentNullException("datatableDTO", "datatableDTO is null.");
@@ -114,25 +128,28 @@ namespace BIA.Net.Business.Services
                 throw new ArgumentNullException("datatableDTO.Order", "datatableDTO.Order is null.");
             }
 
-            IQueryable<Entity> query = Repository.GetStandardQuery(TranslateAccess(smode));
-            totalResultsCount = query.Count();
-
-            if (where != default(Expression<Func<Entity, bool>>))
+            using (var dbContextReadPerformance = new Helpers.DbContextReadPerformance(this.Repository.GetProjectDBContextForOptim()))
             {
-                query = query.Where(where);
-                filteredResultsCount = query.Count();
-            }
-            else
-            {
-                filteredResultsCount = totalResultsCount;
-            }
+                IQueryable<Entity> query = Repository.GetStandardQuery(TranslateAccess(smode)).AsNoTracking();
+                totalResultsCount = query.Count();
 
-            string sortExpression = datatableDTO.Columns[datatableDTO.Order.First().Column].Data.Replace("__", ".") + " " + datatableDTO.Order.First().Dir.ToLower();
+                if (where != default(Expression<Func<Entity, bool>>))
+                {
+                    query = query.Where(where);
+                    filteredResultsCount = query.Count();
+                }
+                else
+                {
+                    filteredResultsCount = totalResultsCount;
+                }
 
-            List<DTO> result = query.OrderBy(sortExpression)
-                .Skip(datatableDTO.Start)
-                .Take(datatableDTO.Length)
-                .Select(GetSelectorExpression()).ToList();
+                string sortExpression = datatableDTO.Columns[datatableDTO.Order.First().Column].Data.Replace("__", ".") + " " + datatableDTO.Order.First().Dir.ToLower();
+
+                result = query.OrderBy(sortExpression)
+                    .Skip(datatableDTO.Start)
+                    .Take(datatableDTO.Length)
+                    .Select(GetSelectorExpression()).ToList();
+            }
 
             return result ?? new List<DTO>();
         }
@@ -147,7 +164,13 @@ namespace BIA.Net.Business.Services
         /// <returns> the DTO by specifing key values, acces mode, and add include</returns>
         public virtual DTO Find(object keyValue_s, ServiceAccessMode smode = ServiceAccessMode.Read, List<Expression<Func<Entity, dynamic>>> expFieldsToInclude = null, List<string> sFieldsToInclude = null)
         {
-            DTO entity = Repository.GetFindQuery(keyValue_s, TranslateAccess(smode), expFieldsToInclude, sFieldsToInclude).Select(GetSelectorExpression()).SingleOrDefault();
+            DTO entity = default(DTO);
+
+            using (var dbContextReadPerformance = new Helpers.DbContextReadPerformance(this.Repository.GetProjectDBContextForOptim()))
+            {
+                entity = Repository.GetFindQuery(keyValue_s, TranslateAccess(smode), expFieldsToInclude, sFieldsToInclude).AsNoTracking().Select(GetSelectorExpression()).SingleOrDefault();
+            }
+
             return entity;
         }
 
@@ -222,7 +245,7 @@ namespace BIA.Net.Business.Services
         public async Task<List<DTO>> GetAllAsync(ServiceAccessMode smode = ServiceAccessMode.Read)
         {
             IQueryable<Entity> query = Repository.GetStandardQuery(TranslateAccess(smode));
-            return await query.Select(GetSelectorExpression()).ToListAsync();
+            return await query.AsNoTracking().Select(GetSelectorExpression()).ToListAsync();
         }
 
         /*

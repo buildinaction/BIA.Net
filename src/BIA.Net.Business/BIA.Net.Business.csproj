@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="DTO\infrastructure\MapperBase.cs" />
     <Compile Include="DTO\infrastructure\MapperExtensions.cs" />
+    <Compile Include="Helpers\DbContextReadPerformance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AllServicesDTO.cs" />
     <Compile Include="Services\MapperServiceDTO.cs" />
