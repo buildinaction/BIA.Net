@@ -16,6 +16,11 @@ namespace BIA.Net.Business.Services
     public static class MapperServiceDTO
     {
         /// <summary>
+        /// Singleton
+        /// </summary>
+        private static readonly object SyncLock = new object();
+
+        /// <summary>
         /// The service mapping
         /// </summary>
         public static Dictionary<Type, TypeMapper> serviceMapping = null;
@@ -47,7 +52,13 @@ namespace BIA.Net.Business.Services
             Type mapperType = MapperServiceDTO.ServiceMapping[typeof(DTO)].MapperType;
             if (!mapperContainer.Keys.Contains(mapperType))
             {
-                mapperContainer.Add(mapperType, Activator.CreateInstance(mapperType));
+                lock (SyncLock)
+                {
+                    if (!mapperContainer.Keys.Contains(mapperType))
+                    {
+                        mapperContainer.Add(mapperType, Activator.CreateInstance(mapperType));
+                    }
+                }
             }
 
             return (MapperBase<Entity, DTO>)mapperContainer[mapperType];
