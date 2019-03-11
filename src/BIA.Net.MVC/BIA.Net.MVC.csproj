@@ -108,6 +108,7 @@
   <ItemGroup>
     <Compile Include="Filter\PreventDuplicateRequestAttribute.cs" />
     <Compile Include="Utility\ErrorHandler.cs" />
+    <Compile Include="Utility\FlashMessageExtension.cs" />
     <Compile Include="Utility\ValidatorUtility.cs" />
     <Compile Include="ViewModel\DataTableColumnDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -115,16 +116,9 @@
     <Compile Include="ViewModel\JQueryDataTableParamModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\BIA.Net\FilterDataTable.css" />
-    <TypeScriptCompile Include="..\BIA.Net.Dialog.MVC\Scripts\BIA.Net\Dialog.d.ts">
-      <Link>Scripts\typings\BIA.Net\Dialog.d.ts</Link>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\BIA.Net\Localization.ts" />
-    <TypeScriptCompile Include="Scripts\BIA.Net\PreventDuplicateRequest.ts" />
     <None Include="BIA.Net.MVC.csproj.nuspec">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Scripts\BIA.Net\MVC.js" />
     <Content Include="Views\Shared\BIA.Net\_Localization.cshtml" />
     <None Include="_CreateNewNuGetPackage\DoNotModify\NuGet.exe" />
     <None Include="packages.config" />
@@ -139,10 +133,6 @@
       <Project>{9073da56-b20a-476a-b6dd-3231ea11d5bc}</Project>
       <Name>BIA.Net.Common</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="Scripts\typings\jquery.validation\jquery.validation.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />

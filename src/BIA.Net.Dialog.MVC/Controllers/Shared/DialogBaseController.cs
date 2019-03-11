@@ -30,7 +30,8 @@ namespace BIA.Net.Dialog.MVC.Controllers
             Popup = 1,
             MainPageContent = 2,
             Document = 3,
-            Content = 4
+            Content = 4,
+            Refresh = 5
         };
 
         private string UniformizeUrl(string url)
@@ -107,26 +108,29 @@ namespace BIA.Net.Dialog.MVC.Controllers
                  viewName = HttpContext.Request["DialogRefreshPartialView"];
                  return PartialViewConverter.Convert(base.PartialView(viewName, model));
              }*/
-            if (displayFlag == DisplayFlag.Popup)
+            if (string.IsNullOrEmpty(masterName))
             {
-                ViewResult myView = base.View(viewName, masterName, model);
-                myView.MasterName = BIA.Net.Common.BIASettingsReader.GetDialogLayout("Popup");
-                //Request.Add("BIACurrentDialogUrl", Url.Action(viewName));
-                return myView;
-            }
-            else if (displayFlag == DisplayFlag.Content)
-            {
-                ViewResult myView = base.View(viewName, masterName, model);
-                myView.MasterName = Common.BIASettingsReader.GetDialogLayout("Content");
-                //Request.Add("BIACurrentDialogUrl", Url.Action(viewName));
-                return myView;
-            }
-            else if (displayFlag == DisplayFlag.MainPageContent)
-            {
-                ViewResult myView = base.View(viewName, masterName, model);
-                myView.MasterName = Common.BIASettingsReader.GetDialogLayout("MainPageContent");
-                //Request.Add("BIACurrentDialogUrl", Url.Action(viewName));
-                return myView;
+                if (displayFlag == DisplayFlag.Popup)
+                {
+                    ViewResult myView = base.View(viewName, masterName, model);
+                    myView.MasterName = BIA.Net.Common.BIASettingsReader.GetDialogLayout("Popup");
+                    //Request.Add("BIACurrentDialogUrl", Url.Action(viewName));
+                    return myView;
+                }
+                else if (displayFlag == DisplayFlag.Content)
+                {
+                    ViewResult myView = base.View(viewName, masterName, model);
+                    myView.MasterName = Common.BIASettingsReader.GetDialogLayout("Content");
+                    //Request.Add("BIACurrentDialogUrl", Url.Action(viewName));
+                    return myView;
+                }
+                else if (displayFlag == DisplayFlag.MainPageContent)
+                {
+                    ViewResult myView = base.View(viewName, masterName, model);
+                    myView.MasterName = Common.BIASettingsReader.GetDialogLayout("MainPageContent");
+                    //Request.Add("BIACurrentDialogUrl", Url.Action(viewName));
+                    return myView;
+                }
             }
 
             return base.View(viewName, masterName, model);

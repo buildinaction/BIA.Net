@@ -1,0 +1,71 @@
+@model $companyName$.$saferootprojectname$.Business.DTO.SiteDTO
+
+@{
+    ViewBag.Title = AppliResources.ExamplePage;
+}
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-sm-4">
+        @Html.Label("Text box").ToIconified("glyphicon-folder-open")
+        @Html.Editor("TextBox1").ToIconified("glyphicon-thumbs-up")
+        @Html.TextBox("TextBox2").ToIconified("glyphicon-thumbs-down")
+    </div>
+    <div class="col-sm-4">
+        <label>Password</label>
+        @Html.Password("pwd1").ToIconified("glyphicon-lock")
+    </div>
+    <div class="col-sm-4">
+        @Html.Label("Drop Down List item").ToIconified()
+        @Html.DropDownList("ddl1",
+            new List<SelectListItem>() {
+        new SelectListItem() { Text = "item1", Value = "1" },
+        new SelectListItem() { Text = "item2", Value = "2" },
+        new SelectListItem() { Text = "item3", Value = "3" },
+        new SelectListItem() { Text = "item4", Value = "4" },
+        new SelectListItem() { Text = "item5", Value = "5" },
+            }, "Please select").ToIconified("glyphicon-plane")
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <label>check box</label>
+        @Html.CheckBox("chk1").ToIconified("glyphicon-ok")
+    </div>
+    <div class="col-sm-4">
+        <label>Radio button</label>
+        @Html.RadioButton("rdb1", "Test Ko").ToIconified("glyphicon-remove")
+        @Html.RadioButton("rdb1", "Test Ok").ToIconified("glyphicon-ok")
+        @Html.DisplayName("My value to display refresh").ToIconified("glyphicon-refresh")
+    </div>
+    <div class="col-sm-4">
+        <label>Multiselect</label>
+        <div>
+            @Html.MultiselectFor(model => model.MembersIds, (IEnumerable<SelectListItem>)ViewBag.MembersIds, null).ToIconified("glyphicon-screenshot")
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <label>Text area</label>
+        <textarea class="form-control" rows="5"></textarea>
+    </div>
+    <div class="col-sm-8">
+        <label>MultiSelect2Lists</label>
+        @Html.Multiselect2ListsFor(model => model.Members, (IEnumerable<SelectListItem>)ViewBag.MembersIds, null).ToIconified("glyphicon-transfer")
+    </div>
+</div>
+<div class="row">
+    <button type="button" class="btn btn-1 pull-right">@TextResources.Button</button>
+</div>
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" id="btn1" class="btn btn-2">@TextResources.Cancel</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn2" class="btn btn-2">@TextResources.Save</button>
+        </div>
+    </div>
+}

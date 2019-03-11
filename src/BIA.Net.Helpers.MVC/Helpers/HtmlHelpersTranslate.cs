@@ -75,6 +75,19 @@ namespace BIA.Net.Helpers
         }
 
         /// <summary>
+        /// LabelFor translated.
+        /// </summary>
+        /// <typeparam name="TModel">The type of the model.</typeparam>
+        /// <typeparam name="TProperty">The type of the property.</typeparam>
+        /// <param name="html">The HTML.</param>
+        /// <param name="expression">The expression.</param>
+        /// <param name="htmlAttributes">The HTML attributes.</param>
+        /// <returns>teh name translated</returns>
+        public static MvcHtmlString T_Label<TModel>(this HtmlHelper<TModel> html,  string expression, object htmlAttributes)
+        {
+            return html.Label(TranslateStringOrOriginal(expression), htmlAttributes);
+        }
+        /// <summary>
         /// Display name for translated.
         /// </summary>
         /// <typeparam name="TModel">The type of the model.</typeparam>
@@ -125,6 +138,25 @@ namespace BIA.Net.Helpers
         public static void InitResources(List<Type> lResourceTypes)
         {
             resourceTypes = lResourceTypes;
+        }
+
+        /// <summary>
+        /// Translates the string.
+        /// </summary>
+        /// <param name="originString">The origin string.</param>
+        /// <returns>the translated string</returns>
+        public static string TranslateStringOrOriginal(string originString)
+        {
+            string translated = TranslateString(originString);
+
+            if (string.IsNullOrEmpty(translated))
+            {
+                return originString;
+            }
+            else
+            {
+                return translated;
+            }
         }
 
         /// <summary>

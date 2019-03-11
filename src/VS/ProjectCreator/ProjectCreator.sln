@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ReadMe", "ReadMe", "{920D3CBC-90A7-4DDC-AF1E-208424CB972A}"
+	ProjectSection(SolutionItems) = preProject
+		RefreshKit.ps1 = RefreshKit.ps1
+		RemplacementToDoInSafran.ZZProjecectName.txt = RemplacementToDoInSafran.ZZProjecectName.txt
+		SolveIssue.txt = SolveIssue.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZZProjectInstaller", "ZZProjectInstaller\ZZProjectInstaller.csproj", "{E3CA0818-F7C2-48B0-A174-E8BA88FBD87E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZZProjectKit", "ZZProjectKit\ZZProjectKit.csproj", "{45CA2E06-5B64-43C7-8B4D-69FDA4E867D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZZProjectInstallerWizards", "ZZProjectInstallerWizards\ZZProjectInstallerWizards.csproj", "{AB617895-58CA-48D2-8890-C51BCEA14C4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.ProjectCreator.Settings", "BIA.ProjectCreator.Settings\BIA.ProjectCreator.Settings.csproj", "{29DE217E-DE96-433E-9BFE-F2B407C8A891}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E3CA0818-F7C2-48B0-A174-E8BA88FBD87E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3CA0818-F7C2-48B0-A174-E8BA88FBD87E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3CA0818-F7C2-48B0-A174-E8BA88FBD87E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3CA0818-F7C2-48B0-A174-E8BA88FBD87E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45CA2E06-5B64-43C7-8B4D-69FDA4E867D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45CA2E06-5B64-43C7-8B4D-69FDA4E867D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45CA2E06-5B64-43C7-8B4D-69FDA4E867D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45CA2E06-5B64-43C7-8B4D-69FDA4E867D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB617895-58CA-48D2-8890-C51BCEA14C4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB617895-58CA-48D2-8890-C51BCEA14C4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB617895-58CA-48D2-8890-C51BCEA14C4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB617895-58CA-48D2-8890-C51BCEA14C4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29DE217E-DE96-433E-9BFE-F2B407C8A891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29DE217E-DE96-433E-9BFE-F2B407C8A891}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29DE217E-DE96-433E-9BFE-F2B407C8A891}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29DE217E-DE96-433E-9BFE-F2B407C8A891}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {612B88F1-309D-40D3-BCCE-37408393AAA5}
+	EndGlobalSection
+EndGlobal

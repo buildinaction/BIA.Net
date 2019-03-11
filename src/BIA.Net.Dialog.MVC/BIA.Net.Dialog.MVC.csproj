@@ -120,21 +120,6 @@
     <None Include="_CreateNewNuGetPackage\DoNotModify\NuGet.exe" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Scripts\BIA.Net\Dialog.ts" />
-    <TypeScriptCompile Include="Scripts\BIA.Net\DialogAjaxLoading.ts" />
-    <TypeScriptCompile Include="Scripts\BIA.Net\DialogDiv.ts" />
-    <TypeScriptCompile Include="Scripts\BIA.Net\DialogEvent.ts" />
-    <TypeScriptCompile Include="Scripts\BIA.Net\DialogLink.ts" />
-    <TypeScriptCompile Include="Scripts\typings\jquery.ui.layout\jquery.ui.layout.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\jquery.validation\jquery.validation.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Content\BIA.Net\Dialog.css" />
-    <Content Include="Scripts\BIA.Net\Dialog.js" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\BIA.Net.Common\BIA.Net.Common.csproj">
       <Project>{9073da56-b20a-476a-b6dd-3231ea11d5bc}</Project>
       <Name>BIA.Net.Common</Name>

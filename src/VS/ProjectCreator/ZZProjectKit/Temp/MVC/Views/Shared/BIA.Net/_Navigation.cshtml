@@ -1,0 +1,39 @@
+﻿<script language="javascript">
+    @{var pageName = ViewContext.RouteData.Values["controller"].ToString(); }
+    @if (pageName == "Home") {
+        @:$(".breadcrumb").addClass("homePage");
+    }
+    else {
+        @:$(".breadcrumb").removeClass("homePage");
+    }
+
+    var content = "@Html.Raw(BIA.Net.Design.Helpers.SiteMapHelper.GetBreadcrumbContent())";
+
+    $(".content-breadcrumb").html(content);
+    BIA.Net.Dialog.LinkToContent($(".content-breadcrumb"));
+
+    function underlineMenu() {
+        //if have child, adding blue underline on the parent menu
+        $("ul.navigation.menu-list > .nav-item > .dropdown-menu > ul > .lvl2 > .title").on('click', function () {
+            $("ul.navigation.menu-list > .nav-item").each(function () {
+                $(this).removeClass("actualPage");
+            });
+            $(this).closest(".nav-item").addClass("actualPage");
+        });
+
+        //if haven't child, adding blue underline on menu
+        $("ul.navigation.menu-list > .nav-item > .nav-link").on('click', function () {
+            var biadialoglink = $(this).attr('biadialoglink');
+            // check if biadialoglink attr
+            if (typeof biadialoglink !== typeof undefined && biadialoglink !== false) {
+                $("ul.navigation.menu-list > .nav-item").each(function () {
+                    $(this).removeClass("actualPage");
+                });
+                $(this).parent('.nav-item').addClass("actualPage");
+            }
+        });
+    }
+
+        //var currentPage = window.location.pathname;
+        //var navigation[] =
+</script>

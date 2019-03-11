@@ -1,0 +1,54 @@
+@model $companyName$.$saferootprojectname$.Business.DTO.SiteDTO
+
+@{
+    ViewBag.Title = TextResources.Delete + " " + TextResources.Site;
+}
+
+<h2>@TextResources.Delete @TextResources.Site</h2>
+
+<h4 class="text-center">@TextResources.AreYouSureDelete</h4>
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "err" })
+    @Html.HiddenFor(model => model.Id)
+    <div class="form-group">
+        @Html.T_LabelFor(model => model.Title, htmlAttributes: new { @class = "bmd-label-floating" })
+        <div class="field">
+            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger bmd-help" })
+        </div>
+    </div>
+</div>
+
+<div class='dotted-title'>
+    <h3>Membres</h3>
+    <div class="section-buttons">
+        @Html.ActionLink(TextResources.New, "Create", "Member", new { SiteId = Model.Id }, new { @class = "btn btn-main float-right d-none", BIADialogLink = "Type:Modal" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.T_LabelFor(model => model.Members, htmlAttributes: new { })
+    <div BIADialogRefresh="Url:@Url.Action("_List","Member", new { SiteId=Model.Id });OnFormValidated:@Url.Action("Create","Member")|@Url.Action("Edit","Member")|@Url.Action("Delete","Member")" style="overflow: auto;">
+        @{Html.RenderAction("_List", "Member", new { SiteId = Model.Id });}
+    </div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "SiteDeleteForm" + Model.Id, @class = "PreventDuplicateRequest" }))
+{
+    @Html.AntiForgeryToken()
+}
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" onclick="location.href='@Url.Action("Index")'" class="btn btn-second">@TextResources.BackToList</button>
+        </div>
+        <div class="btn-action">
+            <button onclick="$('#SiteDeleteForm@(Model.Id)').submit();" class="btn btn-main">@TextResources.Delete</button>
+        </div>
+    </div>
+}
+@section Scripts {
+    <script type="text/javascript">
+        BIA.Net.DataTable.InitStandard('#MemberTable');
+    </script>
+}

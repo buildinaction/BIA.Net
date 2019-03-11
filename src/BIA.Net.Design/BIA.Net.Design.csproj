@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\SiteMapHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SiteMap\CustomSiteMapProvider.cs" />
   </ItemGroup>
@@ -73,10 +74,16 @@
     </None>
     <None Include="packages.config" />
     <Content Include="SiteMap\Sample_ToRename.sitemap" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Shared\_Menu.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\BIA.Net\_BIALayout.cshtml" />
+    <Content Include="Views\Shared\BIA.Net\_BIALayout_Content.cshtml" />
+    <Content Include="Views\Shared\BIA.Net\_BIALayout_Dialog.cshtml" />
+    <Content Include="Views\Shared\BIA.Net\_BIALayout_Dialog_Infos.cshtml" />
+    <Content Include="Views\Shared\BIA.Net\_BIALayout_MainPageContent.cshtml" />
+    <Content Include="Views\Shared\BIA.Net\_Localization.cshtml" />
+    <Content Include="Views\Shared\BIA.Net\_LoginPartial.cshtml" />
+    <Content Include="Views\Shared\BIA.Net\_Menu.cshtml" />
+    <Content Include="Views\Shared\BIA.Net\_Navigation.cshtml" />
     <None Include="_CreateNewNuGetPackage\Config.ps1" />
     <None Include="_CreateNewNuGetPackage\DoNotModify\CreateNuGetPackage.ps1" />
     <None Include="_CreateNewNuGetPackage\DoNotModify\New-NuGetPackage.ps1" />
@@ -88,6 +95,10 @@
     <ProjectReference Include="..\BIA.Net.Common\BIA.Net.Common.csproj">
       <Project>{9073da56-b20a-476a-b6dd-3231ea11d5bc}</Project>
       <Name>BIA.Net.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BIA.Net.Helpers.MVC\BIA.Net.Helpers.MVC.csproj">
+      <Project>{590d4fb1-aa55-4c5b-9bc6-ae4073b44ef5}</Project>
+      <Name>BIA.Net.Helpers.MVC</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

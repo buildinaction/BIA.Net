@@ -1,0 +1,103 @@
+@model $companyName$.$saferootprojectname$.Business.DTO.ExampleTable3DTO
+
+@{    ViewBag.Title = @TextResources.Details + " " + @Html.Translate("ExampleTable3");
+}
+
+<h2>@TextResources.Details @Html.Translate("ExampleTable3")</h2>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.T_DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.T_DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.T_DisplayNameFor(model => model.Value)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Value)
+        </dd>
+
+        <dt>
+            @Html.T_DisplayNameFor(model => model.Decimal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Decimal)
+        </dd>
+
+        <dt>
+            @Html.T_DisplayNameFor(model => model.Double)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Double)
+        </dd>
+
+        <dt>
+            @Html.T_DisplayNameFor(model => model.DateOnly)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateOnly)
+        </dd>
+
+        <dt>
+            @Html.T_DisplayNameFor(model => model.DateAndTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateAndTime)
+        </dd>
+
+        <dt>
+            @Html.T_DisplayNameFor(model => model.TimeOnly)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TimeOnly)
+        </dd>
+
+        <dt>
+            @Html.T_DisplayNameFor(model => model.TimeSpan)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TimeSpan)
+        </dd>
+
+        <dt>
+            @Html.T_DisplayNameFor(model => model.TimeSpanOver24H)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TimeSpanOver24H)
+        </dd>
+
+    </dl>
+</div>
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" onclick="location.href='@Url.Action("Index")'" class="btn btn-2">@TextResources.BackToList</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" onclick="location.href='@Url.Action("Edit", new { id = Model.Id })'" class="btn btn-2">@TextResources.Edit</button>
+        </div>
+    </div>
+}
+

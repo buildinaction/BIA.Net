@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Multi Files Upload";
+}
+
+<h2>Multi Files Upload</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "MultiFileUpload", @class = "PreventDuplicateRequest", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <label for="file">Upload files:</label>
+
+    <div class="col-md-12">
+        <div class="control-group" id="fields">
+            <label class="control-label" for="field1">
+                Add Attachments
+            </label>
+            <div class="controls">
+                <div class="entry input-group col-xs-12">
+                    <input class="btn btn-primary col-xs-12" name="files" type="file">
+                    <span class="input-group-btn">
+                        <button class="btn btn-success btn-add" type="button">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br><br>
+    @ViewBag.Message
+}  
+
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button onclick="$('#MultiFileUpload').submit();" class="btn btn-2">Upload Files</button>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+<script>
+        $(function () {
+            $(document).on('click', '.btn-add', function (e) {
+                e.preventDefault();
+
+                var controlForm = $('.controls:first'),
+                    currentEntry = $(this).parents('.entry:first'),
+                    newEntry = $(currentEntry.clone()).appendTo(controlForm);
+
+                newEntry.find('input').val('');
+                controlForm.find('.entry:not(:last) .btn-add')
+                    .removeClass('btn-add').addClass('btn-remove')
+                    .removeClass('btn-success').addClass('btn-danger')
+                    .html('<span class="glyphicon glyphicon-minus"></span>');
+            }).on('click', '.btn-remove', function (e) {
+                $(this).parents('.entry:first').remove();
+
+                e.preventDefault();
+                return false;
+            });
+        });
+</script>
+}

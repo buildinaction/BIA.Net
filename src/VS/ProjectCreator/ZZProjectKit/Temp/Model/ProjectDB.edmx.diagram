@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="606d7c822bb24d7894f67b8d47bbd5eb" Name="Diagram1" ZoomLevel="97" >
+        <EntityTypeShape EntityType="ProjectDB.ExampleTable1" Width="1.5" PointX="7" PointY="2.25" />
+        <EntityTypeShape EntityType="ProjectDB.ExampleTable2" Width="1.5" PointX="9.125" PointY="1.625" />
+        <EntityTypeShape EntityType="ProjectDB.ExampleTable3" Width="1.5" PointX="9.125" PointY="3.625" />
+        <EntityTypeShape EntityType="ProjectDB.Version" Width="1.5" PointX="0.5" PointY="0.5" FillColor="255, 128, 0" />
+        <EntityTypeShape EntityType="ProjectDB.User" Width="1.875" PointX="2.5" PointY="0.5" FillColor="Fuchsia" />
+        <EntityTypeShape EntityType="ProjectDB.Member" Width="1.5" PointX="4.875" PointY="0.5" FillColor="0, 192, 0" />
+        <EntityTypeShape EntityType="ProjectDB.MemberRole" Width="1.5" PointX="7" PointY="0.5" FillColor="0, 192, 0" />
+        <AssociationConnector Association="ProjectDB.UserMember" />
+        <AssociationConnector Association="ProjectDB.MemberRoleMember" />
+        <EntityTypeShape EntityType="ProjectDB.Site" Width="1.5" PointX="4.875" PointY="2.625" FillColor="0, 192, 0" />
+        <AssociationConnector Association="ProjectDB.SiteMember" />
+        <AssociationConnector Association="ProjectDB.ExampleTable2ExampleTable1" />
+        <AssociationConnector Association="ProjectDB.ExampleTable2ExampleTable11" />
+        <AssociationConnector Association="ProjectDB.ExampleTable3ExampleTable1" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
