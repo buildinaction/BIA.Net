@@ -40,37 +40,52 @@ namespace BIA.Net.Helpers
         /// <param name="mvcControl">string of the control html</param>
         /// <param name="iconDisplay">Icon name from glyphicons</param>
         /// <returns>Return the control html with an encapsulation with an icon</returns>
-        public static MvcHtmlString ToIconified(this MvcHtmlString mvcControl, string iconDisplay = "")
+        public static MvcHtmlString ToIconified(this MvcHtmlString mvcControl, string iconDisplay = "", string position = "left")
         {
             MvcHtmlString returnvalue = new MvcHtmlString(string.Empty);
 
             // Define the span with the glyphicons or the glyphicon by default
-            TagBuilder builderSpanIcon = new TagBuilder("span");
-            builderSpanIcon.AddCssClass("glyphicon");
+            TagBuilder builderiIcon = new TagBuilder("i");
 
             // No Icon specify => Set an icon and hidden this one
             if (string.IsNullOrEmpty(iconDisplay))
             {
-                builderSpanIcon.AddCssClass("glyphicon-ok");
-                builderSpanIcon.Attributes.Add("style", "visibility:hidden");
+                builderiIcon.AddCssClass("fas fa-check");
+                builderiIcon.Attributes.Add("style", "visibility:hidden");
             }
             else
             {
-                builderSpanIcon.AddCssClass(iconDisplay);
+                builderiIcon.AddCssClass(iconDisplay);
             }
 
             // Define the parent span for the glyphicons span
             TagBuilder builderSpan = new TagBuilder("span");
-            builderSpan.AddCssClass("input-group-addon");
-            builderSpan.AddCssClass("group-lg");
+            builderSpan.AddCssClass("input-group-text");
 
-            builderSpan.InnerHtml = builderSpanIcon.ToString(TagRenderMode.Normal);
+            builderSpan.InnerHtml = builderiIcon.ToString(TagRenderMode.Normal);
+
+            // Define the global div to set the icon and the html control
+            TagBuilder builderPosition = new TagBuilder("div");
+            if (position == "left")
+            {
+                builderPosition.AddCssClass("input-group-prepend");
+            }
+            else
+            {
+                builderPosition.AddCssClass("input-group-append");
+            }
+
+            builderPosition.InnerHtml = builderSpan.ToString(TagRenderMode.Normal);
+
+            TagBuilder builderFormGroup = new TagBuilder("div");
+            builderFormGroup.AddCssClass("form-group");
+
+            builderFormGroup.InnerHtml = builderSpan.ToString(TagRenderMode.Normal);
 
             // Define the global div to set the icon and the html control
             TagBuilder builder = new TagBuilder("div");
             builder.AddCssClass("col-md-10");
             builder.AddCssClass("input-group");
-            builder.AddCssClass("group-lg");
 
             // Retrieve the html control to set the class form-control if not present
             string currentControl = mvcControl.ToString();
@@ -103,8 +118,15 @@ namespace BIA.Net.Helpers
                 currentControl = currentControl.Insert(currentControl.IndexOf(" "), " class=\"form-control\" ");
             }
 
+            TagBuilder builderLabel = new TagBuilder("label");
+            builderLabel.AddCssClass("bmd-label-floating");
+            builderFormGroup.InnerHtml = string.Format("{0}{1}", builderLabel.ToString(TagRenderMode.Normal), currentControl));
+
+
+
             // Add the html control in the parent div and return the new object
-            builder.InnerHtml = string.Format("{0}{1}", builderSpan.ToString(TagRenderMode.Normal), MvcHtmlString.Create(currentControl).ToHtmlString());
+            builder.InnerHtml = string.Format("{0}{1}", builderPosition.ToString(TagRenderMode.Normal), builderFormGroup.ToString(TagRenderMode.Normal));
+            //MvcHtmlString.Create(currentControl)
             returnvalue = MvcHtmlString.Create(builder.ToString());
             return returnvalue;
         }
