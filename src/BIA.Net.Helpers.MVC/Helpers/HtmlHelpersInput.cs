@@ -120,7 +120,7 @@ namespace BIA.Net.Helpers
 
             TagBuilder builderLabel = new TagBuilder("label");
             builderLabel.AddCssClass("bmd-label-floating");
-            builderFormGroup.InnerHtml = string.Format("{0}{1}", builderLabel.ToString(TagRenderMode.Normal), currentControl));
+            builderFormGroup.InnerHtml = string.Format("{0}{1}", builderLabel.ToString(TagRenderMode.Normal), currentControl);
 
 
 
