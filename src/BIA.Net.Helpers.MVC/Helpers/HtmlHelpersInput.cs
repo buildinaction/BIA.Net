@@ -44,7 +44,7 @@ namespace BIA.Net.Helpers
         {
             MvcHtmlString returnvalue = new MvcHtmlString(string.Empty);
 
-            // Define the span with the glyphicons or the glyphicon by default
+            // Define the fontawesome icon
             TagBuilder builderiIcon = new TagBuilder("i");
 
             // No Icon specify => Set an icon and hidden this one
@@ -58,13 +58,13 @@ namespace BIA.Net.Helpers
                 builderiIcon.AddCssClass(iconDisplay);
             }
 
-            // Define the parent span for the glyphicons span
+            // Define the parent span for the fontawesome icon
             TagBuilder builderSpan = new TagBuilder("span");
             builderSpan.AddCssClass("input-group-text");
 
             builderSpan.InnerHtml = builderiIcon.ToString(TagRenderMode.Normal);
 
-            // Define the global div to set the icon and the html control
+            // specify the icon position
             TagBuilder builderPosition = new TagBuilder("div");
             if (position == "left")
             {
@@ -77,10 +77,9 @@ namespace BIA.Net.Helpers
 
             builderPosition.InnerHtml = builderSpan.ToString(TagRenderMode.Normal);
 
+            // Define the form-group including the floating label and the principal field
             TagBuilder builderFormGroup = new TagBuilder("div");
             builderFormGroup.AddCssClass("form-group");
-
-            builderFormGroup.InnerHtml = builderSpan.ToString(TagRenderMode.Normal);
 
             // Define the global div to set the icon and the html control
             TagBuilder builder = new TagBuilder("div");
@@ -118,13 +117,14 @@ namespace BIA.Net.Helpers
                 currentControl = currentControl.Insert(currentControl.IndexOf(" "), " class=\"form-control\" ");
             }
 
+            //Add the floating label
             TagBuilder builderLabel = new TagBuilder("label");
             builderLabel.AddCssClass("bmd-label-floating");
             builderFormGroup.InnerHtml = string.Format("{0}{1}", builderLabel.ToString(TagRenderMode.Normal), currentControl);
 
 
 
-            // Add the html control in the parent div and return the new object
+            // Add the html control + the icon in the parent div and return the new object
             builder.InnerHtml = string.Format("{0}{1}", builderPosition.ToString(TagRenderMode.Normal), builderFormGroup.ToString(TagRenderMode.Normal));
             //MvcHtmlString.Create(currentControl)
             returnvalue = MvcHtmlString.Create(builder.ToString());
