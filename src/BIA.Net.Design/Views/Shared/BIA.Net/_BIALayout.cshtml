@@ -38,7 +38,7 @@
                 <div class="header-cell blank">&nbsp;</div>
                 @Html.Partial("BIA.Net/_LoginPartial")
                 <div class="header-cell fullscreenIcon" id="fullscreen">
-                    <div class="svgIcon startfullscreen" id="linkFullScreen" datatitle="fullscreen" onclick="BIA.Net.Design.Look.toggleFullScreen()"></div>
+                    <div class="svgIcon startfullscreen" id="linkFullScreen" data-toggle="tooltip" data-placement="left" title="fullscreen" onclick="BIA.Net.Design.Look.toggleFullScreen()"></div>
                 </div>
             </div>
         </div>
@@ -89,13 +89,13 @@
 
     <div class="stopfullscreenIcon" id="fullscreen" onclick="BIA.Net.Design.Look.toggleFullScreen()">
         <i class="fa fa-circle"></i>
-        <div class="svgIcon stopfullscreen" id="linkFullScreen" datatitle="fullscreen"></div>
+        <div class="svgIcon stopfullscreen" id="linkFullScreen" data-toggle="tooltip" data-placement="left" title="exit fullscreen"></div>
     </div>
     <div id="alert_placeholder" class="alert-placeholder"></div>
     <div class="breadcrumb">
-        <div class="breadcrumbLeft svgIcon follow-left-black" onclick="BIA.Net.Design.Look.toggleBreadcrumb()"></div>
+        <div class="breadcrumbLeft svgIcon follow-left" onclick="BIA.Net.Design.Look.toggleBreadcrumb()"></div>
         <div class="content-breadcrumb"></div>
-        <div class="breadcrumbRight svgIcon follow-right-black" onclick="BIA.Net.Design.Look.toggleBreadcrumb()"></div>
+        <div class="breadcrumbRight svgIcon follow-right" onclick="BIA.Net.Design.Look.toggleBreadcrumb()"></div>
     </div>
     <div id="BiaNetMainPageContent" class="BiaNetMainPageContent">
         <div class="bia-dynamic-html-page-elem">

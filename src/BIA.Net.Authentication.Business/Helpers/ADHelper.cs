@@ -46,39 +46,44 @@
             return userName;
         }
 
+        private static String isRoleInit = "";
 
         private static Dictionary<string, List<ADGroup>> adRoles = null;
         public static Dictionary<string, List<ADGroup>> ADRoles
         {
             get
             {
-                if (adRoles == null)
+                lock (isRoleInit)
                 {
-                    List<string> adDomains = BIASettingsReader.BIANetSection?.Authentication?.Parameters?.ADDomains;
-
-                    adRoles = new Dictionary<string, List<ADGroup>>();
-                    HeterogeneousCollection rolesValues = BIASettingsReader.BIANetSection?.Authentication?.Roles;
-                    if (rolesValues != null && rolesValues.Count > 0)
+                    if (adRoles == null)
                     {
-                        foreach (IHeterogeneousConfigurationElement heterogeneousElem in rolesValues)
+                        List<string> adDomains = BIASettingsReader.BIANetSection?.Authentication?.Parameters?.ADDomains;
+
+                        adRoles = new Dictionary<string, List<ADGroup>>();
+                        HeterogeneousCollection rolesValues = BIASettingsReader.BIANetSection?.Authentication?.Roles;
+                        if (rolesValues != null && rolesValues.Count > 0)
                         {
-                            if (heterogeneousElem.TagName == "ADRole")
+                            foreach (IHeterogeneousConfigurationElement heterogeneousElem in rolesValues)
                             {
-                                ValueElement ADRole = (ValueElement)heterogeneousElem;
-                                List<string> values = new List<string>(ADRole.Value.Split(',')).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
-                                if (values != null && values.Any())
+                                if (heterogeneousElem.TagName == "ADRole")
                                 {
-                                    List<ADGroup> groups = new List<ADGroup>();
-                                    
-                                    foreach(string value in values)
+                                    ValueElement ADRole = (ValueElement)heterogeneousElem;
+                                    List<string> values = new List<string>(ADRole.Value.Split(',')).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+                                    if (values != null && values.Any())
                                     {
-                                        ADGroup group = new ADGroup(value, ADRole.Key);
-                                        groups.Add(group);
+                                        List<ADGroup> groups = new List<ADGroup>();
+
+                                        foreach (string value in values)
+                                        {
+                                            ADGroup group = new ADGroup(value, ADRole.Key);
+                                            groups.Add(group);
+                                        }
+                                        adRoles.Add(ADRole.Key, groups);
                                     }
-                                    adRoles.Add(ADRole.Key, groups);
                                 }
                             }
                         }
+                        isRoleInit = "init";
                     }
                 }
                 return adRoles;
