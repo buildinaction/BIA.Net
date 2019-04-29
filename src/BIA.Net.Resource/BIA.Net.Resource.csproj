@@ -47,39 +47,9 @@
     <None Include="BIA.Net.Resource.csproj.nuspec">
       <SubType>Designer</SubType>
     </None>
+    <None Include="tools\Install.ps1" />
+    <None Include="tools\Uninstall.ps1" />
     <None Include="_CreateNewNuGetPackage\DoNotModify\NuGet.exe" />
-    <Content Include="BIA.Net\V2.0\Content\Button.scss" />
-    <Content Include="BIA.Net\V2.0\Content\ContentFormat.scss" />
-    <Content Include="BIA.Net\V2.0\Content\Dialog.scss" />
-    <Content Include="BIA.Net\V2.0\Content\FlipSwitch.scss" />
-    <Content Include="BIA.Net\V2.0\Content\FullScreen.scss" />
-    <Content Include="BIA.Net\V2.0\Content\global.scss" />
-    <Content Include="BIA.Net\V2.0\Content\Themes\Light\global.light.scss" />
-    <Content Include="BIA.Net\V2.0\Content\Themes\Dark\global.dark.scss" />
-    <Content Include="BIA.Net\V2.0\Content\Site.scss" />
-    <Content Include="BIA.Net\V2.0\Content\Themes\Dark\Main.scss" />
-    <Content Include="BIA.Net\V2.0\Content\Themes\Dark\Theme.scss" />
-    <Content Include="BIA.Net\V2.0\Content\Themes\Light\Main.scss" />
-    <Content Include="BIA.Net\V2.0\Content\Themes\Light\Theme.scss" />
-    <Content Include="BIA.Net\V2.0\Content\Validation.scss" />
-    <Content Include="BIA.Net\V2.0\Content\global.min.css" />
-    <Content Include="BIA.Net\V2.0\Content\Themes\Dark\global.dark.min.css" />
-    <Content Include="BIA.Net\V2.0\Content\Themes\Light\global.light.min.css" />
-    <Content Include="BIA.Net\V2.0\Img\accordion-button.png" />
-    <Content Include="BIA.Net\V2.0\Img\favicon.ico" />
-    <Content Include="BIA.Net\V2.0\Img\logo.png" />
-    <Content Include="BIA.Net\V2.0\Img\Themes\Dark\Icons\Default.png" />
-    <Content Include="BIA.Net\V2.0\Img\Themes\Dark\logo_small.png" />
-    <Content Include="BIA.Net\V2.0\Img\Themes\Light\Icons\Default.png" />
-    <Content Include="BIA.Net\V2.0\Img\Themes\Light\logo_small.png" />
-    <Content Include="BIA.Net\V2.0\Scripts\Error.js" />
-    <Content Include="BIA.Net\V2.0\Scripts\LanguageInfo.js" />
-    <Content Include="BIA.Net\V2.0\Scripts\Layout.js" />
-    <Content Include="BIA.Net\V2.0\Scripts\RefreshUserRight.js" />
-    <Content Include="compilerconfig.json" />
-    <None Include="compilerconfig.json.defaults">
-      <DependentUpon>compilerconfig.json</DependentUpon>
-    </None>
     <None Include="packages.config" />
     <None Include="_CreateNewNuGetPackage\Config.ps1" />
     <None Include="_CreateNewNuGetPackage\DoNotModify\CreateNuGetPackage.ps1" />
@@ -88,41 +58,14 @@
     <None Include="_CreateNewNuGetPackage\RunMeToUploadNuGetPackage.cmd" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BIA.Net\V2.0\Fonts\Oswald\oswald-bold-webfont.eot" />
-    <Content Include="BIA.Net\V2.0\Fonts\Oswald\oswald-bold-webfont.ttf" />
-    <Content Include="BIA.Net\V2.0\Fonts\Oswald\oswald-bold-webfont.woff" />
-    <Content Include="BIA.Net\V2.0\Fonts\Oswald\oswald-light-webfont.eot" />
-    <Content Include="BIA.Net\V2.0\Fonts\Oswald\oswald-light-webfont.ttf" />
-    <Content Include="BIA.Net\V2.0\Fonts\Oswald\oswald-light-webfont.woff" />
-    <Content Include="BIA.Net\V2.0\Fonts\Oswald\oswald-regular-webfont.eot" />
-    <Content Include="BIA.Net\V2.0\Fonts\Oswald\oswald-regular-webfont.ttf" />
-    <Content Include="BIA.Net\V2.0\Fonts\Oswald\oswald-regular-webfont.woff" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-bold-webfont.eot" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-bold-webfont.ttf" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-bold-webfont.woff" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-extrabold-webfont.eot" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-extrabold-webfont.ttf" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-extrabold-webfont.woff" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-extralight-webfont.eot" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-extralight-webfont.ttf" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-extralight-webfont.woff" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-heavy-webfont.eot" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-heavy-webfont.ttf" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-heavy-webfont.woff" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-light-webfont.eot" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-light-webfont.ttf" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-light-webfont.woff" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-regular-webfont.eot" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-regular-webfont.ttf" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-regular-webfont.woff" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-semibold-webfont.eot" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-semibold-webfont.ttf" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-semibold-webfont.woff" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-thin-webfont.eot" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-thin-webfont.ttf" />
-    <Content Include="BIA.Net\V2.0\Fonts\Raleway\raleway-thin-webfont.woff" />
+    <EmbeddedResource Include="Resources\BIA.Net\TextResources.de.resx" />
+    <EmbeddedResource Include="Resources\BIA.Net\TextResources.es.resx" />
+    <EmbeddedResource Include="Resources\BIA.Net\TextResources.fr.resx" />
+    <EmbeddedResource Include="Resources\BIA.Net\TextResources.resx">
+      <LastGenOutput>TextResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>REM Create a NuGet package for this project and place the .nupkg file in the project's output directory.
