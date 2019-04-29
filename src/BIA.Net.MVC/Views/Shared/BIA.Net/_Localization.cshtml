@@ -1,9 +1,17 @@
 ﻿<script language="javascript">
+    BIA.Net.Design.Site.UrlStatic = "@BIASettingsReader.UrlStatic";
+    BIA.Net.Design.Site.UrlRoot = "@Url.Content("~/")";
     @{
         var currentCulture = System.Globalization.CultureInfo.CurrentCulture;
         var culture = currentCulture.Name;
         var cultureShort = culture.Split('-')[0];
         var cultureFormatDate = currentCulture.DateTimeFormat.ShortDatePattern.Replace("M", "m");
+        var cultureFormatGijgoDate = currentCulture.DateTimeFormat.ShortDatePattern.Replace("M", "m");
+        var cultureFormatGijgoDateTime = cultureFormatDate + " " + currentCulture.DateTimeFormat.ShortTimePattern.Replace("m", "M");
+        var cultureFormatGijgoTime = currentCulture.DateTimeFormat.ShortTimePattern.Replace("m", "M");
+        var cultureGijgoTimeMode = "24hr";
+        if (cultureFormatGijgoTime.ToLower().Contains('t')) { cultureGijgoTimeMode = "ampm"; }
+
         var cultureFormatDateMoment = currentCulture.DateTimeFormat.ShortDatePattern.ToUpper();
         var cultureFormatDateTimeMoment = cultureFormatDateMoment + " " + currentCulture.DateTimeFormat.ShortTimePattern.Replace("M", "m").Replace("tt", "A");
         var cultureFormatDateTimeSecMoment = cultureFormatDateMoment + " " + currentCulture.DateTimeFormat.LongTimePattern.Replace("M", "m").Replace("tt", "A");
@@ -12,8 +20,13 @@
     }
     var culture = '@culture';
     var cultureDisplayName = '@System.Globalization.CultureInfo.CurrentCulture.DisplayName';
+    BIA.Net.MVC.Localisation.cultureGijgo = "@cultureShort-@cultureShort";
     BIA.Net.MVC.Localisation.cultureShort = "@cultureShort";
     BIA.Net.MVC.Localisation.cultureFormatDate = "@cultureFormatDate";
+    BIA.Net.MVC.Localisation.cultureFormatGijgoDate = "@cultureFormatGijgoDate";
+    BIA.Net.MVC.Localisation.cultureFormatGijgoDateTime = "@cultureFormatGijgoDateTime";
+    BIA.Net.MVC.Localisation.cultureFormatGijgoTime = "@cultureFormatGijgoTime";
+    BIA.Net.MVC.Localisation.cultureGijgoTimeMode = "@cultureGijgoTimeMode";
     $.fn.dataTable.moment('@cultureFormatDateMoment');
     $.fn.dataTable.moment('@cultureFormatDateTimeMoment');
     $.fn.dataTable.moment('@cultureFormatDateTimeSecMoment');
@@ -40,8 +53,8 @@
         "sEmptyTable": "Aucune donn&eacute;e disponible dans le tableau",
         "oPaginate": {
             "sFirst": "Premier",
-            "sNext": "<svg class='pagination-follow' viewBox='0 0 16 16'><use xlink:href='#follow-right'/></svg>",
-            "sPrevious": "<svg class='pagination-follow'viewBox='0 0 16 16'><use xlink:href='#follow-left'/></svg>",
+            "sNext": "<div class='pagination-follow svgIcon follow-right'></div>",
+            "sPrevious": "<div class='pagination-follow svgIcon follow-left'></div>",
             "sLast": "Dernier"
         },
         "oAria": {
@@ -76,8 +89,8 @@
         "oPaginate": {
             "sFirst": "Primero",
             "sLast": "Ultimo",
-            "sNext": "<svg class='pagination-follow' viewBox='0 0 16 16'><use xlink:href='#follow-right'/></svg>",
-            "sPrevious": "<svg class='pagination-follow'viewBox='0 0 16 16'><use xlink:href='#follow-left'/></svg>",
+            "sNext": "<div class='pagination-follow svgIcon follow-right'></div>",
+            "sPrevious": "<div class='pagination-follow svgIcon follow-left'></div>",
         },
         "oAria": {
             "sSortAscending": ": activar para ordenar la columna ascendente",
@@ -112,8 +125,8 @@
         "oPaginate": {
             "sFirst": "Erste",
             "sLast": "Letzte",
-            "sNext": "<svg class='pagination-follow' viewBox='0 0 16 16'><use xlink:href='#follow-right'/></svg>",
-            "sPrevious": "<svg class='pagination-follow'viewBox='0 0 16 16'><use xlink:href='#follow-left'/></svg>",
+            "sNext": "<div class='pagination-follow svgIcon follow-right'></div>",
+            "sPrevious": "<div class='pagination-follow svgIcon follow-left'></div>",
         },
         "oAria": {
             "sSortAscending": ": Aktiviere um Spalte aufsteigend zu sortieren",
@@ -148,8 +161,8 @@
         "oPaginate": {
             "sFirst": "First",
             "sLast": "Last",
-            "sNext": "<svg class='pagination-follow' viewBox='0 0 16 16'><use xlink:href='#follow-right'/></svg>",
-            "sPrevious": "<svg class='pagination-follow'viewBox='0 0 16 16'><use xlink:href='#follow-left'/></svg>",
+            "sNext": "<div class='pagination-follow svgIcon follow-right'></div>",
+            "sPrevious": "<div class='pagination-follow svgIcon follow-left'></div>",
         },
         "oAria": {
             "sSortAscending": ": activate to sort column ascending",

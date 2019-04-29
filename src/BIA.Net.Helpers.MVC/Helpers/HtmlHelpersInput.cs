@@ -12,6 +12,7 @@ namespace BIA.Net.Helpers
     using System.Text.RegularExpressions;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
+    using System.Web.Routing;
     using System.Xml.Linq;
 
     /// <summary>
@@ -19,6 +20,35 @@ namespace BIA.Net.Helpers
     /// </summary>
     public static class HtmlHelpersInput
     {
+        /// <summary>
+        /// Merge 2 dictionnary, can be use to merge htmlAttribut
+        /// </summary>
+        /// <typeparam name="TModel"></typeparam>
+        /// <param name="htmlHelper"></param>
+        /// <param name="obj1"></param>
+        /// <param name="obj2"></param>
+        /// <returns></returns>
+        public static IDictionary<string, object> MergeDict<TModel>(this HtmlHelper<TModel> htmlHelper, object obj1, object obj2)
+        {
+            var dict1 = new RouteValueDictionary(obj1);
+            var dict2 = new RouteValueDictionary(obj2);
+            IDictionary<string, object> result = new Dictionary<string, object>();
+
+            foreach (var pair in dict1.Concat(dict2))
+            {
+                if (result.ContainsKey(pair.Key))
+                {
+                    result[pair.Key] = result[pair.Key] + " " + pair.Value;
+                }
+                else
+                {
+                    result.Add(pair);
+                }
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Replace unauthorized char by underscore and first char by Z if not authorize
         /// </summary>
