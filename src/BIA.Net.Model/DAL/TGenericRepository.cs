@@ -491,6 +491,17 @@ namespace BIA.Net.Model
                     bulkCopy.DestinationTableName = tableName;
                     ObjectContext objectContext = ((IObjectContextAdapter)this.DbContainer.db).ObjectContext;
                     IDataReader dr = entities.AsDataReader(objectContext);
+
+                    // Get and fill Column Mappings
+                    Dictionary<string, string> columnMappings = EntityDataReader<Entity>.ColumnMappings;
+                    if (columnMappings != null && columnMappings.Any())
+                    {
+                        foreach (var columnMapping in columnMappings)
+                        {
+                            bulkCopy.ColumnMappings.Add(new SqlBulkCopyColumnMapping(columnMapping.Key, columnMapping.Value));
+                        }
+                    }
+
                     bulkCopy.WriteToServer(dr);
                 }
 
