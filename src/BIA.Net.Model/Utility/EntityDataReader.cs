@@ -87,7 +87,6 @@ namespace Microsoft.Samples.EntityDataReader
     /// <typeparam name="T"></typeparam>
     public sealed class EntityDataReader<T> : DbDataReader, IDataReader
     {
-
         readonly IEnumerator<T> enumerator;
         readonly EntityDataReaderOptions options;
 
@@ -97,6 +96,8 @@ namespace Microsoft.Samples.EntityDataReader
         static List<Attribute> scalarAttributes;
         static List<Attribute> scalarAttributesPlusRelatedObjectScalarAttributes;
         static List<Attribute> scalarAttributesPlusRelatedObjectKeyAttributes;
+        // CUSTOM JSOU
+        public static Dictionary<string, string> ColumnMappings;
 
         readonly List<Attribute> attributes;
 
@@ -270,8 +271,8 @@ namespace Microsoft.Samples.EntityDataReader
             }
             if (options.RecreateForeignKeysForEntityFrameworkEntities && scalarAttributesPlusRelatedObjectKeyAttributes == null)
             {
-                var atts = DiscoverRelatedObjectKeyAttributes(typeof(T), objectContext);
-                scalarAttributesPlusRelatedObjectKeyAttributes = scalarAttributes.Concat(atts).ToList();
+                // CUSTOM JSOU
+                scalarAttributesPlusRelatedObjectKeyAttributes = DiscoverRelatedObjectKeyAttributes(typeof(T), objectContext, out ColumnMappings);
             }
 
             if (options.FlattenRelatedObjects)
@@ -339,20 +340,23 @@ namespace Microsoft.Samples.EntityDataReader
             return allProperties.Select(p => new Attribute(p)).ToList();
 
         }
-        static List<Attribute> DiscoverRelatedObjectKeyAttributes(Type thisType, ObjectContext objectContext)
+
+        static List<Attribute> DiscoverRelatedObjectKeyAttributes(Type thisType, ObjectContext objectContext, out Dictionary<string, string> columnMappings)
         {
-            // BEGIN CUSTOM JSOU
+            // CUSTOM JSOU
+            columnMappings = new Dictionary<string, string>();
             var atts = new List<Attribute>();
+
+            //find all the scalar properties
+            var scalarProperties = (from p in thisType.GetProperties()
+                                    where IsScalarType(p.PropertyType)
+                                    select p).ToList();
 
             //recreate foreign key column values
             //by adding Attributes for any key values of referenced entities 
             //that aren't already exposed as scalar properties
             var mw = objectContext.MetadataWorkspace;
             var entityTypesByName = mw.GetItems<EntityType>(DataSpace.OSpace).ToLookup(e => e.FullName);
-
-            //find the EntityType metadata for T 
-            //EntityType thisEntity = entityTypesByName[parentType.FullName].First();
-            //var thisEntityKeys = thisEntity.KeyMembers.ToDictionary(k => k.Name);
 
             //get the related objects which aren't scalars, not EntityReference objects and not collections
             var relatedObjectProperties =
@@ -363,22 +367,36 @@ namespace Microsoft.Samples.EntityDataReader
                                   && !typeof(EntityKey).IsAssignableFrom(p.PropertyType)
                                select p).ToList();
 
-            foreach (var rop in relatedObjectProperties)
+            var allProperties = scalarProperties.Concat(relatedObjectProperties).ToList();
+
+            foreach (var property in allProperties)
             {
-                EntityType thisEntity = entityTypesByName[rop.PropertyType.FullName].First();
-                var thisEntityKeys = thisEntity.KeyMembers.ToDictionary(k => k.Name);
+                Attribute att = null;
 
-                var type = rop.PropertyType;
-                //get the scalar properties for the related type
-                var scalar = type.GetProperties().Where(p => IsScalarType(p.PropertyType)).First();
-
-                string attName = rop.Name + "_" + scalar.Name;
-                //create a value accessor which takes an instance of T, and returns the related object scalar
-                var valueAccessor = Attribute.MakeRelatedPropertyAccessor<T, object>(rop, scalar);
-                string name = attName;
-                foreach (var item in thisEntityKeys)
+                if (relatedObjectProperties.Contains(property))
                 {
-                    Attribute att = new Attribute(thisType.Name + "_" + rop.Name + "_" + item.Key, attName, scalar.PropertyType, valueAccessor, true);
+                    EntityType thisEntity = entityTypesByName[property.PropertyType.FullName].First();
+                    var thisEntityKeys = thisEntity.KeyMembers.ToDictionary(k => k.Name);
+
+                    var type = property.PropertyType;
+                    //get the scalar properties for the related type
+                    var scalar = type.GetProperties().Where(p => IsScalarType(p.PropertyType)).First();
+
+                    string attName = property.Name + "_" + scalar.Name;
+                    //create a value accessor which takes an instance of T, and returns the related object scalar
+                    var valueAccessor = Attribute.MakeRelatedPropertyAccessor<T, object>(property, scalar);
+                    string name = attName;
+                    foreach (var item in thisEntityKeys)
+                    {
+                        att = new Attribute(thisType.Name + "_" + property.Name + "_" + item.Key, attName, scalar.PropertyType, valueAccessor, true);
+                        columnMappings.Add(att.FullName, att.Name);
+                        atts.Add(att);
+                    }
+                }
+                else
+                {
+                    att = new Attribute(property);
+                    columnMappings.Add(att.Name, att.Name);
                     atts.Add(att);
                 }
             }
