@@ -41,6 +41,11 @@ namespace BIA.Net.Authentication.Business.Helpers
             }
         }
 
+        public bool IsInAd()
+        {
+            return UserPrincipal != null;
+        }
+
         protected string login = null;
 
         public virtual string Login

@@ -60,8 +60,11 @@
                         userInfo.Roles = new List<string> { group.Role };
                         // Create the missing user
 
-                        ILinkedProperties adUserCreated = Insert(userInfo.LinkedProperties);
-                        listUserName.Add(new TLinkedProperties { Login = userName, IsValid = true });
+                        if (IsUserToSyncFromAd(userInfo))
+                        {
+                            ILinkedProperties adUserCreated = Insert(userInfo.LinkedProperties);
+                            listUserName.Add(new TLinkedProperties { Login = userName, IsValid = true });
+                        }
                     }
                     else if (findedUser.IsValid == false)
                     {
@@ -88,11 +91,23 @@
         }
 
         /// <summary>
+        /// Check if the user is to insert during sync from AD.
+        /// </summary>
+        /// <param name="userInfo">The ASP net user.</param>
+        /// <returns>Nothing: Function to override</returns>
+        /// <exception cref="System.Exception">Please override SetUserValidity</exception>
+        protected virtual bool IsUserToSyncFromAd(TLinkedUserInfo userInfo)
+        {
+            if (!userInfo.IsInAd()) return false;
+            return true;
+        }
+
+        /// <summary>
         /// Inserts the specified ASP user.
         /// </summary>
         /// <param name="aspUser">The ASP user.</param>
         /// <returns>Nothing: Function to override</returns>
-        /// <exception cref="System.Exception">Please overide Insert</exception>
+        /// <exception cref="System.Exception">Please override Insert</exception>
         protected virtual ILinkedProperties Insert(ILinkedProperties aspUser)
         {
             throw new Exception("Please overide Insert");
