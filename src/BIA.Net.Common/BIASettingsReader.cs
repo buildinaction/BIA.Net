@@ -180,6 +180,17 @@ namespace BIA.Net.Common
         }
 
         /// <summary>
+        /// Gets the division name.
+        /// </summary>
+        public static string DivisionShortName
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["DivisionShortName"];
+            }
+        }
+
+        /// <summary>
         /// Gets the project title.
         /// </summary>
         public static string ProjectTitle

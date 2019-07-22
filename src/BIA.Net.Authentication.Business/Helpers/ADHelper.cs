@@ -208,7 +208,7 @@
         public static List<string> GetGroups(WindowsIdentity wi)
         {
             List<string> result = new List<string>();
-            if (wi != null)
+            if (wi != null && wi.Groups != null)
             {
                 TraceManager.Debug("ADHelper", "GetGroups", "Nb group in AD : " + wi.Groups.Count);
 
