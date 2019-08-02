@@ -43,18 +43,20 @@ else
 }
 </div>
 
+<script>
+        $(document).ready(function ($) {
+            BIA.Net.Design.Look.InitThemeAndMode("@("BIANetTheme" + PageData["theme"])",
+                @((ViewBag.FullScreen==true).ToString().ToLower()),
+                @((ViewBag.HiddeFullScreenIcon == true).ToString().ToLower()),
+                @((ViewBag.HiddeBreadCrumb == true).ToString().ToLower())
+            );
+        });
+</script>
+
 @Html.Partial("BIA.Net/_Navigation")
 @RenderSection("scripts", required: false)
 @Html.RenderScripts()
-    <script>
-            $(document).ready(function ($) {
-                BIA.Net.Design.Look.InitThemeAndMode("@("BIANetTheme" + PageData["theme"])",
-                    @((ViewBag.FullScreen==true).ToString().ToLower()),
-                    @((ViewBag.HiddeFullScreenIcon == true).ToString().ToLower()),
-                    @((ViewBag.HiddeBreadCrumb == true).ToString().ToLower())
-                );
-            });
-    </script>
+
 <style>
 
 </style>
