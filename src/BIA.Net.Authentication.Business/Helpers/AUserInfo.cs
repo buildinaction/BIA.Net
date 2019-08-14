@@ -330,15 +330,6 @@
             #endregion
         }
 
-        [JsonIgnore]
-        public string JSONData
-        {
-            get
-            {
-                return JsonConvert.SerializeObject(this);
-            }
-        }
-
         #endregion Properties
 
         #region Methods
