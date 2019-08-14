@@ -331,7 +331,7 @@
         }
 
         [JsonIgnore]
-        public string GetJSON
+        public string JSONData
         {
             get
             {
