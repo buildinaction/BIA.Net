@@ -31,7 +31,7 @@
 
         private static void CreateCookieWithFlashMessage(Notification notification, string message)
         {
-            HttpContext.Current.Response.Cookies.Add(new HttpCookie(string.Format("Flash.{0}", notification), message) { Path = "/" });
+            HttpContext.Current.Response.Cookies.Add(new HttpCookie(string.Format("Flash.{0}", notification), HttpUtility.UrlEncode(message)) { Path = "/" });
         }
 
         private enum Notification
