@@ -3,19 +3,12 @@
     using BIA.Net.Common;
     using BIA.Net.Common.Helpers;
     using Business;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
-    using System.DirectoryServices.AccountManagement;
-    using System.IO;
     using System.Linq;
-    using System.Net;
-    using System.Reflection;
-    using System.Security.Claims;
     using System.Security.Principal;
-    using System.Text;
     using System.Text.RegularExpressions;
-    using static BIA.Net.Common.Configuration.AuthenticationElement.LanguageElement;
     using static BIA.Net.Common.Configuration.AuthenticationElement.ParametersElement;
     using static BIA.Net.Common.Configuration.CommonElement;
 
@@ -44,13 +37,15 @@
 
         private bool isUserGroupsFromIISInit = false;
         private List<string> userGroupsFromIIS = null;
-        public  List<string> UserGroupsFromIIS
+
+        [JsonIgnore]
+        public List<string> UserGroupsFromIIS
         {
             get
             {
                 if (!isUserGroupsFromIISInit)
                 {
-                    userGroupsFromIIS = ADHelper.GetGroups((WindowsIdentity) Identity);
+                    userGroupsFromIIS = ADHelper.GetGroups((WindowsIdentity)Identity);
                     isUserGroupsFromIISInit = true;
                 }
                 return userGroupsFromIIS;
@@ -58,6 +53,8 @@
         }
         private bool isUserGroupsFromADInit = false;
         private List<string> userGroupsFromAD = null;
+
+        [JsonIgnore]
         public List<string> UserGroupsFromAD
         {
             get
@@ -89,7 +86,7 @@
 
         public class IdentityManager
         {
-            Dictionary<string, string> IdentitiesContainer = null;
+            private Dictionary<string, string> IdentitiesContainer = null;
             public IdentityManager()
             {
                 IdentitiesContainer = new Dictionary<string, string>();
@@ -120,12 +117,12 @@
                 }
 
             }
-            public string Get (string key)
+            public string Get(string key)
             {
                 string value = null;
                 if (value == null)
                 {
-                        IdentitiesContainer.TryGetValue("Login", out value);
+                    IdentitiesContainer.TryGetValue("Login", out value);
                 }
                 return value;
             }
@@ -171,7 +168,6 @@
             }
         }
 
-
         public virtual TUserProperties Properties
         {
             get
@@ -197,6 +193,8 @@
                 userInfoContainer.propertiesRefreshDate = DateTime.Now;
             }
         }
+
+        [JsonIgnore]
         public virtual IdentityManager Identities
         {
             get
@@ -226,6 +224,7 @@
         /// <summary>
         /// Gets or sets the user profil
         /// </summary>
+        [JsonIgnore]
         public virtual Dictionary<string, string> UserProfile
         {
             get
@@ -269,7 +268,7 @@
                     languageInBuilding = "en-US";
                     RefreshLanguageInBuilding();
                     Language = languageInBuilding;
- 
+
                 }
                 return userInfoContainer.language;
             }
@@ -282,16 +281,12 @@
             }
         }
 
-
-
-
+        [JsonIgnore]
         public UserInfoContainer userInfoContainer;
-
 
         /// <summary>
         /// Gets or sets the user name (used to retrieve profile)
         /// </summary>
-
         public class UserInfoContainer
         {
             #region identities
@@ -335,7 +330,6 @@
             #endregion
         }
 
-
         #endregion Properties
 
         #region Methods
@@ -344,7 +338,7 @@
         {
             return src.GetType().GetProperty(propName).GetValue(src, null);
         }
-        static public IUserInfo GetCurrentUserInfo()
+        public static IUserInfo GetCurrentUserInfo()
         {
             return BIAUnity.ResolveContent<IUserInfo>();
         }
@@ -360,28 +354,26 @@
             userInfoContainer.rolesShouldBeRefreshed = shouldRefreshUserRoles;
         }
 
-
         protected virtual void RefreshIdentitiesInBuilding()
         {
             BaseRefreshIdentitiesInBuilding();
         }
 
-
         public void BaseRefreshIdentitiesInBuilding()
         {
-            HeterogeneousCollection identities = BIASettingsReader.BIANetSection?.Authentication?.Identities;
+            var identities = BIASettingsReader.BIANetSection?.Authentication?.Identities;
             if (identities != null && identities.Count > 0)
             {
                 foreach (IHeterogeneousConfigurationElement heterogeneousElem in identities)
                 {
                     if (heterogeneousElem is ValueElement)
                     {
-                        ValueElement value = (ValueElement)heterogeneousElem;
+                        var value = (ValueElement)heterogeneousElem;
                         identitiesInBuilding.Set(value.Key, value.Value, userInfoContainer);
                     }
                     else if (heterogeneousElem is WindowsIdentityElement)
                     {
-                        WindowsIdentityElement value = (WindowsIdentityElement)heterogeneousElem;
+                        var value = (WindowsIdentityElement)heterogeneousElem;
                         if (Identity != null && Identity.IsAuthenticated && value.IdentityField != null)
                         {
                             identitiesInBuilding.Set(value.Key, PreparePrincipalUserName(Identity, value.IdentityField, value.RemoveDomain), userInfoContainer);
@@ -389,7 +381,7 @@
                     }
                     else if (heterogeneousElem is ObjectFieldElement)
                     {
-                        ObjectFieldElement value = (ObjectFieldElement)heterogeneousElem;
+                        var value = (ObjectFieldElement)heterogeneousElem;
                         object result = ExtractObjectFieldValue(value);
                         if (result != null)
                         {
@@ -413,7 +405,7 @@
                 }
             }
         }
-
+        
         public virtual void CustomCodeIdentities(IdentityManager identities)
         {
 
@@ -429,7 +421,7 @@
             //Initialize User profile
             string userProfileKey = "";
 
-            HeterogeneousCollection userProfileValues = BIASettingsReader.BIANetSection?.Authentication?.UserProfile;
+            var userProfileValues = BIASettingsReader.BIANetSection?.Authentication?.UserProfile;
             if (userProfileValues != null && userProfileValues.Count > 0)
             {
                 foreach (IHeterogeneousConfigurationElement heterogeneousElem in userProfileValues)
@@ -464,7 +456,6 @@
 
         }
 
-
         protected virtual void RefreshRolesInBuilding()
         {
             BaseRefreshRolesInBuilding();
@@ -472,7 +463,7 @@
 
         public void BaseRefreshRolesInBuilding()
         {
-            HeterogeneousCollection rolesValues = BIASettingsReader.BIANetSection?.Authentication?.Roles;
+            var rolesValues = BIASettingsReader.BIANetSection?.Authentication?.Roles;
             if (rolesValues != null && rolesValues.Count > 0)
             {
                 foreach (IHeterogeneousConfigurationElement heterogeneousElem in rolesValues)
@@ -483,7 +474,7 @@
                     }
                     else if (heterogeneousElem.TagName == "ADRole")
                     {
-                        ValueElement ADRole = (ValueElement)heterogeneousElem;
+                        var ADRole = (ValueElement)heterogeneousElem;
                         if (HasRole(ADRole.Key))
                         {
                             rolesInBuilding.Add(ADRole.Key);
@@ -507,29 +498,29 @@
 
         public bool HasRole(string role, List<string> adGroupName)
         {
-            List<ADGroup> groups = ADHelper.GetADGroupsForRoleOrCreate(role, adGroupName);
+            var groups = ADHelper.GetADGroupsForRoleOrCreate(role, adGroupName);
             return IsInOneOfThoseGroups(groups);
         }
 
         private bool HasRole(string role)
         {
-            List<ADGroup> groups = ADHelper.GetADGroupsForRole(role);
+            var groups = ADHelper.GetADGroupsForRole(role);
             return IsInOneOfThoseGroups(groups);
         }
 
         private bool IsInOneOfThoseGroups(List<ADGroup> groups)
         {
-            ADRolesModes? mode = BIASettingsReader.BIANetSection?.Authentication?.Parameters?.ADRolesMode;
+            var mode = BIASettingsReader.BIANetSection?.Authentication?.Parameters?.ADRolesMode;
             if (mode == null) mode = ADRolesModes.IISGroup;
-            foreach (ADGroup adgroup in groups)
+            foreach (var adgroup in groups)
             {
                 switch (mode)
                 {
                     case ADRolesModes.IISGroup:
-                        if (IsGroupInList(adgroup.GroupName,UserGroupsFromIIS)) return true;
+                        if (IsGroupInList(adgroup.GroupName, UserGroupsFromIIS)) return true;
                         break;
                     case ADRolesModes.ADUserFirst:
-                        if (IsGroupInList(adgroup.GroupName,UserGroupsFromAD)) return true;
+                        if (IsGroupInList(adgroup.GroupName, UserGroupsFromAD)) return true;
                         break;
                     case ADRolesModes.ADGroupFirst:
                         if (adgroup.IsUserInGroup(Login)) return true;
@@ -546,7 +537,7 @@
         {
             if (groupToFind.IndexOfAny(new char[] { '*', '.', '(', ')', '+', '[', ']' }) != -1)
             {
-                Regex regex = new Regex("^" + groupToFind + "$");
+                var regex = new Regex("^" + groupToFind + "$");
                 foreach (string group in groupList)
                 {
                     if (regex.IsMatch(group)) return true;
@@ -578,8 +569,8 @@
         /// </summary>
         public void BaseRefreshPropertiesInBuilding()
         {
-               
-            HeterogeneousCollection propertiesValues = BIASettingsReader.BIANetSection?.Authentication?.Properties;
+
+            var propertiesValues = BIASettingsReader.BIANetSection?.Authentication?.Properties;
             if (propertiesValues != null && propertiesValues.Count > 0)
             {
                 foreach (IHeterogeneousConfigurationElement heterogeneousElem in propertiesValues)
@@ -604,7 +595,7 @@
                     {
                         SetFromWindowsIdentityElement(propertiesInBuilding, heterogeneousElem);
                     }
-                    else if (heterogeneousElem.TagName ==  "CustomCode")
+                    else if (heterogeneousElem.TagName == "CustomCode")
                     {
                         if (SetFromCustomCodeElement(propertiesInBuilding, heterogeneousElem))
                         {
@@ -630,19 +621,19 @@
 
         public void BaseRefreshLanguageInBuilding()
         {
-            HeterogeneousCollection languageValues = BIASettingsReader.BIANetSection?.Authentication?.Language;
+            var languageValues = BIASettingsReader.BIANetSection?.Authentication?.Language;
             if (languageValues != null && languageValues.Count > 0)
             {
                 foreach (IHeterogeneousConfigurationElement heterogeneousElem in languageValues)
                 {
                     if (heterogeneousElem.TagName == "Value")
                     {
-                        ValueElement value = (ValueElement)heterogeneousElem;
+                        var value = (ValueElement)heterogeneousElem;
                         languageInBuilding = value.Value;
                     }
                     else if (heterogeneousElem.TagName == "Mapping")
                     {
-                        MappingCollection mappingCollection = (MappingCollection)heterogeneousElem;
+                        var mappingCollection = (MappingCollection)heterogeneousElem;
                         if (mappingCollection?.Key != null)
                         {
                             object objectValueToMap = GetObjectValue(this, mappingCollection?.Key);
@@ -662,7 +653,7 @@
                     }
                     else if (heterogeneousElem.TagName == "CustomCode")
                     {
-                        CustomCodeElement customCode = (CustomCodeElement) heterogeneousElem;
+                        var customCode = (CustomCodeElement)heterogeneousElem;
                         if (customCode != null)
                         {
                             if (string.IsNullOrEmpty(customCode.Function))
@@ -671,7 +662,7 @@
                             }
                             else
                             {
-                                languageInBuilding = (string)this.GetType().GetMethod(customCode.Function).Invoke(this, null);
+                                languageInBuilding = (string)GetType().GetMethod(customCode.Function).Invoke(this, null);
                                 if (languageInBuilding != null) break;
                             }
                         }
@@ -708,13 +699,12 @@
         /// <returns>return the profile value or default string</returns>
         public string GetProfileValueOrDefault(string key, string defaultValue)
         {
-            string value;
             if (UserProfile == null)
             {
                 return defaultValue;
             }
 
-            return UserProfile.TryGetValue(key, out value) ? value : defaultValue;
+            return UserProfile.TryGetValue(key, out string value) ? value : defaultValue;
         }
 
         /// <summary>
@@ -724,7 +714,7 @@
         /// <returns>True if the role is in identity's roles, false otherwise.</returns>
         public bool IsInRole(string role)
         {
-            if ((this.Roles != null) && (this.Roles.Any(r => r == role)))
+            if ((Roles != null) && (Roles.Any(r => r == role)))
             {
                 return true;
             }
@@ -741,7 +731,7 @@
         public string ListOfRole()
         {
             string ret = string.Empty;
-            foreach (string role in this.Roles)
+            foreach (string role in Roles)
             {
                 if (ret != string.Empty)
                 {
