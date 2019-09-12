@@ -116,6 +116,8 @@
     <None Include="BIA.Net.NuGet\BIA.Net.Model\BIA.Net.Model.1.8.0.4.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Model\BIA.Net.Model.1.8.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Model\BIA.Net.Model.1.9.0.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.Model\BIA.Net.Model.2.5.0.1.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.Model\BIA.Net.Model.2.5.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.MVC\BIA.Net.MVC.1.7.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.MVC\BIA.Net.MVC.1.7.2.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.MVC\BIA.Net.MVC.1.7.3.1.nupkg" />

@@ -197,20 +197,17 @@ namespace BIA.Net.Model
             return entity;
         }
 
-        /// <summary>
-        /// Gets the find query.
-        /// </summary>
-        /// <param name="keyValue_s">The key value_s.</param>
-        /// <param name="mode">The mode.</param>
-        /// <param name="expFieldsToInclude">The fields to include as expression.</param>
-        /// <param name="sFieldsToInclude">The fields to include as string.</param>
-        /// <returns>the find query</returns>
         public virtual IQueryable<Entity> GetFindQuery(object keyValue_s, AccessMode mode = AccessMode.Read, List<Expression<Func<Entity, dynamic>>> expFieldsToInclude = null, List<string> sFieldsToInclude = null)
         {
-            IQueryable<Entity> query = this.GetStandardQuery(mode);
+            return this.GetFindQuery<Entity>(this.GetStandardQuery(mode), keyValue_s, expFieldsToInclude, sFieldsToInclude);
+        }
+
+        private IQueryable<T2> GetFindQuery<T2>(IQueryable<T2> query, object keyValue_s, List<Expression<Func<T2, dynamic>>> expFieldsToInclude = null, List<string> sFieldsToInclude = null)
+                    where T2 : ObjectRemap, new()
+        { 
             if (expFieldsToInclude != null)
             {
-                foreach (Expression<Func<Entity, dynamic>> field in expFieldsToInclude)
+                foreach (Expression<Func<T2, dynamic>> field in expFieldsToInclude)
                 {
                     query = query.Include(field);
                 }
@@ -225,7 +222,7 @@ namespace BIA.Net.Model
             }
 
             string searchIdentity = string.Empty;
-            EntityKeyHelper.KeyProperties[] keyProperties = this.GetPrimaryKeysProperties();
+            EntityKeyHelper.KeyProperties[] keyProperties = EntityKeyHelper.GetKeysProperties<T2>(this.Db);
             int countkey = 0;
 
             object[] keyValues = null;
@@ -389,7 +386,7 @@ namespace BIA.Net.Model
         /// <returns>Returns the updated entity</returns>
         private Entity Update(Entity entity, object[] primaryKey, GenericRepositoryParmeter param = null)
         {
-            List<string> lstFieldToInclude = this.GetFieldToInclude(param, AccessMode.Write);
+            List<string> lstFieldToInclude = this.GetFieldToInclude<Entity>(param, AccessMode.Write);
 
             Entity dbobj = this.Find(primaryKey, AccessMode.Write, sFieldsToInclude: lstFieldToInclude);
             if (dbobj == null)
@@ -518,7 +515,7 @@ namespace BIA.Net.Model
         public virtual Entity Duplicate(object primaryKey, GenericRepositoryParmeter param = null)
         {
             TraceManager.Debug("GenericRepository", "Duplicate", "Begin Duplicate for element " + typeof(Entity).Name);
-            List<string> lstFieldToInclude = this.GetFieldToInclude(param, AccessMode.Delete);
+            List<string> lstFieldToInclude = this.GetFieldToInclude<Entity>(param, AccessMode.Delete);
             Entity dbobj = this.Find(primaryKey, AccessMode.Read, sFieldsToInclude: lstFieldToInclude);
             Entity duplicated = this.Insert(dbobj, param);
             TraceManager.Debug("GenericRepository", "Duplicate", "End Duplicate for element " + typeof(Entity).Name);
@@ -554,7 +551,7 @@ namespace BIA.Net.Model
         public virtual int DeleteById(object primaryKey, GenericRepositoryParmeter param = null)
         {
             TraceManager.Debug("GenericRepository", "DeleteById", "Begin DeleteById for element " + typeof(Entity).Name);
-            List<string> lstFieldToInclude = !BIAUnity.IsMoq ? this.GetFieldToInclude(param, AccessMode.Delete) : null;
+            List<string> lstFieldToInclude = !BIAUnity.IsMoq ? this.GetFieldToInclude<Entity>(param, AccessMode.Delete) : null;
             Entity dbobj = this.Find(primaryKey, AccessMode.Delete, sFieldsToInclude: lstFieldToInclude);
 
             if (dbobj == null)
@@ -605,12 +602,12 @@ namespace BIA.Net.Model
         /// <param name="param">The parameter.</param>
         /// <param name="mode">The mode.</param>
         /// <returns>The list of fields to include</returns>
-        private List<string> GetFieldToInclude(GenericRepositoryParmeter param, AccessMode mode)
+        private List<string> GetFieldToInclude<T2>(GenericRepositoryParmeter param, AccessMode mode)
         {
-            List<PropertyInfo> lstProp = typeof(Entity).GetProperties().ToList();
+            List<PropertyInfo> lstProp = typeof(T2).GetProperties().ToList();
             List<string> retLstProp = new List<string>();
 
-            string[] navigationProperties = EntityPropHelper.GetNavigationProperties<Entity>(this.Db);
+            string[] navigationProperties = EntityPropHelper.GetNavigationProperties<T2>(this.Db);
 
             foreach (PropertyInfo prop in lstProp)
             {
@@ -827,7 +824,7 @@ namespace BIA.Net.Model
                     {
                         foreach (object ref2excl in param.Ref2Exclude)
                         {
-                            if (this.IsSameItem(targetItem, ref2excl))
+                            if (/*this.IsSameItem(targetItem, ref2excl)|| */this.IsSameItem(db_Item, ref2excl))
                             {
                                 return;
                             }
@@ -923,6 +920,8 @@ namespace BIA.Net.Model
             PropertyInfo valueProp = dbParentObj.GetType().GetProperty(childItemListName);
             ICollection<T2> db_ObjList = (ICollection<T2>)valueProp.GetValue(dbParentObj);
             List<T2> toDelete = new List<T2>();
+            List<string> lstFieldToIncludeInCascade = null;
+
             if (targetParentObj == null)
             {
                 foreach (T2 item in db_ObjList)
@@ -934,10 +933,15 @@ namespace BIA.Net.Model
                 {
                     NotifyListItemChange(dbParentObj, item, null, childItemListName, param, TypeOfCascade.Deletion);
                     db_ObjList.Remove(item);
-                    if (IsValue2Clone(param, childItemListName))
+                    if (this.IsParentDirectlyReferenced(item, dbParentObj))
                     {
-                        this.CascadeRemap(item, null, targetParentObj, childItemListName, param);
-                        this.Db.Set(noProxyT2).Remove(item);
+                        T2 dbobjRefreshAllProperties = this.RefreshDbItem(item, param, ref lstFieldToIncludeInCascade);
+                        this.CascadeRemap(dbobjRefreshAllProperties, null, targetParentObj, childItemListName, param);
+                        DbSet dbSet = this.Db.Set(noProxyT2);
+                        if (dbSet != null)
+                        {
+                            dbSet.Remove(item);
+                        }
                     }
                 }
 
@@ -970,8 +974,9 @@ namespace BIA.Net.Model
                         {
                             if ((subListRule != null) && subListRule.CascadeUpdate)
                             {
-                                NotifyListItemChange(dbParentObj, dbItem, targetItem, childItemListName, param, TypeOfCascade.Update);
-                                this.CascadeRemap(dbItem, targetItem, targetParentObj, childItemListName, param);
+                                T2 dbobjRefreshAllProperties = this.RefreshDbItem(dbItem, param, ref lstFieldToIncludeInCascade);
+                                // NotifyListItemChange(dbParentObj, dbItem, targetItem, childItemListName, param, TypeOfCascade.Update);
+                                this.CascadeRemap(dbobjRefreshAllProperties, targetItem, targetParentObj, childItemListName, param);
                             }
 
                             elemInList = true;
@@ -999,18 +1004,45 @@ namespace BIA.Net.Model
                         }
                     }
 
+
                     foreach (T2 item in toDelete)
                     {
                         NotifyListItemChange(dbParentObj, item, null, childItemListName, param, TypeOfCascade.Deletion);
                         db_ObjList.Remove(item);
                         if (this.IsParentDirectlyReferenced(item, dbParentObj))
                         {
-                            this.CascadeRemap(item, null, targetParentObj, childItemListName, param);
-                            this.Db.Set(noProxyT2).Remove(item);
+                            T2 dbobjRefreshAllProperties = this.RefreshDbItem(item, param, ref lstFieldToIncludeInCascade);
+
+                            this.CascadeRemap(dbobjRefreshAllProperties, null, targetParentObj, childItemListName, param);
+                            DbSet dbSet = this.Db.Set(noProxyT2);
+                            if (dbSet != null)
+                            {
+                                dbSet.Remove(item);
+                            }
                         }
                     }
                 }
             }
+        }
+
+        private T2 RefreshDbItem<T2>(T2 item, GenericRepositoryParmeter param, ref List<string> lstFieldToIncludeInCascade)
+            where T2 : ObjectRemap, new()
+        {
+            IQueryable<T2> query = this.Db.Set<T2>();
+            if (query == null)
+            {
+                // Use only for mock;
+                return item;
+            }
+
+            object[] keys = this.GetPrimaryKeys(item);
+            if (lstFieldToIncludeInCascade == null)
+            {
+                lstFieldToIncludeInCascade = this.GetFieldToInclude<T2>(param, AccessMode.Write);
+            }
+
+            T2 dbobjRefreshAllProperties = this.GetFindQuery<T2>(this.Db.Set<T2>(), keys, sFieldsToInclude: lstFieldToIncludeInCascade).SingleOrDefault();
+            return dbobjRefreshAllProperties;
         }
 
         /// <summary>
@@ -1035,7 +1067,10 @@ namespace BIA.Net.Model
             bool forceCreate = IsValue2Clone(param, childItemListName);
             object[] keys = this.GetPrimaryKeys(targetItem);
 
-            if (!forceCreate && (!AreKeysNull(keys)))
+            // dbset is nul only in mock
+            DbSet dbSet = this.Db.Set(noProxyT2);
+
+            if (!forceCreate && (!AreKeysNull(keys)) && (dbSet != null))
             {
                 T2 existingObj = (T2)this.Db.Set(noProxyT2).Find(keys);
                 if (existingObj != null)
@@ -1059,7 +1094,10 @@ namespace BIA.Net.Model
             targetItem.dbCreatedObject = newObj;
             newObj.dbCreatedObject = newObj;
             this.CascadeRemap(newObj, targetItem, targetParentObj, childItemListName, param);
-            this.Db.Set(noProxyT2).Add(newObj);
+            if (dbSet != null)
+            {
+                dbSet.Add(newObj);
+            }
 
             if (!forceCreate && (!AreKeysNull(keys)))
             {
