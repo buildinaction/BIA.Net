@@ -14,6 +14,7 @@ namespace BIA.Net.Authentication.MVC
     using System.Web;
     using System.Web.Mvc;
     using BIA.Net.Authentication.Business.Helpers;
+    using BIA.Net.Common;
 
 
 
@@ -53,7 +54,7 @@ namespace BIA.Net.Authentication.MVC
         /// <param name="userLogin">Login of the user.</param>
         public static void RefreshUserRoles(string userLogin)
         {
-            HttpContext.Current.Application[AuthenticationConstants.SessionRefreshUserRolesDate + "_" + userLogin] = DateTime.Now;
+            RefreshCurrentApplicationValues(AuthenticationConstants.SessionRefreshUserRolesDate + "_" + userLogin, true);
         }
 
         /// <summary>
@@ -62,7 +63,7 @@ namespace BIA.Net.Authentication.MVC
         /// <param name="userLogin">Login of the user.</param>
         public static void RefreshUserProperties(string userLogin)
         {
-            HttpContext.Current.Application[AuthenticationConstants.SessionRefreshUserPropertiesDate + "_" + userLogin] = DateTime.Now;
+            RefreshCurrentApplicationValues(AuthenticationConstants.SessionRefreshUserPropertiesDate + "_" + userLogin, true);
         }
 
         /// <summary>
@@ -71,9 +72,8 @@ namespace BIA.Net.Authentication.MVC
         /// <param name="userLogin">Login of the user.</param>
         public static void RefreshUserProfile(string userLogin)
         {
-            HttpContext.Current.Application[AuthenticationConstants.SessionRefreshUserProfileDate + "_" + userLogin] = DateTime.Now;
+            RefreshCurrentApplicationValues(AuthenticationConstants.SessionRefreshUserProfileDate + "_" + userLogin, true);
         }
-
 
         /// <summary>
         /// Called when authorization is required.

@@ -341,11 +341,6 @@ namespace BIA.Net.Common.Configuration
             }
         }
 
-        /*<WebService URL = "$(UrlIndexDivision)/UserProfile/GetUserProfile" >
-          < Parameters >
-            < add key="Login" object="UserInfo" field="Login" />
-          </Parameters>
-        </WebService>*/
         public class WebServiceElement : HeterogeneousCollectionBase
         {
             public WebServiceElement(string elementName) : base(elementName) { }

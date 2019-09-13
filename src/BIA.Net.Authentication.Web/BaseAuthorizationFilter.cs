@@ -17,6 +17,9 @@ namespace BIA.Net.Authentication.Web
     using static BIA.Net.Common.Configuration.AuthenticationElement;
     using static BIA.Net.Common.Configuration.CommonElement;
     using System.Reflection;
+    using System.Net;
+    using System.Threading;
+    using System.Text;
 
     public enum RolesRedirectAction
     {
@@ -255,17 +258,50 @@ namespace BIA.Net.Authentication.Web
             }
         }
 
-        private static bool ShouldRefresh(string RefreshKey, HttpSessionState Session, string userName)
+        private static bool ShouldRefresh(string RefreshKey, HttpSessionState Session, string userKey)
         {
             if (Session[RefreshKey] == null) return true;
-            return HttpContext.Current.Application[RefreshKey + "_" + userName] != null && DateTime.Compare((DateTime)HttpContext.Current.Application[RefreshKey + "_" + userName], (DateTime)Session[RefreshKey]) > 0;
+            return HttpContext.Current.Application[RefreshKey + "_" + userKey] != null && DateTime.Compare((DateTime)HttpContext.Current.Application[RefreshKey + "_" + userKey], (DateTime)Session[RefreshKey]) > 0;
         }
 
 
-        private static bool ShouldRefresh(string RefreshKey, string userName, DateTime dateTimeLastRefresh)
+        private static bool ShouldRefresh(string RefreshKey, string userKey, DateTime dateTimeLastRefresh)
         {
             if (dateTimeLastRefresh == DateTime.MinValue) return true;
-            return HttpContext.Current.Application[RefreshKey + "_" + userName] != null && DateTime.Compare((DateTime)HttpContext.Current.Application[RefreshKey + "_" + userName], dateTimeLastRefresh) > 0;
+            return HttpContext.Current.Application[RefreshKey + "_" + userKey] != null && DateTime.Compare((DateTime)HttpContext.Current.Application[RefreshKey + "_" + userKey], dateTimeLastRefresh) > 0;
+        }
+
+        public static void RefreshCurrentApplicationValues(string sKey, bool broadcastToLoadbalanced=false)
+        {
+            HttpContext.Current.Application[sKey] = DateTime.Now;
+            if (broadcastToLoadbalanced)
+            {
+                List<string> loadbalancedListUrls = BIASettingsReader.BIANetSection?.Authentication?.Parameters?.LoadbalancedListUrls;
+                foreach (string loadbalancedListUrl in loadbalancedListUrls)
+                {
+                    string url = loadbalancedListUrl + "/RefreshCurrentApplicationValues";
+                    try
+                    {
+                        HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
+                        myRequest.Method = "POST";
+                        myRequest.ContentType = "application/x-www-form-urlencoded";
+                        myRequest.Timeout = 20000;
+                        myRequest.Credentials = CredentialCache.DefaultCredentials;
+                        var postData = "sKey=" + Uri.EscapeDataString(sKey);
+                        var data = Encoding.ASCII.GetBytes(postData);
+                        myRequest.ContentLength = data.Length;
+                        using (var stream = myRequest.GetRequestStream())
+                        {
+                            stream.Write(data, 0, data.Length);
+                        }
+                        myRequest.GetResponseAsync();
+                    }
+                    catch (Exception e)
+                    {
+                        TraceManager.Error("Not able to join a loadbalanced server : " + url, e);
+                    }
+                }
+            }
         }
 
         protected RolesRedirectAction CheckAuthorize<TContext>(TUserInfo user, out RolesRedirectURL redirect, Func<TContext, bool> IsAllowAnonymousCallback, Func<TContext, List<string>> DisableRedirectRoles, TContext context)

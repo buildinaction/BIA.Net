@@ -54,6 +54,17 @@ namespace BIA.Net.Authentication.MVC.Controllers
         }
 
         /// <summary>
+        /// Refresh a current application value
+        /// </summary>
+        /// <returns>Empty</returns>
+        [HttpPost]
+        public virtual void RefreshCurrentApplicationValues(string sKey)
+        {
+            BIAAuthorizationFilterMVC<TUserInfo, TUserProperties>.RefreshCurrentApplicationValues(sKey);
+        }
+
+
+        /// <summary>
         /// Refresh the current user profile
         /// </summary>
         /// <param name="login">login of the user to refresh</param>

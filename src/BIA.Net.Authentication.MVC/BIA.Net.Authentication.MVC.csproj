@@ -126,7 +126,6 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="BIA.Net.Authentication.MVC.csproj.nuspec" />
-    <None Include="Views\Shared\BIA.Net\_Localization.cshtml" />
     <None Include="_CreateNewNuGetPackage\Config.ps1" />
     <None Include="_CreateNewNuGetPackage\DoNotModify\CreateNuGetPackage.ps1" />
     <None Include="_CreateNewNuGetPackage\DoNotModify\New-NuGetPackage.ps1" />

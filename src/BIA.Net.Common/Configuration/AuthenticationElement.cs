@@ -158,6 +158,27 @@ namespace BIA.Net.Common.Configuration
                 }
             }
 
+            private List<string> _loadbalancedListUrls = null;
+            public List<string> LoadbalancedListUrls
+            {
+                get
+                {
+                    if (_loadbalancedListUrls == null)
+                    {
+                        KeyValueElement loadbalancedListUrls = Values?.GetElemByKey("LoadbalancedListUrls");
+                        if (loadbalancedListUrls != null)
+                        {
+                            _loadbalancedListUrls = loadbalancedListUrls.Value.Split(',').ToList<string>();
+                        }
+                        else
+                        {
+                            _loadbalancedListUrls = new List<string>();
+                        }
+                    }
+                    return _loadbalancedListUrls;
+                }
+            }
+
             private string _caching = null;
             public string Caching
             {
