@@ -108,6 +108,7 @@
     <Compile Include="Configuration\LanguageElement.cs" />
     <Compile Include="CustomMailMessage.cs" />
     <Compile Include="Helpers\BIAAUnityContainer.cs" />
+    <Compile Include="Helpers\DataTableToDTO.cs" />
     <Compile Include="Helpers\OpenXmlExcelHelper.cs" />
     <Compile Include="Helpers\SerializationHelper.cs" />
     <Compile Include="Helpers\BIAUnity.cs" />

@@ -66,6 +66,7 @@
     <None Include="BIA.Net.NuGet\BIA.Net.Common\BIA.Net.Common.2.0.0.2.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Common\BIA.Net.Common.2.0.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Common\BIA.Net.Common.2.1.0.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.Common\BIA.Net.Common.2.1.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.DataTable.DTO\BIA.Net.DataTable.DTO.1.7.5.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.DataTable.DTO\BIA.Net.DataTable.DTO.1.8.0.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.DataTable.DT\BIA.Net.DataTable.DT.1.8.0.1.nupkg" />
