@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1DD5FB6A-EF31-4A33-9401-5E510B9882E3}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>NuGetPackage</RootNamespace>
     <AssemblyName>NuGetPackage</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="BIA.Net.NuGet\BIA.Net.Api\BIA.Net.Api.1.8.0.1.nupkg" />
@@ -41,6 +44,7 @@
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.Business\BIA.Net.Authentication.Business.2.0.0.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.Business\BIA.Net.Authentication.Business.2.0.0.2.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.Business\BIA.Net.Authentication.Business.2.0.0.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.Authentication.Business\BIA.Net.Authentication.Business.2.0.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.MVC\BIA.Net.Authentication.MVC.1.9.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.MVC\BIA.Net.Authentication.MVC.2.0.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.MVC\BIA.Net.Authentication.MVC.2.1.0.nupkg" />
