@@ -122,8 +122,54 @@
             adRoles.Add(role, groups);
             return groups;
         }
+        /// <summary>
+        /// Gets All user whose match the Query
+        /// </summary>
+        /// <param name="queryName">String to find in the AD</param>
+        /// <returns></returns>
+        public static List<UserPrincipal> GetUsersFromADs(string queryName)
+        {
+            List<string> adDomains = BIASettingsReader.BIANetSection?.Authentication?.Parameters?.ADDomains;
+            List<UserPrincipal> users = new List<UserPrincipal>();
 
+            if (adDomains != null)
+            {
+                foreach (string domain in adDomains)
+                {
+                    try
+                    {
+                        
+                        PrincipalContext ctx = new PrincipalContext(ContextType.Domain, domain);
+                        //Create a "user object" in the context
+                        UserPrincipal userSeeked = new UserPrincipal(ctx)
+                        {
+                            //Specify the search parameters
+                            Name = $"*{queryName}*"
+                        };
 
+                        //Create the searcher
+                        //pass (our) user object
+                        PrincipalSearcher pS = new PrincipalSearcher
+                        {
+                            QueryFilter = userSeeked
+                        };
+
+                        //Perform the search and cast the result to UserPrincipal
+                        var results = pS.FindAll().Cast<UserPrincipal>();
+                        if(results.Count() == 0)
+                        {
+                            break;
+                        }
+                        users.AddRange(results);
+                    }
+                    catch (Exception e)
+                    {
+                        TraceManager.Warn("ADHelper", "GetUsersFromADs", "Could not join Domain :" + domain, e);
+                    }
+                }
+            }
+            return users;
+        }
         /// <summary>
         /// Gets the user from ad.
         /// </summary>

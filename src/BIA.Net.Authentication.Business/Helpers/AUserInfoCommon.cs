@@ -25,9 +25,9 @@ namespace BIA.Net.Authentication.Business.Helpers
         protected bool isUserPrincipalInit = false;
         protected UserPrincipal userPrincipal { get; set; }
 
-        protected UserPrincipal UserPrincipal
+        public UserPrincipal UserPrincipal
         {
-            get
+            protected get
             {
                 if (!isUserPrincipalInit)
                 {
@@ -36,7 +36,12 @@ namespace BIA.Net.Authentication.Business.Helpers
                 }
                 return userPrincipal;
             }
+            set
+            {
+                userPrincipal = value;
+            }
         }
+
 
         public bool IsInAd()
         {
