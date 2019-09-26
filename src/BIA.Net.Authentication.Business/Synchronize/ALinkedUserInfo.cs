@@ -43,6 +43,12 @@
                     TraceManager.Debug("Return the linkedPropertiesInBuilding");
                     return linkedPropertiesInBuilding;
                 }
+
+                if (linkedProperties != null)
+                {
+                    return linkedProperties;
+                }
+
                 linkedPropertiesInBuilding = new TLinkedProperties();
                 RefreshLinkedPropertiesInBuilding();
                 LinkedProperties = linkedPropertiesInBuilding;

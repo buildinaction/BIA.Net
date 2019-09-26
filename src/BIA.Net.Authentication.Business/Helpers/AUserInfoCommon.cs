@@ -38,6 +38,7 @@ namespace BIA.Net.Authentication.Business.Helpers
             }
             set
             {
+                isUserPrincipalInit = true;
                 userPrincipal = value;
             }
         }
