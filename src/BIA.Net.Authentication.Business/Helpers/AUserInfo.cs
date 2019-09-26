@@ -463,6 +463,7 @@
 
         public void BaseRefreshRolesInBuilding()
         {
+            userInfoContainer.rolesKey = Login;
             var rolesValues = BIASettingsReader.BIANetSection?.Authentication?.Roles;
             if (rolesValues != null && rolesValues.Count > 0)
             {
@@ -493,7 +494,6 @@
                     }
                 }
             }
-            userInfoContainer.rolesKey = Login;
         }
 
         public bool HasRole(string role, List<string> adGroupName)
@@ -621,6 +621,7 @@
 
         public void BaseRefreshLanguageInBuilding()
         {
+            userInfoContainer.languageKey = Login;
             var languageValues = BIASettingsReader.BIANetSection?.Authentication?.Language;
             if (languageValues != null && languageValues.Count > 0)
             {
@@ -678,7 +679,6 @@
             {
                 languageInBuilding = "en-US";
             }
-            userInfoContainer.languageKey = Login;
         }
 
         public virtual string CustomCodeLanguage()

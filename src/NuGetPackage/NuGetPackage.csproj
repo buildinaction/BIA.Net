@@ -44,6 +44,7 @@
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.Business\BIA.Net.Authentication.Business.2.0.0.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.Business\BIA.Net.Authentication.Business.2.0.0.2.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.Business\BIA.Net.Authentication.Business.2.0.0.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.Authentication.Business\BIA.Net.Authentication.Business.2.0.1.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.Business\BIA.Net.Authentication.Business.2.0.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.MVC\BIA.Net.Authentication.MVC.1.9.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Authentication.MVC\BIA.Net.Authentication.MVC.2.0.0.nupkg" />
