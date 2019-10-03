@@ -12,6 +12,7 @@ namespace BIA.Net.Authentication.MVC.Controllers
     using BIA.Net.Authentication.Business.Helpers;
     using BIA.Net.Authentication.Business.Synchronize;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Web.Mvc;
     using BIA.Net.Common.Helpers;
 
@@ -97,6 +98,19 @@ namespace BIA.Net.Authentication.MVC.Controllers
             }
 
             return this.Json(string.Empty);
+        }
+
+        /// <summary>
+        /// Get all users
+        /// </summary>
+        /// <param name="queryName">the user partial name researched</param>
+        /// <param name="login"> the user login</param>
+        /// <returns>all username found</returns>
+        public JsonResult GetAllUsers(string queryName, string login)
+        {
+
+            var list = ADHelper.GetUsersFromAds(queryName, login);
+            return this.Json(list.OrderBy(t => t.LastName + t.FirstName), JsonRequestBehavior.AllowGet);
         }
     }
 }

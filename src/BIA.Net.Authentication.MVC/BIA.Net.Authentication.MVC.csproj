@@ -152,6 +152,10 @@
       <Project>{0e47f422-94b5-46ab-bb28-6334caedec8b}</Project>
       <Name>BIA.Net.Authentication.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BIA.Net.Business\BIA.Net.Business.csproj">
+      <Project>{3F87600C-7C87-4768-812D-3CFDEDAE5E2A}</Project>
+      <Name>BIA.Net.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BIA.Net.Common\BIA.Net.Common.csproj">
       <Project>{9073da56-b20a-476a-b6dd-3231ea11d5bc}</Project>
       <Name>BIA.Net.Common</Name>

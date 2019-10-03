@@ -9,6 +9,9 @@
     using System.Reflection;
     using System.Security.Principal;
     using System.Text.RegularExpressions;
+
+    using BIA.Net.Business.DTO;
+
     using static BIA.Net.Common.Configuration.AuthenticationElement.ParametersElement;
     using static BIA.Net.Common.Configuration.CommonElement;
 
@@ -287,6 +290,34 @@
 
             return result;
         }
+        /// <summary>
+        /// Find all user corresponding to the queryName in Name and Surname
+        /// </summary>
+        /// <param name="queryName">query</param>
+        /// <param name="login">login</param>
+        /// <returns></returns>
+        public static IEnumerable<UserADDTO> GetUsersFromAds(string queryName, string login)
+        {
+            List<UserADDTO> usersInfo = new List<UserADDTO>();
+            if (!string.IsNullOrEmpty(queryName) && string.IsNullOrEmpty(login))
+            {
+                List<UserPrincipal> usersMatche = new List<UserPrincipal>();
+                usersMatche = ADHelper.GetUsersFromADs(queryName).Take(10).ToList();
+                usersMatche.ForEach(
+                    um => {
+                            usersInfo.Add(new UserADDTO
+                                              {
+                                                  FirstName = um.GivenName,
+                                                  LastName = um.Surname,
+                                                  Login = um.SamAccountName,
+                                                  Guid = um.Guid?.ToString()
+                                              });
+                        }
+                );
+            }
+
+            return usersInfo;
+        }
         /*
         /// <summary>
         /// Filters the group.
@@ -375,4 +406,6 @@
             }
         }
     }
+
+    
 }
