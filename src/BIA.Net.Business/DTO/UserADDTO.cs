@@ -12,5 +12,6 @@ namespace BIA.Net.Business.DTO
         public string FirstName { get; set; }
         public string Login { get; set; }
         public string Guid { get; set; }
+        public string DisplayFullName => $"{LastName} {FirstName} ({Login})";
     }
 }
