@@ -27,16 +27,16 @@ else { Write-Warning "Could not find Config file at '$CONFIG_FILE_PATH'. Default
 
 # The NuGet gallery to upload to. If not provided, the DefaultPushSource in your NuGet.config file is used (typically nuget.org).
 if (!(Test-Path Variable:Private:sourceToUploadTo) -or (Test-StringIsNullOrWhitespace $sourceToUploadTo)) { $sourceToUploadTo = ""; Write-Output "Using default Source To Upload To value."  }
-else { Write-Output "Using userProperties-specified Source To Update To value '$sourceToUploadTo'." }
+else { Write-Output "Using user-specified Source To Update To value '$sourceToUploadTo'." }
 
 # The API Key to use to upload the package to the gallery. If not provided and a system-level one does not exist for the specified Source, you will be prompted for it.
 if (!(Test-Path Variable:Private:apiKey) -or (Test-StringIsNullOrWhitespace $apiKey)) { $apiKey = ""; Write-Output "Using default API Key value."  }
-else { Write-Output "Using userProperties-specified API Key value [value not shown here for security purposes]." }
+else { Write-Output "Using user-specified API Key value [value not shown here for security purposes]." }
 
 # Specify any NuGet Push options to pass to nuget.exe.
 # Do not specify the "-Source" or "-ApiKey" here; use the variables above.
 if (!(Test-Path Variable:Private:pushOptions) -or (Test-StringIsNullOrWhitespace $pushOptions)) { $pushOptions = ""; Write-Output "Using default Push Options value."  }
-else { Write-Output "Using userProperties-specified Push Options value '$pushOptions'." }
+else { Write-Output "Using user-specified Push Options value '$pushOptions'." }
 
 # Add the Source and ApiKey to the Push Options if there were provided.
 if (!(Test-StringIsNullOrWhitespace $sourceToUploadTo)) { $pushOptions += " -Source ""$sourceToUploadTo"" " }

@@ -217,7 +217,15 @@ namespace BIA.Net.Model
             {
                 foreach (string field in sFieldsToInclude)
                 {
-                    query = query.Include(field);
+                    try
+                    {
+                        if(!query.GetType().FullName.Contains("Castle.Proxies.DbSet"))
+                            query = query.Include(field);
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
                 }
             }
 
@@ -276,7 +284,8 @@ namespace BIA.Net.Model
             {
                 for (int i = 0; i < this.ListInclude.Count; i++)
                 {
-                    dbcontext = dbcontext.Include(this.ListInclude[i]);
+                    if(!dbcontext.GetType().FullName.Contains("Castle.Proxies.DbSet"))
+                        dbcontext = dbcontext.Include(this.ListInclude[i]);
                 }
             }
 
@@ -352,6 +361,7 @@ namespace BIA.Net.Model
             if (!this.IsInTransaction)
             {
                 this.Db.SaveChanges();
+                
             }
         }
 
@@ -633,8 +643,8 @@ namespace BIA.Net.Model
                                         ((param.Values2Update != null) && param.Values2Update.Contains(prop.Name))
                                         ||
                                         ((param.Values2Exclude != null) && !param.Values2Exclude.Contains(prop.Name)))
-                                    ||
-                                    prop.CustomAttributes.Any(c => c.AttributeType.Name == "RequiredAttribute")))))
+                                    //||
+                                    /*prop.CustomAttributes.Any(c => c.AttributeType.Name == "RequiredAttribute")*/))))
                 {
                     retLstProp.Add(prop.Name);
                 }
