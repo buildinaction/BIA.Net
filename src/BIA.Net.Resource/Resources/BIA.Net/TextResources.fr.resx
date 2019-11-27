@@ -241,7 +241,7 @@
     <value>Accueil</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Langues</value>
+    <value>Langue</value>
   </data>
   <data name="New" xml:space="preserve">
     <value>Nouveau</value>
@@ -272,5 +272,59 @@
   </data>
   <data name="UpdatedSuccessfully" xml:space="preserve">
     <value>Mis à jour avec succés</value>
+  </data>
+  <data name="Filters" xml:space="preserve">
+    <value>Filtres</value>
+  </data>
+  <data name="Languages" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+  <data name="Current" xml:space="preserve">
+    <value>En cours</value>
+  </data>
+  <data name="View_NameUndefined" xml:space="preserve">
+    <value>Veuillez spécifier un nom pour la vue.</value>
+  </data>
+  <data name="View_SiteUndefined" xml:space="preserve">
+    <value>Aucun site défini pour attribuer la vue.</value>
+  </data>
+  <data name="View_DefaultView" xml:space="preserve">
+    <value>Affichage par défaut</value>
+  </data>
+  <data name="View_SitesUsed" xml:space="preserve">
+    <value>Utilisé par {0} sites</value>
+  </data>
+  <data name="View_DefaultViewDescription" xml:space="preserve">
+    <value>Vue système générée par défaut</value>
+  </data>
+  <data name="View_SiteUsed" xml:space="preserve">
+    <value>Utilisé par {0} site</value>
+  </data>
+  <data name="View_View" xml:space="preserve">
+    <value>Vue</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Sélection</value>
+  </data>
+  <data name="View_SaveCurrentView" xml:space="preserve">
+    <value>Sauver la vue courante comme</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="View_ManageViews" xml:space="preserve">
+    <value>Gérer mes vues</value>
+  </data>
+  <data name="View_ManageSiteViews" xml:space="preserve">
+    <value>Gérer les vues du site</value>
+  </data>
+  <data name="View_ViewManagement" xml:space="preserve">
+    <value>Gestion des vues</value>
+  </data>
+  <data name="ModifyExisting" xml:space="preserve">
+    <value>Modifier l'existant</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Gérer</value>
   </data>
 </root>

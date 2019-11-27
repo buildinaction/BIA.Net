@@ -65,9 +65,8 @@
     <CodeAnalysisRuleSet />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -107,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Filter\PreventDuplicateRequestAttribute.cs" />
+    <Compile Include="Utility\Binders.cs" />
     <Compile Include="Utility\ErrorHandler.cs" />
     <Compile Include="Utility\FlashMessageExtension.cs" />
     <Compile Include="Utility\ValidatorUtility.cs" />
@@ -116,6 +116,11 @@
     <Compile Include="ViewModel\JQueryDataTableParamModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Views\Shared\BIA.Net\Views\ViewsPopup.cshtml" />
+    <Content Include="Views\Shared\BIA.Net\Views\_ListManageMyViews.cshtml" />
+    <Content Include="Views\Shared\BIA.Net\Views\_ListMyViews.cshtml" />
+    <Content Include="Views\Shared\BIA.Net\Views\_ListSiteViews.cshtml" />
+    <Content Include="Views\Shared\BIA.Net\Views\_SiteViews.cshtml" />
     <None Include="_CreateNewNuGetPackage\DoNotModify\NuGet.exe" />
     <None Include="BIA.Net.MVC.csproj.nuspec">
       <SubType>Designer</SubType>

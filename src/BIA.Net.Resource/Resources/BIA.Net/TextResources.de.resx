@@ -273,4 +273,58 @@
   <data name="UpdatedSuccessfully" xml:space="preserve">
     <value>Erfolgreich geupdated</value>
   </data>
+  <data name="Filters" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Sprachen</value>
+  </data>
+  <data name="Current" xml:space="preserve">
+    <value>Aktuell</value>
+  </data>
+  <data name="View_NameUndefined" xml:space="preserve">
+    <value>Bitte geben Sie der Ansicht einen Namen.</value>
+  </data>
+  <data name="View_SiteUndefined" xml:space="preserve">
+    <value>Keine Site definiert, um die Ansicht zuzuweisen.</value>
+  </data>
+  <data name="View_DefaultView" xml:space="preserve">
+    <value>Standardansicht</value>
+  </data>
+  <data name="View_SitesUsed" xml:space="preserve">
+    <value>Von {0} Website verwendet</value>
+  </data>
+  <data name="View_DefaultViewDescription" xml:space="preserve">
+    <value>Dies ist die standardmäßig generierte Systemansicht</value>
+  </data>
+  <data name="View_SiteUsed" xml:space="preserve">
+    <value>Von {0} Websites verwendet</value>
+  </data>
+  <data name="View_View" xml:space="preserve">
+    <value>Von</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Beschreibung:</value>
+  </data>
+  <data name="View_SaveCurrentView" xml:space="preserve">
+    <value>Speichern Sie die aktuelle Ansicht als</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Auswählen</value>
+  </data>
+  <data name="View_ManageViews" xml:space="preserve">
+    <value>Ansichten verwalten</value>
+  </data>
+  <data name="View_ManageSiteViews" xml:space="preserve">
+    <value>Site Views verwalten</value>
+  </data>
+  <data name="View_ViewManagement" xml:space="preserve">
+    <value>Verwaltung anzeigen</value>
+  </data>
+  <data name="ModifyExisting" xml:space="preserve">
+    <value>Vorhandene Antwortdatei ändern</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Verwalten</value>
+  </data>
 </root>

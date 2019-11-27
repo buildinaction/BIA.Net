@@ -273,4 +273,58 @@
   <data name="UpdatedSuccessfully" xml:space="preserve">
     <value>Actualizado exitosamente</value>
   </data>
+  <data name="Filters" xml:space="preserve">
+    <value>Filtros</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="Current" xml:space="preserve">
+    <value>Actual</value>
+  </data>
+  <data name="View_NameUndefined" xml:space="preserve">
+    <value>Por favor, especifique un nombre para la vista.</value>
+  </data>
+  <data name="View_SiteUndefined" xml:space="preserve">
+    <value>Ningún sitio define para asignar la vista.</value>
+  </data>
+  <data name="View_DefaultView" xml:space="preserve">
+    <value>Vista predeterminada</value>
+  </data>
+  <data name="View_SitesUsed" xml:space="preserve">
+    <value>Usado por {0} sitios</value>
+  </data>
+  <data name="View_DefaultViewDescription" xml:space="preserve">
+    <value>Es la vista del sistema generada por defecto</value>
+  </data>
+  <data name="View_SiteUsed" xml:space="preserve">
+    <value>Usado por {0} sitio</value>
+  </data>
+  <data name="View_View" xml:space="preserve">
+    <value>Usado</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Descripción:</value>
+  </data>
+  <data name="View_SaveCurrentView" xml:space="preserve">
+    <value>Guardar la vista actual como</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Seleccionar</value>
+  </data>
+  <data name="View_ManageViews" xml:space="preserve">
+    <value>Administrar vistas</value>
+  </data>
+  <data name="View_ManageSiteViews" xml:space="preserve">
+    <value>Administra las vistas del sitio</value>
+  </data>
+  <data name="View_ViewManagement" xml:space="preserve">
+    <value>Ver administración</value>
+  </data>
+  <data name="ModifyExisting" xml:space="preserve">
+    <value>Modificar tarea existente</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Administrar</value>
+  </data>
 </root>
