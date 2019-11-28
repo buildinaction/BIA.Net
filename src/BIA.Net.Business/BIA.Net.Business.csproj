@@ -98,7 +98,7 @@
       <Name>BIA.Net.DataTable.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\BIA.Net.Model\BIA.Net.Model.csproj">
-      <Project>{e366dad2-d95c-44f9-9215-6ccc912574dd}</Project>
+      <Project>{E366DAD2-D95C-44F9-9215-6CCC912574DD}</Project>
       <Name>BIA.Net.Model</Name>
     </ProjectReference>
   </ItemGroup>
