@@ -26,6 +26,11 @@ namespace BIA.Net.Business.Services
         public static Dictionary<Type, TypeMapper> serviceMapping = null;
 
         /// <summary>
+        /// The service mapping
+        /// </summary>
+        public static Dictionary<Type, Type> specBuilderMapping = null;
+
+        /// <summary>
         /// The mapper container
         /// </summary>
         private static Dictionary<Type, object> mapperContainer = new Dictionary<Type, object>();
@@ -39,6 +44,17 @@ namespace BIA.Net.Business.Services
         public static Dictionary<Type, TypeMapper> ServiceMapping
         {
             get { return serviceMapping; }
+        }
+
+        /// <summary>
+        /// Gets the specification mapping.
+        /// </summary>
+        /// <value>
+        /// The service mapping.
+        /// </value>
+        public static Dictionary<Type, Type> SpecBuilderMapping
+        {
+            get { return specBuilderMapping; }
         }
 
         /// <summary>
@@ -69,11 +85,6 @@ namespace BIA.Net.Business.Services
         /// </summary>
         public class TypeMapper
         {
-            /// <summary>
-            /// the iservice type
-            /// </summary>
-            private Type iServiceType;
-
             /// <summary>
             /// Initializes a new instance of the <see cref="TypeMapper"/> class.
             /// </summary>

@@ -5,7 +5,9 @@
 namespace BIA.Net.Business.Services
 {
     using BIA.Net.Business.DTO.Infrastructure;
+    using BIA.Net.Business.Helpers;
     using BIA.Net.Business.Services;
+    using BIA.Net.Business.Specifications;
     using BIA.Net.DataTable.DTO;
     using BIA.Net.Model;
     using BIA.Net.Model.DAL;
@@ -86,6 +88,30 @@ namespace BIA.Net.Business.Services
             return list;
         }
 
+
+        /// <summary>
+        /// Gets list of DTO filtered based on acces right.
+        /// </summary>
+        /// <typeparam name="DTO">The type of dto.</typeparam>
+        /// <typeparam name="CTO">The type of cto.</typeparam>
+        /// <param name="advancedFilter">The advanced Filter.</param>
+        /// <param name="smode">The smode.</param>
+        /// <returns>all dto of a type based on acces right</returns>
+        public virtual List<DTO> GetAdvancedFiltered<CTO>(CTO advancedFilter, ServiceAccessMode smode = ServiceAccessMode.Read)
+        {
+            if (advancedFilter == null) return GetAll(smode);
+            List<DTO> list = null;
+            Specification<Entity> advancedSpec = ((ISpecBuilder<Entity, CTO>)AllServicesDTO.GetSpecBuilder<CTO>()).BuildSpec(advancedFilter);
+
+            using (var dbContextReadPerformance = new Helpers.DbContextReadPerformance(this.Repository.GetProjectDBContextForOptim()))
+            {
+                IQueryable<Entity> query = Repository.GetStandardQuery(TranslateAccess(smode));
+                list = query.Where(advancedSpec.SatisfiedBy()).AsNoTracking().Select(GetSelectorExpression()).ToList();
+            }
+
+            return list;
+        }
+
         /// <summary>
         /// Gets all DTO filter by condition of a Type corresponding to the acces mode.
         /// </summary>
@@ -106,6 +132,57 @@ namespace BIA.Net.Business.Services
         }
 
         /// <summary>
+        /// Returns a filter object list to be displayed in a paginated list filtered by the spec, global search and header filter.
+        /// </summary>
+        /// <param name="datatableDTO"><see cref="DataTableAjaxPostDTO"/></param>
+        /// <param name="filteredResultsCount">filtered results count</param>
+        /// <param name="totalResultsCount">total results count</param>
+        /// <param name="advancedFilterSpec">custom filter</param>
+        /// <param name="smode"><see cref="ServiceAccessMode"/></param>
+        /// <param name="mappingCol2Entity">Mapping if Entity name differ of Col name</param>
+        /// <returns>list of objects</returns>
+        public virtual List<DTO> GetAdvancedFilteredForAjaxDataTable<CTO>(DataTableAjaxPost<CTO> datatableDTO, out int filteredResultsCount, out int totalResultsCount, ServiceAccessMode smode = ServiceAccessMode.Read, Dictionary<string, string> mappingCol2Entity = null)
+        {
+            if (datatableDTO.AdvancedFilter == null) return GetFilteredForAjaxDataTable(datatableDTO, out filteredResultsCount, out totalResultsCount, smode, mappingCol2Entity, null );
+            return GetFilteredForAjaxDataTable(datatableDTO, out filteredResultsCount, out totalResultsCount, smode, mappingCol2Entity, ((ISpecBuilder<Entity, CTO>)AllServicesDTO.GetSpecBuilder<CTO>()).BuildSpec(datatableDTO.AdvancedFilter));
+        }
+
+        public virtual List<DTO> GetFilteredForAjaxDataTable(DataTableAjaxPostDTO datatableDTO, out int filteredResultsCount, out int totalResultsCount, ServiceAccessMode smode = ServiceAccessMode.Read, Dictionary<string, string> mappingCol2Entity = null, Specification<Entity> currentSpec = null)
+        {
+            if (currentSpec == null) currentSpec = new TrueSpecification<Entity>();
+            List<DataTableColumnDTO> cols = datatableDTO.Columns;
+            // Manage the general filter of the grid
+            string generalSearch = datatableDTO?.Search?.Value;
+            if (!string.IsNullOrWhiteSpace(generalSearch))
+            {
+                generalSearch = generalSearch.Trim();
+                Specification<Entity> specificationSearchGlobal = new FalseSpecification<Entity>();
+                foreach (var col in cols)
+                {
+                    if (col.Searchable)
+                    {
+                        specificationSearchGlobal |= new DirectSpecification<Entity>(LinqEntityBuilder.GetDynamicContains<DTO, Entity>(col.Data, generalSearch));
+                    }
+                }
+
+                currentSpec &= specificationSearchGlobal;
+            }
+
+            // To set if header filter are present in the grid
+            foreach (var col in cols)
+            {
+                if (!string.IsNullOrWhiteSpace(col.Search.Value))
+                {
+                    Specification<Entity> specificationSearchHeader = new TrueSpecification<Entity>();
+                    specificationSearchHeader &= new DirectSpecification<Entity>(LinqEntityBuilder.GetDynamicContains<DTO, Entity>(col.Data, col.Search.Value));
+                    currentSpec &= specificationSearchHeader;
+                }
+            }
+
+            return GetAllWhereForAjaxDataTable(datatableDTO, out filteredResultsCount, out totalResultsCount, currentSpec.SatisfiedBy(), smode, mappingCol2Entity).ToList();
+        }
+
+        /// <summary>
         /// Returns a filter object list to be displayed in a paginated list.
         /// </summary>
         /// <param name="datatableDTO"><see cref="DataTableAjaxPostDTO"/></param>
@@ -113,8 +190,9 @@ namespace BIA.Net.Business.Services
         /// <param name="totalResultsCount">total results count</param>
         /// <param name="where">custom filter</param>
         /// <param name="smode"><see cref="ServiceAccessMode"/></param>
+        /// <param name="mappingCol2Entity">Mapping if Entity name differ of Col name</param>
         /// <returns>list of objects</returns>
-        public virtual List<DTO> GetAllWhereForAjaxDataTable(DataTableAjaxPostDTO datatableDTO, out int filteredResultsCount, out int totalResultsCount, Expression<Func<Entity, bool>> where = default(Expression<Func<Entity, bool>>), ServiceAccessMode smode = ServiceAccessMode.Read)
+        protected virtual List<DTO> GetAllWhereForAjaxDataTable(DataTableAjaxPostDTO datatableDTO, out int filteredResultsCount, out int totalResultsCount, Expression<Func<Entity, bool>> where = default(Expression<Func<Entity, bool>>), ServiceAccessMode smode = ServiceAccessMode.Read, Dictionary<string,string> mappingCol2Entity = null)
         {
             List<DTO> result = null;
 
@@ -143,7 +221,15 @@ namespace BIA.Net.Business.Services
                     filteredResultsCount = totalResultsCount;
                 }
 
-                string sortExpression = datatableDTO.Columns[datatableDTO.Order.First().Column].Data.Replace("__", ".") + " " + datatableDTO.Order.First().Dir.ToLower();
+                string entityName = datatableDTO.Columns[datatableDTO.Order.First().Column].Data.Replace("__", ".");
+                if (mappingCol2Entity != null)
+                {
+                    string entityRemappedName = null;
+                    mappingCol2Entity.TryGetValue(entityName, out entityRemappedName);
+                    if (entityRemappedName != null) entityName = entityRemappedName;
+                }
+
+                string sortExpression = entityName + " " + datatableDTO.Order.First().Dir.ToLower();
 
                 result = query.OrderBy(sortExpression)
                     .Skip(datatableDTO.Start)

@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="@Url.Content(BIA.Net.Common.BIASettingsReader.UrlStatic + "/ZZCompanyNameZZ.Net/V2.0/img/company.ico")" type="image/vnd.microsoft.icon">
     <title>@ViewBag.Title - @BIA.Net.Common.BIASettingsReader.ProjectTitle</title>
 
-    @Styles.Render(BIA.Net.Common.BIASettingsReader.UrlStatic + "/BIA.Net/V2.0/css/BIABundle.css")
+    @Styles.Render(BIA.Net.Common.BIASettingsReader.UrlStatic + "/BIA.Net/V2.1/css/BIABundle.css")
     @Styles.Render(BIA.Net.Common.BIASettingsReader.UrlStatic + "/" + BIA.Net.Common.BIASettingsReader.CompanyName + ".Net/V2.0/css/BIABundle.min.css")
     @Styles.Render(BIA.Net.Common.BIASettingsReader.UrlStatic + "/" + BIA.Net.Common.BIASettingsReader.CompanyName + "." + BIA.Net.Common.BIASettingsReader.DivisionName + ".Net/V2.0/css/BIABundle.min.css")
 
@@ -143,7 +143,18 @@
         </div>
     </div>
 
-    <script src="@Url.Content(BIA.Net.Common.BIASettingsReader.UrlStatic + "/BIA.Net/V2.0/js/BIAbundle.min.js")"></script>
+@if (HttpContext.Current?.IsDebuggingEnabled == true)
+{
+    @*use those 2 lines to debug the BIA.js package*@
+    <script src="@Url.Content(BIA.Net.Common.BIASettingsReader.UrlStatic + "/BIA.Net/V2.1/js/BIAbundleDebug.js")"></script>
+    <script src="@Url.Content(BIA.Net.Common.BIASettingsReader.UrlStatic + "/BIA.Net/V2.1/js/BIA.js")"></script>
+}
+else
+{
+    @*use this line to run in production*@
+    <script src="@Url.Content(BIA.Net.Common.BIASettingsReader.UrlStatic + "/BIA.Net/V2.1/js/BIAbundle.min.js")"></script>
+}
+
     @Html.Partial("BIA.Net/_Localization")
     @Scripts.Render("~/bundles/ProjectJs")
     @Html.Partial("_footerLayout")
@@ -151,13 +162,13 @@
 
     <div id="BiaNetMainPageScript">
         <script>
-                $(document).ready(function ($) {
-                    BIA.Net.Design.Look.InitThemeAndMode("@("BIANetTheme" + PageData["theme"])",
-                        @((ViewBag.FullScreen==true).ToString().ToLower()),
-                        @((ViewBag.HiddeFullScreenIcon == true).ToString().ToLower()),
-                        @((ViewBag.HiddeBreadCrumb == true).ToString().ToLower())
-                    );
-                });
+            $(document).ready(function ($) {
+                BIA.Net.Design.Look.InitThemeAndMode("@("BIANetTheme" + PageData["theme"])",
+                    @((ViewBag.FullScreen==true).ToString().ToLower()),
+                    @((ViewBag.HiddeFullScreenIcon == true).ToString().ToLower()),
+                    @((ViewBag.HiddeBreadCrumb == true).ToString().ToLower())
+                );
+            });
         </script>
 
         @Html.Partial("BIA.Net/_Navigation")

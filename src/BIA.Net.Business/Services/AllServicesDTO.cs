@@ -4,6 +4,7 @@
 
 namespace BIA.Net.Business.Services
 {
+    using BIA.Net.Business.Specifications;
     using BIA.Net.Common.Helpers;
     using BIA.Net.DataTable.DTO;
     using System;
@@ -17,11 +18,6 @@ namespace BIA.Net.Business.Services
     /// </summary>
     public static class AllServicesDTO
     {
-        /// <summary>
-        /// The service container
-        /// </summary>
-        private static Dictionary<Type, Type> MappingDTOtoIService = new Dictionary<Type, Type>();
-
 
         /// <summary>
         /// Enum for Acces mode
@@ -60,6 +56,17 @@ namespace BIA.Net.Business.Services
             return BIAUnity.RootContainer.Resolve(mapperType.ServiceType);
 
         }
+        /// <summary>
+        /// Gets the service corresponding to the DTO.
+        /// </summary>
+        /// <typeparam name="DTO">The type of to.</typeparam>
+        /// <returns>the service corresponding to the DTO</returns>
+        public static object GetSpecBuilder<CTO>()
+        {
+            Type specificationType = MapperServiceDTO.SpecBuilderMapping[typeof(CTO)];
+            return BIAUnity.RootContainer.Resolve(specificationType);
+
+        }
 
         /// <summary>
         /// Gets all dto of a type based on acces right.
@@ -70,6 +77,19 @@ namespace BIA.Net.Business.Services
         public static List<DTO> GetAll<DTO>(ServiceAccessMode smode = ServiceAccessMode.Read)
         {
             return ((dynamic)GetService<DTO>()).GetAll(smode);
+        }
+
+        /// <summary>
+        /// Gets list of DTO filtered based on acces right.
+        /// </summary>
+        /// <typeparam name="DTO">The type of dto.</typeparam>
+        /// <typeparam name="CTO">The type of cto.</typeparam>
+        /// <param name="advancedFilter">The advanced Filter.</param>
+        /// <param name="smode">The smode.</param>
+        /// <returns>all dto of a type based on acces right</returns>
+        public static List<DTO> GetAdvancedFiltered<DTO,CTO>(CTO advancedFilter, ServiceAccessMode smode = ServiceAccessMode.Read)
+        {
+            return ((dynamic)GetService<DTO>()).GetAdvancedFiltered(advancedFilter, smode);
         }
 
         /// <summary>
@@ -85,6 +105,9 @@ namespace BIA.Net.Business.Services
             return ((dynamic)GetService<DTO>()).GetAllWhere(where, smode);
         }
 
+
+
+
         /// <summary>
         /// Returns a filter object list to be displayed in a paginated list.
         /// </summary>
@@ -95,11 +118,47 @@ namespace BIA.Net.Business.Services
         /// <param name="totalResultsCount">total results count</param>
         /// <param name="where">custom filter</param>
         /// <param name="smode"><see cref="ServiceAccessMode"/></param>
+        /// <param name="mappingCol2Entity">Mapping if Entity name differ of Col name</param>
         /// <returns>list of objects</returns>
-        public static List<DTO> GetAllWhereForAjaxDataTable<DTO, Entity>(DataTableAjaxPostDTO datatableDTO, out int filteredResultsCount, out int totalResultsCount, Expression<Func<Entity, bool>> where = default(Expression<Func<Entity, bool>>), ServiceAccessMode smode = ServiceAccessMode.Read)
+        public static List<DTO> GetAllWhereForAjaxDataTable<DTO, Entity>(DataTableAjaxPostDTO datatableDTO, out int filteredResultsCount, out int totalResultsCount, Expression<Func<Entity, bool>> where = default(Expression<Func<Entity, bool>>), ServiceAccessMode smode = ServiceAccessMode.Read, Dictionary<string, string> mappingCol2Entity = null)
         {
-            return ((dynamic)GetService<DTO>()).GetAllWhereForAjaxDataTable(datatableDTO, out filteredResultsCount, out totalResultsCount, where, smode);
+            return ((dynamic)GetService<DTO>()).GetAllWhereForAjaxDataTable(datatableDTO, out filteredResultsCount, out totalResultsCount, where, smode, mappingCol2Entity);
         }
+
+        /// <summary>
+        /// Returns a filter object list to be displayed in a paginated list filtered by the spec, global search and header filter.
+        /// </summary>
+        /// <typeparam name="DTO">The type of the dto.</typeparam>
+        /// <typeparam name="Entity">The type of the entity.</typeparam>
+        /// <param name="datatableDTO"><see cref="DataTableAjaxPostDTO"/> </param>
+        /// <param name="filteredResultsCount">filtered results count</param>
+        /// <param name="totalResultsCount">total results count</param>
+        /// <param name="where">custom filter</param>
+        /// <param name="smode"><see cref="ServiceAccessMode"/></param>
+        /// <param name="mappingCol2Entity">Mapping if Entity name differ of Col name</param>
+        /// <returns>list of objects</returns>
+        public static List<DTO> GetAdvancedFilteredForAjaxDataTable<DTO, CTO>(DataTableAjaxPost<CTO> datatableDTO, out int filteredResultsCount, out int totalResultsCount, ServiceAccessMode smode = ServiceAccessMode.Read, Dictionary<string, string> mappingCol2Entity = null)
+        {
+            return ((dynamic)GetService<DTO>()).GetAdvancedFilteredForAjaxDataTable(datatableDTO, out filteredResultsCount, out totalResultsCount, smode, mappingCol2Entity);
+        }
+
+        /// <summary>
+        /// Returns a filter object list to be displayed in a paginated list filtered by the spec, global search and header filter.
+        /// </summary>
+        /// <typeparam name="DTO">The type of the dto.</typeparam>
+        /// <typeparam name="Entity">The type of the entity.</typeparam>
+        /// <param name="datatableDTO"><see cref="DataTableAjaxPostDTO"/> </param>
+        /// <param name="filteredResultsCount">filtered results count</param>
+        /// <param name="totalResultsCount">total results count</param>
+        /// <param name="where">custom filter</param>
+        /// <param name="smode"><see cref="ServiceAccessMode"/></param>
+        /// <param name="mappingCol2Entity">Mapping if Entity name differ of Col name</param>
+        /// <returns>list of objects</returns>
+        public static List<DTO> GetFilteredForAjaxDataTable<DTO>(DataTableAjaxPostDTO datatableDTO, out int filteredResultsCount, out int totalResultsCount, ServiceAccessMode smode = ServiceAccessMode.Read, Dictionary<string, string> mappingCol2Entity = null)
+        {
+            return ((dynamic)GetService<DTO>()).GetFilteredForAjaxDataTable(datatableDTO, out filteredResultsCount, out totalResultsCount, smode, mappingCol2Entity);
+        }
+
 
         /// <summary>
         /// Finds the DTO by specifing key values, acces mode, and add include.
