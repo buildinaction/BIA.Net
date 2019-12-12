@@ -97,6 +97,7 @@
     <None Include="BIA.Net.NuGet\BIA.Net.Design\BIA.Net.Design.2.0.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Design\BIA.Net.Design.2.0.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Design\BIA.Net.Design.2.0.2.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.Design\BIA.Net.Design.2.1.0.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Design\BIA.Net.Design.2.1.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog.DT\BIA.Net.Dialog.DT.1.8.0.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Dialog.DT\BIA.Net.Dialog.DT.1.8.0.2.nupkg" />
@@ -150,6 +151,7 @@
     <None Include="BIA.Net.NuGet\BIA.Net.MVC\BIA.Net.MVC.2.0.0.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.MVC\BIA.Net.MVC.2.0.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.MVC\BIA.Net.MVC.2.0.1.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.MVC\BIA.Net.MVC.2.1.0.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.MVC\BIA.Net.MVC.2.1.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Resource\BIA.Net.Resource.2.0.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Resource\BIA.Net.Resource.2.1.0.nupkg" />

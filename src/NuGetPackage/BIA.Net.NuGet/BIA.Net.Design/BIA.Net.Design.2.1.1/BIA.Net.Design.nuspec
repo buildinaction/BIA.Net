@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>BIA.Net.Design</id>
+    <version>2.1.1</version>
+    <title>BIA.Net.Design</title>
+    <authors>BIA Team (Leader: Gwenael Fillon)</authors>
+    <owners>BIA</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">GPL-3.0-or-later</license>
+    <licenseUrl>https://licenses.nuget.org/GPL-3.0-or-later</licenseUrl>
+    <icon>LogoBIA.png</icon>
+    <projectUrl>https://github.com/BIAdotNet/BIA.Net</projectUrl>
+    <description>Common design for MVC Application</description>
+    <copyright>Copyright © BIA 2018</copyright>
+    <tags>.Net Design</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+</package>

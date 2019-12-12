@@ -53,6 +53,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Design", "BIA.Net.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Resource", "BIA.Net.Resource\BIA.Net.Resource.csproj", "{C282DA47-AF18-460B-809A-490944EAF7A3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{2B7ED733-A82F-46FD-942A-DD6B11632C5B}"
+	ProjectSection(SolutionItems) = preProject
+		Images\LogoBIA.png = Images\LogoBIA.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

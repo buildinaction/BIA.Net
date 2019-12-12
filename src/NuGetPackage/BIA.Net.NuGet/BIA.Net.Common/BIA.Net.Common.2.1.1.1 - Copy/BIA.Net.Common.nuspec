@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>BIA.Net.Common</id>
+    <version>2.1.1.1</version>
+    <title>BIA.Net.Common</title>
+    <authors>BIA Team (Leader: Gwenael Fillon)</authors>
+    <owners>BIA</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://github.com/BIAdotNet/BIA.Net</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/BIAdotNet/BIA.Net/master/img/LogoBIA.png</iconUrl>
+    <description>Common class for .Net development of MVC and WebForm application</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright © BIA 2017</copyright>
+    <tags>.Net MVC</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+</package>
