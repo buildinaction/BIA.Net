@@ -1,11 +1,11 @@
 ﻿@model BIA.Net.MVC.ViewModel.View.ViewPopupVM
 
 <ul class="nav-ul">
-    @foreach (var vw in Model.Views.Where(x => x.Id > 0))
+    @foreach (var vw in Model.ViewsICanSee.Where(x => x.Id > 0))
     {
         var vwClass = vw.IsCurrentView ? "currentvw" : "";
         var vwName = vw.IsCurrentView ? $"{vw.Name} ({TextResources.Current})" : vw.Name;
-        vwName = (vw.IsReference && vw.Id != 0) ? $"{vwName} (Site view : {vw.Comment})" : vwName;
+        vwName = (vw.IsReference && vw.Id != 0) ? $"{vwName} (Site view : {vw.Usage})" : vwName;
         vwClass += " dotted";
         <li class="@vwClass">
             <a class="vwButton pb-1" data-toggle="tooltip" data-placement="right" title="@vw.Description">@vwName</a>

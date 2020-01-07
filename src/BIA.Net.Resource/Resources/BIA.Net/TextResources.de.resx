@@ -184,7 +184,7 @@
     <value>Ausgewählt</value>
   </data>
   <data name="PleaseSelect" xml:space="preserve">
-    <value>Bitte wähle ein</value>
+    <value>Bitte wähle ein </value>
   </data>
   <data name="Profile" xml:space="preserve">
     <value>Mein Profil</value>
@@ -304,7 +304,7 @@
     <value>Von</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Beschreibung:</value>
+    <value>Beschreibung</value>
   </data>
   <data name="View_SaveCurrentView" xml:space="preserve">
     <value>Speichern Sie die aktuelle Ansicht als</value>

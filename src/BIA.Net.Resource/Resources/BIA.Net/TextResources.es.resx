@@ -304,7 +304,7 @@
     <value>Usado</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Descripción:</value>
+    <value>Descripción</value>
   </data>
   <data name="View_SaveCurrentView" xml:space="preserve">
     <value>Guardar la vista actual como</value>

@@ -36,13 +36,13 @@
                 <div class="form-group">
                     @Html.T_Label(TextResources.Name, new { @class = "mandatory" })
                     <div class="field">
-                        @Html.TextBoxFor(x => x.NewNameViewSite, new { @class = "form-control" })
+                        @Html.TextBox("NewNameViewSite", "", new { @class = "form-control" })
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.T_Label(TextResources.Description, new { @class = "bmd-label-floating" })
                     <div class="field">
-                        @Html.TextAreaFor(x => x.DescriptionViewSite, new { @class = "form-control" })
+                        @Html.TextArea("DescriptionViewSite", "", new { @class = "form-control" })
                     </div>
                 </div>
             </div>
@@ -57,7 +57,7 @@
                 <div class="form-group">
                     @Html.T_Label($"{TextResources.PleaseSelect} {TextResources.View_View}", new { @class = "mandatory" })
                     <div class="field">
-                        @Html.DropDownListFor(x => x.SiteViewToReplace, @Model.SitesDefaultViews, htmlAttributes: new { @class = "form-control" })
+                        @Html.DropDownList("SiteViewToReplace", @Model.SitesViewsUpdatable, htmlAttributes: new { @class = "form-control" })
                     </div>
                 </div>
             </div>

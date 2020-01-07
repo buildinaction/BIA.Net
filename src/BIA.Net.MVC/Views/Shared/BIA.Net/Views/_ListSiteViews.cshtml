@@ -1,20 +1,20 @@
 ﻿@model BIA.Net.MVC.ViewModel.View.ViewPopupVM
 
 <ul class="nav-ul">
-    @foreach (var vw in Model.SiteViews.Where(x => x.IsReference == true && x.Id > 0))
+    @foreach (var vw in Model.SiteViewsIManage)
     {
         var vwClass = vw.IsCurrentView ? "currentvw" : "";
         var vwName = vw.IsCurrentView ? $"{vw.Name} ({TextResources.Current})" : vw.Name;
-        vwName = (vw.IsReference && vw.Id != 0) ? $"{vwName} (Site view : {vw.Comment})" : vwName;
+        vwName = (vw.IsReference && vw.Id != 0) ? $"{vwName} ({vw.Usage})" : vwName;
         vwClass += " dotted";
         <li class="@vwClass">
             <a class="vwButton pb-1" data-toggle="tooltip" data-placement="right" title="@vw.Description">@vwName</a>
             @if (vw.Id > 0)
             {
-                if (Model.SelectedSite != null && vw.SiteAssignedId.Contains(Model.SelectedSite.Id))
+                if (vw.IsAssignedToThisSite)
                 {
                     <a class="delete-view-to-site fas fa-check-square float-right mt-2 pl-1" style="cursor:pointer" data-id="@vw.Id"></a>
-                    if (vw.SiteViewDefaultId.Contains(Model.SelectedSite.Id))
+                    if (vw.IsDefaultView)
                     {
                         <a class="default-button-active fas fa-eye float-right mt-2 pl-1 delete-default-view-site" style="cursor:pointer; color:blue" data-id="@vw.Id"></a>
                     }

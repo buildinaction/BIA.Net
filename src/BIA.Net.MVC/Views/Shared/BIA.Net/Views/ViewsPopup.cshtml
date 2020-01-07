@@ -42,7 +42,7 @@
                             <div class="form-group">
                                 @Html.T_Label($"{TextResources.PleaseSelect} {TextResources.Site}", new { @class = "bmd-label-floating mandatory" })
                                 <div class="field">
-                                    @Html.DropDownListFor(x => x.SelectedSite.Id, @Model.SitesPossible, htmlAttributes: new { @class = "form-control" })
+                                    @Html.DropDownList("SelectedSite_Id", @Model.SitesPossible, htmlAttributes: new { @class = "form-control" })
                                 </div>
                             </div>
                             <div id="PartialViewSite">
@@ -87,13 +87,13 @@
                                             <div class="form-group">
                                                 @Html.T_Label(TextResources.Name, new { @class = "bmd-label-floating mandatory" })
                                                 <div class="field">
-                                                    @Html.TextBoxFor(x => x.NewNameView, new { @class = "form-control" })
+                                                    @Html.TextBox("NewNameView", "", new { @class = "form-control" })
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 @Html.T_Label(TextResources.Description, new { @class = "bmd-label-floating" })
                                                 <div class="field">
-                                                    @Html.TextAreaFor(x => x.DescriptionView, new { @class = "form-control" })
+                                                    @Html.TextArea("DescriptionView", "", new { @class = "form-control" })
                                                 </div>
                                             </div>
                                         </div>
@@ -108,7 +108,7 @@
                                             <div class="form-group">
                                                 @Html.T_Label($"{TextResources.PleaseSelect} {TextResources.View_View}", new { @class = "bmd-label-floating mandatory" })
                                                 <div class="field">
-                                                    @Html.DropDownListFor(x => x.ViewToReplace, @Model.UserViews, htmlAttributes: new { @class = "form-control" })
+                                                    @Html.DropDownList("ViewToReplace", @Model.UserViewsUpdatable, htmlAttributes: new { @class = "form-control" })
                                                 </div>
                                             </div>
                                         </div>

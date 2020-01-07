@@ -171,7 +171,7 @@ namespace BIA.Net.Business.Services
             // To set if header filter are present in the grid
             foreach (var col in cols)
             {
-                if (!string.IsNullOrWhiteSpace(col.Search.Value))
+                if (!string.IsNullOrWhiteSpace(col.Search?.Value))
                 {
                     Specification<Entity> specificationSearchHeader = new TrueSpecification<Entity>();
                     specificationSearchHeader &= new DirectSpecification<Entity>(LinqEntityBuilder.GetDynamicContains<DTO, Entity>(col.Data, col.Search.Value));
