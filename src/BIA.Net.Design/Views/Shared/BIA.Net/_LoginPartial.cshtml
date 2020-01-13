@@ -30,11 +30,11 @@
                 </div>
             </li>
             <li class="dropdown-submenu pull-left">
-                <a  data-toggle="dropdown" tabindex="-1"><i class="fa fa-caret-left"></i>@TextResources.Theme</a>
+                <a data-toggle="dropdown" tabindex="-1"><i class="fa fa-caret-left"></i>@TextResources.Theme</a>
                 <div class="dropdown-menu">
                     <ul>
-                        <li><a onclick="BIA.Net.Helper.AjaxCall('@Url.Content("~/Common/SetTheme/")', { code: JSON.stringify('Light')})"><i class="fa fa-circle light" aria-hidden="true"></i> Light</a></li>
-                        <li><a onclick="BIA.Net.Helper.AjaxCall('@Url.Content("~/Common/SetTheme/")', { code: JSON.stringify('Dark')})"><i class="fa fa-circle dark" aria-hidden="true"></i> Dark</a></li>
+                        <li><a onclick="BIA.Net.Helper.AjaxCall('@Url.Content("~/Common/SetTheme/")', { code: 'Light'})"><i class="fa fa-circle light" aria-hidden="true"></i> Light</a></li>
+                        <li><a onclick="BIA.Net.Helper.AjaxCall('@Url.Content("~/Common/SetTheme/")', { code: 'Dark'})"><i class="fa fa-circle dark" aria-hidden="true"></i> Dark</a></li>
                     </ul>
                 </div>
             </li>

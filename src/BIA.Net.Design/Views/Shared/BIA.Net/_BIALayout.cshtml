@@ -45,7 +45,16 @@
         <div class="main-navbar">
             <div class="navbar-header" style="overflow: hidden">
                 <a class="navbar-logo" href="@Url.Action("Index", "Home")">
-                    @Html.Raw(File.ReadAllText(Server.MapPath("~/Images/AppIcon.svg")))
+                    @{ 
+                        try
+                        {
+                            @Html.Raw(File.ReadAllText(Server.MapPath("~/Images/AppIcon.svg")))
+                        }
+                        catch(Exception e)
+                        {
+                            TraceManager.Error("AppIcon read error");
+                        }
+                    }
                 </a>
             </div>
             <div class="navbar-header" style="overflow: hidden">

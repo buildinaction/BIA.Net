@@ -172,13 +172,13 @@ CREATE TABLE <# if (!IsSQLCE) {#>[<#=schemaName#>].<#}#>[<#=tableName#>] (
     [<#=Id(prop.Name)#>] <#=prop.ToStoreType()#> <#=WriteIdentity(prop, targetVersion)#> <#=WriteNullable(prop.Nullable)#><#=Helper.DefaultValue(prop)#> <#=(p < entitySet.ElementType.Properties.Count - 1) ? "," : ""#>
 <#
             }
-        }
 #>
 );
 GO
 
 <# 
-    } 
+         }
+   } 
 #>
 -- --------------------------------------------------
 -- Creating all PRIMARY KEY constraints
