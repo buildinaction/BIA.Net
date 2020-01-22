@@ -161,7 +161,11 @@ namespace BIA.Net.Business.Services
                 {
                     if (col.Searchable)
                     {
-                        specificationSearchGlobal |= new DirectSpecification<Entity>(LinqEntityBuilder.GetDynamicContains<DTO, Entity>(col.Data, generalSearch));
+                        Expression<Func<Entity, bool>> expressionCriteria = LinqEntityBuilder.GetDynamicContains<DTO, Entity>(col.Data, generalSearch, mappingCol2Entity);
+                        if (expressionCriteria != null)
+                        {
+                            specificationSearchGlobal |= new DirectSpecification<Entity>(expressionCriteria);
+                        }
                     }
                 }
 
@@ -174,8 +178,12 @@ namespace BIA.Net.Business.Services
                 if (!string.IsNullOrWhiteSpace(col.Search?.Value))
                 {
                     Specification<Entity> specificationSearchHeader = new TrueSpecification<Entity>();
-                    specificationSearchHeader &= new DirectSpecification<Entity>(LinqEntityBuilder.GetDynamicContains<DTO, Entity>(col.Data, col.Search.Value));
-                    currentSpec &= specificationSearchHeader;
+                    Expression<Func<Entity, bool>> expressionCriteria = LinqEntityBuilder.GetDynamicContains<DTO, Entity>(col.Data, col.Search.Value, mappingCol2Entity);
+                    if (expressionCriteria != null)
+                    {
+                        specificationSearchHeader &= new DirectSpecification<Entity>(expressionCriteria);
+                        currentSpec &= specificationSearchHeader;
+                    }
                 }
             }
 

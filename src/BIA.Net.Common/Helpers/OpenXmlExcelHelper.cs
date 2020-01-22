@@ -37,7 +37,6 @@
         private static Cell GetCell(string text, SharedStringTablePart shareStringPart)
         {
             int index = InsertSharedStringItem(text, shareStringPart);
-
             return new Cell
             {
                 CellValue = new CellValue(index.ToString()),
@@ -122,7 +121,7 @@
         /// </summary>
         /// <param name="listSheets">The rows.</param>
         /// <returns>File Byte Array</returns>
-        public static byte[] CreateWorkBook(IDictionary<string, List<Row>> listSheets)
+        public static byte[] CreateWorkBook(IDictionary<string, List<Row>> listSheets, bool useSharedString = true)
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -134,15 +133,19 @@
                     workbookpart.Workbook = new Workbook();
 
                     // Get the SharedStringTablePart. If it does not exist, create a new one.
-                    SharedStringTablePart shareStringPart;
-                    if (workbookpart.GetPartsOfType<SharedStringTablePart>().Count() > 0)
+                    SharedStringTablePart shareStringPart = null;
+                    if (useSharedString)
                     {
-                        shareStringPart = workbookpart.GetPartsOfType<SharedStringTablePart>().First();
+                        if (workbookpart.GetPartsOfType<SharedStringTablePart>().Count() > 0)
+                        {
+                            shareStringPart = workbookpart.GetPartsOfType<SharedStringTablePart>().First();
+                        }
+                        else
+                        {
+                            shareStringPart = workbookpart.AddNewPart<SharedStringTablePart>();
+                        }
                     }
-                    else
-                    {
-                        shareStringPart = workbookpart.AddNewPart<SharedStringTablePart>();
-                    }
+
 
                     // Add Sheets to the Workbook.
                     var sheets = workbookpart.Workbook.AppendChild<Sheets>(new Sheets());
@@ -155,7 +158,7 @@
                             var listCells = new List<Cell>();
                             foreach (var currentCell in currentRow.Elements<Cell>())
                             {
-                                listCells.Add(GetCell(currentCell.InnerText, shareStringPart));
+                                listCells.Add(useSharedString ? GetCell(currentCell.InnerText, shareStringPart) : GetCell(currentCell.InnerText));
                             }
 
                             listRows.Add(new Row(listCells));

@@ -19,7 +19,7 @@ namespace BIA.Net.Business.Helpers
         /// <param name="propertyName"></param>
         /// <param name="val"></param>
         /// <returns></returns>
-        public static Expression<Func<Entity, bool>> GetDynamicContains<DTO, Entity>(string propertyName, string val)
+        public static Expression<Func<Entity, bool>> GetDynamicContains<DTO, Entity>(string propertyName, string val, Dictionary<string, string> mappingCol2Entity)
         {
             // x =>
             var param = Expression.Parameter(typeof(Entity), "x");
@@ -27,8 +27,18 @@ namespace BIA.Net.Business.Helpers
             // x.[propertyName]
             Expression prop;
             Type propertyType;
+
+            propertyName = propertyName.Replace("__", ".");
+
+            if (mappingCol2Entity != null)
+            {
+                mappingCol2Entity.TryGetValue(propertyName, out string entityRemappedName);
+                if (entityRemappedName != null) propertyName = entityRemappedName;
+            }
+
             PrepareProperty<Entity>(propertyName, param, out prop, out propertyType);
 
+            if (propertyType == null) return null;
             if (Nullable.GetUnderlyingType(propertyType) != null)
             {
                 prop = Expression.PropertyOrField(prop, "Value");
@@ -246,7 +256,6 @@ namespace BIA.Net.Business.Helpers
             try
             {
                 prop = param;
-                propertyName = propertyName.Replace("__", ".");
                 propertyType = typeof(Entity);
                 foreach (var property in propertyName.Split('.'))
                 {
@@ -268,7 +277,6 @@ namespace BIA.Net.Business.Helpers
         /// <param name="propertyName"></param>
         public static string DisplayFormat<DTO>(string propertyName)
         {
-            propertyName = propertyName.Replace("__", ".");
             var propertyType = typeof(DTO);
             PropertyInfo propertyInfo = null;
             foreach (var property in propertyName.Split('.'))
