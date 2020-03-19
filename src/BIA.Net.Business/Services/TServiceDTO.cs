@@ -30,6 +30,9 @@ namespace BIA.Net.Business.Services
         where Entity : ObjectRemap, new()
         where DBContext : DbContext, new()
     {
+
+
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TServiceDTO{DTO, Entity, DBContext}"/> class.
         /// </summary>
@@ -147,6 +150,28 @@ namespace BIA.Net.Business.Services
             return GetFilteredForAjaxDataTable(datatableDTO, out filteredResultsCount, out totalResultsCount, smode, mappingCol2Entity, ((ISpecBuilder<Entity, CTO>)AllServicesDTO.GetSpecBuilder<CTO>()).BuildSpec(datatableDTO.AdvancedFilter));
         }
 
+
+        /// <summary>
+        /// Return Expression used for sort
+        /// </summary>
+        /// <param name="colName">name of the column</param>
+        /// <returns>Value expression</returns>
+        protected virtual Expression<Func<Entity, object>> Col2Value(string colName)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Return Expression used for search
+        /// </summary>
+        /// <param name="colName">name of the column</param>
+        /// <param name="search">search value</param>
+        /// <returns>boolean search expression</returns>
+        protected virtual Expression<Func<Entity, bool>> Col2Search(string colName, string search)
+        {
+            return null;
+        }
+
         public virtual List<DTO> GetFilteredForAjaxDataTable(DataTableAjaxPostDTO datatableDTO, out int filteredResultsCount, out int totalResultsCount, ServiceAccessMode smode = ServiceAccessMode.Read, Dictionary<string, string> mappingCol2Entity = null, Specification<Entity> currentSpec = null)
         {
             if (currentSpec == null) currentSpec = new TrueSpecification<Entity>();
@@ -161,7 +186,12 @@ namespace BIA.Net.Business.Services
                 {
                     if (col.Searchable)
                     {
-                        Expression<Func<Entity, bool>> expressionCriteria = LinqEntityBuilder.GetDynamicContains<DTO, Entity>(col.Data, generalSearch, mappingCol2Entity);
+                        Expression<Func<Entity, bool>> expressionCriteria = Col2Search(col.Data, generalSearch);
+
+                        if (expressionCriteria == null)
+                        {
+                            expressionCriteria = LinqEntityBuilder.GetDynamicContains<DTO, Entity>(col.Data, generalSearch, mappingCol2Entity);
+                        }
                         if (expressionCriteria != null)
                         {
                             specificationSearchGlobal |= new DirectSpecification<Entity>(expressionCriteria);
@@ -187,7 +217,7 @@ namespace BIA.Net.Business.Services
                 }
             }
 
-            return GetAllWhereForAjaxDataTable(datatableDTO, out filteredResultsCount, out totalResultsCount, currentSpec.SatisfiedBy(), smode, mappingCol2Entity).ToList();
+            return GetAllWhereForAjaxDataTable(datatableDTO, out filteredResultsCount, out totalResultsCount, currentSpec.SatisfiedBy(), smode, mappingCol2Entity);
         }
 
         /// <summary>
@@ -237,9 +267,24 @@ namespace BIA.Net.Business.Services
                     if (entityRemappedName != null) entityName = entityRemappedName;
                 }
 
-                string sortExpression = entityName + " " + datatableDTO.Order.First().Dir.ToLower();
+                //string sortExpression = entityName + " " + datatableDTO.Order.First().Dir.ToLower();
+                IQueryable<Entity> queryOrdered = null;
 
-                result = query.OrderBy(sortExpression)
+
+                Expression<Func<Entity, object>> col2Value = Col2Value(entityName);
+                if (col2Value != null)
+                {
+                    queryOrdered = query.OrderByWithDirection(col2Value, datatableDTO.Order.First().Dir.ToLower() == "desc");
+                }
+
+
+                if (queryOrdered == null)
+                {
+                    string sortExpression = entityName + " " + datatableDTO.Order.First().Dir.ToLower();
+                    queryOrdered = query.OrderBy(sortExpression);
+                }
+
+                result = queryOrdered
                     .Skip(datatableDTO.Start)
                     .Take(datatableDTO.Length)
                     .Select(GetSelectorExpression()).ToList();
