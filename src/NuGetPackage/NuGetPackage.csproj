@@ -69,6 +69,8 @@
     <None Include="BIA.Net.NuGet\BIA.Net.Business\BIA.Net.Business.2.1.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Business\BIA.Net.Business.2.1.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Business\BIA.Net.Business.2.1.2.1.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.Business\BIA.Net.Business.2.1.2.2.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.Business\BIA.Net.Business.2.1.2.3.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Business\BIA.Net.Business.2.1.2.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Common\BIA.Net.Common.1.7.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Common\BIA.Net.Common.1.7.2.nupkg" />

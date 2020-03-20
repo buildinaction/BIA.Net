@@ -208,7 +208,12 @@ namespace BIA.Net.Business.Services
                 if (!string.IsNullOrWhiteSpace(col.Search?.Value))
                 {
                     Specification<Entity> specificationSearchHeader = new TrueSpecification<Entity>();
-                    Expression<Func<Entity, bool>> expressionCriteria = LinqEntityBuilder.GetDynamicContains<DTO, Entity>(col.Data, col.Search.Value, mappingCol2Entity);
+                    Expression<Func<Entity, bool>> expressionCriteria = Col2Search(col.Data, col.Search.Value);
+
+                    if (expressionCriteria == null)
+                    {
+                        expressionCriteria = LinqEntityBuilder.GetDynamicContains<DTO, Entity>(col.Data, col.Search.Value, mappingCol2Entity);
+                    }
                     if (expressionCriteria != null)
                     {
                         specificationSearchHeader &= new DirectSpecification<Entity>(expressionCriteria);
