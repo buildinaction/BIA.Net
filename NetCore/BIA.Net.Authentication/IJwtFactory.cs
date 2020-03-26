@@ -14,13 +14,6 @@ namespace BIA.Net.Authentication
     public interface IJwtFactory
     {
         /// <summary>
-        /// Generate an encoded JWT.
-        /// </summary>
-        /// <param name="identity">The identity of the current user.</param>
-        /// <returns>The encoded JWT as string.</returns>
-        Task<string> GenerateEncodedTokenAsync(ClaimsIdentity identity);
-
-        /// <summary>
         /// Generate the identity for a user.
         /// </summary>
         /// <param name="userName">The user name (login).</param>
@@ -30,12 +23,20 @@ namespace BIA.Net.Authentication
         ClaimsIdentity GenerateClaimsIdentity(string userName, int id, IEnumerable<string> roles);
 
         /// <summary>
+        /// Generate an encoded JWT.
+        /// </summary>
+        /// <param name="identity">The identity of the current user.</param>
+        /// <returns>The encoded JWT as string.</returns>
+        Task<string> GenerateEncodedTokenAsync(ClaimsIdentity identity);
+
+        /// <summary>
         /// Generate a JWT.
         /// </summary>
         /// <param name="identity">The identity of the current user.</param>
-        /// <param name="userInfo">The user info.</param>
-        /// <param name="userProfile">The user profile.</param>
+        /// <param name="additionalInfos">
+        /// The additional information we want to let visible in the token.
+        /// </param>
         /// <returns>The JWT as string.</returns>
-        Task<object> GenerateJwtAsync(ClaimsIdentity identity, object userInfo, object userProfile);
+        Task<object> GenerateJwtAsync(ClaimsIdentity identity, object additionalInfos);
     }
 }

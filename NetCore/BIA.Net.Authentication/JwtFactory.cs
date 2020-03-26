@@ -33,6 +33,14 @@ namespace BIA.Net.Authentication
             ThrowIfInvalidOptions(this.jwtOptions);
         }
 
+        /// <inheritdoc cref="IJwtFactory.GenerateClaimsIdentity"/>
+        public ClaimsIdentity GenerateClaimsIdentity(string userName, int id, IEnumerable<string> roles)
+        {
+            var claims = roles.Select(s => new Claim(ClaimTypes.Role, s)).ToList();
+            claims.Add(new Claim(ClaimTypes.Sid, id.ToString()));
+            return new ClaimsIdentity(new GenericIdentity(userName, "Token"), claims);
+        }
+
         /// <inheritdoc cref="IJwtFactory.GenerateEncodedTokenAsync"/>
         public async Task<string> GenerateEncodedTokenAsync(ClaimsIdentity identity)
         {
@@ -58,33 +66,18 @@ namespace BIA.Net.Authentication
             return encodedJwt;
         }
 
-        /// <inheritdoc cref="IJwtFactory.GenerateClaimsIdentity"/>
-        public ClaimsIdentity GenerateClaimsIdentity(string userName, int id, IEnumerable<string> roles)
-        {
-            var claims = roles.Select(s => new Claim(ClaimTypes.Role, s)).ToList();
-            claims.Add(new Claim(ClaimTypes.Sid, id.ToString()));
-            return new ClaimsIdentity(new GenericIdentity(userName, "Token"), claims);
-        }
-
         /// <inheritdoc cref="IJwtFactory.GenerateJwtAsync"/>
-        public async Task<object> GenerateJwtAsync(ClaimsIdentity identity, object userInfo, object userProfile)
+        public async Task<object> GenerateJwtAsync(ClaimsIdentity identity, object additionalInfos)
         {
             var response = new
             {
-                userInfo,
-                userProfile,
                 token = await this.GenerateEncodedTokenAsync(identity),
                 permissions = identity.Claims.Where(w => w.Type == ClaimTypes.Role).Select(s => s.Value).ToList(),
+                additionalInfos,
             };
 
             return response;
         }
-
-        /// <returns>Date converted to seconds since Unix epoch (Jan 1, 1970, midnight UTC).</returns>
-        private static long ToUnixEpochDate(DateTime date)
-          => (long)Math.Round((date.ToUniversalTime() -
-                               new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero))
-                              .TotalSeconds);
 
         /// <summary>
         /// Throw an exception if a JWT option is not correctly set.
@@ -112,5 +105,11 @@ namespace BIA.Net.Authentication
                 throw new ArgumentNullException(nameof(options), $"The attribute {nameof(options.JtiGenerator)} is null.");
             }
         }
+
+        /// <returns>Date converted to seconds since Unix epoch (Jan 1, 1970, midnight UTC).</returns>
+        private static long ToUnixEpochDate(DateTime date)
+          => (long)Math.Round((date.ToUniversalTime() -
+                               new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero))
+                              .TotalSeconds);
     }
 }
