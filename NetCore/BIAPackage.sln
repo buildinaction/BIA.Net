@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29509.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.ActiveDirectory", "BIA.Net.ActiveDirectory\BIA.Net.ActiveDirectory.csproj", "{BA0F41ED-A931-4C63-8CF9-64BB674EE35D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Authentication", "BIA.Net.Authentication\BIA.Net.Authentication.csproj", "{45EA7A52-BD71-48DD-A403-1156998D2064}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.Specification", "BIA.Net.Specification\BIA.Net.Specification.csproj", "{79975B88-6D0C-4924-92AE-F1FE97ED931A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.Net.QueryOrder", "BIA.Net.QueryOrder\BIA.Net.QueryOrder.csproj", "{E3F43F05-65C1-4CAA-8863-F6033EE6D03A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F84B47CA-0509-477D-BC79-EC6A10E9AA15}"
+	ProjectSection(SolutionItems) = preProject
+		Images\LogoBIA.png = Images\LogoBIA.png
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetPackage", "NuGetPackage\NuGetPackage.csproj", "{F9DAC6A5-BB6A-4DB2-BEAF-59CB09A4025F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BA0F41ED-A931-4C63-8CF9-64BB674EE35D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA0F41ED-A931-4C63-8CF9-64BB674EE35D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA0F41ED-A931-4C63-8CF9-64BB674EE35D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA0F41ED-A931-4C63-8CF9-64BB674EE35D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45EA7A52-BD71-48DD-A403-1156998D2064}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45EA7A52-BD71-48DD-A403-1156998D2064}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45EA7A52-BD71-48DD-A403-1156998D2064}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45EA7A52-BD71-48DD-A403-1156998D2064}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79975B88-6D0C-4924-92AE-F1FE97ED931A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79975B88-6D0C-4924-92AE-F1FE97ED931A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79975B88-6D0C-4924-92AE-F1FE97ED931A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79975B88-6D0C-4924-92AE-F1FE97ED931A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3F43F05-65C1-4CAA-8863-F6033EE6D03A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3F43F05-65C1-4CAA-8863-F6033EE6D03A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3F43F05-65C1-4CAA-8863-F6033EE6D03A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3F43F05-65C1-4CAA-8863-F6033EE6D03A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9DAC6A5-BB6A-4DB2-BEAF-59CB09A4025F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9DAC6A5-BB6A-4DB2-BEAF-59CB09A4025F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9DAC6A5-BB6A-4DB2-BEAF-59CB09A4025F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9DAC6A5-BB6A-4DB2-BEAF-59CB09A4025F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {65561525-77B6-4FE1-8571-FDAC1ED6FC5E}
+	EndGlobalSection
+EndGlobal
