@@ -1,0 +1,32 @@
+﻿@model ZZCompanyNameZZ.ZZProjectNameZZ.Business.DTO.ExampleTable2CompColDTO
+
+@{
+    ViewBag.Title = TextResources.Edit + " " + Html.Translate("ExampleTable2CompCol");
+    ViewBag.htmlFormFieldsAttributes = new { @class = "form-control"};
+}
+
+<h2>@TextResources.Edit @Html.Translate("ExampleTable2CompCol")</h2>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "ExampleTable2FACompColEditForm" + Model.Id, @class = "PreventDuplicateRequest" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+@Html.Partial("_Form", Model)
+    </div>
+}
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" onclick="location.href='@Url.Action("Index")'" class="btn btn-second">@TextResources.Cancel</button>
+        </div>
+        <div class="btn-action">
+            <button onclick="$('#ExampleTable2FACompColEditForm@(Model.Id)').submit();" class="btn btn-main">@TextResources.Save</button>
+        </div>
+    </div>
+}
+

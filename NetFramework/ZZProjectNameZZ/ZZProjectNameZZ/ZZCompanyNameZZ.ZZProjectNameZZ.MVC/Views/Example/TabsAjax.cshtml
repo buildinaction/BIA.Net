@@ -1,0 +1,69 @@
+﻿@model ZZCompanyNameZZ.ZZProjectNameZZ.Business.DTO.SiteDTO
+
+@{
+    ViewBag.Title = AppliResources.ExamplePage + " Tabs Ajax loaded";
+}
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-sm-12" style="color:green" id="Message">
+        Example Tabs Ajax Loaded................................
+    </div>
+</div>
+<ul class="nav nav-pills w-100 row" role="tablist">
+    <li class="nav-item col">
+        <a class="nav-link active" data-toggle="pill" href="#IdTabs1" id="tabProject">Tabs 1</a>
+    </li>
+    <li class="nav-item col">
+        <a class="nav-link" data-toggle="pill" href="#IdTabs2" id="tabAssociatedProject" onclick="LoadTab2();">Tabs 2</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <!-- Tab panes -->
+    <div id="IdTabs1" class="tab-pane active">
+        <div id="DivTab1" style="min-height: 350px;">
+
+        </div>
+    </div>
+    <div id="IdTabs2" class="tab-pane fade">
+        <div id="DivTab2" style="min-height: 420px;">
+
+        </div>
+    </div>
+</div>
+
+
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" class="btn btn-second" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+                Tooltip on top
+            </button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn1" class="btn btn-second">@TextResources.Cancel</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn2" class="btn btn-main">@TextResources.Save</button>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    <script  type="text/javascript">
+        var Tab2loaded = false;
+        function LoadTab2() {
+            if (!Tab2loaded) {
+                BIA.Net.Dialog.ChangeContent("#DivTab2", "@Url.Action("_Tab2")")
+                Tab2loaded = true;
+            }
+        }
+        $(document).ready(function () {
+            BIA.Net.Dialog.ChangeContent("#DivTab1", "@Url.Action("_Tab1")")
+        });
+    </script>
+
+}

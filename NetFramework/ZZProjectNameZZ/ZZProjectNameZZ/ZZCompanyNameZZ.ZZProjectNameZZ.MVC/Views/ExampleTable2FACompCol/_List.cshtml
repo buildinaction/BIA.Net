@@ -1,0 +1,23 @@
+﻿@model IEnumerable<ZZCompanyNameZZ.ZZProjectNameZZ.Business.DTO.ExampleTable2CompColDTO>
+    
+    <table class="dataTable stripe table @*rowselectable*@"  id="ExampleTable2FACompColTable">
+        <thead>
+            <tr>
+                <th>
+                    @Html.T_DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.T_DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.T_DisplayNameFor(model => model.Site)
+                </th>
+                <th>
+                    @Html.T_DisplayNameFor(model => model.ComputedCol)
+                </th>
+                <th class="biaListColAction">@TextResources.Actions</th>
+            </tr>
+        </thead>
+    <tbody></tbody>
+    
+    </table>

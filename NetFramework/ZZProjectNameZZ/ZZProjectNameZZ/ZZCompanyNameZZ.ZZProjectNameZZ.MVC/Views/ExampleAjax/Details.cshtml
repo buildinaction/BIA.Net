@@ -1,0 +1,25 @@
+﻿@model ZZCompanyNameZZ.ZZProjectNameZZ.Business.DTO.ExampleTable3DTO
+
+@{
+    ViewBag.Title = TextResources.Details + " " + Html.Translate("ExampleTable3");
+    ViewBag.htmlFormFieldsAttributes = new { @class = "form-control", @disabled = "disabled"};
+    ViewBag.IsReadOnly = true;
+}
+
+<h2>@TextResources.Details @Html.Translate("ExampleTable3")</h2>
+
+    <div class="form-horizontal">
+@Html.Partial("_Form", Model)
+    </div>
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" onclick="location.href='@Url.Action("Index")'" class="btn btn-second">@TextResources.Cancel</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" onclick="location.href='@Url.Action("Edit", new { id = Model.Id })'" class="btn btn-main">@TextResources.Edit</button>
+        </div>
+    </div>
+}
+

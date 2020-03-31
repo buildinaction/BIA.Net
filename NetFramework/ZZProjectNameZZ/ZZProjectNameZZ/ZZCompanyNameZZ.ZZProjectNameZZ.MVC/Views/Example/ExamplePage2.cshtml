@@ -1,0 +1,151 @@
+﻿@model ZZCompanyNameZZ.ZZProjectNameZZ.Business.DTO.SiteDTO
+
+@{
+    ViewBag.Title = AppliResources.ExamplePage + " 2";
+}
+<h2>@ViewBag.Title</h2>
+
+@Html.Script(
+@<script type="text/javascript">
+     $(document).ready(function () {
+         $("#Message")[0].innerHTML = "Js Code insert in page with HtmlHelper";
+     });
+</script>
+ )
+ <div class="row">
+     <div class="col-sm-12" style="color:green" id="Message">
+         Example Page 2 ................................
+     </div>
+ </div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="bmd-label-floating">TextBox1</label>
+            <input class="form-control" type="text" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="bmd-label-floating">Date</label>
+            <input class="form-control calendarPicker" type="text" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="bmd-label-floating">DropDownList1</label>
+            <select class="form-control">
+                <option></option>
+                <option>Item1</option>
+                <option>Item2</option>
+                <option>Item3</option>
+                <option>Item4</option>
+            </select>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="bmd-label-floating">MyDecimal</label>
+            <input class="form-control" pattern="^\d*(\@System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberMyDecimalSeparator\d{0,2})?$" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="bmd-label-floating">DropDownList2</label>
+            <select class="form-control">
+                <option value="No">@TextResources.Yes</option>
+                <option value="Yes">@TextResources.No</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="bmd-label-floating">Multiselect</label>
+            <div>
+                @Html.MultiselectFor(model => model.MembersIds, (IEnumerable<SelectListItem>)ViewBag.MembersIds, null)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="bmd-label-floating">Text area</label>
+            <textarea class="form-control" rows="5"></textarea>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="bmd-label-floating">MultiSelect2Lists</label>
+            <div>
+                @Html.Multiselect2ListsFor(model => model.Members, (IEnumerable<SelectListItem>)ViewBag.MembersIds, null)
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <label class="bmd-label-floating">CheckBox</label>
+        <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider">
+                <div class="slider-text">ON</div>
+                <div class="slider-text">OFF</div>
+            </span>
+        </label>
+    </div>
+</div>
+<div class="row">
+    <div class="btn-action">
+        <button type="button" class="btn btn-second pull-right">Bouton secondaire</button>
+    </div>
+    <div class="btn-action">
+        <button type="button" class="btn btn-main pull-right">Bouton principal</button>
+    </div>
+</div>
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" id="btn1" class="btn btn-second">@TextResources.Cancel</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn2" class="btn btn-main">@TextResources.Save</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn1" class="btn btn-second">@TextResources.Cancel</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn2" class="btn btn-main">@TextResources.Save</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn1" class="btn btn-second">@TextResources.Cancel</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn2" class="btn btn-main">@TextResources.Save</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn1" class="btn btn-second">@TextResources.Cancel</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn2" class="btn btn-main">@TextResources.Save</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn1" class="btn btn-second">@TextResources.Cancel</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn2" class="btn btn-main">@TextResources.Save</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn1" class="btn btn-second">@TextResources.Cancel</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn2" class="btn btn-main">@TextResources.Save</button>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+
+}

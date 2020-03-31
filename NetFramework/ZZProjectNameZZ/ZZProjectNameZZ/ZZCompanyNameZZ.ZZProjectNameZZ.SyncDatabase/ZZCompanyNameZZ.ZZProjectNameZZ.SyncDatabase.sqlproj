@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>ZZCompanyNameZZ.ZZProjectNameZZ.SyncDatabase</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{cb946115-45ec-4e1b-8eaf-b299753f9013}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>ZZCompanyNameZZ.ZZProjectNameZZ.SyncDatabase</RootNamespace>
+    <AssemblyName>ZZCompanyNameZZ.ZZProjectNameZZ.SyncDatabase</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <Recovery>SIMPLE</Recovery>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!-- VS10 without SP1 will not have VisualStudioVersion set, so do that here -->
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <!-- Default to the v10.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Scmp" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\LoadTableParam" />
+    <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="dbo\Functions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scmp\0-Dev-Model2DBDev.scmp" />
+    <None Include="Scmp\1-Delivery-DBDev2Model.scmp" />
+    <None Include="Scmp\POSTSQL_To_DEV.scmp" />
+    <None Include="SyncDatabase.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Script.PreSqlPackage.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Scripts\LoadTableParam\insert_update_MemberRole.sql" />
+    <None Include="Scripts\LoadTableParam\insert_update_Version.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment1.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="Script.PreDeployment1.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\Version.sql" />
+    <Build Include="dbo\Tables\Site.sql" />
+    <Build Include="dbo\Tables\MemberRoleMember.sql" />
+    <Build Include="dbo\Tables\MemberRole.sql" />
+    <Build Include="dbo\Tables\Member.sql" />
+    <Build Include="dbo\Tables\User.sql" />
+    <Build Include="dbo\Stored Procedures\GetExampleUsersByCompany.sql" />
+    <Build Include="dbo\Tables\ExampleTable3ExampleTable1.sql" />
+    <Build Include="dbo\Tables\ExampleTable3.sql" />
+    <Build Include="dbo\Tables\ExampleTable2.sql" />
+    <Build Include="dbo\Tables\ExampleTable1.sql" />
+    <Build Include="dbo\Tables\View.sql" />
+    <Build Include="dbo\Tables\UserViews.sql" />
+    <Build Include="dbo\Tables\SiteViews.sql" />
+    <Build Include="dbo\Functions\IsUpperVersion.sql" />
+    <Build Include="dbo\Functions\IsLowerVersion.sql" />
+  </ItemGroup>
+</Project>

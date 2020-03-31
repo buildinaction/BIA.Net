@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<parameters>
+  <parameter name="AppPool" defaultValue="ASP.NET 4.0">
+    <parameterEntry kind="DeploymentObjectAttribute" scope="application" match="applicationPool/@applicationPool" />
+  </parameter>
+</parameters>

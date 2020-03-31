@@ -1,0 +1,45 @@
+﻿@model ZZCompanyNameZZ.ZZProjectNameZZ.Business.DTO.MemberDTO
+
+@{
+    ViewBag.Title = TextResources.Create + " " + TextResources.Member;
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "MemberCreateForm", @class = "PreventDuplicateRequest" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.SiteId)
+    
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.T_LabelFor(model => model.User, htmlAttributes: new { @class = "bmd-label-floating mandatory" })
+            <div class="field">
+                @Html.DropDownListFor(model => model.UserId, (IEnumerable<SelectListItem>)ViewBag.UserDTOId, htmlAttributes: new { @class = "form-control", @style= "display: inline;width: calc(100% - 40px);" })
+                <img src="~/Images/Refresh-icon.png" onclick="BIA.Net.Dialog.DoActionAndRefresh($(this), '@Url.Action("RefreshUsersFromAD", "Common")')">
+                @Html.ValidationMessageFor(model => model.UserId, @TextResources.PleaseSelect + Html.T_DisplayNameFor(m => m.User ) + ".", new { @class = "text-danger bmd-help" })
+            </div>
+        </div> 
+
+        <div class="form-group">
+            @Html.T_LabelFor(model => model.MemberRole, htmlAttributes: new { @class = "bmd-label-floating" })
+            <div class="field">
+                @Html.CheckBoxListFor(model => model.MemberRoleIds, (IEnumerable<SelectListItem>)ViewBag.MemberRoleDTOIds, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.MemberRoleIds, @TextResources.PleaseSelect + Html.T_DisplayNameFor(m => m.MemberRole ) + ".", new { @class = "text-danger bmd-help" })
+            </div>
+        </div> 
+    </div>
+}
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" onclick="location.href='@Url.Action("Edit", "Site", new { id = Model.SiteId })'" class="btn btn-second">@TextResources.Cancel</button>
+        </div>
+        <div class="btn-action">
+            <button onclick="$('#MemberCreateForm').submit();" class="btn btn-main">@TextResources.Create</button>
+        </div>
+    </div>
+}

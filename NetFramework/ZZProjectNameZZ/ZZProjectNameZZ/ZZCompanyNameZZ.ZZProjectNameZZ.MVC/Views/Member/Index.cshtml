@@ -1,0 +1,56 @@
+﻿@model IEnumerable<ZZCompanyNameZZ.ZZProjectNameZZ.Business.DTO.MemberDTO>
+
+@{
+    ViewBag.Title = TextResources.ListOf + " " + TextResources.Member + "s";
+}
+
+<!-- start Sidebar -->
+<div class="biaList">
+    <div class="biaListContainer">
+        <div class="biaListFilter">
+            <div class="w-100 mb-4">
+                <a class="btn btn-filterbox mb-0 biaListFilter-toggle-cross">
+                    <div class="svgIcon cross-filter"></div>
+                </a>
+                <h3 class="align-middle d-inline">@TextResources.Filters</h3>
+            </div>
+            <div id="MemberFilterContent"></div>
+        </div>
+        <!-- end Sidebar -->
+        <div class="biaListDisplay">
+            <div class="row">
+                <div class="col-md-6">
+                    <a Id="MemberFilterButton" class="btn align-top btn-filterbox empty biaListFilter-toggle" data-toggle="tooltip" data-target="" data-placement="bottom" title="@TextResources.Filters">
+                        <div class="svgIcon filter-box"><span class="badge badge-danger d-none"></span></div>
+                    </a>
+                    <h2 class="titlePage align-top">@TextResources.ListOf @Html.TranslateAndPlurialize("Member")</h2>
+                </div>
+                <div class="col dt-buttons-group">
+                    @Html.ActionLink(TextResources.New, "Create", new { }, new { @class = "btn btn-main float-right", BIADialogLink = "Type:Modal" })
+                </div>
+            </div>
+            <div id="MemberList" BIADialogRefresh="OnlyEvent;OnFormValidated:@Url.Action("Create")|@Url.Action("Edit")|@Url.Action("Delete")">
+                @Html.Partial("_List", Model)
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Html.ScriptViewToApply("MemberTable")
+    <script type="text/javascript">
+        BIA.Net.DataTable.InitStandard2(
+            new BIA.Net.DataTable.Parameter({
+                tableId: "MemberTable",
+                urlList: '@Url.Action("_List")',
+                exportButtons: ['csv', 'excel'],
+                advancedfilterId: "MemberFilter",
+                advancedfilterButtonOpenId: "MemberFilterButton",
+                advancedfilterContentPanelId: "MemberFilterContent",
+                advancedfilterUrl: '@Url.Action("AdvancedFilter")',
+                dataTableOptionAdditional: { fixedHeader: { header: true } }
+            })
+        );
+    </script>
+}

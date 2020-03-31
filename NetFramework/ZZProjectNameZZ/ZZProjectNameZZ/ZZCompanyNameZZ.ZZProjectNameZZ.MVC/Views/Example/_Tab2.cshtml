@@ -1,0 +1,27 @@
+﻿@model ZZCompanyNameZZ.ZZProjectNameZZ.Business.DTO.SiteDTO
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="bmd-label-floating">Multiselect</label>
+            <div>
+                @Html.MultiselectFor(model => model.MembersIds, (IEnumerable<SelectListItem>)ViewBag.MembersIds, null)
+            </div>
+        </div>
+    </div>          
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="bmd-label-floating">Text area</label>
+            <textarea class="form-control" rows="3"></textarea>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <label class="bmd-label-floating">MultiSelect2Lists</label>
+            <div>
+                @Html.Multiselect2ListsFor(model => model.Members, (IEnumerable<SelectListItem>)ViewBag.MembersIds, null)
+            </div>
+        </div>
+    </div>
+</div>

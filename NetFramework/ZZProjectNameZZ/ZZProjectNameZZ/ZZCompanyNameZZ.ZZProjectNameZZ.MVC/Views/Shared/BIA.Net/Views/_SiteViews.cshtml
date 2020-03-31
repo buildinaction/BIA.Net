@@ -1,0 +1,71 @@
+﻿@model BIA.Net.MVC.ViewModel.View.ViewPopupVM
+
+<ul class="nav nav-pills row" role="tablist">
+    <li class="nav-item col">
+        <a class="nav-link active" data-toggle="pill" href="#IdSiteView1" id="tabSiteView1">@TextResources.Manage</a>
+    </li>
+    <li class="nav-item col">
+        <a class="nav-link" data-toggle="pill" href="#IdSiteView2" id="tabSiteView2">@TextResources.Create</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <!-- Tab panes -->
+    <div id="IdSiteView1" class="tab-pane active" style="padding: 5px 35px">
+        <div class="form-group">
+            <div class="field" id="ListSiteViews">
+                @Html.Partial("BIA.Net/Views/_ListSiteViews", Model)
+            </div>
+        </div>
+    </div>
+    <!-- Tab panes -->
+    <div id="IdSiteView2" class="tab-pane fade" style="padding: 5px 35px">
+        <div class='dotted-title'>
+            <h3>@TextResources.View_SaveCurrentView</h3>
+            <div class="section-buttons">
+                <input type="button" value="@TextResources.Save" id="saveVwSiteButton" class="btn btn-main float-right" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <div class="field">
+                        @Html.RadioButton("SaveModeSite", "NewView", new { @checked = true, id = "SaveModeNewViewSite", @class = "savemode-viewsite" })
+                        @Html.Label("savemode-viewsite", TextResources.CreateNew, new { @for = "SaveModeNewViewSite", @class = "bmd-label-floating", style = "top:0;" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.T_Label(TextResources.Name, new { @class = "mandatory" })
+                    <div class="field">
+                        @Html.TextBox("NewNameViewSite", "", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.T_Label(TextResources.Description, new { @class = "bmd-label-floating" })
+                    <div class="field">
+                        @Html.TextArea("DescriptionViewSite", "", new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <div class="field">
+                        @Html.RadioButton("SaveModeSite", "ExistingView", new { id = "SaveModeExistingViewSite", @class = "savemode-viewsite" })
+                        @Html.Label("savemode-viewsite", TextResources.ModifyExisting, new { @for = "SaveModeExistingViewSite", @class = "bmd-label-floating", style = "top:0;" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.T_Label($"{TextResources.PleaseSelect} {TextResources.View_View}", new { @class = "mandatory" })
+                    <div class="field">
+                        @Html.DropDownList("SiteViewToReplace", @Model.SitesViewsUpdatable, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        BIA.Net.View.Manage.InitSiteViews('@Model.TableId')
+    });
+</script>

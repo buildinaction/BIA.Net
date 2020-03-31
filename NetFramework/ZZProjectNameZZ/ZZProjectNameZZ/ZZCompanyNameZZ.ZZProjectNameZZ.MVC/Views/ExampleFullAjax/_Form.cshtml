@@ -1,0 +1,92 @@
+﻿@model ZZCompanyNameZZ.ZZProjectNameZZ.Business.DTO.ExampleTable3DTO
+
+
+        <div class="form-group">
+            @Html.T_LabelFor(model => model.Title, htmlAttributes: new { @class = "bmd-label-floating" })
+            <div class="field">
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = (object) ViewBag.htmlFormFieldsAttributes })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger bmd-help" })
+            </div>
+        </div> 
+
+        <div class="form-group">
+            @Html.T_LabelFor(model => model.Description, htmlAttributes: new { @class = "bmd-label-floating" })
+            <div class="field">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = (object) ViewBag.htmlFormFieldsAttributes })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger bmd-help" })
+            </div>
+        </div> 
+
+        <div class="form-group">
+            @Html.T_LabelFor(model => model.Value, htmlAttributes: new { @class = "bmd-label-floating" })
+            <div class="field">
+                @Html.EditorFor(model => model.Value, new { htmlAttributes = Html.MergeDict(new { @pattern=@Html.PatternNumber("short") }, (object) ViewBag.htmlFormFieldsAttributes) })
+                @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger bmd-help" })
+            </div>
+        </div> 
+
+        <div class="form-group">
+            @Html.T_LabelFor(model => model.MyDecimal, htmlAttributes: new { @class = "bmd-label-floating" })
+            <div class="field">
+                @Html.EditorFor(model => model.MyDecimal, new { htmlAttributes = Html.MergeDict(new { @pattern=@Html.PatternNumber("decimal?") }, (object) ViewBag.htmlFormFieldsAttributes) })
+                @Html.ValidationMessageFor(model => model.MyDecimal, "", new { @class = "text-danger bmd-help" })
+            </div>
+        </div> 
+
+        <div class="form-group">
+            @Html.T_LabelFor(model => model.MyDouble, htmlAttributes: new { @class = "bmd-label-floating" })
+            <div class="field">
+                @Html.EditorFor(model => model.MyDouble, new { htmlAttributes = Html.MergeDict(new { @pattern=@Html.PatternNumber("double?") }, (object) ViewBag.htmlFormFieldsAttributes) })
+                @Html.ValidationMessageFor(model => model.MyDouble, "", new { @class = "text-danger bmd-help" })
+            </div>
+        </div> 
+
+        <div class="form-group">
+            @Html.T_LabelFor(model => model.DateOnly, htmlAttributes: new { @class = "bmd-label-floating" })
+            <div class="field">
+                @Html.EditorFor(model => model.DateOnly, new { htmlAttributes = Html.MergeDict(new { @class = "calendarPicker"}, (object) ViewBag.htmlFormFieldsAttributes) })
+                @Html.ValidationMessageFor(model => model.DateOnly, "", new { @class = "text-danger bmd-help" })
+            </div>
+        </div> 
+
+        <div class="form-group">
+            @Html.T_LabelFor(model => model.DateAndTime, htmlAttributes: new { @class = "bmd-label-floating" })
+            <div class="field">
+                @Html.EditorFor(model => model.DateAndTime, new { htmlAttributes = Html.MergeDict(new { @class = "calendarAndTimePicker"}, (object) ViewBag.htmlFormFieldsAttributes) })
+                @Html.ValidationMessageFor(model => model.DateAndTime, "", new { @class = "text-danger bmd-help" })
+            </div>
+        </div> 
+
+        <div class="form-group">
+            @Html.T_LabelFor(model => model.TimeOnly, htmlAttributes: new { @class = "bmd-label-floating" })
+            <div class="field">
+                @Html.EditorFor(model => model.TimeOnly, new { htmlAttributes = Html.MergeDict(new { @class = "timePicker" }, (object) ViewBag.htmlFormFieldsAttributes) })
+                @Html.ValidationMessageFor(model => model.TimeOnly, "", new { @class = "text-danger bmd-help" })
+            </div>
+        </div> 
+
+        <div class="form-group">
+            @Html.T_LabelFor(model => model.MyTimeSpan, htmlAttributes: new { @class = "bmd-label-floating" })
+            <div class="field">
+                @Html.EditorFor(model => model.MyTimeSpan, new { htmlAttributes = Html.MergeDict(new { @class = "timeSpanPicker" }, (object) ViewBag.htmlFormFieldsAttributes) })
+                @Html.ValidationMessageFor(model => model.MyTimeSpan, "", new { @class = "text-danger bmd-help" })
+            </div>
+        </div> 
+
+        <div class="form-group">
+            @Html.T_LabelFor(model => model.TimeSpanOver24H, htmlAttributes: new { @class = "bmd-label-floating" })
+            <div class="field">
+                @Html.EditorFor(model => model.TimeSpanOver24H, new { htmlAttributes = Html.MergeDict(new { @pattern=@Html.PatternNumber("long?") }, (object) ViewBag.htmlFormFieldsAttributes) })
+                @Html.ValidationMessageFor(model => model.TimeSpanOver24H, "", new { @class = "text-danger bmd-help" })
+            </div>
+        </div> 
+
+        <div class="form-group">
+            @Html.T_LabelFor(model => model.Site, htmlAttributes: new { @class = "bmd-label-floating" })
+            <div class="field">
+                @Html.DropDownListFor(model => model.SiteId, (IEnumerable<SelectListItem>)ViewBag.SiteDTOId, "", htmlAttributes : (object) ViewBag.htmlFormFieldsAttributes)
+                @Html.ValidationMessageFor(model => model.SiteId, @TextResources.PleaseSelect + Html.DisplayNameFor(m => m.Site ) + ".", new { @class = "text-danger bmd-help" })
+            </div>
+        </div> 
+
+

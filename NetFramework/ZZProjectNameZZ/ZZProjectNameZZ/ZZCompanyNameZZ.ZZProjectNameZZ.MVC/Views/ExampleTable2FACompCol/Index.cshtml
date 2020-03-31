@@ -1,0 +1,77 @@
+﻿@model IEnumerable<ZZCompanyNameZZ.ZZProjectNameZZ.Business.DTO.ExampleTable2CompColDTO>
+
+@{
+    ViewBag.Title = TextResources.ListOf + " " + Html.TranslateAndPlurialize("ExampleTable2CompCol");
+}
+
+
+
+<div class="biaList">
+    <div class="biaListContainer">
+        <div class="biaListFilter">
+            <div class="w-100 mb-4">
+                <a class="btn btn-filterbox mb-0 biaListFilter-toggle-cross">
+                    <div class="svgIcon cross-filter"></div>
+                </a>
+                <h3 class="align-middle d-inline">Filtres</h3>
+            </div>
+            <div id="ExampleTable2FACompColFilterContent"></div>
+        </div>
+        <div class="biaListDisplay">
+            <div class="row">
+                <div class="col-md-6">
+                    <a Id="ExampleTable2FACompColFilterButton" class="btn align-top btn-filterbox empty biaListFilter-toggle" data-toggle="tooltip" data-target="" data-placement="bottom" title="Filtres">
+                        <div class="svgIcon filter-box"><span class="badge badge-danger d-none"></span></div>
+                    </a>
+                    <h2 class="titlePage align-top">@TextResources.ListOf @Html.TranslateAndPlurialize("ExampleTable2CompCol")</h2>
+                </div>
+                <div class="col dt-buttons-group">
+                    @if (User.IsInRole(Constants.RoleAdmin))
+                    {
+                        @Html.ActionLink(TextResources.New, "Create", new { }, new { @class = "btn btn-main float-right", BIADialogLink = "Type:Modal" })
+                    }
+
+                </div>
+            </div>
+
+            <div BIADialogRefresh="OnlyEvent;OnFormValidated:@Url.Action("Create")|@Url.Action("Edit")|@Url.Action("Delete")">
+                @Html.Partial("_List", new List<ZZCompanyNameZZ.ZZProjectNameZZ.Business.DTO.ExampleTable2CompColDTO>())
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    @Html.ScriptViewToApply("ExampleTable2FACompColTable") 
+    <script type="text/javascript">
+
+        var columns = [
+            { "data": "Title", "searchable":true, "orderable":true },
+            { "data": "Description", "searchable":true, "orderable":true },
+            { "data": "Site__Title", "searchable":true, "orderable":true },
+            { "data": "ComputedCol", "searchable":true, "orderable":true },
+            { "data": "Links" }]
+        BIA.Net.DataTable.InitFullAjax2(
+            new BIA.Net.DataTable.Parameter({
+                tableId: "ExampleTable2FACompColTable",
+                urlList: '@Url.Action("GetListData")',
+                ajax: new BIA.Net.DataTable.ParameterAjax({ columns: columns }),                
+                exportButtons: ['csv', 'excel', {
+                    extend: 'excel',
+                    text: 'excel server side',
+                    action: function (e, dt, node, config) {
+                        BIA.Net.DataTable.serversideExportAction("ExampleTable2FACompColTable", '@Url.Action("GetExcel")');
+                    }
+                }],                advancedfilterId: "ExampleTable2FACompColFilter",
+                advancedfilterButtonOpenId: "ExampleTable2FACompColFilterButton",
+                advancedfilterContentPanelId: "ExampleTable2FACompColFilterContent",
+                advancedfilterUrl: '@Url.Action("AdvancedFilter")',
+                dataTableOptionAdditional: { fixedHeader: { header: true } }
+            })
+        );
+    </script>
+}
+

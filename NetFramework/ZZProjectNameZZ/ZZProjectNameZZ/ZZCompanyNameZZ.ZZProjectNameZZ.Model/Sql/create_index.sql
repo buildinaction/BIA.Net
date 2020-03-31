@@ -1,0 +1,5 @@
+CREATE UNIQUE NONCLUSTERED INDEX [UX_Login] ON [dbo].[User]
+(
+	[Login] ASC
+)
+GO

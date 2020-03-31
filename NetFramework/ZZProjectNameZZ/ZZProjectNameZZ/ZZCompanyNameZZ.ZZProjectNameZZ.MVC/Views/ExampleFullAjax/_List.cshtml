@@ -1,0 +1,44 @@
+﻿@model IEnumerable<ZZCompanyNameZZ.ZZProjectNameZZ.Business.DTO.ExampleTable3DTO>
+    
+    <table class="dataTable stripe table @*rowselectable*@"  id="ExampleFullAjaxTable">
+        <thead>
+        <tr>
+            <th>
+                @Html.T_DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.Value)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.MyDecimal)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.MyDouble)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.DateOnly)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.DateAndTime)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.TimeOnly)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.MyTimeSpan)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.TimeSpanOver24H)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.Site)
+            </th>
+            <th class="biaListColAction">@TextResources.Actions</th>
+        </tr>
+        </thead>
+    <tbody></tbody>
+    
+    </table>

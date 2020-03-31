@@ -1,0 +1,234 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29609.76
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZZCompanyNameZZ.ZZProjectNameZZ.Business", "ZZProjectNameZZ\ZZCompanyNameZZ.ZZProjectNameZZ.Business\ZZCompanyNameZZ.ZZProjectNameZZ.Business.csproj", "{64C5DD38-0D77-4F5C-B9E2-07F17070937D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZZCompanyNameZZ.ZZProjectNameZZ.Model", "ZZProjectNameZZ\ZZCompanyNameZZ.ZZProjectNameZZ.Model\ZZCompanyNameZZ.ZZProjectNameZZ.Model.csproj", "{2FF2F75D-BFB5-4499-BA16-98E2B09D939B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZZCompanyNameZZ.ZZProjectNameZZ.Common", "ZZProjectNameZZ\ZZCompanyNameZZ.ZZProjectNameZZ.Common\ZZCompanyNameZZ.ZZProjectNameZZ.Common.csproj", "{899FDFAB-68A0-4E78-962A-228792B77D9B}"
+EndProject
+Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "ZZCompanyNameZZ.ZZProjectNameZZ.Report", "ZZProjectNameZZ\ZZCompanyNameZZ.ZZProjectNameZZ.Report\ZZCompanyNameZZ.ZZProjectNameZZ.Report.rptproj", "{E86E66CA-45D5-4129-8686-A4AB1D0A522F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZZCompanyNameZZ.ZZProjectNameZZ.Template", "ZZProjectNameZZ\ZZCompanyNameZZ.ZZProjectNameZZ.Template\ZZCompanyNameZZ.ZZProjectNameZZ.Template.csproj", "{579E8638-E72A-465A-8842-A63747E5D287}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZZCompanyNameZZ.ZZProjectNameZZ.WindowsService", "ZZProjectNameZZ\ZZCompanyNameZZ.ZZProjectNameZZ.WindowsService\ZZCompanyNameZZ.ZZProjectNameZZ.WindowsService.csproj", "{863E4423-AB9D-4BD5-A0F9-759A2A2CC6CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZZCompanyNameZZ.ZZProjectNameZZ.Test", "ZZProjectNameZZ\ZZCompanyNameZZ.ZZProjectNameZZ.Test\ZZCompanyNameZZ.ZZProjectNameZZ.Test.csproj", "{9EFF9A30-A067-4B3A-8F76-EF3CFA689262}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 - Front", "01 - Front", "{BC575E3C-1398-41F2-B2C2-69478BBF596A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02 - Business", "02 - Business", "{6E4A334A-642E-4FC5-947A-7A2B0C22319C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03 - Data Model", "03 - Data Model", "{92488C16-2110-48DC-8C11-DAE25922FD83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "10 - Common", "10 - Common", "{FB97FD2E-025B-455B-B252-4DF02125A1FE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "99 - Test", "99 - Test", "{0EE32B3F-E258-4621-BC02-BDF7388D77DB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04 - SSIS", "04 - SSIS", "{81CCBAD5-8B00-4E7B-9C88-93240D9C5EC5}"
+EndProject
+Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "ZZCompanyNameZZ.ZZProjectNameZZ.SSIS.Project1", "ZZProjectNameZZ\ZZCompanyNameZZ.ZZProjectNameZZ.SSIS.Project1\ZZCompanyNameZZ.ZZProjectNameZZ.SSIS.Project1.dtproj", "{44A89100-3431-412C-8D2C-B61D4B223083}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZZCompanyNameZZ.ZZProjectNameZZ.Connector", "ZZProjectNameZZ\ZZCompanyNameZZ.ZZProjectNameZZ.Connector\ZZCompanyNameZZ.ZZProjectNameZZ.Connector.csproj", "{E89AB20F-8EE0-4CFA-A8C8-8D76052A4B7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZZCompanyNameZZ.ZZProjectNameZZ.MVC", "ZZProjectNameZZ\ZZCompanyNameZZ.ZZProjectNameZZ.MVC\ZZCompanyNameZZ.ZZProjectNameZZ.MVC.csproj", "{F3683C0F-ECBD-4B7A-8F53-A575AC0144D0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migration", "Migration", "{C0BF79BE-4A6B-45AD-9240-906796E16B83}"
+	ProjectSection(SolutionItems) = preProject
+		Migration\Migration1_8to1_9.ps1 = Migration\Migration1_8to1_9.ps1
+		Migration\Migration1_9to2_0.ps1 = Migration\Migration1_9to2_0.ps1
+	EndProjectSection
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ZZCompanyNameZZ.ZZProjectNameZZ.SyncDatabase", "ZZProjectNameZZ\ZZCompanyNameZZ.ZZProjectNameZZ.SyncDatabase\ZZCompanyNameZZ.ZZProjectNameZZ.SyncDatabase.sqlproj", "{CB946115-45EC-4E1B-8EAF-B299753F9013}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZZCompanyNameZZ.ZZProjectNameZZ.WebApi", "ZZProjectNameZZ\ZZCompanyNameZZ.ZZProjectNameZZ.WebApi\ZZCompanyNameZZ.ZZProjectNameZZ.WebApi.csproj", "{137278CD-7F7A-4F8B-AFE0-727EE0C4E2CB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		DebugLocal|Any CPU = DebugLocal|Any CPU
+		Development|Any CPU = Development|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{64C5DD38-0D77-4F5C-B9E2-07F17070937D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64C5DD38-0D77-4F5C-B9E2-07F17070937D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64C5DD38-0D77-4F5C-B9E2-07F17070937D}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{64C5DD38-0D77-4F5C-B9E2-07F17070937D}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{64C5DD38-0D77-4F5C-B9E2-07F17070937D}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{64C5DD38-0D77-4F5C-B9E2-07F17070937D}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{64C5DD38-0D77-4F5C-B9E2-07F17070937D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64C5DD38-0D77-4F5C-B9E2-07F17070937D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FF2F75D-BFB5-4499-BA16-98E2B09D939B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FF2F75D-BFB5-4499-BA16-98E2B09D939B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FF2F75D-BFB5-4499-BA16-98E2B09D939B}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FF2F75D-BFB5-4499-BA16-98E2B09D939B}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{2FF2F75D-BFB5-4499-BA16-98E2B09D939B}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FF2F75D-BFB5-4499-BA16-98E2B09D939B}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{2FF2F75D-BFB5-4499-BA16-98E2B09D939B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FF2F75D-BFB5-4499-BA16-98E2B09D939B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{899FDFAB-68A0-4E78-962A-228792B77D9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{899FDFAB-68A0-4E78-962A-228792B77D9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{899FDFAB-68A0-4E78-962A-228792B77D9B}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{899FDFAB-68A0-4E78-962A-228792B77D9B}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{899FDFAB-68A0-4E78-962A-228792B77D9B}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{899FDFAB-68A0-4E78-962A-228792B77D9B}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{899FDFAB-68A0-4E78-962A-228792B77D9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{899FDFAB-68A0-4E78-962A-228792B77D9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E86E66CA-45D5-4129-8686-A4AB1D0A522F}.Debug|Any CPU.ActiveCfg = Debug
+		{E86E66CA-45D5-4129-8686-A4AB1D0A522F}.Debug|Any CPU.Build.0 = Debug
+		{E86E66CA-45D5-4129-8686-A4AB1D0A522F}.Debug|Any CPU.Deploy.0 = Debug
+		{E86E66CA-45D5-4129-8686-A4AB1D0A522F}.DebugLocal|Any CPU.ActiveCfg = DebugLocal
+		{E86E66CA-45D5-4129-8686-A4AB1D0A522F}.DebugLocal|Any CPU.Build.0 = DebugLocal
+		{E86E66CA-45D5-4129-8686-A4AB1D0A522F}.Development|Any CPU.ActiveCfg = DebugLocal
+		{E86E66CA-45D5-4129-8686-A4AB1D0A522F}.Development|Any CPU.Build.0 = DebugLocal
+		{E86E66CA-45D5-4129-8686-A4AB1D0A522F}.Development|Any CPU.Deploy.0 = DebugLocal
+		{E86E66CA-45D5-4129-8686-A4AB1D0A522F}.Release|Any CPU.ActiveCfg = Release
+		{E86E66CA-45D5-4129-8686-A4AB1D0A522F}.Release|Any CPU.Build.0 = Release
+		{E86E66CA-45D5-4129-8686-A4AB1D0A522F}.Release|Any CPU.Deploy.0 = Release
+		{579E8638-E72A-465A-8842-A63747E5D287}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{579E8638-E72A-465A-8842-A63747E5D287}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{579E8638-E72A-465A-8842-A63747E5D287}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{579E8638-E72A-465A-8842-A63747E5D287}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{579E8638-E72A-465A-8842-A63747E5D287}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{579E8638-E72A-465A-8842-A63747E5D287}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{579E8638-E72A-465A-8842-A63747E5D287}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{579E8638-E72A-465A-8842-A63747E5D287}.Release|Any CPU.Build.0 = Release|Any CPU
+		{863E4423-AB9D-4BD5-A0F9-759A2A2CC6CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{863E4423-AB9D-4BD5-A0F9-759A2A2CC6CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{863E4423-AB9D-4BD5-A0F9-759A2A2CC6CB}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{863E4423-AB9D-4BD5-A0F9-759A2A2CC6CB}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{863E4423-AB9D-4BD5-A0F9-759A2A2CC6CB}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{863E4423-AB9D-4BD5-A0F9-759A2A2CC6CB}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{863E4423-AB9D-4BD5-A0F9-759A2A2CC6CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{863E4423-AB9D-4BD5-A0F9-759A2A2CC6CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EFF9A30-A067-4B3A-8F76-EF3CFA689262}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EFF9A30-A067-4B3A-8F76-EF3CFA689262}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EFF9A30-A067-4B3A-8F76-EF3CFA689262}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EFF9A30-A067-4B3A-8F76-EF3CFA689262}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{9EFF9A30-A067-4B3A-8F76-EF3CFA689262}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EFF9A30-A067-4B3A-8F76-EF3CFA689262}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{9EFF9A30-A067-4B3A-8F76-EF3CFA689262}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EFF9A30-A067-4B3A-8F76-EF3CFA689262}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44A89100-3431-412C-8D2C-B61D4B223083}.Debug|Any CPU.ActiveCfg = Development
+		{44A89100-3431-412C-8D2C-B61D4B223083}.Debug|Any CPU.Build.0 = Development
+		{44A89100-3431-412C-8D2C-B61D4B223083}.DebugLocal|Any CPU.ActiveCfg = Development
+		{44A89100-3431-412C-8D2C-B61D4B223083}.DebugLocal|Any CPU.Build.0 = Development
+		{44A89100-3431-412C-8D2C-B61D4B223083}.Development|Any CPU.ActiveCfg = Development
+		{44A89100-3431-412C-8D2C-B61D4B223083}.Development|Any CPU.Build.0 = Development
+		{44A89100-3431-412C-8D2C-B61D4B223083}.Release|Any CPU.ActiveCfg = Development
+		{44A89100-3431-412C-8D2C-B61D4B223083}.Release|Any CPU.Build.0 = Development
+		{E89AB20F-8EE0-4CFA-A8C8-8D76052A4B7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E89AB20F-8EE0-4CFA-A8C8-8D76052A4B7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E89AB20F-8EE0-4CFA-A8C8-8D76052A4B7C}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{E89AB20F-8EE0-4CFA-A8C8-8D76052A4B7C}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{E89AB20F-8EE0-4CFA-A8C8-8D76052A4B7C}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{E89AB20F-8EE0-4CFA-A8C8-8D76052A4B7C}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{E89AB20F-8EE0-4CFA-A8C8-8D76052A4B7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E89AB20F-8EE0-4CFA-A8C8-8D76052A4B7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3683C0F-ECBD-4B7A-8F53-A575AC0144D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3683C0F-ECBD-4B7A-8F53-A575AC0144D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3683C0F-ECBD-4B7A-8F53-A575AC0144D0}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3683C0F-ECBD-4B7A-8F53-A575AC0144D0}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{F3683C0F-ECBD-4B7A-8F53-A575AC0144D0}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3683C0F-ECBD-4B7A-8F53-A575AC0144D0}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{F3683C0F-ECBD-4B7A-8F53-A575AC0144D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3683C0F-ECBD-4B7A-8F53-A575AC0144D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB946115-45EC-4E1B-8EAF-B299753F9013}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB946115-45EC-4E1B-8EAF-B299753F9013}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB946115-45EC-4E1B-8EAF-B299753F9013}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{CB946115-45EC-4E1B-8EAF-B299753F9013}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB946115-45EC-4E1B-8EAF-B299753F9013}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{CB946115-45EC-4E1B-8EAF-B299753F9013}.DebugLocal|Any CPU.Deploy.0 = Debug|Any CPU
+		{CB946115-45EC-4E1B-8EAF-B299753F9013}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB946115-45EC-4E1B-8EAF-B299753F9013}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{CB946115-45EC-4E1B-8EAF-B299753F9013}.Development|Any CPU.Deploy.0 = Debug|Any CPU
+		{CB946115-45EC-4E1B-8EAF-B299753F9013}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB946115-45EC-4E1B-8EAF-B299753F9013}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB946115-45EC-4E1B-8EAF-B299753F9013}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{137278CD-7F7A-4F8B-AFE0-727EE0C4E2CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{137278CD-7F7A-4F8B-AFE0-727EE0C4E2CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{137278CD-7F7A-4F8B-AFE0-727EE0C4E2CB}.DebugLocal|Any CPU.ActiveCfg = Debug|Any CPU
+		{137278CD-7F7A-4F8B-AFE0-727EE0C4E2CB}.DebugLocal|Any CPU.Build.0 = Debug|Any CPU
+		{137278CD-7F7A-4F8B-AFE0-727EE0C4E2CB}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{137278CD-7F7A-4F8B-AFE0-727EE0C4E2CB}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{137278CD-7F7A-4F8B-AFE0-727EE0C4E2CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{137278CD-7F7A-4F8B-AFE0-727EE0C4E2CB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{64C5DD38-0D77-4F5C-B9E2-07F17070937D} = {6E4A334A-642E-4FC5-947A-7A2B0C22319C}
+		{2FF2F75D-BFB5-4499-BA16-98E2B09D939B} = {92488C16-2110-48DC-8C11-DAE25922FD83}
+		{899FDFAB-68A0-4E78-962A-228792B77D9B} = {FB97FD2E-025B-455B-B252-4DF02125A1FE}
+		{E86E66CA-45D5-4129-8686-A4AB1D0A522F} = {BC575E3C-1398-41F2-B2C2-69478BBF596A}
+		{579E8638-E72A-465A-8842-A63747E5D287} = {6E4A334A-642E-4FC5-947A-7A2B0C22319C}
+		{863E4423-AB9D-4BD5-A0F9-759A2A2CC6CB} = {BC575E3C-1398-41F2-B2C2-69478BBF596A}
+		{9EFF9A30-A067-4B3A-8F76-EF3CFA689262} = {0EE32B3F-E258-4621-BC02-BDF7388D77DB}
+		{44A89100-3431-412C-8D2C-B61D4B223083} = {81CCBAD5-8B00-4E7B-9C88-93240D9C5EC5}
+		{E89AB20F-8EE0-4CFA-A8C8-8D76052A4B7C} = {BC575E3C-1398-41F2-B2C2-69478BBF596A}
+		{F3683C0F-ECBD-4B7A-8F53-A575AC0144D0} = {BC575E3C-1398-41F2-B2C2-69478BBF596A}
+		{CB946115-45EC-4E1B-8EAF-B299753F9013} = {92488C16-2110-48DC-8C11-DAE25922FD83}
+		{137278CD-7F7A-4F8B-AFE0-727EE0C4E2CB} = {BC575E3C-1398-41F2-B2C2-69478BBF596A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B251FA7A-9BA2-4E97-924A-58F2AE24FDA0}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 13
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfsdm.eu.labinal.snecma/innovation%20factory
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.Business\\ZZCompanyNameZZ.ZZProjectNameZZ.Business.csproj
+		SccProjectTopLevelParentUniqueName1 = ZZProjectNameZZ.sln
+		SccProjectName1 = ZZProjectNameZZ/ZZCompanyNameZZ.ZZProjectNameZZ.Business
+		SccLocalPath1 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.Business
+		SccProjectUniqueName2 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.Model\\ZZCompanyNameZZ.ZZProjectNameZZ.Model.csproj
+		SccProjectTopLevelParentUniqueName2 = ZZProjectNameZZ.sln
+		SccProjectName2 = ZZProjectNameZZ/ZZCompanyNameZZ.ZZProjectNameZZ.Model
+		SccLocalPath2 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.Model
+		SccProjectUniqueName3 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.Common\\ZZCompanyNameZZ.ZZProjectNameZZ.Common.csproj
+		SccProjectTopLevelParentUniqueName3 = ZZProjectNameZZ.sln
+		SccProjectName3 = ZZProjectNameZZ/ZZCompanyNameZZ.ZZProjectNameZZ.Common
+		SccLocalPath3 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.Common
+		SccProjectUniqueName4 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.Template\\ZZCompanyNameZZ.ZZProjectNameZZ.Template.csproj
+		SccProjectTopLevelParentUniqueName4 = ZZProjectNameZZ.sln
+		SccProjectName4 = ZZProjectNameZZ/ZZCompanyNameZZ.ZZProjectNameZZ.Template
+		SccLocalPath4 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.Template
+		SccProjectUniqueName5 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.WindowsService\\ZZCompanyNameZZ.ZZProjectNameZZ.WindowsService.csproj
+		SccProjectTopLevelParentUniqueName5 = ZZProjectNameZZ.sln
+		SccProjectName5 = ZZProjectNameZZ/ZZCompanyNameZZ.ZZProjectNameZZ.WindowsService
+		SccLocalPath5 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.WindowsService
+		SccProjectUniqueName6 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.Test\\ZZCompanyNameZZ.ZZProjectNameZZ.Test.csproj
+		SccProjectTopLevelParentUniqueName6 = ZZProjectNameZZ.sln
+		SccProjectName6 = ZZProjectNameZZ/ZZCompanyNameZZ.ZZProjectNameZZ.Test
+		SccLocalPath6 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.Test
+		SccProjectUniqueName7 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.Connector\\ZZCompanyNameZZ.ZZProjectNameZZ.Connector.csproj
+		SccProjectTopLevelParentUniqueName7 = ZZProjectNameZZ.sln
+		SccProjectName7 = ZZProjectNameZZ/ZZCompanyNameZZ.ZZProjectNameZZ.Connector
+		SccLocalPath7 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.Connector
+		SccProjectUniqueName8 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.MVC\\ZZCompanyNameZZ.ZZProjectNameZZ.MVC.csproj
+		SccProjectTopLevelParentUniqueName8 = ZZProjectNameZZ.sln
+		SccProjectName8 = ZZProjectNameZZ/ZZCompanyNameZZ.ZZProjectNameZZ.MVC
+		SccLocalPath8 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.MVC
+		SccProjectUniqueName9 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.SSIS.Project1\\ZZCompanyNameZZ.ZZProjectNameZZ.SSIS.Project1.dtproj
+		SccProjectTopLevelParentUniqueName9 = ZZProjectNameZZ.sln
+		SccProjectName9 = ZZProjectNameZZ/ZZCompanyNameZZ.ZZProjectNameZZ.SSIS.Project1
+		SccLocalPath9 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.SSIS.Project1
+		SccProjectUniqueName10 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.SyncDatabase\\ZZCompanyNameZZ.ZZProjectNameZZ.SyncDatabase.sqlproj
+		SccProjectTopLevelParentUniqueName10 = ZZProjectNameZZ.sln
+		SccProjectName10 = ZZProjectNameZZ/ZZCompanyNameZZ.ZZProjectNameZZ.SyncDatabase
+		SccLocalPath10 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.SyncDatabase
+		SccProjectUniqueName11 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.Report\\ZZCompanyNameZZ.ZZProjectNameZZ.Report.rptproj
+		SccProjectTopLevelParentUniqueName11 = ZZProjectNameZZ.sln
+		SccProjectName11 = ZZProjectNameZZ/ZZCompanyNameZZ.ZZProjectNameZZ.Report
+		SccLocalPath11 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.Report
+		SccProjectUniqueName12 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.WebApi\\ZZCompanyNameZZ.ZZProjectNameZZ.WebApi.csproj
+		SccProjectTopLevelParentUniqueName12 = ZZProjectNameZZ.sln
+		SccProjectName12 = ZZProjectNameZZ/ZZCompanyNameZZ.ZZProjectNameZZ.WebApi
+		SccLocalPath12 = ZZProjectNameZZ\\ZZCompanyNameZZ.ZZProjectNameZZ.WebApi
+	EndGlobalSection
+EndGlobal

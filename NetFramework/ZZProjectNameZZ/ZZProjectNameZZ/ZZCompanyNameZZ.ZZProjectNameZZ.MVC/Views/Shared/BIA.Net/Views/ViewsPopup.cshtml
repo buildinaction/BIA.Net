@@ -1,0 +1,128 @@
+﻿@model BIA.Net.MVC.ViewModel.View.ViewPopupVM
+
+<style>
+    .BiaNetDialogPopup.BiaNetDialogDiv.BiaNetContentDiv.ui-dialog-content.ui-widget-content {
+        overflow-y: auto;
+    }
+</style>
+<div id="vw-popup-window">
+    @using (Ajax.BeginForm(new AjaxOptions()))
+    {
+        <h2>@TextResources.View_ViewManagement</h2>
+        <div class="form-horizontal">
+            <div id="vwPopupForm">
+                @Html.AntiForgeryToken()
+                <ul class="nav nav-pills w-100 row" role="tablist">
+                    <li class="nav-item col">
+                        <a class="nav-link" data-toggle="pill" href="#IdView1" id="tabView1">@TextResources.Select</a>
+                    </li>
+                    @if (@Model.IsAdmin)
+                    {
+                        <li class="nav-item col">
+                            <a class="nav-link" data-toggle="pill" href="#IdView2" id="tabView2">@TextResources.View_ManageSiteViews</a>
+                        </li>
+                    }
+                    <li class="nav-item col">
+                        <a class="nav-link" data-toggle="pill" href="#IdView3" id="tabView3">@TextResources.View_ManageViews</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <!-- Tab panes -->
+                    <div id="IdView1" class="tab-pane" style="padding: 5px 35px">
+                        <div class="form-group w-100">
+                            @Html.T_Label($"{TextResources.PleaseSelect} {TextResources.View_View}", new { @class = "bmd-label-floating" })
+                            <div class="field" id="ListMyViews">
+                                @Html.Partial("BIA.Net/Views/_ListMyViews", Model)
+                            </div>
+                        </div>
+                    </div>
+                    @if (@Model.IsAdmin)
+                    {
+                        <div id="IdView2" class="tab-pane fade" style="padding: 5px 35px">
+                            <div class="form-group">
+                                @Html.T_Label($"{TextResources.PleaseSelect} {TextResources.Site}", new { @class = "bmd-label-floating mandatory" })
+                                <div class="field">
+                                    @Html.DropDownList("SelectedSite_Id", @Model.SitesPossible, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div id="PartialViewSite">
+                                @Html.Partial("~/Views/Shared/BIA.Net/Views/_SiteViews.cshtml", Model)
+                            </div>
+                        </div>
+                    }
+                        <div id="IdView3" class="tab-pane fade" style="padding: 5px 35px">
+                            <ul class="nav nav-pills row" role="tablist">
+                                <li class="nav-item col">
+                                    <a class="nav-link active" data-toggle="pill" href="#IdManageView1" id="tabManageView1">@TextResources.Manage</a>
+                                </li>
+                                <li class="nav-item col">
+                                    <a class="nav-link" data-toggle="pill" href="#IdManageView2" id="tabManageView2">@TextResources.Create</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <!-- Tab panes -->
+                                <div id="IdManageView1" class="tab-pane active" style="padding: 5px 35px">
+                                    <div class="form-group">
+                                        <div class="field" id="ListManageMyViews">
+                                            @Html.Partial("BIA.Net/Views/_ListManageMyViews", Model)
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Tab panes -->
+                                <div id="IdManageView2" class="tab-pane fade" style="padding: 5px 35px">
+                                    <div class='dotted-title'>
+                                        <h3>@TextResources.View_SaveCurrentView</h3>
+                                        <div class="section-buttons">
+                                            <input type="button" value="@TextResources.Save" id="saveVwButton" class="btn btn-main float-right" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <div class="field">
+                                                    @Html.RadioButton("SaveMode", "NewView", new { @checked = true, id = "SaveModeNewView", @class = "savemode-view" })
+                                                    @Html.Label("SaveModeNewView", TextResources.CreateNew, new { @for = "SaveModeNewView", @class = "bmd-label-floating", style = "top:0;" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.T_Label(TextResources.Name, new { @class = "bmd-label-floating mandatory" })
+                                                <div class="field">
+                                                    @Html.TextBox("NewNameView", "", new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.T_Label(TextResources.Description, new { @class = "bmd-label-floating" })
+                                                <div class="field">
+                                                    @Html.TextArea("DescriptionView", "", new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <div class="field">
+                                                    @Html.RadioButton("SaveMode", "ExistingView", new { id = "SaveModeExistingView", @class = "savemode-view" })
+                                                    @Html.Label("SaveMode", TextResources.ModifyExisting, new { @for = "SaveModeExistingView", @class = "bmd-label-floating", style = "top:0;" })
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                @Html.T_Label($"{TextResources.PleaseSelect} {TextResources.View_View}", new { @class = "bmd-label-floating mandatory" })
+                                                <div class="field">
+                                                    @Html.DropDownList("ViewToReplace", @Model.UserViewsUpdatable, htmlAttributes: new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <script>    
+                    $(document).ready(function () {
+                        BIA.Net.View.Manage.InitViewsPopup('@Model.TableId', @((User.IsInRole(Constants.RoleAdmin) || User.IsInRole(Constants.RoleSiteAdmin)).ToString().ToLower()))
+                    });
+                </script>
+            </div>
+        </div>
+    }
+</div>
