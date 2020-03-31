@@ -1,0 +1,132 @@
+// @import '../../../scss/typography';
+
+:host {
+  display: flex;
+}
+
+.topbar {
+  height: 35px;
+  // button {
+  //   @include bia-typography-level-to-styles($oswald-typography, body-1);
+  // }
+}
+
+.logos {
+  .separator {
+    height: 24px;
+    border-left: 1px solid;
+  }
+}
+
+.mainbar {
+  // Warning any change to this area will affect custom main bar
+  min-height: 70px;
+  z-index: 1;
+  // ----
+  nav {
+    // button {
+    //   @include bia-typography-level-to-styles($oswald-typography, headline);
+    // }
+    .nav-button {
+      text-transform: uppercase;
+    }
+  }
+  .help {
+    padding-right: 16px;
+  }
+
+  .project-title {
+    display: flex;
+    padding-left: 16px;
+    font-family: 'oswald-regular';
+    font-size: 19px;
+    // @include bia-typography-level-to-styles($oswald-typography, display-1);
+  }
+
+  .project-version {
+    font-family: 'oswald-regular';
+    font-size: 10px;
+    // @include bia-typography-level-to-styles($oswald-typography, caption);
+  }
+
+  .app-logo {
+    height: 60px;
+    width: 60px;
+    margin-right: 0.5em;
+    // https://codepen.io/sosuke/pen/Pjoqqp
+    // hexa: #f8a92b
+    filter: invert(60%) sepia(92%) saturate(376%) hue-rotate(356deg) brightness(98%) contrast(98%);
+  }
+}
+
+.fullscreen-exit {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+}
+
+.app-full-screen {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 16px;
+  margin-left: 8px;
+}
+
+.app-refresh {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+:host ::ng-deep {
+  .ui-widget-content {
+    border-width: 0px !important;
+  }
+  .ui-megamenu,
+  .ui-menubar {
+    background-color: transparent !important;
+  }
+
+  p-menubar {
+    .ui-menubar {
+      margin-top: 17px;
+    }
+    p-menubarsub:first-child > ul > li > a > .ui-menuitem-text {
+      font-family: 'oswald-regular';
+      // @include bia-typography-level-to-styles($oswald-typography, body-1);
+      font-weight: 400 !important;
+      font-size: 18px !important;
+      text-transform: uppercase !important;
+    }
+    .ui-state-active {
+      background-color: transparent;
+    }
+  }
+
+  p-megamenu {
+    .ui-megamenu-panel {
+      width: 10em;
+    }
+
+    .ui-megamenu-submenu {
+      width: 9em;
+    }
+    .ui-menuitem-active > a {
+      background-color: transparent !important;
+    }
+    .ui-megamenu-root-list > li > .ui-menuitem-link {
+      > .ui-menuitem-text,
+      .ui-submenu-icon {
+        color: white;
+      }
+      > .ui-menuitem-text {
+        text-transform: uppercase !important;
+      }
+    }
+
+    .ui-menuitem-text {
+      font-family: 'oswald-light';
+      // @include bia-typography-level-to-styles($oswald-typography, body-1);
+    }
+  }
+}

@@ -1,0 +1,4 @@
+﻿@{
+    Layout = "~/Views/Shared/BIA.Net/_BIALayout.cshtml";
+    PageData["theme"] = ((User as UserInfo) == null) ? BIA.Net.Common.BIAConstants.ThemeDefault : ((UserInfo)User).GetProfileValueOrDefault("Theme", BIA.Net.Common.BIAConstants.ThemeDefault);
+}

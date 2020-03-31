@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="BiaNet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Language">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ApplicationLanguages">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="add">
+                      <xs:complexType>
+                        <xs:attribute name="key" type="xs:string" use="required" />
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                        <xs:attribute name="shortName" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Authentication">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Parameters">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Values">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element maxOccurs="unbounded" name="add">
+                            <xs:complexType>
+                              <xs:attribute name="key" type="xs:string" use="required" />
+                              <xs:attribute name="value" type="xs:string" use="required" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Identities">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                      <xs:element maxOccurs="unbounded" name="Value">
+                        <xs:complexType>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                          <xs:attribute name="value" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element name="ClientCertificateInHeader">
+                        <xs:complexType>
+                          <xs:sequence>
+                            <xs:element name="Validation">
+                              <xs:complexType>
+                                <xs:sequence>
+                                  <xs:element maxOccurs="unbounded" name="add">
+                                    <xs:complexType>
+                                      <xs:attribute name="key" type="xs:string" use="required" />
+                                      <xs:attribute name="value" type="xs:string" use="required" />
+                                    </xs:complexType>
+                                  </xs:element>
+                                </xs:sequence>
+                                <xs:attribute name="key" type="xs:string" use="required" />
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:sequence>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                          <xs:attribute name="windowsIdentity" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element name="WindowsIdentity">
+                        <xs:complexType>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                          <xs:attribute name="identityField" type="xs:string" use="required" />
+                          <xs:attribute name="removeDomain" type="xs:boolean" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:choice>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Roles">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                      <xs:element name="Value">
+                        <xs:complexType>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                          <xs:attribute name="value" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element name="ADRole">
+                        <xs:complexType>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                          <xs:attribute name="value" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element name="CustomCode">
+                        <xs:complexType>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:choice>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Properties">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                      <xs:element name="Value">
+                        <xs:complexType>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                          <xs:attribute name="value" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element name="ADField">
+                        <xs:complexType>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                          <xs:attribute name="adfield" type="xs:string" use="required" />
+                          <xs:attribute name="maxLenght" type="xs:unsignedByte" use="required" />
+                          <xs:attribute name="default" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:choice>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="LinkedProperties">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                      <xs:element name="Value">
+                        <xs:complexType>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                          <xs:attribute name="value" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element name="ObjectField">
+                        <xs:complexType>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                          <xs:attribute name="source" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element name="Function">
+                        <xs:complexType>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                          <xs:attribute name="type" type="xs:string" use="required" />
+                          <xs:attribute name="property" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element name="ADField">
+                        <xs:complexType>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                          <xs:attribute name="adfield" type="xs:string" use="optional" />
+                          <xs:attribute name="maxLenght" type="xs:unsignedShort" use="optional" />
+                          <xs:attribute name="default" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element name="CustomCode">
+                        <xs:complexType>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:choice>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Language">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                      <xs:element name="Mapping">
+                        <xs:complexType>
+                          <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="add">
+                              <xs:complexType>
+                                <xs:attribute name="key" type="xs:string" use="required" />
+                                <xs:attribute name="value" type="xs:string" use="required" />
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:sequence>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element name="CustomCode">
+                        <xs:complexType>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element name="Value">
+                        <xs:complexType>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                          <xs:attribute name="value" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:choice>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="UserProfile">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                      <xs:element name="Value">
+                        <xs:complexType>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                          <xs:attribute name="value" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element name="WebService">
+                        <xs:complexType>
+                          <xs:sequence>
+                            <xs:element name="Parameter">
+                              <xs:complexType>
+                                <xs:attribute name="key" type="xs:string" use="required" />
+                                <xs:attribute name="source" type="xs:string" use="required" />
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:sequence>
+                          <xs:attribute name="key" type="xs:string" use="required" />
+                          <xs:attribute name="URL" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:choice>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Dialog">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Layouts">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="add">
+                      <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                        <xs:attribute name="path" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

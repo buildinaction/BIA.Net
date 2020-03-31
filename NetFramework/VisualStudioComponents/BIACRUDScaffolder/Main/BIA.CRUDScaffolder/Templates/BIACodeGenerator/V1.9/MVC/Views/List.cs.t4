@@ -1,0 +1,138 @@
+﻿<#@ template language="C#" HostSpecific="True" #>
+<#@ output extension=".cshtml" #>
+<#@ include file="Imports.include.t4" #>
+<#@ parameter type="System.Boolean" name="GenerateListAjax" #>
+<#@ parameter type="System.Boolean" name="GenerateListFullAjax" #>
+@model IEnumerable<#= "<" + ViewDataTypeName + ">" #>
+<#
+// The following chained if-statement outputs the file header code and markup for a partial view, a view using a layout page, or a regular view.
+if(IsPartialView) {
+#>
+
+<#
+} else if(IsLayoutPageSelected) {
+#>
+
+@{<#if (TranslateType) 
+{#>
+    ViewBag.Title = @TextResources.ListOf + " " + @Html.TranslateAndPlurialize("<#= ViewDataTypeShortName #>");
+<#}
+else
+{#>
+    ViewBag.Title = @TextResources.ListOf + " " + "<#= ViewDataTypeShortName #>"  + "s";
+<#}
+if (!String.IsNullOrEmpty(LayoutPageFile)) {
+#>
+    Layout = "<#= LayoutPageFile#>";
+<#
+}
+#>
+}
+
+<h2>@TextResources.ListOf <#if (TranslateType){#>@Html.TranslateAndPlurialize("<#= ViewDataTypeShortName #>")<#}else{#><#= ViewDataTypeShortName #>s<#}#></h2>
+
+<#
+} else {
+#>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@TextResources.<#= ViewName #></title>
+</head>
+<body>
+<#
+    PushIndent("    ");
+}
+#>
+<p>
+    @Html.ActionLink(@TextResources.CreateNew, "Create", new { }, new { @class = "a2btn", BIADialogLink = "Type:Modal" })
+</p>
+
+<# if (GenerateListAjax || GenerateListFullAjax) { #>
+<div BIADialogRefresh="OnlyEvent;OnFormValidated:@Url.Action("Create")|@Url.Action("Edit")|@Url.Action("Delete")" style="overflow: auto;">
+    @Html.Partial("_List", new List<#= "<" + ViewDataTypeName + ">" #>())
+</div>
+<# 
+} 
+else {
+#>
+<div BIADialogRefresh="Url:@Url.Action("_List");OnFormValidated:@Url.Action("Create")|@Url.Action("Edit")|@Url.Action("Delete")" style="overflow: auto;">
+    @Html.Partial("_List", Model)
+</div>
+<# 
+} 
+#>
+
+<#
+// The following code closes the tag used in the case of a view using a layout page and the body and html tags in the case of a regular view page
+#>
+<#
+if(!IsPartialView && !IsLayoutPageSelected) {
+    ClearIndent();
+#>
+</body>
+</html>
+<#
+}
+string TableName = ControllerRootName + "Table";
+#>
+
+@section Scripts {
+    <script type="text/javascript">
+
+<# if (GenerateListAjax || GenerateListFullAjax) { #>
+
+        var columns = [
+<#foreach (PropertyMetadata property in ModelMetadata.Properties) {
+    if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey) {
+        // We do not want to show any association properties for which there is
+        // no associated foreign key.
+        if (property.IsAssociation && GetRelatedModelMetadata(property) == null) {
+            continue;
+        }
+
+        if (property.IsAssociation && property.AssociationDirection == Microsoft.AspNet.Scaffolding.Core.Metadata.AssociationDirection.OneToMany){
+#>
+            { "data": "<#= property.PropertyName.Replace(".", "__") #>", "searchable":true, "orderable":true },
+<# 
+		}
+		else {
+#>
+            { "data": "<#= GetValueExpression(property).Replace(".", "__") #>", "searchable":true, "orderable":true },
+<# 
+		} 
+#>
+<# 
+    }
+}
+#>
+            { "data": "Links" }]
+<#      if (GenerateListAjax) { #>
+			BIA.Net.DataTable.InitAjax('#<#= TableName #>', '@Url.Action("GetListData")', columns, null, null, null);
+<# 
+		}
+		else if (GenerateListFullAjax) {
+#>
+			BIA.Net.DataTable.InitFullAjax('#<#= TableName #>', '@Url.Action("GetListData")', columns, true, null, null);
+<# 
+		} 
+#>
+<# 
+} 
+else {
+#>
+			BIA.Net.DataTable.InitStandard('#<#= TableName #>');
+<# 
+} 
+#>
+    </script>
+}
+
+<#@ include file="../../ModelMetadataFunctions.cs.include.t4" #>

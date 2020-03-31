@@ -1,0 +1,48 @@
+{
+  "app": {
+    "examples": "Exemples",
+    "members": "Membres",
+    "sites": "Sites",
+    "planes": "Avions",
+    "planesPageMode":"Avions (Mode Page)",
+    "users": "Utilisateurs"
+  },
+  "member": {
+    "add": "Ajouter membre",
+    "listOfSiteMembers": "Liste des membres du site ",
+    "manage": "Gérer membre",
+    "rolesForSite": "Roles pour le site",
+    "user": "Utilisateur"
+  },
+  "msg": {
+    "hideFilters": "Masquer les filtres",
+    "showFilters": "Afficher les filtres",
+    "welcome": "BIA est une librarie de composants, construite avec le framework Angular"
+  },
+  "plane": {
+    "add": "Ajouter avion",
+    "capacity": "Capacité",
+    "edit": "Modifier avion",
+    "firstFlightDate": "Date du premier vol",
+    "firstFlightTime": "Heure du premier vol",
+    "isActive": "Actif",
+    "lastFlightDate": "Date du dernier vol",
+    "listOf": "Liste des avions",
+    "msn": "Msn"
+  },
+  "site": {
+    "add": "Ajouter site",
+    "admins": "Administrateurs",
+    "edit": "Modifier site",
+    "listOf": "Liste de sites",
+    "selectUser": "Sélectionner un utilisateur",
+    "title": "Titre"
+  },
+  "user": {
+    "add": "Ajouter utilisateur",
+    "lastName": "Nom",
+    "firstName": "Prénom",
+    "login": "Login",
+    "listOf": "Liste des utilisateurs"
+  }
+}

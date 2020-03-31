@@ -1,0 +1,57 @@
+@model $companyName$.$saferootprojectname$.Business.DTO.SiteDTO
+
+@{
+    ViewBag.Title = AppliResources.ExamplePage + " Tabs";
+}
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-sm-12" style="color:green" id="Message">
+        Example Tabs................................
+    </div>
+</div>
+<ul class="nav nav-pills w-100 row" role="tablist">
+    <li class="nav-item col">
+        <a class="nav-link active" data-toggle="pill" href="#IdTabs1" id="tabTabs1">Tabs 1</a>
+    </li>
+    <li class="nav-item col">
+        <a class="nav-link" data-toggle="pill" href="#IdTabs2" id="tabTabs2">Tabs 2</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <!-- Tab panes -->
+    <div id="IdTabs1" class="tab-pane active" style="padding:5px 35px">
+        @{
+            Html.RenderPartial("_Tab1");
+        }
+    </div>
+    <div id="IdTabs2" class="tab-pane fade" style="padding:5px 35px">
+        @{
+            Html.RenderPartial("_Tab2");
+        }
+    </div>
+</div>
+
+
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" class="btn btn-second" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+                Tooltip on top
+            </button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn1" class="btn btn-second">@TextResources.Cancel</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn2" class="btn btn-main">@TextResources.Save</button>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+
+}

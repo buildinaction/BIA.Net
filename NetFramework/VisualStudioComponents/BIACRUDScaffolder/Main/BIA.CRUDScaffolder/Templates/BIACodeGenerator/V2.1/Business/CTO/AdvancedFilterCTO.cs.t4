@@ -1,0 +1,31 @@
+﻿<#@ template language="C#" HostSpecific="True" #>
+<#@ output extension=".cs" #>
+<#@ include file="Imports.include.t4" #>namespace <#=BusinessNamespace#>.CTO
+{
+    using Newtonsoft.Json;
+    using System.Collections.Generic;
+
+    /// <summary>
+    /// WindowsService VM
+    /// </summary>
+    public class <#=ControllerRootName#>AdvancedFilterCTO
+    {
+<#		var isFirstLine = true;
+		foreach (PropertyMetadata property in ModelMetadata.Properties) {
+			if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey) {
+				if (property.IsAssociation && GetRelatedModelMetadata(property) == null) {
+					continue;
+				}
+				if (!isFirstLine) { #>
+
+<#				} 
+				isFirstLine = false;#>
+        /// <summary>
+        /// Gets or sets list of the elements selected for the <#= property.PropertyName#>
+        /// </summary>
+        [JsonProperty(PropertyName = "filter<#= property.PropertyName#>")]
+        public List<string> Filter<#= property.PropertyName#> { get; set; }
+<#			}
+		}#>
+    }
+}<#@ include file="../../ModelMetadataFunctions.cs.include.t4" #>

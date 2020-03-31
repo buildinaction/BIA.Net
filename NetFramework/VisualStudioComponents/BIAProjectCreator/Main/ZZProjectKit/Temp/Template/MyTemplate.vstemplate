@@ -1,0 +1,59 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>BIA V2.1.1 &gt; Template</Name>
+    <Description>Project For BIA &gt; Template</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>8</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ZZCompanyNameZZ.ZZProjectNameZZ.Template</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.jpg</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="ZZCompanyNameZZ.ZZProjectNameZZ.Template.csproj" File="ZZCompanyNameZZ.ZZProjectNameZZ.Template.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="app.config">app.config</ProjectItem>
+      <Folder Name="App_Browsers" TargetFolderName="App_Browsers">
+        <ProjectItem ReplaceParameters="false" TargetFileName="qt.browser">qt.browser</ProjectItem>
+      </Folder>
+      <Folder Name="Common" TargetFolderName="Common">
+        <ProjectItem ReplaceParameters="true" TargetFileName="Constants.cs">Constants.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Internal" TargetFolderName="Internal">
+        <ProjectItem ReplaceParameters="true" TargetFileName="RazorTemplate.cs">RazorTemplate.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Models" TargetFolderName="Models">
+        <Folder Name="Base" TargetFolderName="Base">
+          <ProjectItem ReplaceParameters="true" TargetFileName="TemplateModelBase.cs">TemplateModelBase.cs</ProjectItem>
+        </Folder>
+        <ProjectItem ReplaceParameters="true" TargetFileName="ZZTemplateModel.cs">ZZTemplateModel.cs</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">packages.config</ProjectItem>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Rotativa" TargetFolderName="Rotativa">
+        <ProjectItem ReplaceParameters="false" TargetFileName="wkhtmltopdf.exe">wkhtmltopdf.exe</ProjectItem>
+      </Folder>
+      <Folder Name="Services" TargetFolderName="Services">
+        <ProjectItem ReplaceParameters="true" TargetFileName="TemplateService.cs">TemplateService.cs</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="stylecop.json">stylecop.json</ProjectItem>
+      <Folder Name="Templates" TargetFolderName="Templates">
+        <Folder Name="ZZTemplate" TargetFolderName="ZZTemplate">
+          <ProjectItem ReplaceParameters="true" TargetFileName="ZZTemplate.cshtml">ZZTemplate.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="ZZTemplate_EN.cshtml">ZZTemplate_EN.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="ZZTemplate_ES.cshtml">ZZTemplate_ES.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="ZZTemplate_FR.cshtml">ZZTemplate_FR.cshtml</ProjectItem>
+        </Folder>
+      </Folder>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>BIA.ProjectCreatorWizard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>BIA.ProjectCreatorWizard.ChildWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

@@ -1,0 +1,102 @@
+﻿<#@ template language="C#" HostSpecific="True" #>
+<#@ output extension=".cshtml" #>
+<#@ include file="Imports.include.t4" #>
+@model <#= ViewDataTypeName #>
+<#
+Version requiredMvcVersion = new Version("5.1.0.0");
+bool isControlHtmlAttributesSupported = MvcVersion >= requiredMvcVersion;
+// The following chained if-statement outputs the file header code and markup for a partial view, a view using a layout page, or a regular view.
+if(IsPartialView) {
+#>
+
+<#
+} else if(IsLayoutPageSelected) {
+#>
+
+@{
+<#if (TranslateType) 
+{#>
+    ViewBag.Title = TextResources.<#= ViewName#> + " " + Html.Translate("<#= ViewDataTypeShortName #>");
+<#}
+else
+{#>
+    ViewBag.Title = TextResources.<#= ViewName#> + "<#= ViewDataTypeShortName #>";
+<#}
+if (!String.IsNullOrEmpty(LayoutPageFile)) {
+#>
+    Layout = "<#= LayoutPageFile#>";
+<#
+}
+#>
+    ViewBag.htmlFormFieldsAttributes = new { @class = "form-control", @disabled = "disabled"};
+    ViewBag.IsReadOnly = true;
+}
+
+<h2>@TextResources.<#= ViewName#> <#if (TranslateType){#>@Html.Translate("<#= ViewDataTypeShortName #>")<#}else{#><#= ViewDataTypeShortName #><#}#></h2>
+
+<#
+} else {
+#>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@TextResources.<#= ViewName #></title>
+</head>
+<body>
+<#
+    PushIndent("    ");
+}
+#>
+<h4 class="text-center">@TextResources.AreYouSureDelete</h4>
+    <div class="form-horizontal">
+<# 
+    if (isControlHtmlAttributesSupported) {
+#>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<#        
+    } else {
+#>
+        @Html.ValidationSummary(true)
+<#      
+    }
+#>
+@Html.Partial("_Form", Model)
+    </div>
+<#
+    string formName = ControllerRootName + ViewName + "Form";
+#>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = <#=SafeFormId(formName, true)#>, @class = "PreventDuplicateRequest" })) {
+    @Html.AntiForgeryToken()
+}
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" onclick="location.href='@Url.Action("Index")'" class="btn btn-second">@TextResources.BackToList</button>
+        </div>
+        <div class="btn-action">
+            <button onclick="$('#<#=SafeFormId(formName, false)#>').submit();" class="btn btn-main">@TextResources.Delete</button>
+        </div>
+    </div>
+}
+
+<#
+// The following code closes the tag used in the case of a view using a layout page and the body and html tags in the case of a regular view page
+#>
+<#
+if(!IsPartialView && !IsLayoutPageSelected) {
+    ClearIndent();
+#>
+</body>
+</html>
+<#
+}
+#>
+<#@ include file="../../ModelMetadataFunctions.cs.include.t4" #>

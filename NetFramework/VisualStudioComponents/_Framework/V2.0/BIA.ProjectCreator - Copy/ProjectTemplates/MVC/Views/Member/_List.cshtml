@@ -1,0 +1,66 @@
+@model IEnumerable<$companyName$.$saferootprojectname$.Business.DTO.MemberDTO>
+
+
+<table class="dataTable stripe table @*rowselectable*@" id="MemberTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.T_DisplayNameFor(model => model.User)
+            </th>
+
+            <th>
+                @Html.T_DisplayNameFor(model => model.MemberRole)
+            </th>
+            <th>@TextResources.Actions</th>
+        </tr>
+    </thead>
+    @{ var odd = false; }
+    @foreach (var item in Model)
+    {
+        odd = !odd;
+    <tr class="@(odd ? "odd": "even")">
+        <td>
+            @Html.DisplayFor(modelItem => item.User.DisplayFullName)
+            @if (!item.User.DAIEnable)
+            {
+                <span style="color: red;">(Not in AD user group)</span>
+            }
+        </td>
+        <td>
+            @{ if (item.MemberRole != null)
+                {
+                    var last = item.MemberRole.LastOrDefault();
+                    foreach (var subitem in item.MemberRole)
+                    {
+                        @Html.DisplayFor(modelItem => subitem.Title)
+                        if (!subitem.Equals(last))
+                        {@Html.Raw(";")}
+                }
+            }
+            }
+        </td>
+        @*<td>
+            <button class="btn btn-dropdown dropdown-toggle" type="button" data-target="menu-actions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="svgIcon list-actions"></div>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right menu-actions">
+                @Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @data_toggle = "tooltip",  @data_placement = "left", @title = TextResources.Edit, @class = "listAction fas fa-pencil-alt", BIADialogLink = "Type:Modal" })
+                @Html.ActionLink(" ", "Details", new { id = item.Id }, new { @data_toggle = "tooltip",  @data_placement = "left", @title = TextResources.Details, @class = "listAction fas fa-list-ul", BIADialogLink = "Type:Modal" })
+                @if (User.IsInRole(Constants.RoleAdmin))
+                {
+                    @Html.ActionLink(" ", "Delete", new { id = item.Id }, new { @data_toggle = "tooltip",  @data_placement = "left", @title = TextResources.Delete, @class = "listAction fas fa-trash-alt", BIADialogLink = "Type:Modal" })
+                }
+            </div>
+        </td>*@
+        <td>
+            @Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @data_toggle = "tooltip", @data_placement = "left", @title = TextResources.Edit, @class = "fas fa-pencil-alt", BIADialogLink = "Type:Modal" })
+            @Html.ActionLink(" ", "Details", new { id = item.Id }, new { @data_toggle = "tooltip", @data_placement = "left", @title = TextResources.Details, @class = "fas fa-list-ul", BIADialogLink = "Type:Modal" })
+            @if (User.IsInRole(Constants.RoleAdmin))
+            {
+                @Html.ActionLink(" ", "Delete", new { id = item.Id }, new { @data_toggle = "tooltip", @data_placement = "left", @title = TextResources.Delete, @class = "fas fa-trash-alt", BIADialogLink = "Type:Modal" })
+            }
+        </td>
+    </tr>
+    }
+
+</table>

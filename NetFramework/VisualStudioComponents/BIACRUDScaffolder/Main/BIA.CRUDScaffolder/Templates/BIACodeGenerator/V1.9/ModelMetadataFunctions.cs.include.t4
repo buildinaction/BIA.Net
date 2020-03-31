@@ -1,0 +1,103 @@
+﻿
+<#+
+// Gets the related entity information for an association property where there is an associated foreign key property.
+// Note: ModelMetadata.RelatedEntities contains only the related entities associated through a foreign key property.
+RelatedModelMetadata GetRelatedModelMetadata(PropertyMetadata property){
+	return property.RelatedModel;
+}
+
+// An association, e.g. Category, will have a value expression of Category.Title
+string GetValueExpression(PropertyMetadata property) {
+    RelatedModelMetadata propertyModel = GetRelatedModelMetadata(property);
+    return propertyModel != null ? propertyModel.AssociationPropertyName + "." + propertyModel.DisplayPropertyName : property.PropertyName;
+}
+string GetDisplayPropertyName(PropertyMetadata property) {
+    RelatedModelMetadata propertyModel = GetRelatedModelMetadata(property);
+    return propertyModel != null ?  "." + propertyModel.DisplayPropertyName : "";
+}
+
+
+IDictionary<string, RelatedModelMetadata> relatedProperties = null;
+RelatedModelMetadata GetKeyRelatedModelMetadata(PropertyMetadata property){
+	RelatedModelMetadata propertyModel;
+
+	if (relatedProperties == null)
+	{
+		List<RelatedModelMetadata> allRelatedProperties = ModelMetadata.Properties.Where(p => p.RelatedModel != null).Select(p => p.RelatedModel).ToList();
+
+		if(allRelatedProperties != null)
+		{
+			relatedProperties = allRelatedProperties.ToDictionary(item => item.ForeignKeyPropertyNames[0]);
+		}
+		else
+		{
+			relatedProperties = new Dictionary<string, RelatedModelMetadata>();
+		}
+	}
+    relatedProperties.TryGetValue(property.PropertyName, out propertyModel);
+
+    return propertyModel;
+}
+
+// A foreign key, e.g. CategoryID, will have an association name of Category
+string GetAssociationName(PropertyMetadata property) {
+    RelatedModelMetadata propertyModel = GetKeyRelatedModelMetadata(property);
+    return propertyModel != null ? propertyModel.AssociationPropertyName : property.PropertyName;
+}
+
+// A foreign key, e.g. CategoryID, will have an association name of Category
+string GetEntitySetName(PropertyMetadata property) {
+    RelatedModelMetadata propertyModel = GetKeyRelatedModelMetadata(property);
+    return propertyModel != null ? propertyModel.EntitySetName : property.TypeName;
+}
+
+// A foreign key, e.g. CategoryID, will have an association name of Category
+Microsoft.AspNet.Scaffolding.Core.Metadata.AssociationDirection GetAssociationDirection(PropertyMetadata property) {
+    RelatedModelMetadata propertyModel = GetKeyRelatedModelMetadata(property);
+	if (propertyModel != null)
+	{
+		PropertyMetadata relatedProperty =  ModelMetadata.Properties.Where(p => p.PropertyName == propertyModel.AssociationPropertyName).SingleOrDefault();
+		if (relatedProperty != null) return relatedProperty.AssociationDirection;
+	}
+	return Microsoft.AspNet.Scaffolding.Core.Metadata.AssociationDirection.None;
+}
+
+// This will return the primary key property name, if and only if there is exactly
+// one primary key. Returns null if there is no PK, or the PK is composite.
+string GetPrimaryKeyName() {
+    return (ModelMetadata.PrimaryKeys != null && ModelMetadata.PrimaryKeys.Count() == 1) ? ModelMetadata.PrimaryKeys[0].PropertyName : null;
+}
+
+bool IsPropertyGuid(PropertyMetadata property) {
+    return String.Equals("System.Guid", property.TypeName, StringComparison.OrdinalIgnoreCase);
+}
+
+string SafeFormId(string formName,bool inCsharp) {
+	var primaryKeyShortTypeName = ModelMetadata.PrimaryKeys[0].ShortTypeName;
+	var unsafeIdInCsharp = "\"" + formName + "\" + Model." + ModelMetadata.PrimaryKeys[0].PropertyName;
+	var unsafeIdOutCsharp = formName + "@" + "(Model." + ModelMetadata.PrimaryKeys[0].PropertyName + ")";
+	if (primaryKeyShortTypeName == "int")
+	{
+		if (inCsharp)
+		{
+			return  unsafeIdInCsharp;
+		}
+		else
+		{
+			return  unsafeIdOutCsharp;
+		}
+	}
+	else
+	{
+		if (inCsharp)
+		{
+			return "Html.SafeStringForId(" + unsafeIdInCsharp + ")";
+		}
+		else
+		{
+			return "@Html.SafeStringForId(" + unsafeIdInCsharp + ")";
+		}
+	}
+}
+
+#>

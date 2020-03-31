@@ -1,0 +1,59 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ReadMe", "ReadMe", "{920D3CBC-90A7-4DDC-AF1E-208424CB972A}"
+	ProjectSection(SolutionItems) = preProject
+		RefreshKit.ps1 = RefreshKit.ps1
+		RemplacementToDoInSafran.ZZProjecectName.txt = RemplacementToDoInSafran.ZZProjecectName.txt
+		SolveIssue.txt = SolveIssue.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZZProjectKit", "ZZProjectKit\ZZProjectKit.csproj", "{45CA2E06-5B64-43C7-8B4D-69FDA4E867D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.ProjectCreatorWizard", "BIA.ProjectCreatorWizard\BIA.ProjectCreatorWizard.csproj", "{AB617895-58CA-48D2-8890-C51BCEA14C4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.ProjectCreator", "BIA.ProjectCreator\BIA.ProjectCreator.csproj", "{6FBFF83F-D3D3-409B-A56F-328AE7D7BC87}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45CA2E06-5B64-43C7-8B4D-69FDA4E867D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45CA2E06-5B64-43C7-8B4D-69FDA4E867D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45CA2E06-5B64-43C7-8B4D-69FDA4E867D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45CA2E06-5B64-43C7-8B4D-69FDA4E867D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB617895-58CA-48D2-8890-C51BCEA14C4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB617895-58CA-48D2-8890-C51BCEA14C4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB617895-58CA-48D2-8890-C51BCEA14C4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB617895-58CA-48D2-8890-C51BCEA14C4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FBFF83F-D3D3-409B-A56F-328AE7D7BC87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FBFF83F-D3D3-409B-A56F-328AE7D7BC87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FBFF83F-D3D3-409B-A56F-328AE7D7BC87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FBFF83F-D3D3-409B-A56F-328AE7D7BC87}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6FE6E5FE-4B3D-4B2E-9052-79C21B42BEBC}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfsdm.eu.labinal.snecma/innovation%20factory
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ZZProjectKit\\ZZProjectKit.csproj
+		SccProjectName1 = ZZProjectKit
+		SccLocalPath1 = ZZProjectKit
+		SccProjectUniqueName2 = BIA.ProjectCreator\\BIA.ProjectCreator.csproj
+		SccProjectName2 = BIA.ProjectCreator
+		SccLocalPath2 = BIA.ProjectCreator
+		SccProjectUniqueName3 = BIA.ProjectCreatorWizard\\BIA.ProjectCreatorWizard.csproj
+		SccProjectName3 = BIA.ProjectCreatorWizard
+		SccLocalPath3 = BIA.ProjectCreatorWizard
+	EndGlobalSection
+EndGlobal

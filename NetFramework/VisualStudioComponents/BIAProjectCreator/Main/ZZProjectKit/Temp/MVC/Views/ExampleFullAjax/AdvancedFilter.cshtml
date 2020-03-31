@@ -1,0 +1,83 @@
+﻿@model $safeprojectname$.ViewModel.ExampleFullAjax.ExampleFullAjaxAdvancedFilterVM
+
+@using (Html.BeginForm("_List", "ExampleFullAjax", FormMethod.Post, new { id = "ExampleFullAjaxFilter", @class = "PreventDuplicateRequest form-horizontal" }))
+{
+    <div class="filter-box">
+
+	    <div class="form-group">
+			@Html.T_Label("Title", htmlAttributes: new { @class = "control-label" } )
+            <div class="field">
+                @Html.MultiselectFilter("filterTitle", (IEnumerable<SelectListItem>)Model.MslTitle, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+	    <div class="form-group">
+			@Html.T_Label("Description", htmlAttributes: new { @class = "control-label" } )
+            <div class="field">
+                @Html.MultiselectFilter("filterDescription", (IEnumerable<SelectListItem>)Model.MslDescription, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+	    <div class="form-group">
+			@Html.T_Label("Value", htmlAttributes: new { @class = "control-label" } )
+            <div class="field">
+                @Html.MultiselectFilter("filterValue", (IEnumerable<SelectListItem>)Model.MslValue, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+	    <div class="form-group">
+			@Html.T_Label("MyDecimal", htmlAttributes: new { @class = "control-label" } )
+            <div class="field">
+                @Html.MultiselectFilter("filterMyDecimal", (IEnumerable<SelectListItem>)Model.MslMyDecimal, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+	    <div class="form-group">
+			@Html.T_Label("MyDouble", htmlAttributes: new { @class = "control-label" } )
+            <div class="field">
+                @Html.MultiselectFilter("filterMyDouble", (IEnumerable<SelectListItem>)Model.MslMyDouble, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+	    <div class="form-group">
+			@Html.T_Label("DateOnly", htmlAttributes: new { @class = "control-label" } )
+            <div class="field">
+                @Html.MultiselectFilter("filterDateOnly", (IEnumerable<SelectListItem>)Model.MslDateOnly, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+	    <div class="form-group">
+			@Html.T_Label("DateAndTime", htmlAttributes: new { @class = "control-label" } )
+            <div class="field">
+                @Html.MultiselectFilter("filterDateAndTime", (IEnumerable<SelectListItem>)Model.MslDateAndTime, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+	    <div class="form-group">
+			@Html.T_Label("TimeOnly", htmlAttributes: new { @class = "control-label" } )
+            <div class="field">
+                @Html.MultiselectFilter("filterTimeOnly", (IEnumerable<SelectListItem>)Model.MslTimeOnly, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+	    <div class="form-group">
+			@Html.T_Label("MyTimeSpan", htmlAttributes: new { @class = "control-label" } )
+            <div class="field">
+                @Html.MultiselectFilter("filterMyTimeSpan", (IEnumerable<SelectListItem>)Model.MslMyTimeSpan, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+	    <div class="form-group">
+			@Html.T_Label("TimeSpanOver24H", htmlAttributes: new { @class = "control-label" } )
+            <div class="field">
+                @Html.MultiselectFilter("filterTimeSpanOver24H", (IEnumerable<SelectListItem>)Model.MslTimeSpanOver24H, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+	    <div class="form-group">
+			@Html.T_Label("Site", htmlAttributes: new { @class = "control-label" } )
+            <div class="field">
+                @Html.MultiselectFilter("filterSite", (IEnumerable<SelectListItem>)Model.MslSite, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+    </div> <!-- all datatables fields are included in the input-box div -->
+
+    <div class="row mt-4">
+        <div class="btn-action">
+            <button type="button" class="btn btn-second" onclick="BIA.Net.Filter.Action.ResetFilter('#ExampleFullAjaxFilterContent','#ExampleFullAjaxTable', BIA.Net.DataTable.LoadingType.FullAjax);">@TextResources.Reset</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" class="btn btn-main btn-filter" onclick="BIA.Net.DataTable.RefreshList('#ExampleFullAjaxTable', BIA.Net.DataTable.LoadingType.FullAjax);">@TextResources.Filter</button>
+        </div>
+    </div>
+}

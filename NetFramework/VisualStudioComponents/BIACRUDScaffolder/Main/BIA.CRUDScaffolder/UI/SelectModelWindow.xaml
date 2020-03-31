@@ -1,0 +1,57 @@
+﻿<platformUi:DialogWindow x:Class="BIA.CRUDScaffolder.UI.SelectModelWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:platformUi="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
+             mc:Ignorable="d" Height="426" Width="534.2" Title="BIA Manufacturing C.R.U.D. Scaffolder" Icon="/BIA.CRUDScaffolder;component/Resources/Icon_BIA.ico">
+    <Grid>
+        <Label Content="Version" HorizontalAlignment="Left" Margin="36,12,0,0" VerticalAlignment="Top" Width="117"/>
+        <ComboBox HorizontalAlignment="Left" 
+              Margin="168,14,0,0" 
+              VerticalAlignment="Top" 
+              Width="120"
+              ItemsSource="{Binding Versions}"
+              SelectedItem="{Binding SelectedVersion, Mode=OneWayToSource}"/>
+        <Label Content="Filter on namespace" HorizontalAlignment="Left" Margin="36,39,0,0" VerticalAlignment="Top"/>
+        <ComboBox HorizontalAlignment="Left" 
+              Margin="168,42,0,0" 
+              VerticalAlignment="Top" 
+              Width="311"
+              ItemsSource="{Binding Namespaces}"
+              DisplayMemberPath="DisplayName"
+              SelectedItem="{Binding SelectedNamespace, Mode=OneWayToSource}"/>
+        <Label Content="Choose a Model *" HorizontalAlignment="Left"   Margin="36,67,0,0" VerticalAlignment="Top"/>
+        <ComboBox HorizontalAlignment="Left"
+              Margin="168,68,0,0"
+              VerticalAlignment="Top"
+              ItemsSource="{Binding ModelTypes}"
+              DisplayMemberPath="DisplayName"
+              SelectedItem="{Binding SelectedModelType, Mode=OneWayToSource}"
+              Width="311"/>
+        <Label Content="Controller Name *" HorizontalAlignment="Left"   Margin="36,95,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="168,95,0,0" TextWrapping="Wrap" Text="{Binding ControllerName}" VerticalAlignment="Top" Width="311"/>
+
+        <CheckBox Content="Use async controller actions" IsChecked="{Binding UseAsync}" RenderTransformOrigin="1.733,0.787" Margin="36,157,303.8,52.8" Visibility="Hidden" />
+        <CheckBox Content="Generate Views" IsChecked="{Binding GenerateViews}" RenderTransformOrigin="1.733,0.787" Margin="36,181,303.8,27.8" />
+        <CheckBox Content="Translate type" IsChecked="{Binding TranslateType}" RenderTransformOrigin="1.733,0.787" Margin="36,205,303.8,-0.2" />
+        <CheckBox Content="Translate fields" IsChecked="{Binding TranslateFields}" RenderTransformOrigin="1.733,0.787" Margin="36,229,303.8,-32.2" />
+        <CheckBox Name="chkGenerateListAjax" Content="Loading lists in Ajax (Load all data. Recommended for 1000 to 10000 items)" IsChecked="{Binding GenerateListAjax}" RenderTransformOrigin="1.733,0.787" Margin="36,253,49.8,-32.2" Click="GenerateListAjax_Click" />
+        <CheckBox Name="chkGenerateListFullAjax" Content="Loading lists in Ajax (Load data of the current page. Recommended for > 10000 items)" IsChecked="{Binding GenerateListFullAjax}" RenderTransformOrigin="1.733,0.787" Margin="36,277,-0.2,-32.2" Click="GenerateListFullAjax_Click" />
+        <CheckBox Name="chkGenerateFilter" Content="Generate Advanced Filter" IsChecked="{Binding GenerateAdvancedFilter}" RenderTransformOrigin="1.733,0.787" Margin="36,301,-0.2,-32.2" />
+        <CheckBox Content="Iconified input" IsChecked="{Binding IconifiedInput}" RenderTransformOrigin="1.733,0.787" Margin="36,325,303.8,-32.2" />
+        <CheckBox Content="Collapse Action" IsChecked="{Binding CollapseAction}" RenderTransformOrigin="1.733,0.787" Margin="36,349,303.8,-32.2" />
+
+        <Button Content="Add" IsDefault="True" HorizontalAlignment="Left" Margin="315,0,0,4" VerticalAlignment="Bottom" Width="75" RenderTransformOrigin="-0.187,0.75" Click="Button_Click"/>
+        <Button Content="Cancel" IsCancel="True" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="75" Margin="404,0,0,4"/>
+        <Label Content="If is Entity DB Context" HorizontalAlignment="Left"   Margin="36,124,0,0" VerticalAlignment="Top"/>
+        <ComboBox HorizontalAlignment="Left"
+            Margin="168,125,0,0"
+            VerticalAlignment="Top"
+            ItemsSource="{Binding DBContexts}"
+            DisplayMemberPath="DisplayName"
+            SelectedItem="{Binding SelectedDBContext, Mode=OneWayToSource}"
+            Width="311"/>
+        <Image x:Name="image" HorizontalAlignment="Left" Height="50" Margin="315,184,0,0" VerticalAlignment="Top" Width="157" Source="/BIA.CRUDScaffolder;component/Resources/logo_BIA_v2.jpg"/>
+    </Grid>
+</platformUi:DialogWindow>

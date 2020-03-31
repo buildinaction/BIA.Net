@@ -1,0 +1,5 @@
+<!-- Begin User Tracking -->
+<script src="@Url.Content(BIA.Net.Common.BIASettingsReader.UrlStatic + "/" + BIA.Net.Common.BIASettingsReader.CompanyName + "." + BIA.Net.Common.BIASettingsReader.DivisionName + ".Net/V2.0/js/MatomoIds.js")"></script>
+<script src="@Url.Content(BIA.Net.Common.BIASettingsReader.UrlStatic + "/" + BIA.Net.Common.BIASettingsReader.CompanyName + "." + BIA.Net.Common.BIASettingsReader.DivisionName + ".Net/V2.0/js/Matomo.js")"></script>
+@Html.Script("<script>matomoAnalyzer(\"" + BIA.Net.Common.BIASettingsReader.ProjectShortName + "\");</script>", HtmlHelpersScript.Priority.LowPriority)
+<!-- End User Tracking -->

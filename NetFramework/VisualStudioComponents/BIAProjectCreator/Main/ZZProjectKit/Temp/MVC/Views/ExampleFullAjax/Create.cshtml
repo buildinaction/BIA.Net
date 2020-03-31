@@ -1,0 +1,31 @@
+@model $companyName$.$saferootprojectname$.Business.DTO.ExampleTable3DTO
+
+@{
+    ViewBag.Title = TextResources.Create + " " + Html.Translate("ExampleTable3");
+    ViewBag.htmlFormFieldsAttributes = new { @class = "form-control"};
+}
+
+<h2>@TextResources.Create @Html.Translate("ExampleTable3")</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "ExampleFullAjaxCreateForm", @class = "PreventDuplicateRequest" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+@Html.Partial("_Form", Model)
+    </div>
+}
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" onclick="location.href='@Url.Action("Index")'" class="btn btn-second">@TextResources.Cancel</button>
+        </div>
+        <div class="btn-action">
+            <button onclick="$('#ExampleFullAjaxCreateForm').submit();" class="btn btn-main">@TextResources.Create</button>
+        </div>
+    </div>
+}
+

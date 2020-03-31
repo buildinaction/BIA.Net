@@ -1,0 +1,15 @@
+﻿.BIANetThemeLight .contentBackground {
+    background-image: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)), url("../Images/bg-default.jpg");
+}
+
+.BIANetThemeDark .contentBackground {
+    background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url("../Images/bg-default.jpg");
+}
+
+.BIANetThemeLight .contentBackground.homePage {
+    background-image: linear-gradient(to bottom, rgba(255,255,255,0.1) 70vh, rgb(255,255,255) 100%), url("../Images/bg-default.jpg");
+}
+
+.BIANetThemeDark .contentBackground.homePage {
+    background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 70vh, rgb(0,0,0) 100%), url("../Images/bg-default.jpg");
+}

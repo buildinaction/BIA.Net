@@ -1,0 +1,43 @@
+﻿<div class="header-cell user noSelect">
+    <div id="user-login-out">
+        <a data-toggle="collapse" data-target=".user-menu">
+            <i class="fa fa-caret-down"></i> @TextResources.Hello @(((UserInfo)User).Properties.FirstName)
+        </a>
+        <ul class="user-menu collapse" aria-expanded="true">
+
+            @if (((UserInfo)User).Roles.Contains("Generic"))
+            {
+                <li><a onclick="BIA.Net.Helper.AjaxCall('@Url.Content("~/Account/Disconnect/")')" alt="@TextResources.RefreshRight">@TextResources.SignOut</a></li>
+            }
+            <li><a onclick="BIA.Net.Helper.AjaxCall('@Url.Content("~/Common/RefreshUserInfo/")')" alt="@TextResources.RefreshRight">@TextResources.Refresh</a></li>
+            @if (!((UserInfo)User).Roles.Contains("Generic"))
+            {
+                <li><a href="@Url.Content(BIASettingsReader.UrlIndexDivision + "/UserProfile/EditMyProfile?UrlReturn=" + Request.Url.ToString())">@TextResources.Profile</a></li>
+            }
+            <li class="dropdown-submenu pull-left">
+                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="-1"><i class="fa fa-caret-left"></i>@TextResources.Languages</a>
+                <div class="dropdown-menu">
+                    <ul>
+                        @{
+                            var currentLanguage = BIA.Net.Common.LanguageInfo.AllLanguageInfos.FirstOrDefault(d => d.Code == ((UserInfo)User).Language);
+
+                            foreach (var languageInfo in BIA.Net.Common.LanguageInfo.AllLanguageInfos.Where(l => l.Name != currentLanguage.Name).ToList())
+                            {
+                                <li><a onclick="BIA.Net.Helper.AjaxCall('@Url.Content("~/Common/SetLanguageInfo/")',{ code: JSON.stringify('@languageInfo.Code')})">@languageInfo.ShortName</a></li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </li>
+            <li class="dropdown-submenu pull-left">
+                <a  data-toggle="dropdown" tabindex="-1"><i class="fa fa-caret-left"></i>@TextResources.Theme</a>
+                <div class="dropdown-menu">
+                    <ul>
+                        <li><a onclick="BIA.Net.Helper.AjaxCall('@Url.Content("~/Common/SetTheme/")', { code: JSON.stringify('Light')})"><i class="fa fa-circle light" aria-hidden="true"></i> Light</a></li>
+                        <li><a onclick="BIA.Net.Helper.AjaxCall('@Url.Content("~/Common/SetTheme/")', { code: JSON.stringify('Dark')})"><i class="fa fa-circle dark" aria-hidden="true"></i> Dark</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

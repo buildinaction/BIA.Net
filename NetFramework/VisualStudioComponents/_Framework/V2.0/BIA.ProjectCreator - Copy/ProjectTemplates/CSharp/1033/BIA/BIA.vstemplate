@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="ProjectGroup">
+  <TemplateData>
+    <Name>BIA V2.0.0</Name>
+    <Description>Project For BIA</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ProjectName</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.jpg</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectCollection>
+      <SolutionFolder Name="01 - Front" CreateOnDisk="false">
+        <ProjectTemplateLink ProjectName="$safeprojectname$.MVC">
+         temp\MVC\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+      </SolutionFolder>
+      <SolutionFolder Name="02 - Business" CreateOnDisk="false">
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Business">
+          temp\Business\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+      </SolutionFolder>
+      <SolutionFolder Name="03 - Data Model" CreateOnDisk="false">
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Model">
+          temp\Model\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+        <ProjectTemplateLink ProjectName="$safeprojectname$.SyncDatabase">
+          temp\SyncDatabase\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+      </SolutionFolder>
+      <SolutionFolder Name="10 - Common" CreateOnDisk="false">
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Common">
+          temp\Common\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+      </SolutionFolder>
+      <SolutionFolder Name="99 - Test" CreateOnDisk="false">
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Test">
+          temp\Test\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+      </SolutionFolder>
+    </ProjectCollection>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>ZZProjectInstallerWizards, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>ZZProjectInstallerWizards.RootWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

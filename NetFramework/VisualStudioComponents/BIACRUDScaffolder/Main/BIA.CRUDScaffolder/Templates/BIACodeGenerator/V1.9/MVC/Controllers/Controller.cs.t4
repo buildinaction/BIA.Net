@@ -1,0 +1,651 @@
+﻿<#@ template language="C#" HostSpecific="True" Debug="True" #>
+<#@ output extension="cs" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Data.Linq" #>
+<#@ ScaffoldingAssembly Processor="ScaffoldingAssemblyLoader" #>
+<#
+string routePrefix;
+if (String.IsNullOrEmpty(AreaName)) 
+{
+    routePrefix = ControllerRootName;
+}
+else
+{
+    routePrefix = AreaName + "/" + ControllerRootName;
+}
+#>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="Microsoft.AspNet.Scaffolding.Core.Metadata" #>
+<#@ parameter type="System.String" name="ControllerName" #>
+<#@ parameter type="System.String" name="ControllerRootName" #>
+<#@ parameter type="System.String" name="Namespace" #>
+<#@ parameter type="System.String" name="AreaName" #>
+<#@ parameter type="System.String" name="ContextTypeName" #>
+<#@ parameter type="System.String" name="ModelTypeName" #>
+<#@ parameter type="System.String" name="ModelVariable" #>
+<#@ parameter type="Microsoft.AspNet.Scaffolding.Core.Metadata.ModelMetadata" name="ModelMetadata" #>
+<#@ parameter type="System.String" name="EntitySetVariable" #>
+<#@ parameter type="System.Boolean" name="UseAsync" #>
+<#@ parameter type="System.Boolean" name="GenerateListAjax" #>
+<#@ parameter type="System.Boolean" name="GenerateListFullAjax" #>
+<#@ parameter type="System.Boolean" name="GenerateFilter" #>
+<#@ parameter type="System.Boolean" name="IsOverpostingProtectionRequired" #>
+<#@ parameter type="System.String" name="BindAttributeIncludeText" #>
+<#@ parameter type="System.String" name="UpdateAttribute" #>
+<#@ parameter type="System.String" name ="OverpostingWarningMessage" #>
+<#@ parameter type="System.Collections.Generic.HashSet<System.String>" name="RequiredNamespaces" #>
+namespace <#= Namespace #>
+{
+    using BIA.Net.Business.Services;
+    using BIA.Net.MVC.Filter;
+<# if (GenerateListAjax || GenerateListFullAjax) { #>
+    using Net.Common.Resources;
+<# } #>
+<# if (GenerateListFullAjax) { #>
+    using BIA.Net.Common.Helpers;
+    using DocumentFormat.OpenXml.Spreadsheet;
+    using BIA.Net.DataTable.DTO;
+<# } #>
+<# foreach (var namespaceName in RequiredNamespaces) { #>
+    using <#= namespaceName #>;
+<# } #>
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
+    using System.Net;
+<# if (UseAsync) { #>
+    using System.Threading.Tasks;
+<# } #>
+    using System.Web;
+    using System.Web.Mvc;
+
+<#
+    var contextTypeName = ContextTypeName;
+    var entitySetName = ModelMetadata.EntitySetName;
+    var modelEntityName = "Model." + ModelMetadata.EntitySetName.Replace("DTO", "");
+    var entitySetVar = EntitySetVariable ?? (String.IsNullOrEmpty(entitySetName) ? entitySetName : (entitySetName.Substring(0, length:1).ToLowerInvariant() + entitySetName.Substring(1)));
+    var primaryKeyName = ModelMetadata.PrimaryKeys[0].PropertyName;
+    var primaryKeyShortTypeName = ModelMetadata.PrimaryKeys[0].ShortTypeName;
+    var primaryKeyDefaultValue = ModelMetadata.PrimaryKeys[0].DefaultValue;
+    var primaryKeyType = ModelMetadata.PrimaryKeys[0].TypeName;
+    var primaryKeyNullableTypeName = GetNullableTypeName(primaryKeyType, primaryKeyShortTypeName);
+    var lambdaVar = ModelVariable[0];
+    var relatedProperties = ModelMetadata.RelatedEntities.GroupBy(p => p.EntitySetName).Select(g => g.First()).ToDictionary(item => item.AssociationPropertyName);
+    var relatedMultiProperties = ModelMetadata.Properties.Where(p => p.AssociationDirection==Microsoft.AspNet.Scaffolding.Core.Metadata.AssociationDirection.OneToMany && p.RelatedModel != null).Select(p => p.RelatedModel).GroupBy(p => p.EntitySetName).Select(g => g.First()).ToDictionary(item => item.AssociationPropertyName);
+    var displayProperty = ModelMetadata.Properties.Where(property => property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey).FirstOrDefault();
+    var orderlist = displayProperty==null ? "" : ".OrderBy(m => m." + displayProperty.PropertyName + ")";
+
+
+    string bindAttribute;
+    if (IsOverpostingProtectionRequired)
+    {
+        bindAttribute = String.Format("[Bind(Include = \"{0}\")] ", BindAttributeIncludeText);
+    }
+    else
+    {
+        bindAttribute = String.Empty;
+    }
+    string updateAttribute = "nameof(" + entitySetName + "." + UpdateAttribute.Replace(",","), nameof("+ entitySetName+ ".") + ")";
+#>
+    /// <summary>
+    /// Controller for <#= routePrefix #> Pages
+    /// </summary>
+    /// <seealso cref="<#= Namespace #>.BaseController" />
+    public class <#= ControllerName #> : BaseController
+    {
+        /// <summary>
+        /// Index View : list all <#= routePrefix #>s.
+        /// </summary>
+        /// <returns>ActionResult : Index View</returns>
+<# if (UseAsync) { #>
+        public async Task<ActionResult> Index()
+<# } else { #>
+        public ActionResult Index()
+<# } #>
+        {
+<#  if (UseAsync) { #>
+            return View(await AllServicesDTO.GetAllAsync<<#= entitySetName #>>()<#= orderlist #>);
+<#  } else { #>
+            return View(AllServicesDTO.GetAll<<#= entitySetName #>>()<#= orderlist #>);
+<#  } #>
+        }
+
+<# string pkName = GetPrimaryKeyName();
+ if (GenerateListFullAjax) { 
+#>
+        /// <summary>
+        /// Return a list of employees in json format
+        /// </summary>
+        /// <param name="param"><see cref="DataTableAjaxPostDTO"/></param>
+        /// <returns>list of employees in json format</returns>
+        [HttpPost]
+        public JsonResult GetListData(DataTableAjaxPostDTO param)
+        {
+            JsonResult result = default(JsonResult);
+
+            if (param != null)
+            {
+                int filteredResultsCount;
+                int totalResultsCount;
+
+                List<<#= entitySetName #>> objs = this.GetAllWhereForAjaxDataTable(param, out filteredResultsCount, out totalResultsCount);
+
+                var jsonData = new List<object>();
+                objs.ForEach(x => jsonData.Add(new
+                {
+                <#= pkName #> = x.<#= pkName #>,
+<#
+foreach (PropertyMetadata property in ModelMetadata.Properties) {
+    if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey) {
+        // We do not want to show any association properties for which there is
+        // no associated foreign key.
+        if (property.IsAssociation && GetRelatedModelMetadata(property) == null) {
+            continue;
+        }
+
+		if (property.IsAssociation && property.AssociationDirection == Microsoft.AspNet.Scaffolding.Core.Metadata.AssociationDirection.OneToMany){
+#>
+                <#= property.PropertyName.Replace(".", "__") #> = string.Join("; ", x.<#= property.PropertyName #>.Select(y => y<#= GetDisplayPropertyName(property) #>).ToList()),
+<# 
+		}
+		else {
+#>
+                <#= GetValueExpression(property).Replace(".", "__") #> = x.<#= GetValueExpression(property) #><# if(property.TypeName.Contains("System.DateTime")) { if(property.TypeName == "System.Nullable<System.DateTime>") {#>?<#  } #>.ToString("D")<#  }#>,
+<# 
+		} 
+    }
+}
+#>
+                Links = "<a BIADialogLink=\"Type:Modal;<#= pkName #>:<#= routePrefix #>" + x.<#= pkName #> + "\" class=\"a2btn-small glyphicon glyphicon-pencil\" datatitle=\"" + TextResources.Edit + "\" style=\"cursor:pointer\" href=\"" + Url.Action("Edit", "<#= routePrefix #>", new { Id = x.<#= pkName #> }) + "\"></a> | <a BIADialogLink=\"Type:Modal;<#= pkName #>:<#= routePrefix #>" + x.<#= pkName #> + "\" class=\"a2btn-small glyphicon glyphicon-list-alt\" datatitle=\"" + TextResources.Details + "\" style=\"cursor:pointer\" href=\"" + Url.Action("Details", "<#= routePrefix #>", new { Id = x.<#= pkName #> }) + "\"></a> | <a BIADialogLink=\"Type:Modal;Id:<#= routePrefix #>" + x.<#= pkName #> + "\" class=\"a2btn-small glyphicon glyphicon-trash\" datatitle=\"" + TextResources.Delete + "\" style=\"cursor:pointer\" href=\"" + Url.Action("Delete", "<#= routePrefix #>", new { Id = x.<#= pkName #> }) + "\"></a>"
+            }));
+
+                result = Json(new
+                {
+                    draw = param.Draw,
+                    recordsTotal = totalResultsCount,
+                    recordsFiltered = filteredResultsCount,
+                    data = jsonData
+                });
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns an excel file containing the data displayed in the table.
+        /// </summary>Return an export
+        /// <param name="dataJson">The different filter parameters in json format</param>
+        /// <returns>An excel file</returns>
+        [HttpGet]
+        public FileResult GetListData(string dataJson)
+        {
+            FileResult file = default(FileResult);
+
+            if (!string.IsNullOrEmpty(dataJson))
+            {
+                DataTableAjaxPostDTO param = BIA.Net.Common.Helpers.SerializationHelper.ConvertJsonToObject<DataTableAjaxPostDTO>(dataJson);
+
+                if (param != null)
+                {
+                    int filteredResultsCount;
+                    int totalResultsCount;
+
+                    // Remove Pagination
+                    param.Start = default(int);
+                    param.Length = int.MaxValue;
+
+                    List<<#= entitySetName #>> objs = this.GetAllWhereForAjaxDataTable(param, out filteredResultsCount, out totalResultsCount);
+                    file = GetExportFile(objs);
+                }
+            }
+
+            return file;
+        }
+<# } else if (GenerateListAjax) {  #>
+        /// <summary>
+        /// Return a list of <#= routePrefix #> in json format
+        /// </summary>
+        /// <returns>list of employees in json format</returns>
+        public JsonResult GetListData()
+        {
+            var data = AllServicesDTO.GetAll<<#= entitySetName #>>();
+            var jsonData = new List<object>();
+            data.ForEach(x => jsonData.Add(new
+            {
+                <#= pkName #> = x.<#= pkName #>,
+<#
+foreach (PropertyMetadata property in ModelMetadata.Properties) {
+    if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey) {
+        // We do not want to show any association properties for which there is
+        // no associated foreign key.
+        if (property.IsAssociation && GetRelatedModelMetadata(property) == null) {
+            continue;
+        }
+
+        if (property.IsAssociation && property.AssociationDirection == Microsoft.AspNet.Scaffolding.Core.Metadata.AssociationDirection.OneToMany){
+#>
+                <#= property.PropertyName.Replace(".", "__") #> = string.Join("; ", x.<#= property.PropertyName #>.Select(y => y<#= GetDisplayPropertyName(property) #>).ToList()),
+<# 
+        }
+        else {
+#>
+                <#= GetValueExpression(property).Replace(".", "__") #> = x.<#= GetValueExpression(property) #><# if(property.TypeName.Contains("System.DateTime")) { if(property.TypeName == "System.Nullable<System.DateTime>") {#>?<#  } #>.ToString("D")<#  }#>,
+<# 
+        } 
+    }
+}
+#>
+                Links = "<a BIADialogLink=\"Type:Modal;<#= pkName #>:<#= routePrefix #>" + x.<#= pkName #> + "\" class=\"a2btn-small glyphicon glyphicon-pencil\" datatitle=\"" + TextResources.Edit + "\" style=\"cursor:pointer\" href=\"" + Url.Action("Edit", "<#= routePrefix #>", new { Id = x.<#= pkName #> }) + "\"></a> | <a BIADialogLink=\"Type:Modal;<#= pkName #>:<#= routePrefix #>" + x.<#= pkName #> + "\" class=\"a2btn-small glyphicon glyphicon-list-alt\" datatitle=\"" + TextResources.Details + "\" style=\"cursor:pointer\" href=\"" + Url.Action("Details", "<#= routePrefix #>", new { Id = x.<#= pkName #> }) + "\"></a> | <a BIADialogLink=\"Type:Modal;Id:<#= routePrefix #>" + x.<#= pkName #> + "\" class=\"a2btn-small glyphicon glyphicon-trash\" datatitle=\"" + TextResources.Delete + "\" style=\"cursor:pointer\" href=\"" + Url.Action("Delete", "<#= routePrefix #>", new { Id = x.<#= pkName #> }) + "\"></a>"
+            }));
+
+            var jsonResult = Json(new { data = jsonData }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
+        }
+<# } else { #>
+        /// <summary>
+        /// _List Partial View.
+        /// </summary>
+        /// <returns>ActionResult : _List partial View</returns>
+        public ActionResult _List()
+        {
+            return PartialView(AllServicesDTO.GetAll<<#= entitySetName #>>()<#= orderlist #>);
+        }
+<# } #>
+
+        /// <summary>
+        /// Details View for a <#= routePrefix #>. (ex :<#= routePrefix #>/Details/5)
+        /// </summary>
+        /// <param name="id">The id of the <#= routePrefix #>.</param>
+        /// <returns>ActionResult : Details View</returns>
+<# if (UseAsync) { #>
+        public async Task<ActionResult> Details(<#= primaryKeyNullableTypeName #> id)
+<# } else { #>
+        public ActionResult Details(<#= primaryKeyNullableTypeName #> id)
+<# } #>
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+<# if (UseAsync) { #>
+            <#= ModelTypeName #> <#= ModelVariable #> = await AllServicesDTO.FindAsync<<#= entitySetName #>>(id);
+<# } else { #>
+            <#= ModelTypeName #> <#= ModelVariable #> = AllServicesDTO.Find<<#= entitySetName #>>(id);
+<# } #>
+            if (<#= ModelVariable #> == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(<#= ModelVariable #>);
+        }
+
+        /// <summary>
+        /// Create View. (ex :<#= routePrefix #>/Create)
+        /// </summary>
+        /// <returns>ActionResult : Create View</returns>
+        public ActionResult Create()
+        {
+<# if ((relatedProperties.Count > 0) || (relatedMultiProperties.Count >0)) { #>
+            PrepareRelatedLink();
+<# } #>
+            return View();
+        }
+
+        /// <summary>
+        /// Creates the specified <#= routePrefix #>.
+        /// </summary>
+        /// <param name="<#= ModelVariable #>">The <#= routePrefix #>.</param>
+        /// <returns>ActionResult : Create View or Index View if success</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [PreventDuplicateRequest]
+<# if (UseAsync) { #>
+        public async Task<ActionResult> Create(<#= bindAttribute #><#= ModelTypeName #> <#= ModelVariable #>)
+<# } else { #>
+        public ActionResult Create(<#= bindAttribute #><#= ModelTypeName #> <#= ModelVariable #>)
+<# } #>
+        {
+            if (ModelState.IsValid)
+            {
+<# if (UseAsync) { #>
+                await AllServicesDTO.InsertAsync(<#= ModelVariable #>);
+<# } else { #>
+                AllServicesDTO.Insert(<#= ModelVariable #>);
+<# } #>
+                return RedirectToAction("Index");
+            }
+
+<# if ((relatedProperties.Count > 0) || (relatedMultiProperties.Count >0)) { #>
+            PrepareRelatedLink();
+<# } #>
+            return View(<#= ModelVariable #>);
+        }
+
+        /// <summary>
+        /// Edit View. (ex :<#= routePrefix #>/Edit/5)
+        /// </summary>
+        /// <param name="id">The identifier of the <#= routePrefix #>.</param>
+        /// <returns>ActionResult : Edit View</returns>
+<# if (UseAsync) { #>
+        public async Task<ActionResult> Edit(<#= primaryKeyNullableTypeName #> id)
+<# } else { #>
+        public ActionResult Edit(<#= primaryKeyNullableTypeName #> id)
+<# } #>
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+<# if (UseAsync) { #>
+            <#= ModelTypeName #> <#= ModelVariable #> = await AllServicesDTO.FindAsync<<#= entitySetName #>>(id);
+<# } else { #>
+            <#= ModelTypeName #> <#= ModelVariable #> = AllServicesDTO.Find<<#= entitySetName #>>(id);
+<# } #>
+            if (<#= ModelVariable #> == null)
+            {
+                return HttpNotFound();
+            }
+
+<# if ((relatedProperties.Count > 0) || (relatedMultiProperties.Count >0)) { #>
+            PrepareRelatedLink();
+<# } #>
+            return View(<#= ModelVariable #>);
+        }
+
+        /// <summary>
+        /// Edits the specified <#= routePrefix #>.
+        /// </summary>
+        /// <param name="<#= ModelVariable #>">The <#= routePrefix #>.</param>
+        /// <returns>ActionResult : Edit View or Index View if success</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [PreventDuplicateRequest]
+<# if (UseAsync) { #>
+        public async Task<ActionResult> Edit(<#= bindAttribute #><#= ModelTypeName #> <#= ModelVariable #>)
+<# } else { #>
+        public ActionResult Edit(<#= bindAttribute #><#= ModelTypeName #> <#= ModelVariable #>)
+<# } #>
+        {
+            if (ModelState.IsValid)
+            {
+<# if (UseAsync) { #>
+                await AllServicesDTO.UpdateValuesAsync(<#= ModelVariable #>, new List<string>() { <#= updateAttribute #> });
+<# } else { #>
+                AllServicesDTO.UpdateValues(<#= ModelVariable #>, new List<string>() { <#= updateAttribute #> });
+<# } #>
+                return RedirectToAction("Index");
+            }
+
+<# if ((relatedProperties.Count > 0) || (relatedMultiProperties.Count >0)) { #>
+            PrepareRelatedLink();
+<# } #>
+            return View(<#= ModelVariable #>);
+        }
+
+        /// <summary>
+        /// Delete View. (ex :<#= routePrefix #>/Delete/5)
+        /// </summary>
+        /// <param name="id">The identifier of the <#= routePrefix #>.</param>
+        /// <returns>ActionResult : Delete View</returns>
+<# if (UseAsync) { #>
+        public async Task<ActionResult> Delete(<#= primaryKeyNullableTypeName #> id)
+<# } else { #>
+        public ActionResult Delete(<#= primaryKeyNullableTypeName #> id)
+<# } #>
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+<# if (UseAsync) { #>
+            <#= ModelTypeName #> <#= ModelVariable #> = await AllServicesDTO.FindAsync<<#= entitySetName #>>(id);
+<# } else { #>
+            <#= ModelTypeName #> <#= ModelVariable #> = AllServicesDTO.Find<<#= entitySetName #>>(id);
+<# } #>
+            if (<#= ModelVariable #> == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(<#= ModelVariable #>);
+        }
+
+        /// <summary>
+        /// Deletes the specified <#= routePrefix #>.
+        /// </summary>
+        /// <param name="id">The identifier of the <#= routePrefix #>.</param>
+        /// <returns>ActionResult : Delete View or Index View if success</returns>
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [PreventDuplicateRequest]
+<# if (UseAsync) { #>
+        public async Task<ActionResult> DeleteConfirmed(<#= primaryKeyShortTypeName #> id)
+<# } else { #>
+        public ActionResult DeleteConfirmed(<#= primaryKeyShortTypeName #> id)
+<# } #>
+        {
+<# if (UseAsync) { #>
+           await AllServicesDTO.DeleteByIdAsync<<#= entitySetName #>>(id);
+<# } else { #>
+           AllServicesDTO.DeleteById<<#= entitySetName #>>(id);
+<# } #>
+            return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// Releases unmanaged resources and optionally releases managed resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+        }
+<# if ((relatedProperties.Count > 0) || (relatedMultiProperties.Count >0)) { #>
+
+        /// <summary>
+        /// Prepares the related link.
+        /// </summary>
+        private void PrepareRelatedLink()
+        {
+<# foreach (var property in relatedProperties.Values) { #>
+            ViewBag.<#= property.EntitySetName #>Id = new SelectList(
+                AllServicesDTO.GetAll<<#= property.EntitySetName #>>().OrderBy(p => p.<#= property.DisplayPropertyName #>),
+                nameof(<#= property.EntitySetName #>.<#= property.PrimaryKeyNames[0] #>),
+                nameof(<#= property.EntitySetName #>.<#= property.DisplayPropertyName #>));
+<# } #>
+<# foreach (var property in relatedMultiProperties.Values) { #>
+            ViewBag.<#= property.EntitySetName #>Ids = new MultiSelectList(
+                AllServicesDTO.GetAll<<#= property.EntitySetName #>>().OrderBy(p => p.<#= property.DisplayPropertyName #>),
+                nameof(<#= property.EntitySetName #>.<#= property.PrimaryKeyNames[0] #>),
+                nameof(<#= property.EntitySetName #>.<#= property.DisplayPropertyName #>));
+<# } #>
+        }
+<# } #>
+<#if (GenerateListFullAjax) { #>
+        /// <summary>
+        /// Returns the filtered data
+        /// </summary>
+        /// <param name="datatableDTO"><see cref="DataTableAjaxPostDTO"/></param>
+        /// <param name="filteredResultsCount">filtered results count</param>
+        /// <param name="totalResultsCount">total results count</param>
+        /// <returns>list of <see cref="<#= entitySetName #>"/></returns>
+        private List<<#= entitySetName #>> GetAllWhereForAjaxDataTable(DataTableAjaxPostDTO datatableDTO, out int filteredResultsCount, out int totalResultsCount)
+        {
+            string searchValue = datatableDTO?.Search?.Value?.Trim();
+
+            System.Linq.Expressions.Expression<Func<<#= modelEntityName #>, bool>> where = x =>
+            (string.IsNullOrEmpty(searchValue) ||
+<#
+int nbProperty= default(int);
+int totalProperty= default(int);
+foreach (PropertyMetadata property in ModelMetadata.Properties) {
+    if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey) {
+        // We do not want to show any association properties for which there is
+        // no associated foreign key.
+        if (property.IsAssociation && GetRelatedModelMetadata(property) == null) {
+            continue;
+        }
+
+		if (!(property.IsAssociation && property.AssociationDirection == Microsoft.AspNet.Scaffolding.Core.Metadata.AssociationDirection.OneToMany) && property.TypeName.Contains("System.String")) {
+                totalProperty++;
+		}
+    }
+}
+foreach (PropertyMetadata property in ModelMetadata.Properties) {
+    if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey) {
+        // We do not want to show any association properties for which there is
+        // no associated foreign key.
+        if (property.IsAssociation && GetRelatedModelMetadata(property) == null) {
+            continue;
+        }
+
+		if (!(property.IsAssociation && property.AssociationDirection == Microsoft.AspNet.Scaffolding.Core.Metadata.AssociationDirection.OneToMany) && property.TypeName.Contains("System.String")) {
+                nbProperty++;
+#>
+            x.<#= property.PropertyName #>.Contains(searchValue)<# if(totalProperty > nbProperty) { #> ||<# } #>
+
+<# 
+		}
+    }
+}
+#>
+            );
+
+            return AllServicesDTO.GetAllWhereForAjaxDataTable<<#= entitySetName #>, <#= modelEntityName #>>(datatableDTO, out filteredResultsCount, out totalResultsCount, where);
+        }
+
+        /// <summary>
+        /// Return export file
+        /// </summary>
+        /// <param name="objs">list of <see cref="<#= entitySetName #>"/></param>
+        /// <returns>export file</returns>
+        private FileResult GetExportFile(List<<#= entitySetName #>> objs)
+        {
+            FileResult file = default(FileResult);
+
+            if (objs != null && objs.Any())
+            {
+                System.Resources.ResourceManager resourceManager = new System.Resources.ResourceManager(typeof(Common.Resources.AppliResources));
+                List<Row> rows = new List<Row>();
+
+                foreach (var obj in objs)
+                {
+                    List<Cell> cells = new List<Cell>();
+                    if (objs.First() == obj)
+                    {
+                        // Add Header
+<#
+foreach (PropertyMetadata property in ModelMetadata.Properties) {
+    if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey) {
+        // We do not want to show any association properties for which there is
+        // no associated foreign key.
+        if (property.IsAssociation && GetRelatedModelMetadata(property) == null) {
+            continue;
+        }
+
+		if (property.IsAssociation && property.AssociationDirection == Microsoft.AspNet.Scaffolding.Core.Metadata.AssociationDirection.OneToMany){
+#>
+                        cells.Add(OpenXmlExcelHelper.GetCell(resourceManager.GetString(nameof(obj.<#= property.PropertyName #>))));
+<# 
+		}
+		else {
+#>
+                        cells.Add(OpenXmlExcelHelper.GetCell(resourceManager.GetString(nameof(obj.<#= GetValueExpression(property) #>))));
+<# 
+		} 
+    }
+}
+#>
+
+                        rows.Add(new Row(cells));
+
+                        cells.Clear();
+                    }
+
+<#
+foreach (PropertyMetadata property in ModelMetadata.Properties) {
+    if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey) {
+        // We do not want to show any association properties for which there is
+        // no associated foreign key.
+        if (property.IsAssociation && GetRelatedModelMetadata(property) == null) {
+            continue;
+        }
+
+		if (property.IsAssociation && property.AssociationDirection == Microsoft.AspNet.Scaffolding.Core.Metadata.AssociationDirection.OneToMany){
+#>
+                    cells.Add(OpenXmlExcelHelper.GetCell(string.Join("; ", obj.<#= property.PropertyName #>.Select(y => y<#= GetDisplayPropertyName(property) #>).ToList())));
+<# 
+		}
+		else {
+#>
+                    cells.Add(OpenXmlExcelHelper.GetCell(obj.<#= GetValueExpression(property) #><# if(property.TypeName.Contains("System.DateTime")) { if(property.TypeName == "System.Nullable<System.DateTime>") {#>?<#  } #>.ToString("D")<#  }#><#if(!(property.TypeName.Contains("System.DateTime") || property.TypeName.Contains("System.String"))) {#>.ToString()<#  }#>));
+<# 
+		} 
+    }
+}
+#>
+                    
+                    rows.Add(new Row(cells));
+                }
+
+                file = File(OpenXmlExcelHelper.CreateWorkBook(rows), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", string.Format("{0} - {1}.xlsx", resourceManager.GetString(this.GetType().Name.Replace("Controller", string.Empty)), Net.Common.SafranSettingsReader.ProjectTitle));
+            }
+
+            return file;
+        }
+<# } #>
+    }
+}<#+
+// This function converts the primary key short type name to its nullable equivalent when possible. This is required to make
+// sure that an HTTP 400 error is thrown when the user tries to access the edit, delete, or details action with null values.
+    string GetNullableTypeName(string typeName, string shortTypeName)
+    {
+        // The exceptions are caught because if for any reason the type is user defined, then the short type name will be used.
+        // In that case the user will receive a server error if null is passed to the edit, delete, or details actions.
+        Type primaryKeyType = null;
+        try
+        {
+            primaryKeyType = Type.GetType(typeName);
+        }
+        catch
+        {
+        }
+        if (primaryKeyType != null && (primaryKeyType.IsPrimitive || IsGuid(typeName)))
+        {
+            return shortTypeName + "?";
+        }
+        return shortTypeName;
+    }
+
+    bool IsGuid(string typeName) {
+        return String.Equals("System.Guid", typeName, StringComparison.OrdinalIgnoreCase);
+    }
+
+    RelatedModelMetadata GetRelatedModelMetadata(PropertyMetadata property) {
+        return property.RelatedModel;
+    }
+
+    string GetValueExpression(PropertyMetadata property) {
+        RelatedModelMetadata propertyModel = GetRelatedModelMetadata(property);
+        return propertyModel != null ? propertyModel.AssociationPropertyName + "." + propertyModel.DisplayPropertyName : property.PropertyName;
+    }
+    string GetDisplayPropertyName(PropertyMetadata property) {
+        RelatedModelMetadata propertyModel = GetRelatedModelMetadata(property);
+        return propertyModel != null ?  "." + propertyModel.DisplayPropertyName : "";
+    }
+
+    // This will return the primary key property name, if and only if there is exactly
+    // one primary key. Returns null if there is no PK, or the PK is composite.
+     string GetPrimaryKeyName() {
+          return (ModelMetadata.PrimaryKeys != null && ModelMetadata.PrimaryKeys.Count() == 1) ? ModelMetadata.PrimaryKeys[0].PropertyName : null;
+     }
+#>

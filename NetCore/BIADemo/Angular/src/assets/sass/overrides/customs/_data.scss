@@ -1,0 +1,66 @@
+p-table {
+  .ui-widget-overlay {
+    background-color: $biaBgColor !important;
+  }
+  table {
+    thead {
+      tr:first-child th {
+        border-top-width: 0px !important;
+        font-weight: 800 !important;
+      }
+      th {
+        background-color: $biaBgColor !important;
+        color: $biaFgTextColor !important;
+        &.ui-state-highlight {
+          color: $primaryColor !important;
+        }
+      }
+    }
+    tbody {
+      tr:nth-child(odd) {
+        background-color: $biaBgHoverColor !important;
+      }
+      tr:nth-child(even) {
+        background-color: $biaBgColor !important;
+      }
+    }
+
+    .pi.pi-sort-up:before,
+    .pi.pi-sort-down:before {
+      color: $primaryColor !important;
+    }
+
+    tr,
+    th,
+    td {
+      border-left-width: 0px !important;
+      border-right-width: 0px !important;
+    }
+
+    // td {
+    //   font-weight: 300;
+    //   padding: 0.614em 0.857em !important;
+    // }
+  }
+}
+
+p-paginator .ui-paginator {
+  border-left-width: 0px !important;
+  border-right-width: 0px !important;
+  border-top-width: 0px !important;
+  border-bottom-width: 0px !important;
+  background-color: $biaBgColor !important;
+
+  .ui-paginator-prev:before,
+  .ui-paginator-next:before,
+  .ui-paginator-last:before,
+  .ui-paginator-first:before,
+  .ui-paginator-element {
+    color: $biaFgTextColor !important;
+  }
+
+  .ui-paginator-pages a.ui-state-active {
+    background-color: $primaryColor !important;
+    color: $biaBgColor !important;
+  }
+}

@@ -1,0 +1,43 @@
+1- Extract template from ZZProjectNameZZ solution
+
+2- Unzip template file
+
+3- Replace project folder in ZZProjectKit/ZZProjectNameZZ.ZZProjectNameZZ/
+
+4- In all file in ZZProjectKit/ZZProjectNameZZ.ZZProjectNameZZ/ except *.vstemplate :
+	ZZProjectNameZZ => $saferootprojectname$
+
+5- In all *.vstemplate add before </VSTemplate>:
+  <WizardExtension>
+    <Assembly>BIA.ProjectCreatorWizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>BIA.ProjectCreatorWizard.ChildWizard</FullClassName>
+  </WizardExtension>
+
+6- In ZZProjectKit/ZZProjectNameZZ.ZZProjectNameZZ/ZZProjectNameZZ.ZZProjectNameZZ.SyncDatabase/MyTemplate.vstemplate
+=> <Folder Name="Scmp"..> <ProjectItem  set  ReplaceParameters="true" 
+
+7- In ZZProjectKit/ZZProjectNameZZ.ZZProjectNameZZ/ZZProjectNameZZ.ZZProjectNameZZ.SyncDatabase/Scmp/*
+=> Replace "Your Computer Name" by . 
+
+8- In ZZProjectKit/ZZProjectNameZZ.ZZProjectNameZZ/ZZProjectNameZZ.ZZProjectNameZZ.Model/MyTemplate.vstemplate
+=> <ProjectItem ReplaceParameters="true" TargetFileName="ProjectDB.edmx">ProjectDB.edmx</ProjectItem>
+
+9- Verify Item Group in ZZProjectKit.csproj, it should be :
+  <ItemGroup>
+    <VSTemplate Include="BIA.vstemplate">
+      <SubType>Designer</SubType>
+    </VSTemplate>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="__TemplateIcon.jpg" />
+    <Content Include="ZZProjectNameZZ.ZZProjectNameZZ\*" />
+    <Content Include="ZZProjectNameZZ.ZZProjectNameZZ\*\*" />
+    <Content Include="ZZProjectNameZZ.ZZProjectNameZZ\*\*\*" />
+    <Content Include="ZZProjectNameZZ.ZZProjectNameZZ\*\*\*\*" />	
+    <Content Include="ZZProjectNameZZ.ZZProjectNameZZ\*\*\*\*\*" />
+    <Content Include="ZZProjectNameZZ.ZZProjectNameZZ\*\*\*\*\*\*" />
+    <Content Include="ZZProjectNameZZ.ZZProjectNameZZ\*\*\*\*\*\*\*" />
+    <Content Include="ZZProjectNameZZ.ZZProjectNameZZ\*\*\*\*\*\*\*\*" />
+  </ItemGroup>
+
+  (remove other itm Group in  Include="ZZProjectNameZZ.ZZProjectNameZZ) 

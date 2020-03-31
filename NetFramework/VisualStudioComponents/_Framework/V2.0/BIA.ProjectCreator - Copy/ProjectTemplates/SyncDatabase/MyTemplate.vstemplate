@@ -1,0 +1,58 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>BIA V2.0.0 &gt; SyncDatabase</Name>
+    <Description>Project For BIA &gt; SyncDatabase</Description>
+    <ProjectType>SQLDB</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>7</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ZZCompanyNameZZ.ZZProjectNameZZ.SyncDatabase</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <CreateInPlace>true</CreateInPlace>
+    <Icon>__TemplateIcon.jpg</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="ZZCompanyNameZZ.ZZProjectNameZZ.SyncDatabase.sqlproj" File="ZZCompanyNameZZ.ZZProjectNameZZ.SyncDatabase.sqlproj" ReplaceParameters="true">
+      <Folder Name="Properties" TargetFolderName="Properties" />
+      <Folder Name="dbo" TargetFolderName="dbo">
+        <Folder Name="Stored Procedures" TargetFolderName="Stored Procedures">
+          <ProjectItem ReplaceParameters="true" TargetFileName="GetExampleUsersByCompany.sql">GetExampleUsersByCompany.sql</ProjectItem>
+        </Folder>
+        <Folder Name="Tables" TargetFolderName="Tables">
+          <ProjectItem ReplaceParameters="true" TargetFileName="ExampleTable1.sql">ExampleTable1.sql</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="ExampleTable2.sql">ExampleTable2.sql</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="ExampleTable3.sql">ExampleTable3.sql</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="ExampleTable3ExampleTable1.sql">ExampleTable3ExampleTable1.sql</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Member.sql">Member.sql</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="MemberRole.sql">MemberRole.sql</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="MemberRoleMember.sql">MemberRoleMember.sql</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Site.sql">Site.sql</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="User.sql">User.sql</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Version.sql">Version.sql</ProjectItem>
+        </Folder>
+      </Folder>
+      <Folder Name="Scmp" TargetFolderName="Scmp">
+        <ProjectItem ReplaceParameters="true" TargetFileName="0-Dev-Model2DBDev.scmp">0-Dev-Model2DBDev.scmp</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="1-Delivery-DBDev2Model.scmp">1-Delivery-DBDev2Model.scmp</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="POSTSQL_To_DEV.scmp">POSTSQL_To_DEV.scmp</ProjectItem>
+      </Folder>
+      <Folder Name="Scripts" TargetFolderName="Scripts">
+        <Folder Name="LoadTableParam" TargetFolderName="LoadTableParam">
+          <ProjectItem ReplaceParameters="true" TargetFileName="insert_update_MemberRole.sql">insert_update_MemberRole.sql</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="insert_update_Version.sql">insert_update_Version.sql</ProjectItem>
+        </Folder>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Script.PostDeployment1.sql">Script.PostDeployment1.sql</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Script.PreDeployment1.sql">Script.PreDeployment1.sql</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Script.PreSqlPackage.sql">Script.PreSqlPackage.sql</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="SyncDatabase.publish.xml">SyncDatabase.publish.xml</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>ZZProjectInstallerWizards, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>ZZProjectInstallerWizards.ChildWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+  <siteMapNode url="~/" title="Home"  description="" >
+    <!-- Possible Role : Anonymous, Identified, or a label in AspNetRoles table -->
+    <siteMapNode title="Site|s" roles="Admin,SiteAdmin" >
+      <siteMapNode url="~/Site/" title="ListOf| |Site|s" roles= "Admin,SiteAdmin">
+        <siteMapNode url="~/Site/Edit" title="Edit| |Site" roles="Admin,SiteAdmin"/>
+      </siteMapNode>
+      <siteMapNode url="~/Site/Create" title="Create| |Site" roles= "Admin,SiteAdmin"/>
+    </siteMapNode>
+    <siteMapNode title="ExampleTable|2" roles="SiteMember" >
+      <siteMapNode url="~/ExampleTable2/" title="ListOf| |ExampleTable|2" roles="SiteMember"/>
+      <siteMapNode url="~/ExampleTable2/Create" title="Create| |ExampleTable|2" roles="SiteMember"/>
+    </siteMapNode>
+    <siteMapNode title="ExampleTable|3" roles="SiteMember" >
+      <siteMapNode url="~/ExampleTable3/" title="ListOf| |ExampleTable|3" roles="SiteMember"/>
+      <siteMapNode url="~/ExampleTable3/Create" title="Create| |ExampleTable|3" roles="SiteMember"/>
+    </siteMapNode>
+    <siteMapNode title="Example|s" roles="User" >
+      <siteMapNode url="~/Example/ExamplePage" title="ExamplePage" roles="User">
+        <siteMapNode url="~/Example/ExamplePage2" title="ExamplePage2" roles="User"/>
+      </siteMapNode>
+      <siteMapNode url="~/Example/ExamplePageReadOnly" title="ExamplePage| Read Only" roles="User"/>
+      <siteMapNode url="~/Example/ExamplePageCascading" title="ExamplePageCascading" roles="User"/>
+      <siteMapNode url="~/Example/ExamplePageIconBefore" title="ExamplePage with icon on control" roles="User"/>
+      <siteMapNode url="~/Example/FullScreen" title="FullScreen" roles="User"/>
+      <siteMapNode url="~/Example/UploadScreenCapture" title="Upload Screen Capture" roles="User"/>
+      <siteMapNode url="~/Example/Dialog" title="Dialog" roles="User"/>
+      <siteMapNode url="~/Example/BasicFileUpload" title="Basic File Upload" roles="User"/>
+      <siteMapNode url="~/Example/MultiFilesUpload" title="Multi Files Upload" roles="User"/>
+      <siteMapNode url="javascript:alert('Hello');" title="Hello JS" roles="User"/>
+      <siteMapNode js="alert('Hello2');" title="Hello JS - 2" roles="User"/>
+      <siteMapNode url="~/Example/Error" title="Error" roles="User"/>
+      <siteMapNode url="~/Example/CallStoredProcedure" title="Call Stored Procedure" roles="User"/>
+    </siteMapNode>
+  </siteMapNode>
+</siteMap>

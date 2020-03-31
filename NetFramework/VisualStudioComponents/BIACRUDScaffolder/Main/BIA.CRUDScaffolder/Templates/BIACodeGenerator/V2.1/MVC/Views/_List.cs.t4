@@ -1,0 +1,114 @@
+﻿<#@ template language="C#" HostSpecific="True" #>
+<#@ output extension=".cshtml" #>
+<#@ include file="Imports.include.t4" #>
+@model IEnumerable<#= "<" + ViewDataTypeName + ">" #>
+<#
+    PushIndent("    ");
+    string TableName = ControllerRootName + "Table";
+
+#>
+
+<table class="dataTable stripe table @*rowselectable*@"  id="<#= TableName #>">
+    <thead>
+    <tr>
+<#
+IEnumerable<PropertyMetadata> properties = ModelMetadata.Properties;
+foreach (PropertyMetadata property in properties) {
+    if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey) {
+#>
+<#
+        // We do not want to show any association properties for which there is
+        // no associated foreign key.
+        if (property.IsAssociation && GetRelatedModelMetadata(property) == null) {
+            continue;
+        }
+#>
+        <th>
+            @Html.<#if (TranslateFields){#>T_<#}#>DisplayNameFor(model => model.<#= property.PropertyName #>)
+        </th>
+<#
+    }
+}
+#>
+        <th class="biaListColAction">@TextResources.Actions</th>
+    </tr>
+    </thead>
+<# if (GenerateListAjax || GenerateListFullAjax) { #>
+<tbody></tbody>
+<# 
+} 
+else {
+#>
+@{ var odd = false; }
+@foreach (var item in Model) {
+    odd = !odd;
+    <tr class="@(odd ? "odd": "even")">
+<#
+foreach (PropertyMetadata property in properties) {
+    if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey) {
+#>
+<#
+        // We do not want to show any association properties for which there is
+        // no associated foreign key.
+        if (property.IsAssociation && GetRelatedModelMetadata(property) == null) {
+            continue;
+        }
+#>
+        <td>
+<#
+        if (property.IsAssociation && property.AssociationDirection == Microsoft.AspNet.Scaffolding.Core.Metadata.AssociationDirection.OneToMany){
+#>
+            @{ if (item.<#= property.PropertyName #> != null)
+                {
+                    var last = item.<#= property.PropertyName #>.LastOrDefault();
+                    foreach (var subitem in item.<#= property.PropertyName #>)
+                    {
+                        @Html.DisplayFor(modelItem => subitem<#= GetDisplayPropertyName(property)#>)
+                        if (!subitem.Equals(last))
+                        {@Html.Raw(";")}
+                    }
+                }
+            }
+<# 
+        }
+        else {
+#>
+            @Html.DisplayFor(modelItem => <#= "item." + GetValueExpression(property) #>)
+<# 
+        } 
+#>
+        </td>
+<#
+    }
+}
+
+string pkName = GetPrimaryKeyName();
+string pkNameLinQ = "/* id=item.PrimaryKey */";
+if (pkName != null) {
+    pkNameLinQ = "id = item." + pkName;
+}
+#>
+        <td>
+<#if (CollapseAction) { #>
+            <button class="btn btn-dropdown dropdown-toggle" type="button" data-target="menu-actions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <svg viewBox="0 0 16 16"><use xlink:href="#actions" /></svg>
+            </button>
+<# } #>
+            <div class="<#if (CollapseAction) { #>dropdown-menu dropdown-menu-right menu-actions<# } #>">
+                @Html.ActionLink(" ", "Edit", new { <#=pkNameLinQ#> }, new { @data_toggle = "tooltip",  @data_placement = "left", @title = TextResources.Edit, @class = "listAction fas fa-pencil-alt", BIADialogLink = "Type:Modal" })
+                @Html.ActionLink(" ", "Details", new { <#=pkNameLinQ#> }, new { @data_toggle = "tooltip",  @data_placement = "left", @title = TextResources.Details, @class = "listAction fas fa-list-ul", BIADialogLink = "Type:Modal" })
+                @Html.ActionLink(" ", "Delete", new { <#=pkNameLinQ#> }, new { @data_toggle = "tooltip",  @data_placement = "left", @title = TextResources.Delete, @class = "listAction fas fa-trash-alt", BIADialogLink = "Type:Modal" })
+            </div>
+        </td>
+    </tr>
+}
+
+<# 
+} 
+#>
+
+</table>
+<#
+    ClearIndent();
+#>
+<#@ include file="../../ModelMetadataFunctions.cs.include.t4" #>

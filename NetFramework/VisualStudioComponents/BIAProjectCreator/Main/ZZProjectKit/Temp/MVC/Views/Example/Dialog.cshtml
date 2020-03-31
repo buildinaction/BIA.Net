@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = AppliResources.ExamplePage + " Dialog usage";
+}
+<h2>@ViewBag.Title</h2>
+<h3>Example of navigation in popup : </h3>
+<div class="col-sm-12">
+    <button type="button" style="margin: auto;" class="btn btn-main" onclick="window.location='@Url.Action("DialogParentPopup","Example",null)'" BIADialogLink="Type:Modal">Open Dialog Parent Popup</button>
+    <button type="button" style="margin: auto;" class="btn btn-main" onclick="window.location='@Url.Action("BasicFileUpload","Example",null)'" BIADialogLink="Type:Modal">Open upload File Popup</button>
+    <button id="MyJSLink" style="margin: auto;"  type="button" class="btn btn-main" BIADialogLink = "Type:Modal">Javascript Dialog</button>
+</div>
+<br />
+<h3>Example of navigation in a content of the page :</h3>
+<div class="row">
+    <div class="col-sm-6">
+        <label>Content loaded in Javascript after 3s:</label>
+        <div id="DivSiteList" style="height: 280px;">
+
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="row">
+            <button type="button" style="margin: auto;" class="btn btn-main" onclick="window.location='@Url.Action("Index","WindowsService",null)'" BIADialogLinkToContent="DivContent:#DivWindowsService">Display Windows Service Status</button>
+        </div>
+        <div id="DivWindowsService" style="height: 250px;">
+
+        </div>
+    </div>
+</div>
+<br />
+<h3>Example of navigation full page :</h3>
+<div class="col-sm-12">
+    <label>
+        Button :
+    </label>
+    <button type="button" class="btn btn-main" onclick="window.open('http://www.google.fr', '_blank');">Open Google in new windows</button>
+    <button type="button" class="btn btn-main" onclick="window.open('http://www.google.fr', '_self');">Open Google</button>
+</div>
+<div class="col-sm-12">
+    <label>
+        Link :
+    </label>
+    <a href="http://www.google.fr" target="_blank">Open Google in new windows</a> /
+    <a href="http://www.google.fr" target="_self">Open Google in current</a>
+</div>
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" class="btn btn-second" onclick="window.open('http://www.google.fr', '_blank');">Open Google in new windows</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" class="btn btn-main" onclick="window.open('http://www.google.fr', '_self');">Open Google</button>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    <script>
+        var UrlSiteIndex = '@Url.Action("Index", "Site", null)'
+        var UrlSiteCreate = '@Url.Action("Create", "Site", null)'
+    </script>
+    <script src="~/Scripts/app/modules/Example/DialogExample.js"></script>
+}

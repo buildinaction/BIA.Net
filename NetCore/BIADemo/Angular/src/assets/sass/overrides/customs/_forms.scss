@@ -1,0 +1,20 @@
+p-button,
+button[pbutton] {
+    &.ui-button-secondary {
+        color: $primaryColor !important;
+        :before {
+            color: $primaryColor !important;
+        }
+    }
+}
+
+input,
+textarea,
+select,
+button {
+    color: $biaFgTextColor;
+}
+
+body .ui-dialog .ui-dialog-titlebar {
+    background-color: $biaBgColor;
+}

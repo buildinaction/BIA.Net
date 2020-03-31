@@ -1,0 +1,946 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ProjectDB.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ProjectDBStoreContainer">
+    <EntitySet Name="ExampleTable1" EntityType="ProjectDB.Store.ExampleTable1" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ExampleTable2" EntityType="ProjectDB.Store.ExampleTable2" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ExampleTable3" EntityType="ProjectDB.Store.ExampleTable3" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Version" EntityType="ProjectDB.Store.Version" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="User" EntityType="ProjectDB.Store.User" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Member" EntityType="ProjectDB.Store.Member" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MemberRole" EntityType="ProjectDB.Store.MemberRole" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Site" EntityType="ProjectDB.Store.Site" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="View" EntityType="ProjectDB.Store.View" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="SiteViews" EntityType="ProjectDB.Store.SiteViews" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserViews" EntityType="ProjectDB.Store.UserViews" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="MemberRoleMember" EntityType="ProjectDB.Store.MemberRoleMember" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ExampleTable3ExampleTable1" EntityType="ProjectDB.Store.ExampleTable3ExampleTable1" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="UserMember" Association="ProjectDB.Store.UserMember">
+      <End Role="User" EntitySet="User" />
+      <End Role="Member" EntitySet="Member" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MemberRoleMember_MemberRole" Association="ProjectDB.Store.FK_MemberRoleMember_MemberRole">
+      <End Role="MemberRole" EntitySet="MemberRole" />
+      <End Role="MemberRoleMember" EntitySet="MemberRoleMember" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MemberRoleMember_Member" Association="ProjectDB.Store.FK_MemberRoleMember_Member">
+      <End Role="Member" EntitySet="Member" />
+      <End Role="MemberRoleMember" EntitySet="MemberRoleMember" />
+    </AssociationSet>
+    <AssociationSet Name="SiteMember" Association="ProjectDB.Store.SiteMember">
+      <End Role="Site" EntitySet="Site" />
+      <End Role="Member" EntitySet="Member" />
+    </AssociationSet>
+    <AssociationSet Name="ExampleTable2ExampleTable1" Association="ProjectDB.Store.ExampleTable2ExampleTable1">
+      <End Role="ExampleTable2" EntitySet="ExampleTable2" />
+      <End Role="ExampleTable1" EntitySet="ExampleTable1" />
+    </AssociationSet>
+    <AssociationSet Name="ExampleTable2ExampleTable11" Association="ProjectDB.Store.ExampleTable2ExampleTable11">
+      <End Role="ExampleTable2" EntitySet="ExampleTable2" />
+      <End Role="ExampleTable1" EntitySet="ExampleTable1" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ExampleTable3ExampleTable1_ExampleTable3" Association="ProjectDB.Store.FK_ExampleTable3ExampleTable1_ExampleTable3">
+      <End Role="ExampleTable3" EntitySet="ExampleTable3" />
+      <End Role="ExampleTable3ExampleTable1" EntitySet="ExampleTable3ExampleTable1" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ExampleTable3ExampleTable1_ExampleTable1" Association="ProjectDB.Store.FK_ExampleTable3ExampleTable1_ExampleTable1">
+      <End Role="ExampleTable1" EntitySet="ExampleTable1" />
+      <End Role="ExampleTable3ExampleTable1" EntitySet="ExampleTable3ExampleTable1" />
+    </AssociationSet>
+    <AssociationSet Name="SiteExampleTable1" Association="ProjectDB.Store.SiteExampleTable1">
+      <End Role="Site" EntitySet="Site" />
+      <End Role="ExampleTable1" EntitySet="ExampleTable1" />
+    </AssociationSet>
+    <AssociationSet Name="SiteExampleTable2" Association="ProjectDB.Store.SiteExampleTable2">
+      <End Role="Site" EntitySet="Site" />
+      <End Role="ExampleTable2" EntitySet="ExampleTable2" />
+    </AssociationSet>
+    <AssociationSet Name="SiteExampleTable3" Association="ProjectDB.Store.SiteExampleTable3">
+      <End Role="Site" EntitySet="Site" />
+      <End Role="ExampleTable3" EntitySet="ExampleTable3" />
+    </AssociationSet>
+    <AssociationSet Name="UserUserView" Association="ProjectDB.Store.UserUserView">
+      <End Role="User" EntitySet="User" />
+      <End Role="UserView" EntitySet="UserViews" />
+    </AssociationSet>
+    <AssociationSet Name="SiteSiteView" Association="ProjectDB.Store.SiteSiteView">
+      <End Role="Site" EntitySet="Site" />
+      <End Role="SiteView" EntitySet="SiteViews" />
+    </AssociationSet>
+    <AssociationSet Name="ViewSiteView" Association="ProjectDB.Store.ViewSiteView">
+      <End Role="View" EntitySet="View" />
+      <End Role="SiteView" EntitySet="SiteViews" />
+    </AssociationSet>
+    <AssociationSet Name="ViewUserView" Association="ProjectDB.Store.ViewUserView">
+      <End Role="View" EntitySet="View" />
+      <End Role="UserView" EntitySet="UserViews" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="ExampleTable1">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" Nullable="false" MaxLength="10" />
+    <Property Name="Description" Type="nvarchar" Nullable="false" DefaultValue="Description by default" MaxLength="200" />
+    <Property Name="Date" Type="datetime" Nullable="true" DefaultValue="2018-01-01 00:00:00.000Z" />
+    <Property Name="ExampleTable2_Id" Type="int" Nullable="false" />
+    <Property Name="ExampleTable2_0_1_Id" Type="int" Nullable="true" />
+    <Property Name="Site_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ExampleTable2">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" Nullable="false" MaxLength="10" />
+    <Property Name="Description" Type="nvarchar" Nullable="false" MaxLength="200" />
+    <Property Name="Site_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ExampleTable3">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Description" Type="nvarchar" Nullable="false" MaxLength="200" />
+    <Property Name="Value" Type="smallint" Nullable="false" />
+    <Property Name="MyDecimal" Type="decimal" Nullable="true" Precision="9" Scale="4" />
+    <Property Name="MyDouble" Type="float" Nullable="true" />
+    <Property Name="DateOnly" Type="datetime" Nullable="true" />
+    <Property Name="DateAndTime" Type="datetime" Nullable="true" />
+    <Property Name="TimeOnly" Type="datetime" Nullable="true" />
+    <Property Name="MyTimeSpan" Type="time" Nullable="true" />
+    <Property Name="TimeSpanOver24H" Type="bigint" Nullable="true" />
+    <Property Name="Site_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Version">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Value" Type="nvarchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" Nullable="true" MaxLength="256" />
+    <Property Name="FirstName" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="LastName" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Login" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="DistinguishedName" Type="nvarchar" Nullable="false" MaxLength="250" />
+    <Property Name="IsEmployee" Type="bit" Nullable="false" />
+    <Property Name="IsExternal" Type="bit" Nullable="false" />
+    <Property Name="ExternalCompany" Type="nvarchar" Nullable="true" MaxLength="50" />
+    <Property Name="Company" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Site" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Manager" Type="nvarchar" Nullable="true" MaxLength="250" />
+    <Property Name="Department" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="SubDepartment" Type="nvarchar" Nullable="true" MaxLength="50" />
+    <Property Name="Office" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="Country" Type="nvarchar" Nullable="false" MaxLength="10" />
+    <Property Name="DAIEnable" Type="bit" Nullable="false" />
+    <Property Name="DAIDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Member">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="User_Id" Type="int" Nullable="false" />
+    <Property Name="Site_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MemberRole">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" Nullable="false" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Site">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="View">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TableId" Type="nvarchar" Nullable="false" MaxLength="100" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Description" Type="nvarchar" Nullable="true" MaxLength="500" />
+    <Property Name="Preference" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ViewType" Type="int" Nullable="false" DefaultValue="-1" />
+  </EntityType>
+  <EntityType Name="SiteViews">
+    <Key>
+      <PropertyRef Name="SiteId" />
+      <PropertyRef Name="ViewId" />
+    </Key>
+    <Property Name="ViewId" Type="int" Nullable="false" />
+    <Property Name="SiteId" Type="int" Nullable="false" />
+    <Property Name="IsDefault" Type="bit" Nullable="false" DefaultValue="false" />
+  </EntityType>
+  <EntityType Name="UserViews">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="ViewId" />
+    </Key>
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="ViewId" Type="int" Nullable="false" />
+    <Property Name="IsDefault" Type="bit" Nullable="false" DefaultValue="false" />
+  </EntityType>
+  <EntityType Name="MemberRoleMember">
+    <Key>
+      <PropertyRef Name="MemberRole_Id" />
+      <PropertyRef Name="Members_Id" />
+    </Key>
+    <Property Name="MemberRole_Id" Type="int" Nullable="false" />
+    <Property Name="Members_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ExampleTable3ExampleTable1">
+    <Key>
+      <PropertyRef Name="ExampleTable3_Id" />
+      <PropertyRef Name="ExampleTable1_Id" />
+    </Key>
+    <Property Name="ExampleTable3_Id" Type="int" Nullable="false" />
+    <Property Name="ExampleTable1_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="UserMember">
+    <End Role="User" Type="ProjectDB.Store.User" Multiplicity="1" />
+    <End Role="Member" Type="ProjectDB.Store.Member" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Member">
+        <PropertyRef Name="User_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="SiteMember">
+    <End Role="Site" Type="ProjectDB.Store.Site" Multiplicity="1" />
+    <End Role="Member" Type="ProjectDB.Store.Member" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Site">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Member">
+        <PropertyRef Name="Site_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ExampleTable2ExampleTable1">
+    <End Role="ExampleTable2" Type="ProjectDB.Store.ExampleTable2" Multiplicity="1" />
+    <End Role="ExampleTable1" Type="ProjectDB.Store.ExampleTable1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ExampleTable2">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ExampleTable1">
+        <PropertyRef Name="ExampleTable2_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ExampleTable2ExampleTable11">
+    <End Role="ExampleTable2" Type="ProjectDB.Store.ExampleTable2" Multiplicity="0..1" />
+    <End Role="ExampleTable1" Type="ProjectDB.Store.ExampleTable1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ExampleTable2">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ExampleTable1">
+        <PropertyRef Name="ExampleTable2_0_1_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="SiteExampleTable1">
+    <End Role="Site" Type="ProjectDB.Store.Site" Multiplicity="1" />
+    <End Role="ExampleTable1" Type="ProjectDB.Store.ExampleTable1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Site">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ExampleTable1">
+        <PropertyRef Name="Site_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="SiteExampleTable2">
+    <End Role="Site" Type="ProjectDB.Store.Site" Multiplicity="1" />
+    <End Role="ExampleTable2" Type="ProjectDB.Store.ExampleTable2" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Site">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ExampleTable2">
+        <PropertyRef Name="Site_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="SiteExampleTable3">
+    <End Role="Site" Type="ProjectDB.Store.Site" Multiplicity="1" />
+    <End Role="ExampleTable3" Type="ProjectDB.Store.ExampleTable3" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Site">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ExampleTable3">
+        <PropertyRef Name="Site_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserUserView">
+    <End Role="User" Type="ProjectDB.Store.User" Multiplicity="1" />
+    <End Role="UserView" Type="ProjectDB.Store.UserViews" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserView">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="SiteSiteView">
+    <End Role="Site" Type="ProjectDB.Store.Site" Multiplicity="1" />
+    <End Role="SiteView" Type="ProjectDB.Store.SiteViews" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Site">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SiteView">
+        <PropertyRef Name="SiteId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ViewSiteView">
+    <End Role="View" Type="ProjectDB.Store.View" Multiplicity="1" />
+    <End Role="SiteView" Type="ProjectDB.Store.SiteViews" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="View">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SiteView">
+        <PropertyRef Name="ViewId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ViewUserView">
+    <End Role="View" Type="ProjectDB.Store.View" Multiplicity="1" />
+    <End Role="UserView" Type="ProjectDB.Store.UserViews" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="View">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserView">
+        <PropertyRef Name="ViewId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MemberRoleMember_MemberRole">
+    <End Role="MemberRole" Type="ProjectDB.Store.MemberRole" Multiplicity="1" />
+    <End Role="MemberRoleMember" Type="ProjectDB.Store.MemberRoleMember" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MemberRole">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MemberRoleMember">
+        <PropertyRef Name="MemberRole_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MemberRoleMember_Member">
+    <End Role="MemberRoleMember" Type="ProjectDB.Store.MemberRoleMember" Multiplicity="*" />
+    <End Role="Member" Type="ProjectDB.Store.Member" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Member">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MemberRoleMember">
+        <PropertyRef Name="Members_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ExampleTable3ExampleTable1_ExampleTable3">
+    <End Role="ExampleTable3" Type="ProjectDB.Store.ExampleTable3" Multiplicity="1" />
+    <End Role="ExampleTable3ExampleTable1" Type="ProjectDB.Store.ExampleTable3ExampleTable1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ExampleTable3">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ExampleTable3ExampleTable1">
+        <PropertyRef Name="ExampleTable3_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ExampleTable3ExampleTable1_ExampleTable1">
+    <End Role="ExampleTable3ExampleTable1" Type="ProjectDB.Store.ExampleTable3ExampleTable1" Multiplicity="*" />
+    <End Role="ExampleTable1" Type="ProjectDB.Store.ExampleTable1" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="ExampleTable1">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ExampleTable3ExampleTable1">
+        <PropertyRef Name="ExampleTable1_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="ProjectDB" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="$saferootprojectname$DBContainer" annotation:LazyLoadingEnabled="false">
+          <EntitySet Name="ExampleTable1" EntityType="ProjectDB.ExampleTable1" />
+          <EntitySet Name="ExampleTable2" EntityType="ProjectDB.ExampleTable2" />
+          <EntitySet Name="ExampleTable3" EntityType="ProjectDB.ExampleTable3" />
+          <EntitySet Name="Version" EntityType="ProjectDB.Version" />
+          <EntitySet Name="User" EntityType="ProjectDB.User" />
+          <EntitySet Name="Member" EntityType="ProjectDB.Member" />
+          <EntitySet Name="MemberRole" EntityType="ProjectDB.MemberRole" />
+          <AssociationSet Name="UserMember" Association="ProjectDB.UserMember">
+            <End Role="User" EntitySet="User" />
+            <End Role="Member" EntitySet="Member" />
+          </AssociationSet>
+          <AssociationSet Name="MemberRoleMember" Association="ProjectDB.MemberRoleMember">
+            <End Role="MemberRole" EntitySet="MemberRole" />
+            <End Role="Member" EntitySet="Member" />
+          </AssociationSet>
+          <EntitySet Name="Site" EntityType="ProjectDB.Site" />
+          <AssociationSet Name="SiteMember" Association="ProjectDB.SiteMember">
+            <End Role="Site" EntitySet="Site" />
+            <End Role="Member" EntitySet="Member" />
+          </AssociationSet>
+          <AssociationSet Name="ExampleTable2ExampleTable1" Association="ProjectDB.ExampleTable2ExampleTable1">
+            <End Role="ExampleTable2" EntitySet="ExampleTable2" />
+            <End Role="ExampleTable1" EntitySet="ExampleTable1" />
+          </AssociationSet>
+          <AssociationSet Name="ExampleTable2ExampleTable11" Association="ProjectDB.ExampleTable2ExampleTable11">
+            <End Role="ExampleTable2" EntitySet="ExampleTable2" />
+            <End Role="ExampleTable1" EntitySet="ExampleTable1" />
+          </AssociationSet>
+          <AssociationSet Name="ExampleTable3ExampleTable1" Association="ProjectDB.ExampleTable3ExampleTable1">
+            <End Role="ExampleTable3" EntitySet="ExampleTable3" />
+            <End Role="ExampleTable1" EntitySet="ExampleTable1" />
+          </AssociationSet>
+          <AssociationSet Name="SiteExampleTable1" Association="ProjectDB.SiteExampleTable1">
+            <End Role="Site" EntitySet="Site" />
+            <End Role="ExampleTable1" EntitySet="ExampleTable1" />
+          </AssociationSet>
+          <AssociationSet Name="SiteExampleTable2" Association="ProjectDB.SiteExampleTable2">
+            <End Role="Site" EntitySet="Site" />
+            <End Role="ExampleTable2" EntitySet="ExampleTable2" />
+          </AssociationSet>
+          <AssociationSet Name="SiteExampleTable3" Association="ProjectDB.SiteExampleTable3">
+            <End Role="Site" EntitySet="Site" />
+            <End Role="ExampleTable3" EntitySet="ExampleTable3" />
+          </AssociationSet>
+          <EntitySet Name="View" EntityType="ProjectDB.View" />
+          <EntitySet Name="SiteViews" EntityType="ProjectDB.SiteView" />
+          <EntitySet Name="UserViews" EntityType="ProjectDB.UserView" />
+          <AssociationSet Name="UserUserView" Association="ProjectDB.UserUserView">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserView" EntitySet="UserViews" />
+          </AssociationSet>
+          <AssociationSet Name="SiteSiteView" Association="ProjectDB.SiteSiteView">
+            <End Role="Site" EntitySet="Site" />
+            <End Role="SiteView" EntitySet="SiteViews" />
+          </AssociationSet>
+          <AssociationSet Name="ViewSiteView" Association="ProjectDB.ViewSiteView">
+            <End Role="View" EntitySet="View" />
+            <End Role="SiteView" EntitySet="SiteViews" />
+          </AssociationSet>
+          <AssociationSet Name="ViewUserView" Association="ProjectDB.ViewUserView">
+            <End Role="View" EntitySet="View" />
+            <End Role="UserView" EntitySet="UserViews" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="ExampleTable1">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="10" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="200" DefaultValue="Description by default" />
+          <Property Name="Date" Type="DateTime" Nullable="true" DefaultValue="2018-01-01 00:00:00.000z" />
+          <NavigationProperty Name="ExampleTable2" Relationship="ProjectDB.ExampleTable2ExampleTable1" FromRole="ExampleTable1" ToRole="ExampleTable2" />
+          <NavigationProperty Name="ExampleTable2_0_1" Relationship="ProjectDB.ExampleTable2ExampleTable11" FromRole="ExampleTable1" ToRole="ExampleTable2" />
+          <NavigationProperty Name="ExampleTable3" Relationship="ProjectDB.ExampleTable3ExampleTable1" FromRole="ExampleTable1" ToRole="ExampleTable3" />
+          <NavigationProperty Name="Site" Relationship="ProjectDB.SiteExampleTable1" FromRole="ExampleTable1" ToRole="Site" />
+        </EntityType>
+        <EntityType Name="ExampleTable2">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="10" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="200" />
+          <NavigationProperty Name="ExampleTable1" Relationship="ProjectDB.ExampleTable2ExampleTable1" FromRole="ExampleTable2" ToRole="ExampleTable1" />
+          <NavigationProperty Name="ExampleTable11" Relationship="ProjectDB.ExampleTable2ExampleTable11" FromRole="ExampleTable2" ToRole="ExampleTable1" />
+          <NavigationProperty Name="Site" Relationship="ProjectDB.SiteExampleTable2" FromRole="ExampleTable2" ToRole="Site" />
+        </EntityType>
+        <EntityType Name="ExampleTable3">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="200" />
+          <Property Name="Value" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="ExampleTable1" Relationship="ProjectDB.ExampleTable3ExampleTable1" FromRole="ExampleTable3" ToRole="ExampleTable1" />
+          <Property Name="MyDecimal" Type="Decimal" Nullable="true" Precision="9" Scale="4" />
+          <Property Name="MyDouble" Type="Double" Nullable="true" />
+          <Property Name="DateOnly" Type="DateTime" Nullable="true" />
+          <Property Name="DateAndTime" Type="DateTime" Nullable="true">
+            <Documentation>
+              <LongDescription>[DisplayFormat(DataFormatString = "{0:g}", ApplyFormatInEditMode = true)]</LongDescription>
+            </Documentation>
+          </Property>
+          <Property Name="TimeOnly" Type="DateTime" Nullable="true">
+            <Documentation>
+              <LongDescription>[DisplayFormat(DataFormatString = "{0:t}", ApplyFormatInEditMode = true)]</LongDescription>
+            </Documentation>
+          </Property>
+          <Property Name="MyTimeSpan" Type="Time" Nullable="true" />
+          <Property Name="TimeSpanOver24H" Type="Int64" Nullable="true">
+            <Documentation>
+              <LongDescription>Flag:"Time"</LongDescription>
+            </Documentation>
+          </Property>
+          <NavigationProperty Name="Site" Relationship="ProjectDB.SiteExampleTable3" FromRole="ExampleTable3" ToRole="Site" />
+        </EntityType>
+        <EntityType Name="Version">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Members" Relationship="ProjectDB.UserMember" FromRole="User" ToRole="Member" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="50" />
+          <Property Name="DistinguishedName" Type="String" Nullable="false" MaxLength="250" />
+          <Property Name="IsEmployee" Type="Boolean" Nullable="false" />
+          <Property Name="IsExternal" Type="Boolean" Nullable="false" />
+          <Property Name="ExternalCompany" Type="String" Nullable="true" MaxLength="50" />
+          <Property Name="Company" Type="String" Nullable="false" MaxLength="50" />
+          <Property Name="Site" Type="String" Nullable="false" MaxLength="50" />
+          <Property Name="Manager" Type="String" Nullable="true" MaxLength="250" />
+          <Property Name="Department" Type="String" Nullable="false" MaxLength="50" />
+          <Property Name="SubDepartment" Type="String" Nullable="true" MaxLength="50" />
+          <Property Name="Office" Type="String" Nullable="false" MaxLength="20" />
+          <Property Name="Country" Type="String" Nullable="false" MaxLength="10" />
+          <Property Name="DAIEnable" Type="Boolean" Nullable="false" />
+          <Property Name="DAIDate" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Member">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="User" Relationship="ProjectDB.UserMember" FromRole="Member" ToRole="User" />
+          <NavigationProperty Name="MemberRole" Relationship="ProjectDB.MemberRoleMember" FromRole="Member" ToRole="MemberRole" />
+          <NavigationProperty Name="Site" Relationship="ProjectDB.SiteMember" FromRole="Member" ToRole="Site" />
+        </EntityType>
+        <EntityType Name="MemberRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="100" />
+          <NavigationProperty Name="Members" Relationship="ProjectDB.MemberRoleMember" FromRole="MemberRole" ToRole="Member" />
+        </EntityType>
+        <Association Name="UserMember">
+          <End Type="ProjectDB.User" Role="User" Multiplicity="1" />
+          <End Type="ProjectDB.Member" Role="Member" Multiplicity="*" />
+        </Association>
+        <Association Name="MemberRoleMember">
+          <End Type="ProjectDB.MemberRole" Role="MemberRole" Multiplicity="*">
+          </End>
+          <End Type="ProjectDB.Member" Role="Member" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Site">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" />
+          <NavigationProperty Name="Members" Relationship="ProjectDB.SiteMember" FromRole="Site" ToRole="Member" />
+          <NavigationProperty Name="ExampleTable1" Relationship="ProjectDB.SiteExampleTable1" FromRole="Site" ToRole="ExampleTable1" />
+          <NavigationProperty Name="ExampleTable2" Relationship="ProjectDB.SiteExampleTable2" FromRole="Site" ToRole="ExampleTable2" />
+          <NavigationProperty Name="ExampleTable3" Relationship="ProjectDB.SiteExampleTable3" FromRole="Site" ToRole="ExampleTable3" />
+        </EntityType>
+        <Association Name="SiteMember">
+          <End Type="ProjectDB.Site" Role="Site" Multiplicity="1" />
+          <End Type="ProjectDB.Member" Role="Member" Multiplicity="*" />
+        </Association>
+        <Association Name="ExampleTable2ExampleTable1">
+          <End Type="ProjectDB.ExampleTable2" Role="ExampleTable2" Multiplicity="1" />
+          <End Type="ProjectDB.ExampleTable1" Role="ExampleTable1" Multiplicity="*" />
+        </Association>
+        <Association Name="ExampleTable2ExampleTable11">
+          <End Type="ProjectDB.ExampleTable2" Role="ExampleTable2" Multiplicity="0..1" />
+          <End Type="ProjectDB.ExampleTable1" Role="ExampleTable1" Multiplicity="*" />
+        </Association>
+        <Association Name="ExampleTable3ExampleTable1">
+          <End Type="ProjectDB.ExampleTable3" Role="ExampleTable3" Multiplicity="*" />
+          <End Type="ProjectDB.ExampleTable1" Role="ExampleTable1" Multiplicity="*" />
+        </Association>
+        <Association Name="SiteExampleTable1">
+          <End Type="ProjectDB.Site" Role="Site" Multiplicity="1" />
+          <End Type="ProjectDB.ExampleTable1" Role="ExampleTable1" Multiplicity="*" />
+        </Association>
+        <Association Name="SiteExampleTable2">
+          <End Type="ProjectDB.Site" Role="Site" Multiplicity="1" />
+          <End Type="ProjectDB.ExampleTable2" Role="ExampleTable2" Multiplicity="*" />
+        </Association>
+        <Association Name="SiteExampleTable3">
+          <End Type="ProjectDB.Site" Role="Site" Multiplicity="1" />
+          <End Type="ProjectDB.ExampleTable3" Role="ExampleTable3" Multiplicity="*" />
+        </Association>
+        <EntityType Name="View">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TableId" Type="String" Nullable="false" MaxLength="100" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" />
+          <Property Name="Description" Type="String" MaxLength="500" Nullable="true" />
+          <Property Name="Preference" Type="String" Nullable="false" />
+          <Property Name="ViewType" Type="Int32" Nullable="false" DefaultValue="-1" />
+          <NavigationProperty Name="SiteViews" Relationship="ProjectDB.ViewSiteView" FromRole="View" ToRole="SiteView" />
+          <NavigationProperty Name="UserViews" Relationship="ProjectDB.ViewUserView" FromRole="View" ToRole="UserView" />
+        </EntityType>
+        <EntityType Name="SiteView">
+          <Key>
+            <PropertyRef Name="SiteId" />
+            <PropertyRef Name="ViewId" />
+          </Key>
+          <NavigationProperty Name="Site" Relationship="ProjectDB.SiteSiteView" FromRole="SiteView" ToRole="Site">
+            <Documentation>
+              <LongDescription>NotRequired for update use SiteId</LongDescription>
+            </Documentation>
+          </NavigationProperty>
+          <Property Name="ViewId" Type="Int32" Nullable="false">
+          </Property>
+          <Property Name="SiteId" Type="Int32" Nullable="false">
+          </Property>
+          <Property Name="IsDefault" Type="Boolean" Nullable="false" DefaultValue="False" />
+          <NavigationProperty Name="View" Relationship="ProjectDB.ViewSiteView" FromRole="SiteView" ToRole="View">
+            <Documentation>
+              <LongDescription>NotRequired for update use ViewId</LongDescription>
+            </Documentation>
+          </NavigationProperty>
+        </EntityType>
+        <EntityType Name="UserView">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="ViewId" />
+          </Key>
+          <NavigationProperty Name="User" Relationship="ProjectDB.UserUserView" FromRole="UserView" ToRole="User">
+            <Documentation>
+              <LongDescription>NotRequired for update use UserId</LongDescription>
+            </Documentation>
+          </NavigationProperty>
+          <Property Name="UserId" Type="Int32" Nullable="false">
+          </Property>
+          <Property Name="ViewId" Type="Int32" Nullable="false">
+          </Property>
+          <Property Name="IsDefault" Type="Boolean" Nullable="false" DefaultValue="False" />
+          <NavigationProperty Name="View" Relationship="ProjectDB.ViewUserView" FromRole="UserView" ToRole="View">
+            <Documentation>
+              <LongDescription>NotRequired for update use ViewId</LongDescription>
+            </Documentation>
+          </NavigationProperty>
+        </EntityType>
+        <Association Name="UserUserView">
+          <End Type="ProjectDB.User" Role="User" Multiplicity="1" />
+          <End Type="ProjectDB.UserView" Role="UserView" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserView">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SiteSiteView">
+          <End Type="ProjectDB.Site" Role="Site" Multiplicity="1" />
+          <End Type="ProjectDB.SiteView" Role="SiteView" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Site">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SiteView">
+              <PropertyRef Name="SiteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ViewSiteView">
+          <End Type="ProjectDB.View" Role="View" Multiplicity="1" />
+          <End Type="ProjectDB.SiteView" Role="SiteView" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="View">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SiteView">
+              <PropertyRef Name="ViewId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ViewUserView">
+          <End Type="ProjectDB.View" Role="View" Multiplicity="1" />
+          <End Type="ProjectDB.UserView" Role="UserView" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="View">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserView">
+              <PropertyRef Name="ViewId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ProjectDBStoreContainer" CdmEntityContainer="$saferootprojectname$DBContainer">
+    <EntitySetMapping Name="ExampleTable1">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.ExampleTable1)">
+        <MappingFragment StoreEntitySet="ExampleTable1">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ExampleTable2">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.ExampleTable2)">
+        <MappingFragment StoreEntitySet="ExampleTable2">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ExampleTable3">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.ExampleTable3)">
+        <MappingFragment StoreEntitySet="ExampleTable3">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+          <ScalarProperty Name="MyDecimal" ColumnName="MyDecimal" />
+          <ScalarProperty Name="MyDouble" ColumnName="MyDouble" />
+          <ScalarProperty Name="DateOnly" ColumnName="DateOnly" />
+          <ScalarProperty Name="DateAndTime" ColumnName="DateAndTime" />
+          <ScalarProperty Name="TimeOnly" ColumnName="TimeOnly" />
+          <ScalarProperty Name="MyTimeSpan" ColumnName="MyTimeSpan" />
+          <ScalarProperty Name="TimeSpanOver24H" ColumnName="TimeSpanOver24H" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Version">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.Version)">
+        <MappingFragment StoreEntitySet="Version">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="User">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.User)">
+        <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Login" ColumnName="Login" />
+          <ScalarProperty Name="DistinguishedName" ColumnName="DistinguishedName" />
+          <ScalarProperty Name="IsEmployee" ColumnName="IsEmployee" />
+          <ScalarProperty Name="IsExternal" ColumnName="IsExternal" />
+          <ScalarProperty Name="ExternalCompany" ColumnName="ExternalCompany" />
+          <ScalarProperty Name="Company" ColumnName="Company" />
+          <ScalarProperty Name="Site" ColumnName="Site" />
+          <ScalarProperty Name="Manager" ColumnName="Manager" />
+          <ScalarProperty Name="Department" ColumnName="Department" />
+          <ScalarProperty Name="SubDepartment" ColumnName="SubDepartment" />
+          <ScalarProperty Name="Office" ColumnName="Office" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="DAIEnable" ColumnName="DAIEnable" />
+          <ScalarProperty Name="DAIDate" ColumnName="DAIDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Member">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.Member)">
+        <MappingFragment StoreEntitySet="Member">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MemberRole">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.MemberRole)">
+        <MappingFragment StoreEntitySet="MemberRole">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Site">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.Site)">
+        <MappingFragment StoreEntitySet="Site">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="View">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.View)">
+        <MappingFragment StoreEntitySet="View">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TableId" ColumnName="TableId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Preference" ColumnName="Preference" />
+          <ScalarProperty Name="ViewType" ColumnName="ViewType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SiteViews">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.SiteView)">
+        <MappingFragment StoreEntitySet="SiteViews">
+          <ScalarProperty Name="SiteId" ColumnName="SiteId" />
+          <ScalarProperty Name="ViewId" ColumnName="ViewId" />
+          <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserViews">
+      <EntityTypeMapping TypeName="IsTypeOf(ProjectDB.UserView)">
+        <MappingFragment StoreEntitySet="UserViews">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ViewId" ColumnName="ViewId" />
+          <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="UserMember" TypeName="ProjectDB.UserMember" StoreEntitySet="Member">
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="User_Id" />
+      </EndProperty>
+      <EndProperty Name="Member">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="MemberRoleMember" TypeName="ProjectDB.MemberRoleMember" StoreEntitySet="MemberRoleMember">
+      <EndProperty Name="MemberRole">
+        <ScalarProperty Name="Id" ColumnName="MemberRole_Id" />
+      </EndProperty>
+      <EndProperty Name="Member">
+        <ScalarProperty Name="Id" ColumnName="Members_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="SiteMember" TypeName="ProjectDB.SiteMember" StoreEntitySet="Member">
+      <EndProperty Name="Site">
+        <ScalarProperty Name="Id" ColumnName="Site_Id" />
+      </EndProperty>
+      <EndProperty Name="Member">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ExampleTable2ExampleTable1" TypeName="ProjectDB.ExampleTable2ExampleTable1" StoreEntitySet="ExampleTable1">
+      <EndProperty Name="ExampleTable2">
+        <ScalarProperty Name="Id" ColumnName="ExampleTable2_Id" />
+      </EndProperty>
+      <EndProperty Name="ExampleTable1">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ExampleTable2ExampleTable11" TypeName="ProjectDB.ExampleTable2ExampleTable11" StoreEntitySet="ExampleTable1">
+      <EndProperty Name="ExampleTable2">
+        <ScalarProperty Name="Id" ColumnName="ExampleTable2_0_1_Id" />
+      </EndProperty>
+      <EndProperty Name="ExampleTable1">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+      <Condition ColumnName="ExampleTable2_0_1_Id" IsNull="false" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ExampleTable3ExampleTable1" TypeName="ProjectDB.ExampleTable3ExampleTable1" StoreEntitySet="ExampleTable3ExampleTable1">
+      <EndProperty Name="ExampleTable3">
+        <ScalarProperty Name="Id" ColumnName="ExampleTable3_Id" />
+      </EndProperty>
+      <EndProperty Name="ExampleTable1">
+        <ScalarProperty Name="Id" ColumnName="ExampleTable1_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="SiteExampleTable1" TypeName="ProjectDB.SiteExampleTable1" StoreEntitySet="ExampleTable1">
+      <EndProperty Name="Site">
+        <ScalarProperty Name="Id" ColumnName="Site_Id" />
+      </EndProperty>
+      <EndProperty Name="ExampleTable1">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="SiteExampleTable2" TypeName="ProjectDB.SiteExampleTable2" StoreEntitySet="ExampleTable2">
+      <EndProperty Name="Site">
+        <ScalarProperty Name="Id" ColumnName="Site_Id" />
+      </EndProperty>
+      <EndProperty Name="ExampleTable2">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="SiteExampleTable3" TypeName="ProjectDB.SiteExampleTable3" StoreEntitySet="ExampleTable3">
+      <EndProperty Name="Site">
+        <ScalarProperty Name="Id" ColumnName="Site_Id" />
+      </EndProperty>
+      <EndProperty Name="ExampleTable3">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+        <DesignerProperty Name="DDLGenerationTemplate" Value="Template\BIA_SSDLToSQL.tt" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

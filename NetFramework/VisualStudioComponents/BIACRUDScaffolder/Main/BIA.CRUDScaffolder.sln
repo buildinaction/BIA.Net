@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.CRUDScaffolderExtension", "BIA.CRUDScaffolderExtension\BIA.CRUDScaffolderExtension.csproj", "{D22F0C3E-8D60-408A-98AC-A582A7D8D533}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.CRUDScaffolder", "BIA.CRUDScaffolder\BIA.CRUDScaffolder.csproj", "{C5F95FF6-87AD-44E6-A182-486E3254255A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D22F0C3E-8D60-408A-98AC-A582A7D8D533}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D22F0C3E-8D60-408A-98AC-A582A7D8D533}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D22F0C3E-8D60-408A-98AC-A582A7D8D533}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D22F0C3E-8D60-408A-98AC-A582A7D8D533}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5F95FF6-87AD-44E6-A182-486E3254255A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5F95FF6-87AD-44E6-A182-486E3254255A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5F95FF6-87AD-44E6-A182-486E3254255A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5F95FF6-87AD-44E6-A182-486E3254255A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8AD98820-A17E-40C9-BDBA-9493426AE37A}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfsdm.eu.labinal.snecma/innovation%20factory
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = BIA.CRUDScaffolderExtension\\BIA.CRUDScaffolderExtension.csproj
+		SccProjectName1 = BIA.CRUDScaffolderExtension
+		SccLocalPath1 = BIA.CRUDScaffolderExtension
+		SccProjectUniqueName2 = BIA.CRUDScaffolder\\BIA.CRUDScaffolder.csproj
+		SccProjectName2 = BIA.CRUDScaffolder
+		SccLocalPath2 = BIA.CRUDScaffolder
+	EndGlobalSection
+EndGlobal

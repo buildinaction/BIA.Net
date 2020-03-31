@@ -1,0 +1,138 @@
+﻿<#
+foreach (PropertyMetadata property in ModelMetadata.Properties) {
+    if (property.Scaffold && !property.IsAssociation) {
+        if (property.IsPrimaryKey) {
+			continue;
+        }
+#>
+        <div class="form-group">
+<#
+        if (property.IsForeignKey) {
+#>
+            @Html.<#if (TranslateFields){#>T_<#}#>LabelFor(model => model.<#= GetAssociationName(property) #>, htmlAttributes: new { @class = "bmd-label-floating" })
+<#
+        } else {
+#>
+            @Html.<#if (TranslateFields){#>T_<#}#>LabelFor(model => model.<#= property.PropertyName #>, htmlAttributes: new { @class = "bmd-label-floating" })
+<#
+        }
+#>
+            <div class="field">
+<#
+        bool isCheckbox = property.TypeName.Equals(boolType);
+        if (property.IsForeignKey) {
+#>
+<#
+            if (GetAssociationDirection(property) == Microsoft.AspNet.Scaffolding.Core.Metadata.AssociationDirection.ManyToOne )
+            {
+                if (isControlHtmlAttributesSupported) {
+#>
+                @Html.DropDownListFor(model => model.<#= property.PropertyName #>, (IEnumerable<SelectListItem>)ViewBag.<#= GetEntitySetName(property) #>Id, "", htmlAttributes : (object) ViewBag.htmlFormFieldsAttributes)<# if(IconifiedInput) { #>.ToIconified()<# } #>
+
+<#
+                } else {
+#>
+                @Html.DropDownListFor(model => model.<#= property.PropertyName #>", String.Empty)<# if(IconifiedInput) { #>.ToIconified()<# } #>
+
+<#
+                }
+            }
+            else
+            {
+                if (isControlHtmlAttributesSupported) {
+#>
+                @Html.ListBoxFor(model => model.<#= property.PropertyName #>, (IEnumerable<SelectListItem>)ViewBag.<#= GetEntitySetName(property) #>Ids, htmlAttributes : (object) ViewBag.htmlFormFieldsAttributes)<# if(IconifiedInput) { #>.ToIconified()<# } #>
+
+<#
+                } else {
+#>
+                @Html.ListBoxFor(model => model.<#= property.PropertyName #>", String.Empty)<# if(IconifiedInput) { #>.ToIconified()<# } #>
+
+<#
+                }
+            }
+#>
+<#
+        } else  if (isControlHtmlAttributesSupported) {
+            if (isCheckbox) {
+#>
+                <div class="form-control" @{if (ViewBag.IsReadOnly == true) { @Html.Raw("readonly"); } }>
+<#
+                PushIndent("    ");
+#>
+                @Html.EditorFor(model => model.<#= property.PropertyName #>)
+<#
+            } else if (property.IsEnum && !property.IsEnumFlags) {
+#>
+                @Html.EnumDropDownListFor(model => model.<#= property.PropertyName #>, htmlAttributes : (object) ViewBag.htmlFormFieldsAttributes)
+<#
+            } else {
+                if (property.ShortTypeName.IndexOf("System.DateTime")==0)
+                {
+#>
+                @Html.EditorFor(model => model.<#= property.PropertyName #>, new { htmlAttributes = Html.MergeDict(new { @class = "calendarPicker" /*calendarAndTimePicker timePicker*/ }, (object) ViewBag.htmlFormFieldsAttributes) })<# if(IconifiedInput) { #>.ToIconified()<# } #>
+
+<#
+                }
+				else if (property.ShortTypeName.IndexOf("System.TimeSpan")==0)
+                {
+#>
+                @Html.EditorFor(model => model.<#= property.PropertyName #>, new { htmlAttributes = Html.MergeDict(new { @class = "timeSpanPicker" /*calendarAndTimePicker timePicker*/ }, (object) ViewBag.htmlFormFieldsAttributes) })<# if(IconifiedInput) { #>.ToIconified()<# } #>
+
+<#
+                }
+                else if (property.ShortTypeName.IndexOf("double")==0 || property.ShortTypeName.IndexOf("float")==0 ||  property.ShortTypeName.IndexOf("short")==0 || property.ShortTypeName.IndexOf("decimal")==0 || property.ShortTypeName.IndexOf("int")==0 || property.ShortTypeName.IndexOf("long")==0 )
+                {
+#>
+                @Html.EditorFor(model => model.<#= property.PropertyName #>, new { htmlAttributes = Html.MergeDict(new { @pattern=@Html.PatternNumber("<#=property.ShortTypeName#>") }, (object) ViewBag.htmlFormFieldsAttributes) })<# if(IconifiedInput) { #>.ToIconified()<# } #>
+
+<#
+                }
+                else
+                {
+#>
+                @Html.EditorFor(model => model.<#= property.PropertyName #>, new { htmlAttributes = (object) ViewBag.htmlFormFieldsAttributes })<# if(IconifiedInput) { #>.ToIconified()<# } #>
+
+<#
+                }
+            } 
+        } else {
+#>
+                @Html.EditorFor(model => model.<#= property.PropertyName #>)<# if(IconifiedInput) { #>.ToIconified()<# } #>
+
+<#
+        }
+        if (isControlHtmlAttributesSupported) {
+            if (property.IsForeignKey) 
+            {
+#>
+                @Html.ValidationMessageFor(model => model.<#= property.PropertyName #>, @TextResources.PleaseSelect + Html.DisplayNameFor(m => m.<#= GetAssociationName(property)#> ) + ".", new { @class = "text-danger bmd-help" })
+<# 
+            }
+            else
+            {
+#>
+                @Html.ValidationMessageFor(model => model.<#= property.PropertyName #>, "", new { @class = "text-danger bmd-help" })
+<# 
+            }
+      
+        } else {
+#>
+                @Html.ValidationMessageFor(model => model.<#= property.PropertyName #>)
+<#      
+        }
+        if (isCheckbox && isControlHtmlAttributesSupported) {
+            PopIndent();
+#>
+                </div>
+<#
+        }
+#>
+            </div>
+        </div> 
+<# //end form-group div #>
+
+<#
+    }
+}
+#>

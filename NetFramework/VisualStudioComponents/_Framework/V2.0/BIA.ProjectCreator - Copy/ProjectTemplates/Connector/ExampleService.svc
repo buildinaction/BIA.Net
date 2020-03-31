@@ -1,0 +1,1 @@
+<%@ ServiceHost Language="C#" Debug="true" Service="$companyName$.$saferootprojectname$.Connector.ExampleService" Factory="$companyName$.$saferootprojectname$.Connector.WcfServiceFactory" %>

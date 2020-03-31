@@ -1,0 +1,34 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>BIA V2.1.1 &gt; WindowsService</Name>
+    <Description>Project For BIA &gt; WindowsService</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>9</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ZZCompanyNameZZ.ZZProjectNameZZ.WindowsService</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.jpg</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="ZZCompanyNameZZ.ZZProjectNameZZ.WindowsService.csproj" File="ZZCompanyNameZZ.ZZProjectNameZZ.WindowsService.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="App.config">App.config</ProjectItem>
+      <Folder Name="Helpers" TargetFolderName="Helpers">
+        <ProjectItem ReplaceParameters="true" TargetFileName="UnityConfig.cs">UnityConfig.cs</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">packages.config</ProjectItem>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="stylecop.json">stylecop.json</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="WindowsService.cs">WindowsService.cs</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>BIA.ProjectCreatorWizard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>BIA.ProjectCreatorWizard.ChildWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

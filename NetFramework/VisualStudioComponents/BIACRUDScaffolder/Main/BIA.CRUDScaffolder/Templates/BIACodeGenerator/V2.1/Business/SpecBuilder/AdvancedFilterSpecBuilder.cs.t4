@@ -1,0 +1,56 @@
+﻿<#@ template language="C#" HostSpecific="True" #>
+<#@ output extension=".cs" #>
+<#@ include file="Imports.include.t4" #>namespace <#=BusinessNamespace#>.SpecBuilder
+{
+    using BIA.Net.Business.Specifications;
+    using Business.CTO;
+    using Model;
+    using System.Linq;
+
+    /// <summary>
+    /// WindowsService VM
+    /// </summary>
+    public class <#=ControllerRootName#>AdvancedFilterSpecBuilder : ISpecBuilder<<#=ViewDataTypeShortName#>, <#=ControllerRootName#>AdvancedFilterCTO>
+    {
+        /// <summary>
+        /// Search <#=ViewDataTypeShortName#> using the filter.
+        /// </summary>
+        /// <param name="advancedFilter">The filter.</param>
+        /// <returns>The specification.</returns>
+        public Specification<<#=ViewDataTypeShortName#>> BuildSpec(<#=ControllerRootName#>AdvancedFilterCTO advancedFilter)
+        {
+            Specification<<#=ViewDataTypeShortName#>> specification = new TrueSpecification<<#=ViewDataTypeShortName#>>();<#		
+			foreach (PropertyMetadata property in ModelMetadata.Properties) {
+				if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey) {
+						if (property.IsAssociation && GetRelatedModelMetadata(property) == null) {
+							continue;
+						}
+						var linqSelect = "";
+						if (property.IsAssociation && (property.AssociationDirection  == Microsoft.AspNet.Scaffolding.Core.Metadata.AssociationDirection.OneToMany||property.AssociationDirection  == Microsoft.AspNet.Scaffolding.Core.Metadata.AssociationDirection.ManyToMany)){
+							var relatedProperty = GetRelatedModelMetadata(property);
+							var lowerPropertyName = property.PropertyName.Substring(0, length:1).ToLowerInvariant() + property.PropertyName.Substring(1);
+        					linqSelect = "entity." + property.PropertyName + ".Any(" + lowerPropertyName + " => advancedFilter.Filter" + property.PropertyName + ".Contains(" + lowerPropertyName + "." + relatedProperty.DisplayPropertyName + "))";
+						}
+						else
+						{
+							if (property.IsAssociation){
+								RelatedModelMetadata propertyModel = GetRelatedModelMetadata(property);
+								linqSelect = "advancedFilter.Filter" + property.PropertyName + ".Contains((entity." + propertyModel.AssociationPropertyName + " == null) ? string.Empty : entity." + propertyModel.AssociationPropertyName + "." + propertyModel.DisplayPropertyName + ")";
+							}
+							else{
+								linqSelect = "advancedFilter.Filter" + property.PropertyName + ".Contains(entity." + GetValueExpression(property) + ".ToString())";
+							}
+						}
+				#>
+
+            if (advancedFilter.Filter<#= property.PropertyName#> != null && advancedFilter.Filter<#= property.PropertyName#>.Any())
+            {
+                specification &= new DirectSpecification<<#=ViewDataTypeShortName#>>(entity => <#= linqSelect #>);
+            }
+<#				}
+			}#>
+
+            return specification;
+        }
+    }
+}<#@ include file="../../ModelMetadataFunctions.cs.include.t4" #>

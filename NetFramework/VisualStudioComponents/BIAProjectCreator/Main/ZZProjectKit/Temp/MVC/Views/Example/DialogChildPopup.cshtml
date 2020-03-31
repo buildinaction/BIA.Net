@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "Dialog child Popup";
+}
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "DialogChildPopup", @class = "PreventDuplicateRequest" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "err" })
+        <div class="form-group">
+            @Html.T_Label("Action to apply", htmlAttributes: new { @class = "bmd-label-floating mandatory" })
+            <div class="field">
+                <select name="action" class="form-control" style="display: inline;">
+                    <option value="SubmitAndClose">Submit And Close</option>
+                    <option value="SubmitAndSubmitParent">Submit And Submit Parent</option>
+                    <option value="SubmitAndCloseParent">Submit And Close Parent</option>
+                    <option value="SubmitAndActionParent">Submit And Action in Parent</option>
+                    <option value="Other">Other</option>
+                </select>
+                @Html.ValidationMessage("Action to apply", "", new { @class = "text-danger bmd-help" })
+            </div>
+        </div>
+    </div>
+}
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" onclick="location.href='@Url.Action("CloseDialog", "DialogBasicAction")'" class="btn btn-second">Close from server</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" onclick="BIA.Net.Dialog.GetParentDialogDiv($(this)).dialogElem.dialog('close')" class="btn btn-second">Close direct JS</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" onclick="BIA.Net.Dialog.Close($(this))" class="btn btn-second">Close direct JS (short syntax) </button>
+        </div>
+        <div class="btn-action">
+            <button type="button" onclick="location.href='@Url.Action("DialogChildPopup","Example",null)'" class="btn btn-second">Refresh</button>
+        </div>        
+        <div class="btn-action">
+            <button onclick="$('#DialogChildPopup').submit();" class="btn btn-main">@TextResources.Save</button>
+        </div>
+
+    </div>
+}
+
+
+@section Scripts {
+    <script src="~/Scripts/app/modules/Example/DialogChildPopup.js"></script>
+}
+

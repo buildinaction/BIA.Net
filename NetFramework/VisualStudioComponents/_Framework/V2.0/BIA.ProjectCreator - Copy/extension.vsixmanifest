@@ -1,0 +1,25 @@
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011">
+  <Metadata>
+    <Identity Id="BIA.ProjectCreator.acde96dc-7727-44e4-9c2b-6591ab80580a" Version="2.0.0" Language="en-US" Publisher="Gwenael Fillon" />
+    <DisplayName>BIA.ProjectCreator</DisplayName>
+    <Description xml:space="preserve">Template from powerfull application with a WebServer. 
+Contain sample for UI in MVC, Heavy Client, or HTML. 
+Contain sample for WebApi.
+And layers for secure acces to datas.</Description>
+    <Icon>Icon_DM.ico</Icon>
+    <PreviewImage>PreviewTemplate.JPG</PreviewImage>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0, 16.0)" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" Version="[4.5,)" />
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.Assembly" Path="ZZProjectInstallerWizards.dll" AssemblyName="ZZProjectInstallerWizards, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" Path="ProjectTemplates" />
+  </Assets>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />
+  </Prerequisites>
+</PackageManifest>

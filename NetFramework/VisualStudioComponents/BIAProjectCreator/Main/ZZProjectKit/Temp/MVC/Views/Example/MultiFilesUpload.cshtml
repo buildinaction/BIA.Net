@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Multi Files Upload";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "MultiFileUpload", @class = "PreventDuplicateRequest", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group bmd-form-group is-filled bia-multifield">
+        @Html.T_Label("Upload Files:", htmlAttributes: new { @class = "bmd-label-floating mandatory" })
+        <div class="bia-field">
+            <input class="btn form-control" name="files" type="file" style="display: inline;width: calc(100% - 57px);">
+            <button class="btn btn-success btn-add" type="button">
+                <span class="fas fa-plus"></span>
+            </button>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="bmd-label-floating">TextBox1</label>
+        <input class="form-control" type="text" />
+    </div>
+}
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button onclick="$('#MultiFileUpload').submit();" class="btn btn-main">Upload Files</button>
+        </div>
+    </div>
+}
+

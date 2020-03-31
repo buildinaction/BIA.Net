@@ -1,0 +1,203 @@
+﻿<VSTemplateManifest Version="1.0" xmlns="http://schemas.microsoft.com/developer/vstemplatemanifest/2015">
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Business</RelativePathOnDisk>
+    <TemplateFileName>MyTemplate.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <Name>BIA V2.0.0 &gt; Business</Name>
+        <Description>Project For BIA &gt; Business</Description>
+        <ProjectType>CSharp</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>4</SortOrder>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>ZZCompanyNameZZ.ZZProjectNameZZ.Business</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.jpg</Icon>
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Common</RelativePathOnDisk>
+    <TemplateFileName>MyTemplate.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <Name>BIA V2.0.0 &gt; Common</Name>
+        <Description>Project For BIA &gt; Common</Description>
+        <ProjectType>CSharp</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>5</SortOrder>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>ZZCompanyNameZZ.ZZProjectNameZZ.Common</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.jpg</Icon>
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Connector</RelativePathOnDisk>
+    <TemplateFileName>MyTemplate.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <Name>BIA V2.0.0 &gt; Connector</Name>
+        <Description>Project For BIA &gt; Connector</Description>
+        <ProjectType>CSharp</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>11</SortOrder>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>ZZCompanyNameZZ.ZZProjectNameZZ.Connector</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.jpg</Icon>
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Model</RelativePathOnDisk>
+    <TemplateFileName>MyTemplate.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <Name>BIA V2.0.0 &gt; Model</Name>
+        <Description>Project For BIA &gt; Model</Description>
+        <ProjectType>CSharp</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>6</SortOrder>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>ZZCompanyNameZZ.ZZProjectNameZZ.Model</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.jpg</Icon>
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>MVC</RelativePathOnDisk>
+    <TemplateFileName>MyTemplate.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <Name>BIA V2.0.0 &gt; MVC web application</Name>
+        <Description>Project For BIA &gt; MVC web application</Description>
+        <ProjectType>CSharp</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>2</SortOrder>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>ZZCompanyNameZZ.ZZProjectNameZZ.MVC</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.jpg</Icon>
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>SyncDatabase</RelativePathOnDisk>
+    <TemplateFileName>MyTemplate.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <Name>BIA V2.0.0 &gt; SyncDatabase</Name>
+        <Description>Project For BIA &gt; SyncDatabase</Description>
+        <ProjectType>SQLDB</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>7</SortOrder>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>ZZCompanyNameZZ.ZZProjectNameZZ.SyncDatabase</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <CreateInPlace>true</CreateInPlace>
+        <Icon>__TemplateIcon.jpg</Icon>
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Template</RelativePathOnDisk>
+    <TemplateFileName>MyTemplate.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <Name>BIA V2.0.0 &gt; Template</Name>
+        <Description>Project For BIA &gt; Template</Description>
+        <ProjectType>CSharp</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>8</SortOrder>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>ZZCompanyNameZZ.ZZProjectNameZZ.Template</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.jpg</Icon>
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>Test</RelativePathOnDisk>
+    <TemplateFileName>MyTemplate.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <Name>BIA V2.0.0 &gt; Test</Name>
+        <Description>Project For BIA &gt; Test</Description>
+        <ProjectType>CSharp</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>10</SortOrder>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>ZZCompanyNameZZ.ZZProjectNameZZ.Test</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.jpg</Icon>
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>WebApi</RelativePathOnDisk>
+    <TemplateFileName>MyTemplate.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <Name>BIA V2.0.0 &gt; WebApi</Name>
+        <Description>Project For BIA &gt; WebApi</Description>
+        <ProjectType>CSharp</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>3</SortOrder>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>ZZCompanyNameZZ.ZZProjectNameZZ.WebApi</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.jpg</Icon>
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+  <VSTemplateContainer TemplateType="Project">
+    <RelativePathOnDisk>WindowsService</RelativePathOnDisk>
+    <TemplateFileName>MyTemplate.vstemplate</TemplateFileName>
+    <VSTemplateHeader>
+      <TemplateData xmlns="http://schemas.microsoft.com/developer/vstemplate/2005">
+        <Name>BIA V2.0.0 &gt; WindowsService</Name>
+        <Description>Project For BIA &gt; WindowsService</Description>
+        <ProjectType>CSharp</ProjectType>
+        <ProjectSubType>
+        </ProjectSubType>
+        <SortOrder>9</SortOrder>
+        <CreateNewFolder>true</CreateNewFolder>
+        <DefaultName>ZZCompanyNameZZ.ZZProjectNameZZ.WindowsService</DefaultName>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LocationField>Enabled</LocationField>
+        <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+        <Icon>__TemplateIcon.jpg</Icon>
+      </TemplateData>
+    </VSTemplateHeader>
+  </VSTemplateContainer>
+</VSTemplateManifest>

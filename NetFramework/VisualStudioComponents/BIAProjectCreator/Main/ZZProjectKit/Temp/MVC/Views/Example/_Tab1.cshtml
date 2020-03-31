@@ -1,0 +1,64 @@
+﻿<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="bmd-label-floating">TextBox1</label>
+            <input class="form-control" type="text" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="bmd-label-static">CheckBox</label>
+            <div class="form-control">
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider">
+                        <div class="slider-text">ON</div>
+                        <div class="slider-text">OFF</div>
+                    </span>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="bmd-label-floating">Date</label>
+            <input class="form-control calendarPicker" type="text" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="bmd-label-floating">DropDownList1</label>
+            <select class="form-control">
+                <option></option>
+                <option>Item1</option>
+                <option>Item2</option>
+                <option>Item3</option>
+                <option>Item4</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="bmd-label-floating">MyDecimal</label>
+            <input class="form-control" pattern="@Html.PatternNumber("decimal",3)" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="bmd-label-floating">DropDownList2</label>
+            <select class="form-control">
+                <option value="No">@TextResources.Yes</option>
+                <option value="Yes">@TextResources.No</option>
+            </select>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="btn-action">
+        <button type="button" class="btn btn-second">@TextResources.Button</button>
+    </div>
+    <div class="btn-action">
+        <button type="button" class="btn btn-main" onclick="location.href='@Url.Action("ExamplePage2", "Example")'">@AppliResources.ExamplePage 2</button>
+    </div>
+</div>

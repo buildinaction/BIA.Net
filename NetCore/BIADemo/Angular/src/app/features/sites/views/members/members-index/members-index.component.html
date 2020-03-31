@@ -1,0 +1,48 @@
+<div fxLayout fxLayout.xs="column" fxLayoutWrap="wrap">
+  <div fxFlex="100">
+    <bia-table-header
+      [headerTitle]="('member.listOfSiteMembers' | translate) + (currentSite.title)"
+      [btnBackRouterLink]="siteRoute"
+      [canAdd]="canAdd"
+      (create)="onCreate()"
+    ></bia-table-header>
+    <bia-table-controller
+      [defaultPageSize]="defaultPageSize"
+      [length]="totalCount$ | async"
+      [columns]="columns"
+      [(displayedColumns)]="displayedColumns"
+      [hiddenColumns]="['bia.actions']"
+      (displayedColumnsChange)="displayedColumnsChanged($event)"
+      (filter)="searchGlobalChanged($event)"
+      (pageSizeChange)="onPageSizeChange($event)"
+      (toggleSearch)="onToggleSearch()"
+      [tableId]="'membersGrid'"
+    ></bia-table-controller>
+    <bia-table
+      [elements]="members$ | async"
+      [totalRecord]="totalCount$ | async"
+      [columnToDisplays]="displayedColumns"
+      [pageSize]="pageSize"
+      [configuration]="tableConfiguration"
+      [showColSearch]="showColSearch"
+      [globalSearchValue]="globalSearchValue"
+      [canEdit]="canEdit"
+      [canDelete]="canDelete"
+      [loading]="loading$ | async"
+      (edit)="onEdit($event)"
+      (remove)="onRemove($event)"
+      (loadLazy)="onLoadLazy($event)"
+    ></bia-table>
+  </div>
+</div>
+<p-confirmDialog></p-confirmDialog>
+<!-- begin popup mode -->
+<app-member-edit-dialog></app-member-edit-dialog>
+<app-member-new-dialog [site]="currentSite"></app-member-new-dialog>
+<!-- end popup mode -->
+
+
+
+
+
+

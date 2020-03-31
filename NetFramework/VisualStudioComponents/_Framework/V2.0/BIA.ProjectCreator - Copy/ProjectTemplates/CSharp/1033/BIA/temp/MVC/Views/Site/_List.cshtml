@@ -1,0 +1,62 @@
+@model IEnumerable<$companyName$.$saferootprojectname$.Business.DTO.SiteDTO>
+
+<table class="dataTable stripe table @*rowselectable*@" id="SiteTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.T_DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.T_DisplayNameFor(model => model.Members)
+            </th>
+            <th>@TextResources.Actions</th>
+        </tr>
+    </thead>
+    @{ var odd = false; }
+    @foreach (var item in Model)
+    {
+        odd = !odd;
+    <tr class="@(odd ? "odd": "even")">
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @{ if (item.Members != null)
+                {
+                    var last = item.Members.LastOrDefault();
+                    foreach (var subitem in item.Members)
+                    {
+                        @Html.DisplayFor(modelItem => subitem.DisplayName)
+                        if (!subitem.Equals(last))
+                        {@Html.Raw(";")}
+                }
+            }
+            }
+        </td>
+        @*<td>
+            <button class="btn btn-dropdown dropdown-toggle" type="button" data-target="menu-actions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="svgIcon list-actions"></div>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right menu-actions">
+                @Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @data_toggle = "tooltip",  @data_placement = "left", @title = TextResources.Edit, @class = "listAction fas fa-pencil-alt", BIADialogLink = "Type:Modal" })
+                @Html.ActionLink(" ", "Details", new { id = item.Id }, new { @data_toggle = "tooltip",  @data_placement = "left", @title = TextResources.Details, @class = "listAction fas fa-list-ul", BIADialogLink = "Type:Modal" })
+                @if (User.IsInRole(Constants.RoleAdmin))
+                {
+                    @Html.ActionLink(" ", "Delete", new { id = item.Id }, new { @data_toggle = "tooltip",  @data_placement = "left", @title = TextResources.Delete, @class = "listAction fas fa-trash-alt", BIADialogLink = "Type:Modal" })
+                }
+            </div>
+        </td>*@
+        <td>
+            <div class="">
+                @Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @data_toggle = "tooltip", @data_placement = "left", @title = TextResources.Edit, @class = "listAction fas fa-pencil-alt", BIADialogLink = "Type:Modal" })
+                @Html.ActionLink(" ", "Details", new { id = item.Id }, new { @data_toggle = "tooltip", @data_placement = "left", @title = TextResources.Details, @class = "listAction fas fa-list-ul", BIADialogLink = "Type:Modal" })
+                @if (User.IsInRole(Constants.RoleAdmin))
+                {
+                    @Html.ActionLink(" ", "Delete", new { id = item.Id }, new { @data_toggle = "tooltip", @data_placement = "left", @title = TextResources.Delete, @class = "listAction fas fa-trash-alt", BIADialogLink = "Type:Modal" })
+                }
+            </div>
+        </td>
+    </tr>
+    }
+
+</table>

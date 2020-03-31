@@ -1,0 +1,133 @@
+﻿<#@ template language="C#" HostSpecific="True" #>
+<#@ output extension=".cshtml" #>
+<#@ include file="Imports.include.t4" #>
+@model <#= ViewDataTypeName #>
+<#
+// "form-control" attribute is only supported for all EditorFor() in System.Web.Mvc 5.1.0.0 or later versions, except for checkbox, which uses a div in Bootstrap
+Version requiredMvcVersion = new Version("5.1.0.0");
+bool isControlHtmlAttributesSupported = MvcVersion >= requiredMvcVersion;
+// The following chained if-statement outputs the file header code and markup for a partial view, a view using a layout page, or a regular view.
+if(IsPartialView) {
+#>
+
+<#
+} else if(IsLayoutPageSelected) {
+#>
+
+@{
+<#if (TranslateType) 
+{#>
+    ViewBag.Title = TextResources.<#= ViewName#> + " " + Html.Translate("<#= ViewDataTypeShortName #>");
+<#}
+else
+{#>
+    ViewBag.Title = TextResources.<#= ViewName#> + "<#= ViewDataTypeShortName #>";
+<#}
+if (!String.IsNullOrEmpty(LayoutPageFile)) {
+#>
+    Layout = "<#= LayoutPageFile#>";
+<#
+}
+#>
+    ViewBag.htmlFormFieldsAttributes = new { @class = "form-control"};
+}
+
+<h2>@TextResources.<#= ViewName#> <#if (TranslateType){#>@Html.Translate("<#= ViewDataTypeShortName #>")<#}else{#><#= ViewDataTypeShortName #><#}#></h2>
+
+<#
+} else {
+#>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@TextResources.<#= ViewName #></title>
+</head>
+<body>
+<#
+    PushIndent("    ");
+}
+#>
+<#
+if (ReferenceScriptLibraries) {
+#>
+<#
+    if (!IsLayoutPageSelected && IsBundleConfigPresent) {
+#>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+
+<#
+    }
+#>
+<#
+    else if (!IsLayoutPageSelected) {
+#>
+<script src="~/Scripts/jquery-<#= JQueryVersion #>.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<#
+    }
+#>
+
+<#
+}
+    string formName = ControllerRootName + ViewName + "Form";
+
+#>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = <#=SafeFormId(formName,true)#>, @class = "PreventDuplicateRequest" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+<# 
+    if (isControlHtmlAttributesSupported) {
+#>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<#        
+    } else {
+#>
+        @Html.ValidationSummary(true)
+<#      
+    }
+	foreach (PropertyMetadata property in ModelMetadata.Properties.Where(p => p.Scaffold && p.IsPrimaryKey && !p.IsAssociation )) {
+#>
+        @Html.HiddenFor(model => model.<#= property.PropertyName #>)
+<#
+    }
+#>
+@Html.Partial("_Form", Model)
+    </div>
+}
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" onclick="location.href='@Url.Action("Index")'" class="btn btn-second">@TextResources.Cancel</button>
+        </div>
+        <div class="btn-action">
+            <button onclick="$('#<#=SafeFormId(formName,false)#>').submit();" class="btn btn-main">@TextResources.Save</button>
+        </div>
+    </div>
+}
+
+<#
+// The following code closes the tag used in the case of a view using a layout page and the body and html tags in the case of a regular view page
+#>
+<#
+if(!IsPartialView && !IsLayoutPageSelected) {
+    ClearIndent();
+#>
+</body>
+</html>
+<#
+}
+#>
+<#@ include file="../../ModelMetadataFunctions.cs.include.t4" #>

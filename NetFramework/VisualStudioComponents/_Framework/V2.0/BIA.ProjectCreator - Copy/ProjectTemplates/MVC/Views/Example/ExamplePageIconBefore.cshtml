@@ -1,0 +1,159 @@
+@model $companyName$.$saferootprojectname$.Business.DTO.SiteDTO
+
+@{
+    ViewBag.Title = AppliResources.ExamplePage;
+}
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-sm-4">
+        <div class="form-group iconField p-left">
+            @Html.T_LabelFor(model => model.Title, htmlAttributes: new { @class = "bmd-label-floating mandatory" })
+            <div class="field">
+                <span class="fas fa-thumbs-up"></span>
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger bmd-help" })
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group iconField p-right">
+            @Html.T_LabelFor(model => model.Id, htmlAttributes: new { @class = "bmd-label-floating mandatory" })
+            <div class="field">
+                <span class="fas fa-key"></span>
+                @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Id, "", new { @class = "text-danger bmd-help" })
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group iconField p-left">
+            <label class="bmd-label-floating mandatory">Password</label>
+            <div class="field">
+                <span class="fas fa-lock"></span>
+                @Html.Password("pwd1", "", new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label class="bmd-label-floating">Date</label>
+            <div class="field">
+                <input class="form-control calendarPicker" type="text" />
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label class="bmd-label-floating">Time</label>
+            <div class="field">
+                <input class="form-control timePicker" type="text" />
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label class="bmd-label-floating">DateTime</label>
+            <input class="form-control calendarAndTimePicker" type="text" />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="form-group iconField p-left">
+            @Html.Label("Drop Down List item", new { @class = "bmd-label-floating" })
+            <div class="field">
+                <span class="fas fa-plane"></span>
+                @Html.DropDownList("ddl1",
+                    new List<SelectListItem>() {
+                new SelectListItem() { Text = "item1", Value = "1" },
+                new SelectListItem() { Text = "item2", Value = "2" },
+                new SelectListItem() { Text = "item3", Value = "3" },
+                new SelectListItem() { Text = "item4", Value = "4" },
+                new SelectListItem() { Text = "item5", Value = "5" },
+                    }, "", htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group iconField p-left">
+            <label class="bmd-label-floating">Multiselect</label>
+            <div class="field">
+                <span class="fas fa-crosshairs"></span>
+                @Html.MultiselectFor(model => model.MembersIds, (IEnumerable<SelectListItem>)ViewBag.MembersIds, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="form-group iconField p-left">
+            <label class="bmd-label-floating">CheckBox</label>
+            <div class="field">
+                <span class="fas fa-check"></span>
+                <div class="form-control">
+                    @Html.CheckBox("chk1") @TextResources.Yes
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group iconField p-left">
+            <label class="bmd-label-floating">Radio button</label>
+            <div class="field">
+                <span class="fas fa-times"></span>
+                <div class="form-control">
+                    @Html.RadioButton("rdb1", "Test Ko")
+                </div>
+            </div>
+            <div class="field">
+                <span class="fas fa-check"></span>
+                <div class="form-control">
+                    @Html.RadioButton("rdb1", "Test Ok")
+                </div>
+            </div>
+            <div class="field">
+                <span class="fas fa-sync-alt"></span>
+                <div class="form-control">
+                    @Html.DisplayName("My value to display refresh")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="form-group iconField p-left">
+            <label class="bmd-label-floating">Text area</label>
+            <div class="field">
+                <span class="fas fa-file-alt"></span>
+                <textarea class="form-control" rows="5"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-8">
+        <div class="form-group iconField p-left">
+        <label class="bmd-label-floating">MultiSelect2Lists</label>
+        <div class="field">
+            <span class="fas fa-exchange-alt"></span>
+            @Html.Multiselect2ListsFor(model => model.Members, (IEnumerable<SelectListItem>)ViewBag.MembersIds)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <button type="button" class="btn btn-main pull-right">@TextResources.Button</button>
+</div>
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button type="button" id="btn1" class="btn btn-second">@TextResources.Cancel</button>
+        </div>
+        <div class="btn-action">
+            <button type="button" id="btn2" class="btn btn-main">@TextResources.Save</button>
+        </div>
+    </div>
+}

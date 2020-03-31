@@ -1,0 +1,257 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>BIA V2.1.1 &gt; MVC web application</Name>
+    <Description>Project For BIA &gt; MVC web application</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>2</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ZZCompanyNameZZ.ZZProjectNameZZ.MVC</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.jpg</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="ZZCompanyNameZZ.ZZProjectNameZZ.MVC.csproj" File="ZZCompanyNameZZ.ZZProjectNameZZ.MVC.csproj" ReplaceParameters="true">
+      <Folder Name="App_Start" TargetFolderName="App_Start">
+        <ProjectItem ReplaceParameters="true" TargetFileName="BundleConfig.cs">BundleConfig.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="FilterConfig.cs">FilterConfig.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="RouteConfig.cs">RouteConfig.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="UnityConfig.cs">UnityConfig.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="UnityMvcActivator.cs">UnityMvcActivator.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="WebApiConfig.cs">WebApiConfig.cs</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ApplicationInsights.config">ApplicationInsights.config</ProjectItem>
+      <Folder Name="BIA.Net" TargetFolderName="BIA.Net">
+        <Folder Name="Controllers" TargetFolderName="Controllers">
+          <ProjectItem ReplaceParameters="true" TargetFileName="ViewController.cs">ViewController.cs</ProjectItem>
+        </Folder>
+        <Folder Name="Helpers" TargetFolderName="Helpers">
+          <ProjectItem ReplaceParameters="true" TargetFileName="HtmlHelperView.cs">HtmlHelperView.cs</ProjectItem>
+        </Folder>
+        <Folder Name="ViewModel" TargetFolderName="ViewModel">
+          <Folder Name="View" TargetFolderName="View">
+            <ProjectItem ReplaceParameters="true" TargetFileName="ViewPopupVM.cs">ViewPopupVM.cs</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="ViewVM.cs">ViewVM.cs</ProjectItem>
+          </Folder>
+        </Folder>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="BIA.Net.xsd">BIA.Net.xsd</ProjectItem>
+      <Folder Name="Content" TargetFolderName="Content">
+        <ProjectItem ReplaceParameters="true" TargetFileName="multi-select.css">multi-select.css</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Project.css">Project.css</ProjectItem>
+      </Folder>
+      <Folder Name="Controllers" TargetFolderName="Controllers">
+        <ProjectItem ReplaceParameters="true" TargetFileName="ExampleAjaxController.cs">ExampleAjaxController.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="ExampleController.cs">ExampleController.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="ExampleFullAjaxController.cs">ExampleFullAjaxController.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="HomeController.cs">HomeController.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="MemberController.cs">MemberController.cs</ProjectItem>
+        <Folder Name="Shared" TargetFolderName="Shared">
+          <ProjectItem ReplaceParameters="true" TargetFileName="BaseController.cs">BaseController.cs</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="CommonController.cs">CommonController.cs</ProjectItem>
+        </Folder>
+        <ProjectItem ReplaceParameters="true" TargetFileName="SiteController.cs">SiteController.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="WindowsServiceController.cs">WindowsServiceController.cs</ProjectItem>
+      </Folder>
+      <Folder Name="ControllersApi" TargetFolderName="ControllersApi">
+        <ProjectItem ReplaceParameters="true" TargetFileName="ExampleValuesController.cs">ExampleValuesController.cs</ProjectItem>
+        <Folder Name="Shared" TargetFolderName="Shared">
+          <ProjectItem ReplaceParameters="true" TargetFileName="BaseAPIController.cs">BaseAPIController.cs</ProjectItem>
+        </Folder>
+        <ProjectItem ReplaceParameters="true" TargetFileName="SiteAdminsController.cs">SiteAdminsController.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="SitesController.cs">SitesController.cs</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="false" TargetFileName="favicon.ico">favicon.ico</ProjectItem>
+      <Folder Name="fonts" TargetFolderName="fonts" />
+      <ProjectItem ReplaceParameters="true" TargetFileName="Global.asax">Global.asax</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Global.asax.cs">Global.asax.cs</ProjectItem>
+      <Folder Name="Helpers" TargetFolderName="Helpers">
+        <ProjectItem ReplaceParameters="true" TargetFileName="UserInfoMVC.cs">UserInfoMVC.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="VarSession.cs">VarSession.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Images" TargetFolderName="Images">
+        <ProjectItem ReplaceParameters="false" TargetFileName="AppIcon.svg">AppIcon.svg</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="bg-default.jpg">bg-default.jpg</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="Refresh-icon.png">Refresh-icon.png</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="switch.png">switch.png</ProjectItem>
+        <Folder Name="Themes" TargetFolderName="Themes">
+          <Folder Name="Dark" TargetFolderName="Dark" />
+          <Folder Name="Light" TargetFolderName="Light" />
+        </Folder>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="log4net.xsd">log4net.xsd</ProjectItem>
+      <Folder Name="Logs" TargetFolderName="Logs">
+        <ProjectItem ReplaceParameters="true" TargetFileName="ReadMe.txt">ReadMe.txt</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">packages.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Parameters.xml">Parameters.xml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Project_Readme.html">Project_Readme.html</ProjectItem>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+        <Folder Name="PublishProfiles" TargetFolderName="PublishProfiles">
+          <ProjectItem ReplaceParameters="false" TargetFileName="TfsPrecompile.pubxml">TfsPrecompile.pubxml</ProjectItem>
+        </Folder>
+      </Folder>
+      <Folder Name="Scripts" TargetFolderName="Scripts">
+        <ProjectItem ReplaceParameters="true" TargetFileName="_references.js">_references.js</ProjectItem>
+        <Folder Name="app" TargetFolderName="app">
+          <Folder Name="modules" TargetFolderName="modules">
+            <Folder Name="Example" TargetFolderName="Example">
+              <ProjectItem ReplaceParameters="true" TargetFileName="DialogChildPopup.ts">DialogChildPopup.ts</ProjectItem>
+              <ProjectItem ReplaceParameters="true" TargetFileName="DialogExample.ts">DialogExample.ts</ProjectItem>
+              <ProjectItem ReplaceParameters="true" TargetFileName="DialogParentPopup.ts">DialogParentPopup.ts</ProjectItem>
+              <ProjectItem ReplaceParameters="true" TargetFileName="MultiFilesUpload.ts">MultiFilesUpload.ts</ProjectItem>
+            </Folder>
+          </Folder>
+        </Folder>
+        <ProjectItem ReplaceParameters="true" TargetFileName="jquery.multi-select.js">jquery.multi-select.js</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="modernizr-2.6.2.js">modernizr-2.6.2.js</ProjectItem>
+        <Folder Name="typings" TargetFolderName="typings">
+          <Folder Name="BIA.Net" TargetFolderName="BIA.Net">
+            <ProjectItem ReplaceParameters="true" TargetFileName="BIA.d.ts">BIA.d.ts</ProjectItem>
+          </Folder>
+          <Folder Name="jquery" TargetFolderName="jquery">
+            <ProjectItem ReplaceParameters="true" TargetFileName="jquery.d.ts">jquery.d.ts</ProjectItem>
+          </Folder>
+          <Folder Name="jquery.dataTables" TargetFolderName="jquery.dataTables">
+            <ProjectItem ReplaceParameters="true" TargetFileName="jquery.dataTables-1.9.4.d.ts">jquery.dataTables-1.9.4.d.ts</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="jquery.dataTables.d.ts">jquery.dataTables.d.ts</ProjectItem>
+          </Folder>
+          <Folder Name="jquery.ui.layout" TargetFolderName="jquery.ui.layout">
+            <ProjectItem ReplaceParameters="true" TargetFileName="jquery.ui.layout.d.ts">jquery.ui.layout.d.ts</ProjectItem>
+          </Folder>
+          <Folder Name="jquery.validation" TargetFolderName="jquery.validation">
+            <ProjectItem ReplaceParameters="true" TargetFileName="jquery.validation.d.ts">jquery.validation.d.ts</ProjectItem>
+          </Folder>
+          <Folder Name="jqueryui" TargetFolderName="jqueryui">
+            <ProjectItem ReplaceParameters="true" TargetFileName="jqueryui.d.ts">jqueryui.d.ts</ProjectItem>
+          </Folder>
+        </Folder>
+      </Folder>
+      <Folder Name="SiteMap" TargetFolderName="SiteMap">
+        <ProjectItem ReplaceParameters="false" TargetFileName="Sample_ToRename.sitemap">Sample_ToRename.sitemap</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="SiteMap.sitemap">SiteMap.sitemap</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="stylecop.json">stylecop.json</ProjectItem>
+      <Folder Name="ViewModel" TargetFolderName="ViewModel">
+        <Folder Name="ExampleAjax" TargetFolderName="ExampleAjax">
+          <ProjectItem ReplaceParameters="true" TargetFileName="ExampleAjaxAdvancedFilterVM.cs">ExampleAjaxAdvancedFilterVM.cs</ProjectItem>
+        </Folder>
+        <Folder Name="ExampleFullAjax" TargetFolderName="ExampleFullAjax">
+          <ProjectItem ReplaceParameters="true" TargetFileName="ExampleFullAjaxAdvancedFilterVM.cs">ExampleFullAjaxAdvancedFilterVM.cs</ProjectItem>
+        </Folder>
+        <Folder Name="Member" TargetFolderName="Member">
+          <ProjectItem ReplaceParameters="true" TargetFileName="MemberFilterVM.cs">MemberFilterVM.cs</ProjectItem>
+        </Folder>
+        <Folder Name="Shared" TargetFolderName="Shared" />
+        <Folder Name="Site" TargetFolderName="Site">
+          <ProjectItem ReplaceParameters="true" TargetFileName="SiteAdvancedFilterVM.cs">SiteAdvancedFilterVM.cs</ProjectItem>
+        </Folder>
+        <Folder Name="WindowsService" TargetFolderName="WindowsService">
+          <ProjectItem ReplaceParameters="true" TargetFileName="IndexVM.cs">IndexVM.cs</ProjectItem>
+        </Folder>
+      </Folder>
+      <Folder Name="Views" TargetFolderName="Views">
+        <ProjectItem ReplaceParameters="true" TargetFileName="_ViewStart.cshtml">_ViewStart.cshtml</ProjectItem>
+        <Folder Name="Example" TargetFolderName="Example">
+          <ProjectItem ReplaceParameters="true" TargetFileName="_Tab1.cshtml">_Tab1.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="_Tab2.cshtml">_Tab2.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="BasicFileUpload.cshtml">BasicFileUpload.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="CallStoredProcedure.cshtml">CallStoredProcedure.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Dialog.cshtml">Dialog.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="DialogChildPopup.cshtml">DialogChildPopup.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="DialogParentPopup.cshtml">DialogParentPopup.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="ExamplePage.cshtml">ExamplePage.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="ExamplePage2.cshtml">ExamplePage2.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="ExamplePageCascading.cshtml">ExamplePageCascading.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="ExamplePageIconBefore.cshtml">ExamplePageIconBefore.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="ExamplePageReadOnly.cshtml">ExamplePageReadOnly.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="FullScreen.cshtml">FullScreen.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="MultiFilesUpload.cshtml">MultiFilesUpload.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Tabs.cshtml">Tabs.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="TabsAjax.cshtml">TabsAjax.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="UploadScreenCapture.cshtml">UploadScreenCapture.cshtml</ProjectItem>
+        </Folder>
+        <Folder Name="ExampleAjax" TargetFolderName="ExampleAjax">
+          <ProjectItem ReplaceParameters="true" TargetFileName="_Form.cshtml">_Form.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="_List.cshtml">_List.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="AdvancedFilter.cshtml">AdvancedFilter.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Create.cshtml">Create.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Delete.cshtml">Delete.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Details.cshtml">Details.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Edit.cshtml">Edit.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Index.cshtml">Index.cshtml</ProjectItem>
+        </Folder>
+        <Folder Name="ExampleFullAjax" TargetFolderName="ExampleFullAjax">
+          <ProjectItem ReplaceParameters="true" TargetFileName="_Form.cshtml">_Form.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="_List.cshtml">_List.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="AdvancedFilter.cshtml">AdvancedFilter.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Create.cshtml">Create.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Delete.cshtml">Delete.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Details.cshtml">Details.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Edit.cshtml">Edit.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Index.cshtml">Index.cshtml</ProjectItem>
+        </Folder>
+        <Folder Name="Home" TargetFolderName="Home">
+          <ProjectItem ReplaceParameters="true" TargetFileName="Index.cshtml">Index.cshtml</ProjectItem>
+        </Folder>
+        <Folder Name="Member" TargetFolderName="Member">
+          <ProjectItem ReplaceParameters="true" TargetFileName="_List.cshtml">_List.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Create.cshtml">Create.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Delete.cshtml">Delete.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Details.cshtml">Details.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Edit.cshtml">Edit.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Filter.cshtml">Filter.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Index.cshtml">Index.cshtml</ProjectItem>
+        </Folder>
+        <Folder Name="Shared" TargetFolderName="Shared">
+          <ProjectItem ReplaceParameters="true" TargetFileName="_footerLayout.cshtml">_footerLayout.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="_headerLayout.cshtml">_headerLayout.cshtml</ProjectItem>
+          <Folder Name="BIA.Net" TargetFolderName="BIA.Net">
+            <ProjectItem ReplaceParameters="true" TargetFileName="_BIALayout.cshtml">_BIALayout.cshtml</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="_BIALayout_Content.cshtml">_BIALayout_Content.cshtml</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="_BIALayout_Dialog.cshtml">_BIALayout_Dialog.cshtml</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="_BIALayout_Dialog_Infos.cshtml">_BIALayout_Dialog_Infos.cshtml</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="_BIALayout_MainPageContent.cshtml">_BIALayout_MainPageContent.cshtml</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="_Localization.cshtml">_Localization.cshtml</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="_LoginPartial.cshtml">_LoginPartial.cshtml</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="_Menu.cshtml">_Menu.cshtml</ProjectItem>
+            <ProjectItem ReplaceParameters="true" TargetFileName="_Navigation.cshtml">_Navigation.cshtml</ProjectItem>
+            <Folder Name="Views" TargetFolderName="Views">
+              <ProjectItem ReplaceParameters="true" TargetFileName="_ListManageMyViews.cshtml">_ListManageMyViews.cshtml</ProjectItem>
+              <ProjectItem ReplaceParameters="true" TargetFileName="_ListMyViews.cshtml">_ListMyViews.cshtml</ProjectItem>
+              <ProjectItem ReplaceParameters="true" TargetFileName="_ListSiteViews.cshtml">_ListSiteViews.cshtml</ProjectItem>
+              <ProjectItem ReplaceParameters="true" TargetFileName="_SiteViews.cshtml">_SiteViews.cshtml</ProjectItem>
+              <ProjectItem ReplaceParameters="true" TargetFileName="ViewsPopup.cshtml">ViewsPopup.cshtml</ProjectItem>
+            </Folder>
+          </Folder>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Error.cshtml">Error.cshtml</ProjectItem>
+        </Folder>
+        <Folder Name="Site" TargetFolderName="Site">
+          <ProjectItem ReplaceParameters="true" TargetFileName="_List.cshtml">_List.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="AdvancedFilter.cshtml">AdvancedFilter.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Create.cshtml">Create.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Delete.cshtml">Delete.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Details.cshtml">Details.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Edit.cshtml">Edit.cshtml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Index.cshtml">Index.cshtml</ProjectItem>
+        </Folder>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Web.config">Web.config</ProjectItem>
+        <Folder Name="WindowsService" TargetFolderName="WindowsService">
+          <ProjectItem ReplaceParameters="true" TargetFileName="Index.cshtml">Index.cshtml</ProjectItem>
+        </Folder>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Web.config">Web.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Web.Debug.config">Web.Debug.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Web.Release.config">Web.Release.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="WebDMZ.config">WebDMZ.config</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>BIA.ProjectCreatorWizard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>BIA.ProjectCreatorWizard.ChildWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

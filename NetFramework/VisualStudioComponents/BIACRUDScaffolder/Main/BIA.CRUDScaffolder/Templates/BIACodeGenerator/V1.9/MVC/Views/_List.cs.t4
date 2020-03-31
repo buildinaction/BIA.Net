@@ -1,0 +1,117 @@
+﻿<#@ template language="C#" HostSpecific="True" #>
+<#@ output extension=".cshtml" #>
+<#@ include file="Imports.include.t4" #>
+<#@ parameter type="System.Boolean" name="GenerateListAjax" #>
+<#@ parameter type="System.Boolean" name="GenerateListFullAjax" #>
+@model IEnumerable<#= "<" + ViewDataTypeName + ">" #>
+<#
+    PushIndent("    ");
+	string TableName = ControllerRootName + "Table";
+
+#>
+
+<table class="dataTable stripe table flat-row"  id="<#= TableName #>">
+    <thead>
+    <tr>
+<#
+IEnumerable<PropertyMetadata> properties = ModelMetadata.Properties;
+foreach (PropertyMetadata property in properties) {
+    if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey) {
+#>
+<#
+        // We do not want to show any association properties for which there is
+        // no associated foreign key.
+        if (property.IsAssociation && GetRelatedModelMetadata(property) == null) {
+            continue;
+        }
+#>
+        <th>
+            @Html.<#if (TranslateFields){#>T_<#}#>DisplayNameFor(model => model.<#= property.PropertyName #>)
+        </th>
+<#
+    }
+}
+#>
+        <th></th>
+    </tr>
+    </thead>
+<# if (GenerateListAjax || GenerateListFullAjax) { #>
+<tbody></tbody>
+<# 
+} 
+else {
+#>
+@{ var odd = false; }
+@foreach (var item in Model) {
+    odd = !odd;
+    <tr class="@(odd ? "odd": "even")">
+<#
+foreach (PropertyMetadata property in properties) {
+    if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey) {
+#>
+<#
+        // We do not want to show any association properties for which there is
+        // no associated foreign key.
+        if (property.IsAssociation && GetRelatedModelMetadata(property) == null) {
+            continue;
+        }
+#>
+        <td>
+<#
+		if (property.IsAssociation && property.AssociationDirection == Microsoft.AspNet.Scaffolding.Core.Metadata.AssociationDirection.OneToMany){
+#>
+            @{ if (item.<#= property.PropertyName #> != null)
+                {
+                    var last = item.<#= property.PropertyName #>.LastOrDefault();
+                    foreach (var subitem in item.<#= property.PropertyName #>)
+                    {
+                        @Html.DisplayFor(modelItem => subitem<#= GetDisplayPropertyName(property)#>)
+                        if (!subitem.Equals(last))
+                        {@Html.Raw(";")}
+                    }
+                }
+            }
+<# 
+		}
+		else {
+#>
+            @Html.DisplayFor(modelItem => <#= "item." + GetValueExpression(property) #>)
+<# 
+		} 
+#>
+        </td>
+<#
+    }
+}
+
+string pkName = GetPrimaryKeyName();
+if (pkName != null) {
+#>
+        <td style="text-align: center;white-space:nowrap">
+			@Html.ActionLink(" ", "Edit", new { id = item.<#= pkName #> }, new { dataTitle = TextResources.Edit, @class = "a2btn-small glyphicon glyphicon-pencil", BIADialogLink = "Type:Modal" }) |
+            @Html.ActionLink(" ", "Details", new { id = item.<#= pkName #> }, new { dataTitle = TextResources.Details, @class = "a2btn-small glyphicon glyphicon-list-alt", BIADialogLink = "Type:Modal" }) |
+			@Html.ActionLink(" ", "Delete", new { id = item.<#= pkName #> }, new { dataTitle = TextResources.Delete, @class = "a2btn-small glyphicon glyphicon-trash", BIADialogLink = "Type:Modal" })
+        </td>
+<#
+} else {
+#>
+        <td style="text-align: center;white-space:nowrap">
+			@Html.ActionLink(" ", "Edit", new { /* id=item.PrimaryKey */ }, new { dataTitle = TextResources.Edit, @class = "a2btn-small glyphicon glyphicon-pencil", BIADialogLink = "Type:Modal" }) |
+            @Html.ActionLink(" ", "Details", new { /* id=item.PrimaryKey */ }, new { dataTitle = TextResources.Details, @class = "a2btn-small glyphicon glyphicon-list-alt", BIADialogLink = "Type:Modal" }) |
+			@Html.ActionLink(" ", "Delete", new { /* id=item.PrimaryKey */ }, new { dataTitle = TextResources.Delete, @class = "a2btn-small glyphicon glyphicon-trash", BIADialogLink = "Type:Modal" })
+        </td>
+<#
+}
+#>
+    </tr>
+}
+
+<# 
+} 
+#>
+
+</table>
+<#
+    ClearIndent();
+#>
+<#@ include file="../../ModelMetadataFunctions.cs.include.t4" #>

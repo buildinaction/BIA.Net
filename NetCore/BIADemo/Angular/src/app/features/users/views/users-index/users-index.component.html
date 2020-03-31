@@ -1,0 +1,52 @@
+<div fxLayout fxLayout.xs="column" fxLayoutWrap="wrap">
+  <div fxFlex="100">
+    <user-table-header
+      [headerTitle]="'user.listOf' | translate"
+      [canSync]="canSync"
+      [canAdd]="canAdd"
+      (create)="onCreate()"
+      (exportCSV)="onExportCSV()"
+      (synchronize)="onSynchronize()"
+    ></user-table-header>
+    <bia-table-controller
+      [defaultPageSize]="pageSize"
+      [length]="totalCount$ | async"
+      [columns]="columns"
+      [(displayedColumns)]="displayedColumns"
+      [hiddenColumns]="['bia.actions']"
+      (displayedColumnsChange)="displayedColumnsChanged($event)"
+      (filter)="searchGlobalChanged($event)"
+      (pageSizeChange)="onPageSizeChange($event)"
+      (toggleSearch)="onToggleSearch()"
+      [views]="views$ | async"
+      (viewChange)="onViewChange($event)"
+      [globalSearch]="globalSearchValue"
+      (manageView)="onManageView()"
+    ></bia-table-controller>
+    <bia-table
+      [elements]="users$ | async"
+      [totalRecord]="totalCount$ | async"
+      [columnToDisplays]="displayedColumns"
+      [pageSize]="pageSize"
+      [configuration]="tableConfiguration"
+      [showColSearch]="showColSearch"
+      [globalSearchValue]="globalSearchValue"
+      [canEdit]="false"
+      [canDelete]="canDelete"
+      (remove)="onRemove($event)"
+      (loadLazy)="onLoadLazy($event)"
+      [tableId]="tableId"
+      [viewPreference]="viewPreference"
+      [sortFieldValue]="sortField"
+    ></bia-table>
+  </div>
+</div>
+<p-confirmDialog></p-confirmDialog>
+<app-user-new-dialog [(display)]="displayNewUserDialog"></app-user-new-dialog>
+<view-dialog
+    [(display)]="displayViewDialog"
+    [userViews]="views$ | async"
+    (displayChange)="onDisplayViewChange($event)"
+    (deleteView)="onDeleteView($event)"
+    (setDefaultUserView)="onSetDefaultUserView($event)"
+></view-dialog>

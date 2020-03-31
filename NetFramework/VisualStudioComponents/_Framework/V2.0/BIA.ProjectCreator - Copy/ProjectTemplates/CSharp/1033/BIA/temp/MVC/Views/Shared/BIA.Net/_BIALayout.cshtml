@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="shortcut icon" href="@Url.Content(BIA.Net.Common.BIASettingsReader.UrlStatic + "/ZZCompanyNameZZ.Net/V2.0/img/company.ico")" type="image/vnd.microsoft.icon">
+    <title>@ViewBag.Title - @BIA.Net.Common.BIASettingsReader.ProjectTitle</title>
+
+    @Styles.Render(BIA.Net.Common.BIASettingsReader.UrlStatic + "/BIA.Net/V2.0/css/BIABundle.css")
+    @Styles.Render(BIA.Net.Common.BIASettingsReader.UrlStatic + "/ZZCompanyNameZZ.Net/V2.0/css/BIABundle.min.css")
+    @Styles.Render(BIA.Net.Common.BIASettingsReader.UrlStatic + "/ZZCompanyNameZZ.ZZDivisionNameZZ.Net/V2.0/css/BIABundle.min.css")
+
+    @Styles.Render("~/Content/ProjectCss")
+
+    @Html.Partial("_headerLayout")
+    @RenderSection("Styles", false)
+</head>
+<body class="@(" BIANetTheme" + PageData["theme"])">
+    <div class="version" data-version="@Constants.Version" data-application="@BIASettingsReader.ProjectTitle"></div>
+    <div class="navbar navbar-bia navbar-static-top">
+        <div class="header-navbar">
+            <div class="header-row">
+                <div class="header-cell">
+                    <a href="@Url.Content(BIASettingsReader.UrlIndexDivision)">
+                        <div class="logoCompany"> </div>
+                    </a>
+                </div>
+                <div class="header-cell">
+                    <span class="separator"></span>
+                </div>
+                <div class="header-cell noSelect">
+                    <a href="@Url.Content(BIASettingsReader.UrlIndexDivision)">
+                        <div class="logoDivision"> </div>
+                        @*<img class="img-fluid logoDivision" alt="@BIA.Net.Common.BIASettingsReader.DivisionName">*@
+                    </a>
+                </div>
+                <div class="header-cell blank">&nbsp;</div>
+                @Html.Partial("BIA.Net/_LoginPartial")
+                <div class="header-cell fullscreenIcon" id="fullscreen">
+                    <div class="svgIcon startfullscreen" id="linkFullScreen" data-toggle="tooltip" data-placement="left" title="fullscreen" onclick="BIA.Net.Design.Look.toggleFullScreen()"></div>
+                </div>
+            </div>
+        </div>
+        <div class="Line"></div>
+        <div class="main-navbar">
+            <div class="navbar-header" style="overflow: hidden">
+                <a class="navbar-logo" href="@Url.Action("Index", "Home")">
+                    <svg viewBox="0 0 60 60">
+                        <use href="#iconApp" id="logoApp" />
+                    </svg>
+                </a>
+            </div>
+            <div class="navbar-header" style="overflow: hidden">
+                <a class="navbar-logo" href="@Url.Action("Index", "Home")">
+                    <div class="appName noSelect">@BIA.Net.Common.BIASettingsReader.ProjectTitle<span class="application-version">@string.Format("v{0}", Constants.Version)</span></div>
+                </a>
+            </div>
+            <nav class="nav-wrapper noSelect">
+                @if (Session["MyMenu"] == null)
+                {
+                    Session["MyMenu"] = Html.Partial("BIA.Net/_Menu");
+                }
+                @Session["MyMenu"]
+                <div class="help">
+                    <div class="iconHelp">
+                        <a class="svgIcon help-circle" BIADialogLink="Type:Modal" href="@Url.Content(BIASettingsReader.UrlIndexDivision + "/Support/DetailSupport?App=" + BIASettingsReader.ProjectShortName)">
+                        </a>
+                        <div class="policeHelp">aide</div>
+                    </div>
+
+                </div>
+            </nav>
+            <div class="third-navbar">
+                <button class="navbar-toggle burgerButton" type="button">
+                    <span class="sr-only">Toggle Navigation</span>
+                    <div class="menuBar"></div>
+                    <div class="menuBar"></div>
+                    <div class="menuBar"></div>
+                    <div class="burgerPolice">menu</div>
+                </button>
+            </div>
+            <div class="iconHelp">
+                <a class="svgIcon help-circle" BIADialogLink="Type:Modal" href="@Url.Content(BIASettingsReader.UrlIndexDivision + "/Support/DetailSupport?App=" + BIASettingsReader.ProjectTitle + "&UrlReturn=" + Request.Url.ToString())"></a>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="stopfullscreenIcon" id="fullscreen" onclick="BIA.Net.Design.Look.toggleFullScreen()">
+        <i class="fa fa-circle"></i>
+        <div class="svgIcon stopfullscreen" id="linkFullScreen" data-toggle="tooltip" data-placement="left" title="exit fullscreen"></div>
+    </div>
+    <div id="alert_placeholder" class="alert-placeholder"></div>
+    <div class="breadcrumb">
+        <div class="breadcrumbLeft svgIcon follow-left" onclick="BIA.Net.Design.Look.toggleBreadcrumb()"></div>
+        <div class="content-breadcrumb"></div>
+        <div class="breadcrumbRight svgIcon follow-right" onclick="BIA.Net.Design.Look.toggleBreadcrumb()"></div>
+    </div>
+    <div id="BiaNetMainPageContent" class="BiaNetMainPageContent">
+        <div class="bia-dynamic-html-page-elem">
+            @{ var pageName = ViewContext.RouteData.Values["controller"].ToString(); }
+            <div class="contentBackground @(pageName == "Home" ? "homePage" : string.Empty)">
+                @RenderSection("OpenForm", required: false)
+
+                <div class="article content-body">
+                    <div class="container-fluid p-0">
+                        <div class="content-site" id="wrapper">
+                            @RenderBody()
+                        </div>
+                        <div style="clear: both"></div>
+                    </div>
+                </div>
+                @RenderSection("CloseForm", required: false)
+            </div>
+
+            @if (IsSectionDefined("Buttons"))
+            {
+                <footer class="footer-buttons BIARelativePaddingByHeight">
+                    <nav class="navbar navbar-expand-sm footer">
+                        <div class="container">
+                            @RenderSection("Buttons", required: false)
+                        </div>
+                    </nav>
+                </footer>
+            }
+            else
+            {
+                <footer class="footer-standard">
+                    <nav class="navbar navbar-expand-sm">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <div class="copyright copyright-company"> 2019 @BIA.Net.Common.BIASettingsReader.CompanyName</div>
+                            </li>
+                        </ul>
+                        <span class="framework-version">@string.Format("v{0}", Constants.FrameworkVersion)</span>
+                        <ul class="navbar-nav form-inline">
+                            <li class="nav-item" style="display: contents;">
+                                <div class="logoFooter"> </div>
+                            </li>
+                        </ul>
+                    </nav>
+                </footer>
+            }
+        </div>
+    </div>
+
+    <script src="@Url.Content(BIA.Net.Common.BIASettingsReader.UrlStatic + "/BIA.Net/V2.0/js/BIAbundle.min.js")"></script>
+    @Html.Partial("BIA.Net/_Localization")
+    @Scripts.Render("~/bundles/ProjectJs")
+    @Html.Partial("_footerLayout")
+    @Html.Raw(File.ReadAllText(Server.MapPath("~/Images/AppIcon.svg")))
+
+    <div id="BiaNetMainPageScript">
+        <script>
+                $(document).ready(function ($) {
+                    BIA.Net.Design.Look.InitThemeAndMode("@("BIANetTheme" + PageData["theme"])",
+                        @((ViewBag.FullScreen==true).ToString().ToLower()),
+                        @((ViewBag.HiddeFullScreenIcon == true).ToString().ToLower()),
+                        @((ViewBag.HiddeBreadCrumb == true).ToString().ToLower())
+                    );
+                });
+        </script>
+
+        @Html.Partial("BIA.Net/_Navigation")
+        @RenderSection("scripts", required: false)
+        @Html.RenderScripts()
+    </div>
+</body>
+</html>

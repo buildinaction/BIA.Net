@@ -1,0 +1,30 @@
+@model IEnumerable<$companyName$.$saferootprojectname$.Business.DTO.UserDTO>
+
+@{
+    ViewBag.Title = "CallStoredProcedure";
+}
+
+<h2>Example Call Stored Procedure</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.T_DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.T_DisplayNameFor(model => model.LastName)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+    </tr>
+}
+
+</table>

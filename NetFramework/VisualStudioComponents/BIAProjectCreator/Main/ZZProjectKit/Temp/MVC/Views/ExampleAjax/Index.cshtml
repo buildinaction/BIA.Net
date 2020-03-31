@@ -1,0 +1,76 @@
+@model IEnumerable<$companyName$.$saferootprojectname$.Business.DTO.ExampleTable3DTO>
+
+@{
+    ViewBag.Title = TextResources.ListOf + " " + Html.TranslateAndPlurialize("ExampleTable3") + " (Ajax)";
+}
+
+
+
+<div class="biaList">
+    <div class="biaListContainer">
+        <div class="biaListFilter">
+            <div class="w-100 mb-4">
+                <a class="btn btn-filterbox mb-0 biaListFilter-toggle-cross">
+                    <div class="svgIcon cross-filter"></div>
+                </a>
+                <h3 class="align-middle d-inline">Filtres</h3>
+            </div>
+            <div id="ExampleAjaxFilterContent"></div>
+        </div>
+        <div class="biaListDisplay">
+            <div class="row">
+                <div class="col-md-6">
+                    <a Id="ExampleAjaxFilterButton" class="btn align-top btn-filterbox empty biaListFilter-toggle" data-toggle="tooltip" data-target="" data-placement="bottom" title="Filtres">
+                        <div class="svgIcon filter-box"><span class="badge badge-danger d-none"></span></div>
+                    </a>
+                    <h2 class="titlePage align-top">@TextResources.ListOf @Html.TranslateAndPlurialize("ExampleTable3")  (Ajax)</h2>
+                </div>
+                <div class="col dt-buttons-group">
+                    @Html.ActionLink(TextResources.New, "Create", new { }, new { @class = "btn btn-main float-right", BIADialogLink = "Type:Modal" })
+                </div>
+            </div>
+
+            <div BIADialogRefresh="OnlyEvent;OnFormValidated:@Url.Action("Create")|@Url.Action("Edit")|@Url.Action("Delete")">
+                @Html.Partial("_List", new List<$companyName$.$saferootprojectname$.Business.DTO.ExampleTable3DTO>())
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    @Html.ScriptViewToApply("ExampleAjaxTable")
+    <script type="text/javascript">
+        var columns = [
+            { "data": "Title", "searchable": true, "orderable": true },
+            { "data": "Description", "searchable": true, "orderable": true },
+            { "data": "Value", "searchable": true, "orderable": true },
+            { "data": "MyDecimal", "searchable": true, "orderable": true },
+            { "data": "MyDouble", "searchable": true, "orderable": true },
+            { "data": "DateOnly", "searchable": true, "orderable": true },
+            { "data": "DateAndTime", "searchable": true, "orderable": true },
+            { "data": "TimeOnly", "searchable": true, "orderable": true },
+            { "data": "MyTimeSpan", "searchable": true, "orderable": true },
+            { "data": "TimeSpanOver24H", "searchable": true, "orderable": true },
+            { "data": "Site__Title", "searchable": true, "orderable": true },
+            { "data": "Links" }
+        ];
+
+        BIA.Net.DataTable.InitAjax2(
+            new BIA.Net.DataTable.Parameter({
+                tableId: "ExampleAjaxTable",
+                urlList: '@Url.Action("GetListData")',
+                ajax: new BIA.Net.DataTable.ParameterAjax({ columns: columns }),
+                exportButtons: ['csv', 'excel'],
+                advancedfilterId: "ExampleAjaxFilter",
+                advancedfilterButtonOpenId: "ExampleAjaxFilterButton",
+                advancedfilterContentPanelId: "ExampleAjaxFilterContent",
+                advancedfilterUrl: '@Url.Action("AdvancedFilter")',
+                dataTableOptionAdditional: { fixedHeader: { header: true } }
+            })
+        );
+    </script>
+}
+

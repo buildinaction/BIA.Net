@@ -1,0 +1,65 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>BIA V2.1.1 &gt; WebApi</Name>
+    <Description>Project For BIA &gt; WebApi</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>3</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ZZCompanyNameZZ.ZZProjectNameZZ.WebApi</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.jpg</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="ZZCompanyNameZZ.ZZProjectNameZZ.WebApi.csproj" File="ZZCompanyNameZZ.ZZProjectNameZZ.WebApi.csproj" ReplaceParameters="true">
+      <Folder Name="App_Start" TargetFolderName="App_Start">
+        <ProjectItem ReplaceParameters="true" TargetFileName="SwaggerConfig.cs">SwaggerConfig.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="UnityConfig.cs">UnityConfig.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="WebApiConfig.cs">WebApiConfig.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Controllers" TargetFolderName="Controllers">
+        <ProjectItem ReplaceParameters="true" TargetFileName="MemberRolesController.cs">MemberRolesController.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="SitesController.cs">SitesController.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="TokensController.cs">TokensController.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="UserInfosController.cs">UserInfosController.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="UsersController.cs">UsersController.cs</ProjectItem>
+      </Folder>
+      <Folder Name="DTO" TargetFolderName="DTO">
+        <ProjectItem ReplaceParameters="true" TargetFileName="UserInfoDTO.cs">UserInfoDTO.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Extensions" TargetFolderName="Extensions">
+        <ProjectItem ReplaceParameters="true" TargetFileName="UserInfoExtension.cs">UserInfoExtension.cs</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Global.asax">Global.asax</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Global.asax.cs">Global.asax.cs</ProjectItem>
+      <Folder Name="Helpers" TargetFolderName="Helpers">
+        <ProjectItem ReplaceParameters="true" TargetFileName="HttpActionContextHelper.cs">HttpActionContextHelper.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="TraceExceptionLogger.cs">TraceExceptionLogger.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="TraceFilterAttribute.cs">TraceFilterAttribute.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="UserInfoWebApi.cs">UserInfoWebApi.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Jwt" TargetFolderName="Jwt">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AppJwtManager.cs">AppJwtManager.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="BiaJwtAuthorizeAttribute.cs">BiaJwtAuthorizeAttribute.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="BiaJwtManager.cs">BiaJwtManager.cs</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">packages.config</ProjectItem>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+        <Folder Name="PublishProfiles" TargetFolderName="PublishProfiles">
+          <ProjectItem ReplaceParameters="false" TargetFileName="TfsPrecompile.pubxml">TfsPrecompile.pubxml</ProjectItem>
+        </Folder>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Web.config">Web.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Web.Debug.config">Web.Debug.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Web.Release.config">Web.Release.config</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>BIA.ProjectCreatorWizard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>BIA.ProjectCreatorWizard.ChildWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

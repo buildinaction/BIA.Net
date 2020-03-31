@@ -1,0 +1,28 @@
+﻿<#@ template language="C#" HostSpecific="True" #>
+<#@ output extension=".cs" #>
+<#@ include file="Imports.include.t4" #>namespace <#=ViewModelNamespace#>.<#=ControllerRootName#>
+{
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+
+    /// <summary>
+    /// WindowsService VM
+    /// </summary>
+    public class <#=ControllerRootName#>FilterVM
+    {
+<#		var isFirstLine = true;
+		foreach (PropertyMetadata property in ModelMetadata.Properties) {
+			if (property.Scaffold && !property.IsPrimaryKey && !property.IsForeignKey) {
+
+				if (!isFirstLine) { #>
+
+<#				} 
+				isFirstLine = false;#>
+        /// <summary>
+        /// Gets or sets <#= property.PropertyName#> MultiSelectList
+        /// </summary>
+       public MultiSelectList Msl<#= property.PropertyName#> { get; set; }
+<#			}
+		}#>
+    }
+}<#@ include file="../../ModelMetadataFunctions.cs.include.t4" #>

@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Basic File Upload";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "BasicFileUpload", @class = "PreventDuplicateRequest", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group iconField p-left bmd-form-group is-filled">
+        @Html.T_Label("Upload Image:", htmlAttributes: new { @class = "bmd-label-floating mandatory" })
+        <div class="field">
+            <span class="far fa-file"></span>
+            <input type="file" name="file" id="file" class="btn form-control" />
+            @Html.ValidationMessage("File", "", new { @class = "text-danger bmd-help" })
+        </div>
+    </div>
+}
+
+@section Buttons {
+    <div class="btn-action-container">
+        <div class="btn-action">
+            <button onclick="$('#BasicFileUpload').submit();" class="btn btn-main">Upload Image</button>
+        </div>
+    </div>
+}
+

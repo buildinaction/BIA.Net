@@ -1,0 +1,59 @@
+<div fxFlex fxLayout="column" [style.display]="fullscreenMode ? 'none' : 'flex'">
+  <div class="topbar" fxLayoutAlign="space-between">
+    <div class="logos" fxLayoutAlign="center">
+      <ng-template ngFor let-logo let-first="first" [ngForOf]="logos">
+        <span *ngIf="!first" fxFlexAlign="center" class="separator"></span>
+        <img fxFlexAlign="center" src="{{ logo }}" />
+      </ng-template>
+    </div>
+    <bia-ie-warning *ngIf="isIE"></bia-ie-warning>
+    <div class="controls" fxLayout="row">
+      <p-megaMenu [model]="topBarMenuItems"></p-megaMenu>
+      <i
+        class="ui-icon-refresh app-refresh bia-pointer"
+        (click)="refresh()"
+        pTooltip="{{ 'bia.refresh' | translate }}"
+        tooltipPosition="bottom"
+      ></i>
+      <i
+        class="ui-icon-fullscreen app-full-screen bia-pointer"
+        (click)="toggleFullscreenMode()"
+        pTooltip="{{ 'bia.fullscreen' | translate }}"
+        tooltipPosition="left"
+      ></i>
+    </div>
+  </div>
+  <div
+    *ngIf="(layoutService.mainBarHidden$ | async) === false"
+    class="mainbar mat-elevation-z2 bia-relative"
+    fxLayout="row"
+    fxLayoutAlign="stretch"
+  >
+    <a class="mainbar project-title" routerLink="/">
+      <div fxLayout="row" fxLayoutAlign="stretch center">
+        <img class="app-logo" src="{{ urlAppIcon }}" />
+        <span
+          >{{ appTitle }}<span class="project-version">&nbsp;{{ version }}</span></span
+        >
+      </div>
+    </a>
+    <ng-template let-mainBarPortal [ngIf]="layoutService.mainBarPortal$ | async" [ngIfElse]="classicMainBar">
+      <ng-template [cdkPortalOutlet]="mainBarPortal"></ng-template>
+    </ng-template>
+  </div>
+</div>
+<i
+  *ngIf="fullscreenMode"
+  class="ui-icon-fullscreen-exit fullscreen-exit bia-mat-tiny-fab bia-pointer"
+  (click)="toggleFullscreenMode()"
+></i>
+
+<ng-template #classicMainBar>
+  <nav fxFlex fxLayoutAlign="center">
+    <p-menubar [model]="navMenuItems"></p-menubar>
+  </nav>
+  <div *ngIf="helpUrl" class="help" fxLayoutAlign="center center">
+    <i class="ui-icon-help bia-mat-tiny-fab bia-pointer" (click)="openHelp()"></i>
+  </div>
+</ng-template>
+<p-toast key="bia"></p-toast>
