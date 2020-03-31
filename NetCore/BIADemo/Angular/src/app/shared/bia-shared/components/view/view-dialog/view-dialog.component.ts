@@ -17,9 +17,7 @@ export class ViewDialogComponent implements OnInit, OnDestroy {
 
   constructor() {}
 
-  ngOnInit() {
-    
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     if (this.sub) {
@@ -31,11 +29,11 @@ export class ViewDialogComponent implements OnInit, OnDestroy {
     this.displayChange.emit(false);
   }
 
-  onDeleteView(viewId: number){
+  onDeleteView(viewId: number) {
     this.deleteView.emit(viewId);
   }
 
   onSetDefaultUserView(viewId: number, isDefault: boolean) {
-    this.setDefaultUserView.emit({viewId, isDefault});
+    this.setDefaultUserView.emit({ viewId, isDefault });
   }
 }

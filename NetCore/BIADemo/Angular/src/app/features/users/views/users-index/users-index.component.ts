@@ -38,8 +38,8 @@ export class UsersIndexComponent implements OnInit {
   canDelete = false;
   canAdd = false;
   views$: Observable<View[]>;
-  viewPreference: string = '';
-  sortField: string = '';
+  viewPreference = '';
+  sortField = '';
 
   tableConfiguration: BiaListConfig = {
     customButtons: [],
@@ -54,7 +54,7 @@ export class UsersIndexComponent implements OnInit {
   displayedColumns: string[] = this.columns;
   lastLazyLoadEvent: LazyLoadEvent;
   displayViewDialog = false;
-  private tableId: string = 'usersGrid';
+  tableId = 'usersGrid';
 
   constructor(
     private store: Store<AppState>,
@@ -67,7 +67,9 @@ export class UsersIndexComponent implements OnInit {
     this.setPermissions();
     this.users$ = this.store.select(getAllUsers).pipe();
     this.totalCount$ = this.store.select(getUsersTotalCount).pipe();
-    this.views$ = this.store.pipe(select(getAllViews)).pipe(map((views) => views.filter((view) => view.tableId == this.tableId)));
+    this.views$ = this.store
+      .pipe(select(getAllViews))
+      .pipe(map((views: any) => views.filter((view: any) => view.tableId === this.tableId)));
     this.store.dispatch(loadAllViews());
   }
 
@@ -90,17 +92,17 @@ export class UsersIndexComponent implements OnInit {
   }
 
   onLoadLazy(lazyLoadEvent: LazyLoadEvent) {
-    if(JSON.stringify(this.lastLazyLoadEvent) === JSON.stringify(lazyLoadEvent)){
+    if (JSON.stringify(this.lastLazyLoadEvent) === JSON.stringify(lazyLoadEvent)) {
       this.store.dispatch(loadAllByPost({ event: lazyLoadEvent }));
       return;
     }
 
     this.lastLazyLoadEvent = lazyLoadEvent;
-    if(lazyLoadEvent.rows && this.pageSize != lazyLoadEvent.rows){
+    if (lazyLoadEvent.rows && this.pageSize !== lazyLoadEvent.rows) {
       this.pageSize = lazyLoadEvent.rows;
     }
 
-    if(lazyLoadEvent.sortField && this.sortField != lazyLoadEvent.sortField){
+    if (lazyLoadEvent.sortField && this.sortField !== lazyLoadEvent.sortField) {
       this.sortField = lazyLoadEvent.sortField;
     }
 
@@ -111,10 +113,9 @@ export class UsersIndexComponent implements OnInit {
         break;
       }
     }
-    if(globalSearch){
+    if (globalSearch) {
       this.globalSearchValue = globalSearch;
-    }
-    else {
+    } else {
       this.globalSearchValue = '';
       this.store.dispatch(loadAllByPost({ event: lazyLoadEvent }));
     }
@@ -132,8 +133,7 @@ export class UsersIndexComponent implements OnInit {
     this.showColSearch = !this.showColSearch;
   }
 
-  onExportCSV() {
-  }
+  onExportCSV() {}
 
   onSynchronize() {
     this.store.dispatch(synchronize());
@@ -154,11 +154,11 @@ export class UsersIndexComponent implements OnInit {
   }
 
   onDeleteView(viewId: number) {
-    this.store.dispatch(removeUserView({id: viewId}));
+    this.store.dispatch(removeUserView({ id: viewId }));
   }
 
-  onSetDefaultUserView(event: {viewId: number, isDefault: boolean}) {
-    this.store.dispatch(setDefaultUserView({id: event.viewId, isDefault: event.isDefault, tableId: this.tableId}));
+  onSetDefaultUserView(event: { viewId: number; isDefault: boolean }) {
+    this.store.dispatch(setDefaultUserView({ id: event.viewId, isDefault: event.isDefault, tableId: this.tableId }));
   }
 
   private setPermissions() {

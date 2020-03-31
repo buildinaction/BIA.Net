@@ -21,8 +21,8 @@ export class BiaTableComponent implements OnChanges {
   @Input() canEdit = true;
   @Input() canDelete = true;
   @Input() loading = false;
-  @Input() tableId: string = '';
-  @Input() viewPreference: string = '';
+  @Input() tableId = '';
+  @Input() viewPreference = '';
 
   @Output() edit = new EventEmitter<any>();
   @Output() remove = new EventEmitter<any>();
@@ -84,19 +84,17 @@ export class BiaTableComponent implements OnChanges {
 
   private onViewPreferenceChange(changes: SimpleChanges) {
     if (this.table) {
-      if(changes.viewPreference){
-        if(changes.viewPreference.currentValue !== '')
-        {
+      if (changes.viewPreference) {
+        if (changes.viewPreference.currentValue !== '') {
           localStorage.setItem(this.tableId, changes.viewPreference.currentValue);
           this.table.restoreState();
-        }
-        else{
+        } else {
           localStorage.removeItem(this.tableId);
           this.table.reset();
         }
         const lazyLoadEvent: LazyLoadEvent = this.table.createLazyLoadMetadata();
         this.showColSearch = false;
-        if(this.table.hasFilter()) {
+        if (this.table.hasFilter()) {
           for (const key in this.table.filters) {
             if (!key.startsWith('global|')) {
               this.showColSearch = true;
@@ -104,7 +102,7 @@ export class BiaTableComponent implements OnChanges {
             }
           }
         }
-        
+
         this.table.onLazyLoad.emit(lazyLoadEvent);
       }
     }

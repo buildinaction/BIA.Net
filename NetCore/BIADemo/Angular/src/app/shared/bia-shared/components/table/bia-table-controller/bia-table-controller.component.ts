@@ -26,6 +26,7 @@ export class BiaTableControllerComponent implements OnChanges, OnInit, OnDestroy
   @Input() hiddenColumns?: string[];
   @Input() views: View[];
   @Input() globalSearch: string;
+  @Input() tableId = '';
 
   @Output() displayedColumnsChange = new EventEmitter<string[]>();
   @Output() filter = new EventEmitter<string>();
@@ -44,31 +45,33 @@ export class BiaTableControllerComponent implements OnChanges, OnInit, OnDestroy
   };
   listedColumns: SelectItem[];
   filterCtrl = new FormControl();
-  globalFilter: string = '';
+  globalFilter = '';
   selectedView: number;
   defaultView: number;
   groupedViews: SelectItemGroup[];
-  translateKeys: string[] = ['bia.views.system', 'bia.views.default', 'bia.views.site','bia.views.user'];
+  translateKeys: string[] = ['bia.views.system', 'bia.views.default', 'bia.views.site', 'bia.views.user'];
   transalations: any;
 
   private sub = new Subscription();
 
-  constructor(
-    public translateService: TranslateService
-    ) {}
+  constructor(public translateService: TranslateService) {}
 
   ngOnInit() {
     this.updateDisplayedPageSizeOptions();
-    this.sub.add(this.filterCtrl.valueChanges.subscribe((filterValue) => {
-      if(this.globalFilter !== filterValue.trim().toLowerCase()) {
-        this.filter.emit(filterValue.trim().toLowerCase());
-      }
-    }));
+    this.sub.add(
+      this.filterCtrl.valueChanges.subscribe((filterValue: any) => {
+        if (this.globalFilter !== filterValue.trim().toLowerCase()) {
+          this.filter.emit(filterValue.trim().toLowerCase());
+        }
+      })
+    );
 
-    this.sub.add(this.translateService.stream(this.translateKeys).subscribe(translations => {
-      this.transalations = translations;
-      this.updateGroupedViews();
-    }));
+    this.sub.add(
+      this.translateService.stream(this.translateKeys).subscribe((translations: any) => {
+        this.transalations = translations;
+        this.updateGroupedViews();
+      })
+    );
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -82,7 +85,7 @@ export class BiaTableControllerComponent implements OnChanges, OnInit, OnDestroy
       }
       if (changes.columns.isFirstChange()) {
         this.sub.add(
-          this.translateService.stream(cols).subscribe((results) => {
+          this.translateService.stream(cols).subscribe((results: any) => {
             this.listedColumns = new Array<SelectItem>();
             cols.forEach((col) => {
               this.listedColumns.push({ label: results[col.toString()], value: col.toString() });
@@ -95,15 +98,19 @@ export class BiaTableControllerComponent implements OnChanges, OnInit, OnDestroy
       this.updateDisplayedPageSizeOptions();
     }
 
-    if(changes.defaultPageSize && !changes.defaultPageSize.isFirstChange() && Number(this.pageSize) !== this.defaultPageSize) {
+    if (
+      changes.defaultPageSize &&
+      !changes.defaultPageSize.isFirstChange() &&
+      Number(this.pageSize) !== this.defaultPageSize
+    ) {
       this.pageSize = this.defaultPageSize;
     }
 
-    if(changes.globalSearch && !changes.globalSearch.isFirstChange()) {
+    if (changes.globalSearch && !changes.globalSearch.isFirstChange()) {
       this.globalFilter = this.globalSearch;
     }
 
-    if(changes.views){
+    if (changes.views) {
       this.updateGroupedViews();
     }
   }
@@ -168,47 +175,42 @@ export class BiaTableControllerComponent implements OnChanges, OnInit, OnDestroy
     });
   }
 
-  private updateGroupedViews(){
-    if(!this.views || ! this.transalations)
-    {
+  private updateGroupedViews() {
+    if (!this.views || !this.transalations) {
       return;
     }
 
     this.groupedViews = [
       {
         label: this.transalations['bia.views.system'],
-        items: [
-          {label: this.transalations['bia.views.default'], value: 0}
-        ]
+        items: [{ label: this.transalations['bia.views.default'], value: 0 }]
       }
     ];
 
     let defaultView = 0;
-    const siteViews = this.views.filter(v => v.viewType == 1);
-    const userViews = this.views.filter(v => v.viewType == 2);
-    if(siteViews.length > 0) {
+    const siteViews = this.views.filter((v) => v.viewType === 1);
+    const userViews = this.views.filter((v) => v.viewType === 2);
+    if (siteViews.length > 0) {
       this.groupedViews.push({
         label: this.transalations['bia.views.site'],
-        items: siteViews.map(v => { return { label: v.name, value: v.id }})
+        items: siteViews.map((v) => ({ label: v.name, value: v.id }))
       });
 
-      const siteDefault = siteViews.filter(v => v.isSiteDefault)[0];
-      if(siteDefault != null && siteDefault != undefined)
-      {
+      const siteDefault = siteViews.filter((v) => v.isSiteDefault)[0];
+      if (siteDefault != null && siteDefault !== undefined) {
         defaultView = siteDefault.id;
       }
     }
 
-    if(userViews.length > 0) {
+    if (userViews.length > 0) {
       this.groupedViews.push({
         label: this.transalations['bia.views.user'],
-        items: userViews.map(v => { return { label: v.name, value: v.id }})
+        items: userViews.map((v) => ({ label: v.name, value: v.id }))
       });
     }
 
-    const userDefault = this.views.filter(v => v.isUserDefault)[0];
-    if(userDefault != null && userDefault != undefined)
-    {
+    const userDefault = this.views.filter((v) => v.isUserDefault)[0];
+    if (userDefault != null && userDefault !== undefined) {
       defaultView = userDefault.id;
     }
 
@@ -219,18 +221,14 @@ export class BiaTableControllerComponent implements OnChanges, OnInit, OnDestroy
   }
 
   private updateFilterValues() {
-    if(this.selectedView != 0)
-    {
-      const view = this.views.find(f => f.id == this.selectedView);
-      if(view)
-      {
+    if (this.selectedView !== 0) {
+      const view = this.views.find((f) => f.id === this.selectedView);
+      if (view) {
         this.viewChange.emit(view.preference);
-      }
-      else {
+      } else {
         this.viewChange.emit('');
       }
-    }
-    else{
+    } else {
       this.viewChange.emit('');
     }
   }

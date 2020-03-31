@@ -30,5 +30,5 @@ export enum Permission {
   View_List = 'View_List',
   View_Delete_UserView = 'View_Delete_UserView',
   View_Delete_SiteView = 'View_Delete_SiteView',
-  View_Set_Default_UserView= "View_Set_Default_UserView"
+  View_Set_Default_UserView= 'View_Set_Default_UserView'
 }

@@ -58,10 +58,10 @@ export class BiaThemeService {
   }
 
   private applyPrimeNgTheme(theme: string) {
-    const themeLink: HTMLLinkElement = document.getElementById('theme-css') as HTMLLinkElement;
-    const layoutLink: HTMLLinkElement = document.getElementById('layout-css') as HTMLLinkElement;
+    // const themeLink: HTMLLinkElement = document.getElementById('theme-css') as HTMLLinkElement;
+    // const layoutLink: HTMLLinkElement = document.getElementById('layout-css') as HTMLLinkElement;
 
-    themeLink.href = 'assets/theme/theme-primeng-' + theme + '-my-company.css';
-    layoutLink.href = 'assets/layout/css/layout-primeng-' + theme + '-my-company.css';
+    // themeLink.href = 'assets/theme/theme-primeng-' + theme + '-my-company.css';
+    // layoutLink.href = 'assets/layout/css/layout-primeng-' + theme + '-my-company.css';
   }
 }
