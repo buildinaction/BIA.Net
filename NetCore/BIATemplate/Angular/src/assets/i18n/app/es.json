@@ -1,0 +1,48 @@
+{
+  "app": {
+    "examples": "Ejemplos",
+    "members": "Miembros",
+    "sites": "Sitios",
+    "planes": "Planos",
+    "planesPageMode":"Planos (Modo de página)",
+    "users": "Usuarios"
+  },
+  "member": {
+    "add": "Añadir miembro",
+    "listOfSiteMembers": "Lista de miembros del sitio ",
+    "manage": "Gestionar miembro",
+    "rolesForSite": "Roles para el sitio",
+    "user": "Usuario"
+  },
+  "msg": {
+    "hideFilters": "Ocultar filtros",
+    "showFilters": "Mostrar filtros",
+    "welcome": "BIA es una biblioteca de componentes, construida con el marco Angular"
+  },
+  "plane": {
+    "add": "Añadir plano",
+    "capacity": "Capacidad",
+    "edit": "Editar plano",
+    "firstFlightDate": "Fecha del primer vuelo",
+    "firstFlightTime": "Tiempo del primer vuelo",
+    "isActive": "Activo",
+    "lastFlightDate": "Última fecha de vuelo",
+    "listOf": "Lista de planos",
+    "msn": "Msn"
+  },
+  "site": {
+    "add": "Añadir sitios",
+    "admins": "Administradores",
+    "edit": "Editar sitios",
+    "listOf": "Lista de sitios",
+    "selectUser": "Selecciona un usuario",
+    "title": "Title"
+  },
+  "user": {
+    "add": "Añadir usuario",
+    "lastName": "Apellido",
+    "firstName": "Nombre",
+    "login": "Login",
+    "listOf": "Lista de usuarios"
+  }
+}

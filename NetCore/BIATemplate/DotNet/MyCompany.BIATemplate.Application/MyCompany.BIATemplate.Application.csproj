@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Company>MyCompany</Company>
+    <Copyright>MyCompany</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BIA.Net.Authentication" Version="3.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyCompany.BIATemplate.Crosscutting.Common\MyCompany.BIATemplate.Crosscutting.Common.csproj" />
+    <ProjectReference Include="..\MyCompany.BIATemplate.Domain.Core\MyCompany.BIATemplate.Domain.Core.csproj" />
+    <ProjectReference Include="..\MyCompany.BIATemplate.Domain.Dto\MyCompany.BIATemplate.Domain.Dto.csproj" />
+    <ProjectReference Include="..\MyCompany.BIATemplate.Domain\MyCompany.BIATemplate.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

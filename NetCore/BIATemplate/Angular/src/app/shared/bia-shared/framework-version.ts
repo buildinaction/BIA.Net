@@ -1,0 +1,1 @@
+export const FRAMEWORK_VERSION = '3.0.0';

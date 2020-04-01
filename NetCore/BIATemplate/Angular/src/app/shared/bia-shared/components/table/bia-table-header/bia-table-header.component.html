@@ -1,0 +1,35 @@
+<div class="header" fxLayout="row" fxLayoutAlign="space-between">
+  <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="stretch center">
+    <ng-container *ngIf="showBtnFilter">
+      <button
+        type="button"
+        icon="ui-icon-filter-list"
+        class="ui-button-secondary flat"
+        *ngIf="showFilter === false && haveFilter === false"
+        pButton
+        (click)="toggleFilter()"
+        pTooltip="{{ 'msg.showFilters' | translate }}"
+      ></button>
+      <button
+        type="button"
+        icon="ui-icon-filter-list"
+        *ngIf="showFilter === false && haveFilter === true"
+        pButton
+        (click)="toggleFilter()"
+        pTooltip="{{ 'msg.showFilters' | translate }}"
+      ></button>
+    </ng-container>
+    <h1>{{ headerTitle }}</h1>
+  </div>
+  <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="stretch center">
+    <button
+      pButton
+      class="ui-button-secondary"
+      label="{{ 'bia.back' | translate }}"
+      [routerLink]="btnBackRouterLink"
+      *ngIf="btnBackRouterLink"
+    ></button>
+    <button pButton *ngIf="canExportCSV" class="ui-button-secondary" label="CSV" (click)="exportCSV.emit()"></button>
+    <button pButton *ngIf="canAdd" label="{{ 'bia.add' | translate }}" (click)="onCreate()"></button>
+  </div>
+</div>

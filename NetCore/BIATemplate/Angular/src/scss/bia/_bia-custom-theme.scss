@@ -1,0 +1,56 @@
+// classic-footer-theme
+bia-classic-footer {
+  background-color: $biaAccentColor;
+  color: $biaColorOnBgAccentColor;
+}
+
+// classic-header-theme
+bia-classic-header {
+  .topbar {
+    background-color: $biaAccentColor;
+    color: white;
+  }
+
+  .mainbar {
+    background-color: $biaMainBarColor;
+    @if ($is-dark) {
+      color: $biaFgTextColor;
+    } @else {
+      color: $biaAccentColor;
+    }
+  }
+}
+
+// classic-layout-theme
+bia-classic-layout {
+  .content {
+    background-image: linear-gradient(rgba($biaBgColor, 0.6), rgba($biaBgColor, 0.6)),
+      url('~/assets/bia/bg-default.jpg');
+  }
+
+  p-breadcrumb {
+    .pi,
+    .ui-menuitem-text {
+      color: $biaTextBreadcrumbColor !important;
+    }
+    .ui-widget-header {
+      background-color: $biaBgBreadcrumbColor;
+    }
+  }
+}
+// classic-page-layout-theme
+bia-classic-page-layout {
+  > div {
+    background-color: $biaBgColor;
+  }
+}
+
+// search-filter
+.app-search-filter {
+  background-color: $biaBgHoverColor;
+}
+
+// bia-table-controller-theme
+bia-table-controller {
+  background-color: $biaBgHoverColor; // Same color in table
+}

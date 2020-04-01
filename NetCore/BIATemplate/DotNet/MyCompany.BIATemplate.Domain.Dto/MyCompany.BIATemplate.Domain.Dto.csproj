@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Company>MyCompany</Company>
+    <Copyright>MyCompany</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyCompany.BIATemplate.Crosscutting.Common\MyCompany.BIATemplate.Crosscutting.Common.csproj" />
+  </ItemGroup>
+
+</Project>

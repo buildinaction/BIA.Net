@@ -1,0 +1,65 @@
+<p-dialog
+  [focusOnShow]="false"
+  [(visible)]="display"
+  [modal]="true"
+  [closable]="true"
+  [responsive]="true"
+  [maximizable]="true"
+  [style]="{ minWidth: '50vw' }"
+  [contentStyle]="{'overflow': 'visible'}"
+  (onHide)="onClose()"
+>
+  <p-header>
+    {{ 'bia.views.manageViews' | translate }}
+  </p-header>
+  <p-tabView>
+    <p-tabPanel header="{{'bia.views.site' | translate}}">
+       
+    </p-tabPanel>
+    <p-tabPanel header="{{'bia.views.user' | translate}}">
+      <p-table [value]="userViews">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>{{'bia.views.name' | translate}}</th>
+                <th>{{'bia.views.description' | translate}}</th>
+                <th>{{'bia.views.viewType' | translate}}</th>
+                <th>{{'bia.actions' | translate}}</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-view>
+            <tr>
+                <td>{{view.name}} <i *ngIf="view.isUserDefault == true" class="ui-icon-star-border"></i></td>
+                <td>{{view.description}}</td>
+                <td>{{(view.viewType == 1 ? 'bia.views.typeSite' : 'bia.views.typeUser') | translate}}</td>
+                <td>
+                  <i
+                  *ngIf="view.isUserDefault == false"
+                  class="ui-icon-star-border bia-pointer"
+                  (click)="onSetDefaultUserView(view.id, true)"
+                  pTooltip="{{ 'bia.views.defineDefault' | translate }}"
+                  tooltipPosition="top"
+                  placeholder="Top"
+                  ></i>
+                  <i
+                  *ngIf="view.isUserDefault == true"
+                  class="ui-icon-star bia-pointer"
+                  (click)="onSetDefaultUserView(view.id, false)"
+                  pTooltip="{{ 'bia.views.removeDefault' | translate }}"
+                  tooltipPosition="top"
+                  placeholder="Top"
+                  ></i>
+                  <i
+                  *ngIf="view.viewType == 2"
+                  class="ui-icon-delete bia-pointer"
+                  (click)="onDeleteView(view.id)"
+                  pTooltip="{{ 'bia.delete' | translate }}"
+                  tooltipPosition="top"
+                  placeholder="Top"
+                  ></i>
+                </td>
+            </tr>
+        </ng-template>
+      </p-table>
+    </p-tabPanel>
+  </p-tabView>
+</p-dialog>

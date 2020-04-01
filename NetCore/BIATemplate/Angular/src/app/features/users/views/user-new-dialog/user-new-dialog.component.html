@@ -1,0 +1,20 @@
+<p-dialog
+  [focusOnShow]="false"
+  [(visible)]="_display"
+  [modal]="true"
+  [closable]="false"
+  [responsive]="true"
+  [maximizable]="true"
+  [style]="{ minWidth: '50vw' }"
+  [contentStyle]="{ overflow: 'visible' }"
+>
+  <p-header>
+    {{ 'user.add' | translate }}
+  </p-header>
+  <app-user-form
+    [users]="users$ | async"
+    (searchUsers)="onSearchUsers($event)"
+    (cancel)="onCancelled()"
+    (save)="onSubmitted($event)"
+  ></app-user-form>
+</p-dialog>
