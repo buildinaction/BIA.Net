@@ -22,7 +22,7 @@ namespace MyCompany.BIATemplate.Crosscutting.Common
             /// <summary>
             /// The framework version.
             /// </summary>
-            public const string FrameworkVersion = "3.0.0";
+            public const string FrameworkVersion = "3.0.2";
         }
 
         /// <summary>

@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="ProjectGroup">
+  <TemplateData>
+    <Name>BIA V3.0.2</Name>
+    <Description>Project For BIA</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ProjectName</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.jpg</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectCollection>
+      <SolutionFolder Name="01 - Presentation" CreateOnDisk="false">
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Presentation.Api">
+          temp\Presentation.Api\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+      </SolutionFolder>
+      <SolutionFolder Name="02 - Application" CreateOnDisk="false">
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Application">
+          temp\Application\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+      </SolutionFolder>
+      <SolutionFolder Name="03 - Domain" CreateOnDisk="false">
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Domain">
+          temp\Domain\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Domain.Core">
+          temp\Domain.Core\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Domain.Dto">
+          temp\Domain.Dto\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+      </SolutionFolder>
+      <SolutionFolder Name="04 - Infrastructure" CreateOnDisk="false">
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Infrastructure.Data">
+          temp\Infrastructure.Data\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+      </SolutionFolder>
+      <SolutionFolder Name="05 - Crosscutting" CreateOnDisk="false">
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Crosscutting.Common">
+          temp\Crosscutting.Common\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Crosscutting.Ioc">
+          temp\Crosscutting.Ioc\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+      </SolutionFolder>
+    </ProjectCollection>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>BIA.ProjectCreatorWizard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>BIA.ProjectCreatorWizard.RootWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>
