@@ -120,8 +120,10 @@
         /// Creates the work book.
         /// </summary>
         /// <param name="listSheets">The rows.</param>
+        /// <param name="useSharedString">True if SharedStringTable is used</param>
+        /// <param name="keepCellFormat">True to keep the CellFormat in listSheets cells</param>
         /// <returns>File Byte Array</returns>
-        public static byte[] CreateWorkBook(IDictionary<string, List<Row>> listSheets, bool useSharedString = true)
+        public static byte[] CreateWorkBook(IDictionary<string, List<Row>> listSheets, bool useSharedString = true, bool keepCellFormat = false)
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -158,7 +160,15 @@
                             var listCells = new List<Cell>();
                             foreach (var currentCell in currentRow.Elements<Cell>())
                             {
-                                listCells.Add(useSharedString ? GetCell(currentCell.InnerText, shareStringPart) : GetCell(currentCell.InnerText));
+                                if (keepCellFormat && currentCell.DataType.Value != CellValues.String)
+                                {
+                                    // In order to have Date format, currentCell.InnerText must be either string in format "yyyy-MM-dd" with DataType "Date" or Date.ToOADate().ToString() with DataType Number
+                                    listCells.Add(new Cell { CellValue = new CellValue(currentCell.InnerText), DataType = currentCell.DataType });
+                                }
+                                else
+                                {
+                                    listCells.Add(useSharedString ? GetCell(currentCell.InnerText, shareStringPart) : GetCell(currentCell.InnerText));
+                                }
                             }
 
                             listRows.Add(new Row(listCells));
