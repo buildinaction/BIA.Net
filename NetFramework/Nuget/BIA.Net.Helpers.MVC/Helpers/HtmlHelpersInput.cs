@@ -213,7 +213,7 @@ namespace BIA.Net.Helpers
         /// <param name="htmlAttributes">The HTML attributes.</param>
         /// <returns>Html code with a list of checkboxes</returns>
         /// <exception cref="System.ArgumentNullException">selectList</exception>
-        public static MvcHtmlString CheckBoxListFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, IEnumerable<SelectListItem> selectList, object htmlAttributes)
+        public static MvcHtmlString CheckBoxListFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, IEnumerable<SelectListItem> selectList, object htmlAttributes = null)
         {
             var metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
             var propName = metadata.PropertyName;
@@ -225,9 +225,12 @@ namespace BIA.Net.Helpers
             }
 
             StringBuilder sb = new StringBuilder();
+            string optionName;
 
             foreach (SelectListItem info in selectList)
             {
+                optionName = propName + info.Value;
+
                 TagBuilder builder = new TagBuilder("input");
                 if (values != null && values.Contains(int.Parse(info.Value)))
                 {
@@ -237,8 +240,9 @@ namespace BIA.Net.Helpers
                 builder.MergeAttribute("type", "checkbox");
                 builder.MergeAttribute("value", info.Value);
                 builder.MergeAttribute("name", propName);
-                builder.InnerHtml = info.Text;
+                builder.MergeAttribute("id", optionName);
                 sb.Append(builder.ToString(TagRenderMode.Normal));
+                sb.Append("<label class='form-check-label' for='" + optionName + "'>" + info.Text + "</label>");
                 sb.Append("<br />");
             }
 
@@ -256,8 +260,11 @@ namespace BIA.Net.Helpers
         /// <param name="htmlAttributes">The HTML attributes</param>
         /// <param name="searchAppearOver">Number of items in the list before the search functionnality is used</param>
         /// <param name="multiselectParameter">parameter for multiselect</param>
+        /// <param name="isSearchFocused">Should we focus on the search input when opening the DropDownList? False by default.</param>
         /// <returns>Html code with a list of checkable elements in a dropdownlist</returns>
-        public static MvcHtmlString MultiselectFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression, IEnumerable<SelectListItem> selectList, object htmlAttributes = null, int searchAppearOver = 8, string multiselectParameter = "maxHeight: 200, buttonWidth: '100%'")
+        public static MvcHtmlString MultiselectFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, 
+            Expression<Func<TModel, TProperty>> expression, IEnumerable<SelectListItem> selectList, object htmlAttributes = null, 
+            int searchAppearOver = 8, string multiselectParameter = "maxHeight: 200, buttonWidth: '100%'", bool isSearchFocused = false)
         {
             string idSelect = htmlHelper.IdFor(expression).ToString();
 
@@ -270,6 +277,10 @@ namespace BIA.Net.Helpers
                 .Append("nSelectedText : '" + HtmlHelpersTranslate.TranslateString("nSelected") + "',")
                 .Append("allSelectedText : '" + HtmlHelpersTranslate.TranslateString("AllSelected") + "',")
                 .Append(multiselectParameter);
+            if (isSearchFocused)
+            {
+                script.Append(", onDropdownShown: function(event) {$('.multiselect-search').focus();}");
+            }
             if (selectList.Count() > searchAppearOver)
             {
                 script.Append(", enableCaseInsensitiveFiltering: true");
@@ -280,6 +291,59 @@ namespace BIA.Net.Helpers
             htmlHelper.Script(script.ToString(), HtmlHelpersScript.Priority.FastRender);
 
             return htmlHelper.ListBoxFor(expression, selectList, htmlAttributes);
+        }
+
+        /// <summary>
+        /// Control that displays a dropdownlist with a search area.
+        /// </summary>
+        /// <typeparam name="TModel">The type of the model</typeparam>
+        /// <typeparam name="TProperty">The type of the property</typeparam>
+        /// <param name="htmlHelper">The HTML helper</param>
+        /// <param name="expression">The expression</param>
+        /// <param name="selectList">The select list</param>
+        /// <param name="htmlAttributes">The HTML attributes</param>
+        /// <param name="searchAppearOver">Number of items in the list before the search functionnality is used</param>
+        /// <param name="multiselectParameter">parameter for multiselect</param>
+        /// <param name="isSearchFocused">Should we focus on the search input when opening the DropDownList? False by default.</param>
+        /// <param name="noSelectedItem">Should we have no selected item? False by default.</param>
+        /// <param name="id">The ID of the element we want to configure. If null, a default one will be computed.</param>
+        /// <returns>Html code with a list of checkable elements in a dropdownlist</returns>
+        public static MvcHtmlString DropDownListWithSearchFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
+            Expression<Func<TModel, TProperty>> expression, IEnumerable<SelectListItem> selectList, object htmlAttributes = null,
+            int searchAppearOver = 8, string multiselectParameter = "maxHeight: 200, buttonWidth: '100%'", bool isSearchFocused = false,
+            bool noSelectedItem = false,  string id = null)
+        {
+            string idSelect = (id == null) ? htmlHelper.IdFor(expression).ToString() : id;
+
+            StringBuilder script = new StringBuilder();
+            script.Append("<script type=\"text/javascript\">$('#").Append(idSelect).Append("')");
+
+            // Clear selected item.
+            if (noSelectedItem)
+            {
+                script.Append(".val('')");
+            }
+
+            script.Append(".multiselect({ buttonClass: 'btn btn-default form-control',")
+                .Append("filterPlaceholder : '" + HtmlHelpersTranslate.TranslateString("Search") + "',")
+                .Append(multiselectParameter);
+
+            // Display search area.
+            if (selectList.Count() > searchAppearOver)
+            {
+                script.Append(", enableCaseInsensitiveFiltering: true");
+            }
+            // Focus search area.
+            if (isSearchFocused)
+            {
+                script.Append(", onDropdownShown: function(event) {$('.multiselect-search').focus();}");
+            }
+
+            script.Append("});</script>");
+
+            htmlHelper.Script(script.ToString(), HtmlHelpersScript.Priority.FastRender);
+
+            return htmlHelper.DropDownList(idSelect, selectList, htmlAttributes);
         }
 
         /// <summary>

@@ -71,7 +71,7 @@ namespace BIA.Net.Helpers
         /// <returns>teh name translated</returns>
         public static MvcHtmlString T_LabelFor<TModel, TProperty>(this HtmlHelper<TModel> html, Expression<Func<TModel, TProperty>> expression, object htmlAttributes)
         {
-            return TranslateMvcHtmlString(html.Label(html.T_DisplayNameFor(expression).ToString(), htmlAttributes));
+            return html.Label(html.T_DisplayNameFor(expression).ToString(), htmlAttributes);
         }
 
         /// <summary>
