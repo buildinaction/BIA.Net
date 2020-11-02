@@ -173,6 +173,7 @@
     <None Include="BIA.Net.NuGet\BIA.Net.SSDLToSQL\BIA.Net.SSDLToSQL.1.8.0.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.SSDLToSQL\BIA.Net.SSDLToSQL.2.1.1.1.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.SSDLToSQL\BIA.Net.SSDLToSQL.2.1.1.nupkg" />
+    <None Include="BIA.Net.NuGet\BIA.Net.SSDLToSQL\BIA.Net.SSDLToSQL.2.2.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Web\BIA.Net.Web.1.7.0.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Web\BIA.Net.Web.1.7.2.nupkg" />
     <None Include="BIA.Net.NuGet\BIA.Net.Web\BIA.Net.Web.1.8.0.1.nupkg" />
