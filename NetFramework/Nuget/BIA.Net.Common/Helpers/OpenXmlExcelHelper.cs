@@ -23,6 +23,7 @@
         {
             return new Cell
             {
+                StyleIndex = 0U,
                 CellValue = new CellValue(text),
                 DataType = CellValues.String
             };
@@ -39,8 +40,24 @@
             int index = InsertSharedStringItem(text, shareStringPart);
             return new Cell
             {
+                StyleIndex = 0U,
                 CellValue = new CellValue(index.ToString()),
                 DataType = new EnumValue<CellValues>(CellValues.SharedString)
+            };
+        }
+
+        /// <summary>
+        /// return a new instance of the CellValue (CellValues.Date, display format dd/MM/yyyy)
+        /// </summary>
+        /// <param name="date">Date value</param>
+        /// <returns>excel cell</returns>
+        public static Cell GetCell(DateTime? date)
+        {
+            return new Cell
+            {
+                StyleIndex = 1U,
+                CellValue = new CellValue(date?.ToString("yyyy-MM-dd")),
+                DataType = CellValues.Date
             };
         }
 
@@ -123,7 +140,7 @@
         /// <param name="useSharedString">True if SharedStringTable is used</param>
         /// <param name="keepCellFormat">True to keep the CellFormat in listSheets cells</param>
         /// <returns>File Byte Array</returns>
-        public static byte[] CreateWorkBook(IDictionary<string, List<Row>> listSheets, bool useSharedString = true, bool keepCellFormat = false)
+        public static byte[] CreateWorkBook(IDictionary<string, List<Row>> listSheets, bool useSharedString = true, bool keepCellFormat = false, double? defaultColumnWidth = null)
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -133,6 +150,8 @@
                     // Add a WorkbookPart to the document.
                     var workbookpart = spreadSheet.AddWorkbookPart();
                     workbookpart.Workbook = new Workbook();
+                    WorkbookStylesPart workbookStylesPart = workbookpart.AddNewPart<WorkbookStylesPart>();
+                    workbookStylesPart.Stylesheet = GenerateStylesheet();
 
                     // Get the SharedStringTablePart. If it does not exist, create a new one.
                     SharedStringTablePart shareStringPart = null;
@@ -160,10 +179,14 @@
                             var listCells = new List<Cell>();
                             foreach (var currentCell in currentRow.Elements<Cell>())
                             {
-                                if (keepCellFormat && currentCell.DataType.Value != CellValues.String)
+                                if (keepCellFormat && currentCell.DataType.Value == CellValues.Date)
                                 {
-                                    // In order to have Date format, currentCell.InnerText must be either string in format "yyyy-MM-dd" with DataType "Date" or Date.ToOADate().ToString() with DataType Number
-                                    listCells.Add(new Cell { CellValue = new CellValue(currentCell.InnerText), DataType = currentCell.DataType });
+                                    listCells.Add(new Cell
+                                    {
+                                        StyleIndex = 1U,
+                                        CellValue = new CellValue(currentCell.InnerText),
+                                        DataType = CellValues.Date
+                                    });
                                 }
                                 else
                                 {
@@ -177,8 +200,23 @@
                         // Create the Sheet
                         var sheetReference = InsertWorksheet(spreadSheet.WorkbookPart, currentSheet.Key);
 
+                        Worksheet worksheet = new Worksheet();
+                        SheetData sheetData = new SheetData();
+
                         // Add the data in the sheet
-                        sheetReference.Worksheet = new Worksheet(new SheetData(listRows));
+                        sheetData.Append(listRows);
+                        if (defaultColumnWidth.HasValue)
+                        {
+                            Columns columns = worksheet.GetFirstChild<Columns>() ?? new Columns();
+                            columns.Append(new Column() { Min = 1, Max = 27, CustomWidth = true, Width = 12 });
+                            worksheet.Append(columns);
+                        }
+
+                        worksheet.Append(sheetData);
+                        sheetReference.Worksheet = worksheet;
+                        sheetReference.Worksheet.Save();
+
+
                     }
                 }
 
@@ -235,6 +273,60 @@
             {
                 return value;
             }
+        }
+
+        /// <summary>
+        /// Generate style for current sheet.
+        /// </summary>
+        /// <returns>Stylesheet.</returns>
+        public static Stylesheet GenerateStylesheet()
+        {
+            Stylesheet stylesheet = new Stylesheet();
+
+            // Default Font
+            var fonts = new Fonts() { Count = 1, KnownFonts = BooleanValue.FromBoolean(true) };
+            var font = new Font
+            {
+                FontSize = new FontSize() { Val = 11 },
+                FontName = new FontName() { Val = "Calibri" },
+                FontFamilyNumbering = new FontFamilyNumbering() { Val = 2 },
+                FontScheme = new FontScheme() { Val = new EnumValue<FontSchemeValues>(FontSchemeValues.Minor) }
+            };
+            fonts.Append(font);
+            stylesheet.Append(fonts);
+
+            // Default Fill
+            var fills = new Fills() { Count = 1 };
+            var fill = new Fill();
+            fill.PatternFill = new PatternFill() { PatternType = new EnumValue<PatternValues>(PatternValues.None) };
+            fills.Append(fill);
+            stylesheet.Append(fills);
+
+            // Default Border
+            var borders = new Borders() { Count = 1 };
+            var border = new Border
+            {
+                LeftBorder = new LeftBorder(),
+                RightBorder = new RightBorder(),
+                TopBorder = new TopBorder(),
+                BottomBorder = new BottomBorder(),
+                DiagonalBorder = new DiagonalBorder()
+            };
+            borders.Append(border);
+            stylesheet.Append(borders);
+
+            // Default cell format and a date cell format
+            var cellFormats = new CellFormats() { Count = 2 };
+
+            var cellFormatDefault = new CellFormat { NumberFormatId = 0, FormatId = 0, FontId = 0, BorderId = 0, FillId = 0 };
+            cellFormats.Append(cellFormatDefault);
+
+            var cellFormatDate = new CellFormat { NumberFormatId = 14, FormatId = 0, FontId = 0, BorderId = 0, FillId = 0, ApplyNumberFormat = BooleanValue.FromBoolean(true) };
+            cellFormats.Append(cellFormatDate);
+
+            stylesheet.Append(cellFormats);
+
+            return stylesheet;
         }
     }
 }
