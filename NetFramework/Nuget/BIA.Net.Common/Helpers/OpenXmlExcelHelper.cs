@@ -62,6 +62,81 @@
         }
 
         /// <summary>
+        /// return a new instance of the CellValue (CellValues.Number)
+        /// </summary>
+        /// <param name="number">number value</param>
+        /// <returns>excel cell</returns>
+        public static Cell GetCell(int number)
+        {
+            return GetCellInternal(number);
+        }
+
+        /// <summary>
+        /// return a new instance of the CellValue (CellValues.Number)
+        /// </summary>
+        /// <param name="number">number value</param>
+        /// <returns>excel cell</returns>
+        public static Cell GetCell(short number)
+        {
+            return GetCellInternal(number);
+        }
+
+        /// <summary>
+        /// return a new instance of the CellValue (CellValues.Number)
+        /// </summary>
+        /// <param name="number">number value</param>
+        /// <returns>excel cell</returns>
+        public static Cell GetCell(long number)
+        {
+            return GetCellInternal(number);
+        }
+
+        /// <summary>
+        /// return a new instance of the CellValue (CellValues.Number)
+        /// </summary>
+        /// <param name="number">number value</param>
+        /// <returns>excel cell</returns>
+        public static Cell GetCell(float number)
+        {
+            return GetCellInternal(number);
+        }
+
+        /// <summary>
+        /// return a new instance of the CellValue (CellValues.Number)
+        /// </summary>
+        /// <param name="number">number value</param>
+        /// <returns>excel cell</returns>
+        public static Cell GetCell(double number)
+        {
+            return GetCellInternal(number);
+        }
+
+        /// <summary>
+        /// return a new instance of the CellValue (CellValues.Number)
+        /// </summary>
+        /// <param name="number">number value</param>
+        /// <returns>excel cell</returns>
+        public static Cell GetCell(decimal number)
+        {
+            return GetCellInternal(number);
+        }
+
+        /// <summary>
+        /// return a new instance of the CellValue (CellValues.Number)
+        /// </summary>
+        /// <param name="number">number value</param>
+        /// <returns>excel cell</returns>
+        private static Cell GetCellInternal(object number)
+        {
+            return new Cell
+            {
+                StyleIndex = 1U,
+                CellValue = new CellValue(number.ToString()),
+                DataType = CellValues.Number
+            };
+        }
+
+        /// <summary>
         /// Given text and a SharedStringTablePart, creates a SharedStringItem with the specified text
         /// and inserts it into the SharedStringTablePart. If the item already exists, returns its index.
         /// </summary>
@@ -140,7 +215,7 @@
         /// <param name="useSharedString">True if SharedStringTable is used</param>
         /// <param name="keepCellFormat">True to keep the CellFormat in listSheets cells</param>
         /// <returns>File Byte Array</returns>
-        public static byte[] CreateWorkBook(IDictionary<string, List<Row>> listSheets, bool useSharedString = true, bool keepCellFormat = false, double? defaultColumnWidth = null)
+        public static byte[] CreateWorkBook(IDictionary<string, List<Row>> listSheets, bool useSharedString = true, double? defaultColumnWidth = null)
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -179,13 +254,22 @@
                             var listCells = new List<Cell>();
                             foreach (var currentCell in currentRow.Elements<Cell>())
                             {
-                                if (keepCellFormat && currentCell.DataType.Value == CellValues.Date)
+                                if (currentCell.DataType.Value == CellValues.Date)
                                 {
                                     listCells.Add(new Cell
                                     {
                                         StyleIndex = 1U,
                                         CellValue = new CellValue(currentCell.InnerText),
                                         DataType = CellValues.Date
+                                    });
+                                }
+                                else if (currentCell.DataType.Value == CellValues.Number)
+                                {
+                                    listCells.Add(new Cell
+                                    {
+                                        StyleIndex = 0U,
+                                        CellValue = new CellValue(currentCell.InnerText),
+                                        DataType = CellValues.Number
                                     });
                                 }
                                 else
