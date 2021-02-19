@@ -10,6 +10,7 @@ import {
   loadAllByPostSuccess,
   loadSuccess,
   remove,
+  multiRemove,
   update,
   save
 } from './members-actions';
@@ -18,7 +19,7 @@ import { getLastLazyLoadEvent } from './member.state';
 import { Member } from '../../model/user/member';
 import { MemberDas } from '../../services/member-das.service';
 import { DataResult } from 'src/app/shared/bia-shared/model/data-result';
-import { AppState } from 'src/app/shared/bia-shared/store/state';
+import { AppState } from 'src/app/store/state';
 import { BiaMessageService } from 'src/app/core/bia-core/services/bia-message.service';
 import { LazyLoadEvent } from 'primeng/api';
 
@@ -111,6 +112,29 @@ export class MembersEffects {
           map(() => {
             this.biaMessageService.showDeleteSuccess();
             return loadAllByPost({ event: <LazyLoadEvent>event });
+          }),
+          catchError((err) => {
+            this.biaMessageService.showError();
+            return of(failure({ error: err }));
+          })
+        );
+      })
+    )
+  );
+
+  multiDestroy$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(multiRemove),
+      pluck('ids'),
+      concatMap((ids: number[]) => of(ids).pipe(withLatestFrom(this.store.select(getLastLazyLoadEvent)))),
+      switchMap(([ids, event]) => {
+        return this.memberDas.deletes(ids).pipe(
+          map(() => {
+            this.biaMessageService.showDeleteSuccess();
+            // Uncomment this if you do not use SignalR to refresh
+            return loadAllByPost({ event: <LazyLoadEvent>event });
+            // Uncomment this if you use SignalR to refresh
+            // return biaSuccessWaitRefreshSignalR();
           }),
           catchError((err) => {
             this.biaMessageService.showError();

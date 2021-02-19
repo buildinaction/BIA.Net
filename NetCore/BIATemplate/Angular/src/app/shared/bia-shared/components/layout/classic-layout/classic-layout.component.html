@@ -7,11 +7,17 @@
   [supportedLangs]="supportedLangs"
   [allowThemeChange]="allowThemeChange"
   [helpUrl]="helpUrl"
+  [reportUrl]="reportUrl"
+  [sites]="sites"
+  [siteId]="siteId"
+  [environmentType]="environmentType"
   (language)="onLanguageChange($event)"
   (theme)="onThemeChange($event)"
+  (siteChange)="onSiteChange($event)"
+  (setDefaultSite)="onSetDefaultSite($event)"
 ></bia-classic-header>
 <section class="content">
-  <p-breadcrumb *ngIf="(layoutService.footerHidden$ | async) === false" [model]="menuItems"></p-breadcrumb>
+  <p-breadcrumb *ngIf="(layoutService.breadcrumbHidden$ | async) === false" [model]="menuItems"></p-breadcrumb>
   <ng-content></ng-content>
 </section>
 <bia-classic-footer

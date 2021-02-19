@@ -19,6 +19,15 @@
         pTooltip="{{ 'msg.showFilters' | translate }}"
       ></button>
     </ng-container>
+    <button
+      pButton
+      [disabled]="nbSelectedElements === 0"
+      *ngIf="canDelete"
+      label="{{ 'bia.delete' | translate }}"
+      (click)="onDelete()"
+    ></button>
+  </div>
+  <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="stretch center">
     <h1>{{ headerTitle }}</h1>
   </div>
   <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="stretch center">
@@ -26,10 +35,11 @@
       pButton
       class="ui-button-secondary"
       label="{{ 'bia.back' | translate }}"
-      [routerLink]="btnBackRouterLink"
-      *ngIf="btnBackRouterLink"
+      (click)="onBack()"
+      *ngIf="canBack"
     ></button>
     <button pButton *ngIf="canExportCSV" class="ui-button-secondary" label="CSV" (click)="exportCSV.emit()"></button>
     <button pButton *ngIf="canAdd" label="{{ 'bia.add' | translate }}" (click)="onCreate()"></button>
   </div>
 </div>
+<p-confirmDialog></p-confirmDialog>

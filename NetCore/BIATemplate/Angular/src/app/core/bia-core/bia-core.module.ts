@@ -15,6 +15,8 @@ import { AuthService } from './services/auth.service';
 import { BiaThemeService } from './services/bia-theme.service';
 import { BiaTranslationService } from './services/bia-translation.service';
 import { BiaAppInitService } from './services/bia-app-init.service';
+import { SiteModule } from 'src/app/domains/site/site.module';
+import { EnvironmentConfigurationModule } from 'src/app/domains/environment-configuration/environment-configuration.module';
 
 export function initializeApp(appInitService: BiaAppInitService) {
   return (): Promise<any> => {
@@ -22,7 +24,7 @@ export function initializeApp(appInitService: BiaAppInitService) {
   };
 }
 
-const MODULES = [HttpClientModule];
+const MODULES = [HttpClientModule, SiteModule, EnvironmentConfigurationModule];
 
 /* Warning: the order matters */
 const INTERCEPTORS = [standardEncodeHttpParamsInterceptor, biaXhrWithCredInterceptor, biaTokenInterceptor];

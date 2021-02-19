@@ -3,24 +3,37 @@ import { AuthService } from './auth.service';
 import { Subscription, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { isDevMode } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/state';
+import { loadAllSites } from 'src/app/domains/site/store/sites-actions';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BiaAppInitService implements OnDestroy {
   private sub: Subscription;
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private store: Store<AppState>) {}
   Init() {
-    return new Promise<void>((resolve, reject) => {
+    return this.initAuth();
+  }
+
+  private initAuth() {
+    return new Promise<void>((resolve) => {
       this.sub = this.authService
         .login()
         .pipe(
           catchError((error) => {
-            window.location.href = environment.urlErrorPage + '?num=' + error.status;
+            if (!isDevMode()) {
+              window.location.href = environment.urlErrorPage + '?num=' + error.status;
+            }
             return throwError(error);
           })
         )
-        .subscribe(() => resolve());
+        .subscribe(() => {
+          this.store.dispatch(loadAllSites());
+          resolve();
+        });
     });
   }
 

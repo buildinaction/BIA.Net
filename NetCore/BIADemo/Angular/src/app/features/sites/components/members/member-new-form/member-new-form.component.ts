@@ -14,7 +14,7 @@ import { Member } from '../../../model/user/member';
 import { MemberRole } from '../../../model/user/member-role';
 import { DtoState } from 'src/app/shared/bia-shared/model/dto-state.enum';
 import { User } from 'src/app/domains/user/model/user';
-import { Role } from 'src/app/domains/member-role/model/role';
+import { Role } from 'src/app/domains/role/model/role';
 import { BiaMessageService } from 'src/app/core/bia-core/services/bia-message.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -47,10 +47,7 @@ export class MemberNewFormComponent implements OnInit, OnChanges {
     private biaMessageService: BiaMessageService,
     private translateService: TranslateService
   ) {
-    this.form = this.formBuilder.group({
-      users: [this.memberNewFormData.users, Validators.required],
-      roles: [this.memberNewFormData.roles]
-    });
+    this.initForm();
   }
 
   ngOnInit() {}
@@ -61,6 +58,13 @@ export class MemberNewFormComponent implements OnInit, OnChanges {
         return a.firstName.localeCompare(b.firstName);
       });
     }
+  }
+
+  private initForm() {
+    this.form = this.formBuilder.group({
+      users: [this.memberNewFormData.users, Validators.required],
+      roles: [this.memberNewFormData.roles]
+    });
   }
 
   onCancel() {

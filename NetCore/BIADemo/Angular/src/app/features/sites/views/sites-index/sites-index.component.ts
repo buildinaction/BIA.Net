@@ -1,26 +1,23 @@
-import { Component, HostBinding, OnInit, ViewChild } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { getAllSites, getSitesTotalCount, getSiteLoadingGetAll } from '../../store/site.state';
-import { remove, loadAllByPost, load, openDialogNew, openDialogEdit } from '../../store/sites-actions';
+import { multiRemove, loadAllByPost, load, openDialogNew, openDialogEdit } from '../../store/sites-actions';
 import { Observable } from 'rxjs';
-import { ConfirmationService, Confirmation, LazyLoadEvent } from 'primeng/api';
+import { LazyLoadEvent } from 'primeng/api';
 import { map } from 'rxjs/operators';
 import { SiteInfo } from '../../model/site/site-info';
 import { SiteMember } from '../../model/site/site-member';
-import { BiaTableComponent } from 'src/app/shared/bia-shared/components/table/bia-table/bia-table.component';
-import {
-  BiaListConfig,
-  ROUTER_LINK_ID,
-  PrimeTableColumn
-} from 'src/app/shared/bia-shared/components/table/bia-table/bia-table-config';
-import { AppState } from 'src/app/shared/bia-shared/store/state';
-import { BiaDialogService } from 'src/app/core/bia-core/services/bia-dialog.service';
+import { BiaListConfig, PrimeTableColumn } from 'src/app/shared/bia-shared/components/table/bia-table/bia-table-config';
+import { AppState } from 'src/app/store/state';
 import { User } from 'src/app/domains/user/model/user';
 import { loadAllByFilter } from 'src/app/domains/user/store/users-actions';
 import { getAllUsers } from 'src/app/domains/user/store/user.state';
-import { DEFAULT_PAGE_SIZE } from 'src/app/shared/constants';
+import { DEFAULT_PAGE_SIZE, DEFAULT_VIEW } from 'src/app/shared/constants';
 import { AuthService } from 'src/app/core/bia-core/services/auth.service';
 import { Permission } from 'src/app/shared/permission';
+import { KeyValuePair } from 'src/app/shared/bia-shared/model/key-value-pair';
+import { SiteAdvancedFilter } from '../../model/site/site-advanced-filter';
+import { Router } from '@angular/router';
 
 interface SiteListVM {
   id: number;
@@ -31,12 +28,10 @@ interface SiteListVM {
 @Component({
   selector: 'app-sites-index',
   templateUrl: './sites-index.component.html',
-  styleUrls: ['./sites-index.component.scss'],
-  providers: [ConfirmationService]
+  styleUrls: ['./sites-index.component.scss']
 })
 export class SitesIndexComponent implements OnInit {
   @HostBinding('class.bia-flex') flex = true;
-  @ViewChild(BiaTableComponent, { static: false }) siteListComponent: BiaTableComponent;
   showColSearch = false;
   globalSearchValue = '';
   defaultPageSize = DEFAULT_PAGE_SIZE;
@@ -44,47 +39,31 @@ export class SitesIndexComponent implements OnInit {
   totalRecords: number;
   users$: Observable<User[]>;
   sites$: Observable<SiteListVM[]>;
+  selectedSites: SiteListVM[];
   totalCount$: Observable<number>;
   loading$: Observable<boolean>;
   showFilter = false;
   haveFilter = false;
   private lastLazyLoadEvent: LazyLoadEvent;
-  private userId = 0;
   canEdit = false;
   canDelete = false;
   canAdd = false;
-
+  canManageMembers = false;
   tableConfiguration: BiaListConfig;
-  columns: string[];
-  displayedColumns: string[] = this.columns;
+  columns: KeyValuePair[];
+  displayedColumns: KeyValuePair[];
+  viewPreference: string;
+  advancedFilter: SiteAdvancedFilter;
 
-  constructor(
-    private store: Store<AppState>,
-    private confirmationService: ConfirmationService,
-    private biaDialogService: BiaDialogService,
-    private authService: AuthService
-  ) {}
+  constructor(private store: Store<AppState>, private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.initTableConfiguration();
     this.setPermissions();
-    this.users$ = this.store
-      .select(getAllUsers)
-      .pipe()
-      .pipe(
-        map((users: User[]) => {
-          users.forEach((user: User) => {
-            user.displayName = `${user.firstName} ${user.lastName} (${user.login})`;
-          });
-          return users;
-        })
-      );
-    this.sites$ = this.store
-      .select(getAllSites)
-      .pipe()
-      .pipe(map((siteInfos) => siteInfos.map((siteInfo) => this.toSiteListVM(siteInfo))));
-    this.totalCount$ = this.store.select(getSitesTotalCount).pipe();
-    this.loading$ = this.store.select(getSiteLoadingGetAll).pipe();
+    this.initUsers();
+    this.initSites();
+    this.initTotalCount();
+    this.initLoading();
   }
 
   onCreate() {
@@ -96,14 +75,20 @@ export class SitesIndexComponent implements OnInit {
     this.store.dispatch(openDialogEdit());
   }
 
-  onRemove(siteId: number) {
-    const confirmation: Confirmation = {
-      ...this.biaDialogService.getDeleteConfirmation(),
-      accept: () => {
-        this.store.dispatch(remove({ id: siteId }));
-      }
-    };
-    this.confirmationService.confirm(confirmation);
+  onDelete() {
+    if (this.selectedSites) {
+      this.store.dispatch(multiRemove({ ids: this.selectedSites.map((x) => x.id) }));
+    }
+  }
+
+  onSelectedElementsChanged(planesTypes: SiteListVM[]) {
+    this.selectedSites = planesTypes;
+  }
+
+  onManageMember() {
+    if (this.selectedSites && this.selectedSites.length === 1) {
+      this.router.navigate(['/sites', this.selectedSites[0].id, 'members']);
+    }
   }
 
   onPageSizeChange(pageSize: number) {
@@ -112,7 +97,10 @@ export class SitesIndexComponent implements OnInit {
 
   onLoadLazy(lazyLoadEvent: LazyLoadEvent) {
     this.lastLazyLoadEvent = lazyLoadEvent;
-    const customEvent: any = { userId: this.userId, ...lazyLoadEvent };
+
+    const userId: number = this.advancedFilter && this.advancedFilter.userId > 0 ? this.advancedFilter.userId : 0;
+    const customEvent: any = { userId: userId, ...lazyLoadEvent };
+
     this.store.dispatch(loadAllByPost({ event: customEvent }));
   }
 
@@ -120,9 +108,9 @@ export class SitesIndexComponent implements OnInit {
     this.store.dispatch(loadAllByFilter({ filter: value }));
   }
 
-  onFilter(userId: number) {
-    this.userId = userId;
-    this.haveFilter = this.userId > 0;
+  onFilter(advancedFilter: SiteAdvancedFilter) {
+    this.advancedFilter = advancedFilter;
+    this.haveFilter = this.advancedFilter && this.advancedFilter.userId > 0;
     this.onLoadLazy(this.lastLazyLoadEvent);
   }
 
@@ -130,7 +118,7 @@ export class SitesIndexComponent implements OnInit {
     this.globalSearchValue = value;
   }
 
-  displayedColumnsChanged(values: string[]) {
+  displayedColumnsChanged(values: KeyValuePair[]) {
     this.displayedColumns = values;
   }
 
@@ -158,22 +146,36 @@ export class SitesIndexComponent implements OnInit {
     };
   }
 
+  onViewChange(viewPreference: string) {
+    this.updateAdvancedFilterByView(viewPreference);
+    this.viewPreference = viewPreference;
+  }
+
+  private updateAdvancedFilterByView(viewPreference: string) {
+    let advancedFilter: SiteAdvancedFilter = <SiteAdvancedFilter>{};
+    let haveFilter = false;
+
+    if (viewPreference && viewPreference !== DEFAULT_VIEW) {
+      const state = JSON.parse(viewPreference);
+      if (state && state.advancedFilter) {
+        advancedFilter = state.advancedFilter;
+        haveFilter = this.advancedFilter && this.advancedFilter.userId > 0;
+      }
+    }
+
+    this.advancedFilter = advancedFilter;
+    this.haveFilter = haveFilter;
+  }
+
   private setPermissions() {
     this.canEdit = this.authService.hasPermission(Permission.Site_Update);
     this.canDelete = this.authService.hasPermission(Permission.Site_Delete);
     this.canAdd = this.authService.hasPermission(Permission.Site_Create);
+    this.canManageMembers = this.authService.hasPermission(Permission.Member_List_Access);
   }
 
   private initTableConfiguration() {
     this.tableConfiguration = {
-      customButtons: [
-        {
-          classValue: 'ui-icon-assignment-ind  bia-pointer',
-          routerLinkValue: ['/sites', ROUTER_LINK_ID, 'members'],
-          pTooltipValue: 'member.manage',
-          permission: Permission.Member_List_Access
-        }
-      ],
       columns: [
         new PrimeTableColumn('title', 'site.title'),
         Object.assign(new PrimeTableColumn('siteAdmin', 'site.admins'), {
@@ -182,7 +184,26 @@ export class SitesIndexComponent implements OnInit {
         })
       ]
     };
-    this.columns = this.tableConfiguration.columns.map((col) => col.header);
+    this.columns = this.tableConfiguration.columns.map((col) => <KeyValuePair>{ key: col.field, value: col.header });
     this.displayedColumns = this.columns;
+  }
+
+  private initLoading() {
+    this.loading$ = this.store.select(getSiteLoadingGetAll).pipe();
+  }
+
+  private initTotalCount() {
+    this.totalCount$ = this.store.select(getSitesTotalCount).pipe();
+  }
+
+  private initSites() {
+    this.sites$ = this.store
+      .select(getAllSites)
+      .pipe()
+      .pipe(map((siteInfos) => siteInfos.map((siteInfo) => this.toSiteListVM(siteInfo))));
+  }
+
+  private initUsers() {
+    this.users$ = this.store.select(getAllUsers);
   }
 }

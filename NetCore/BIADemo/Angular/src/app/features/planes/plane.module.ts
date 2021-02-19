@@ -9,8 +9,10 @@ import { PlanesIndexComponent } from './views/planes-index/planes-index.componen
 import { SharedModule } from 'src/app/shared/shared.module';
 import { PlaneEditDialogComponent } from './views/plane-edit-dialog/plane-edit-dialog.component';
 import { PlaneNewDialogComponent } from './views/plane-new-dialog/plane-new-dialog.component';
-import { PermissionGuard } from 'src/app/shared/bia-shared/guards/permission.guard';
+import { PermissionGuard } from 'src/app/core/bia-core/guards/permission.guard';
 import { Permission } from 'src/app/shared/permission';
+import { AirportOptionModule } from 'src/app/domains/airport-option/airport-option.module';
+import { PlaneTypeOptionModule } from 'src/app/domains/plane-type-option/plane-type-option.module';
 
 const ROUTES: Routes = [
   {
@@ -37,7 +39,10 @@ const ROUTES: Routes = [
     SharedModule,
     RouterModule.forChild(ROUTES),
     StoreModule.forFeature('planes', reducers),
-    EffectsModule.forFeature([PlanesEffects])
+    EffectsModule.forFeature([PlanesEffects]),
+    // Domain Modules:
+    AirportOptionModule,
+    PlaneTypeOptionModule,
   ]
 })
 export class PlaneModule {}

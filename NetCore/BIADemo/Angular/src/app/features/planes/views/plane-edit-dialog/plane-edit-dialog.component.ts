@@ -4,7 +4,12 @@ import { update, closeDialogEdit } from '../../store/planes-actions';
 import { Observable, Subscription } from 'rxjs';
 import { getCurrentPlane, getDisplayEditDialog, getPlaneLoadingGet } from '../../store/plane.state';
 import { Plane } from '../../model/plane';
-import { AppState } from 'src/app/shared/bia-shared/store/state';
+import { AppState } from 'src/app/store/state';
+import { getAllAirportOptions } from 'src/app/domains/airport-option/store/airport-option.state';
+import { loadAllAirportOptions } from 'src/app/domains/airport-option/store/airport-options-actions';
+import { getAllPlaneTypeOptions } from 'src/app/domains/plane-type-option/store/plane-type-option.state';
+import { loadAllPlaneTypeOptions } from 'src/app/domains/plane-type-option/store/plane-type-options-actions';
+import { OptionDto } from 'src/app/shared/bia-shared/model/option-dto';
 
 @Component({
   selector: 'app-plane-edit-dialog',
@@ -14,6 +19,9 @@ import { AppState } from 'src/app/shared/bia-shared/store/state';
 export class PlaneEditDialogComponent implements OnInit, OnDestroy {
   loading$: Observable<boolean>;
   plane$: Observable<Plane>;
+  airportOptions$: Observable<OptionDto[]>;
+  planeTypeOptions$: Observable<OptionDto[]>;
+
   display = false;
   private sub = new Subscription();
   @Output() displayChange = new EventEmitter<boolean>();
@@ -23,12 +31,17 @@ export class PlaneEditDialogComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loading$ = this.store.select(getPlaneLoadingGet).pipe();
     this.plane$ = this.store.select(getCurrentPlane).pipe();
+
     this.sub.add(
       this.store
         .select(getDisplayEditDialog)
         .pipe()
         .subscribe((x) => (this.display = x))
     );
+    this.airportOptions$ = this.store.select(getAllAirportOptions).pipe();
+    this.store.dispatch(loadAllAirportOptions());
+    this.planeTypeOptions$ = this.store.select(getAllPlaneTypeOptions).pipe();
+    this.store.dispatch(loadAllPlaneTypeOptions());
   }
 
   ngOnDestroy() {

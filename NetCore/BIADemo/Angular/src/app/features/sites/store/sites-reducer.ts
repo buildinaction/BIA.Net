@@ -75,7 +75,7 @@ export const siteReducers = createReducer<State>(
     return { ...state, loadingGet: true };
   }),
   on(loadAllByPostSuccess, (state, { result, event }) => {
-    const stateUpdated = sitesAdapter.addAll(result.data, state);
+    const stateUpdated = sitesAdapter.setAll(result.data, state);
     stateUpdated.currentSite = <Site>{};
     stateUpdated.totalCount = result.totalCount;
     stateUpdated.lastLazyLoadEvent = event;

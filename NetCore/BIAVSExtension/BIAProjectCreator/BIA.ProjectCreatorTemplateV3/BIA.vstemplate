@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="ProjectGroup">
+  <TemplateData>
+    <Name>BIA V3.3.0</Name>
+    <Description>Project For BIA</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>ProjectName</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.jpg</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectCollection>
+      <SolutionFolder Name="01 - Presentation" CreateOnDisk="false">
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Presentation.Api">
+          temp\Safran.BIATemplate.Presentation.Api\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+        <ProjectTemplateLink ProjectName="$safeprojectname$.WorkerService">
+          temp\Safran.BIATemplate.WorkerService\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+      </SolutionFolder>
+      <SolutionFolder Name="02 - Application" CreateOnDisk="false">
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Application">
+          temp\Safran.BIATemplate.Application\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+      </SolutionFolder>
+      <SolutionFolder Name="03 - Domain" CreateOnDisk="false">
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Domain">
+          temp\Safran.BIATemplate.Domain\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Domain.Dto">
+          temp\Safran.BIATemplate.Domain.Dto\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+      </SolutionFolder>
+      <SolutionFolder Name="04 - Infrastructure" CreateOnDisk="false">
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Infrastructure.Data">
+          temp\Safran.BIATemplate.Infrastructure.Data\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Infrastructure.Service">
+          temp\Safran.BIATemplate.Infrastructure.Service\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+      </SolutionFolder>
+      <SolutionFolder Name="05 - Crosscutting" CreateOnDisk="false">
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Crosscutting.Common">
+          temp\Safran.BIATemplate.Crosscutting.Common\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Crosscutting.Ioc">
+          temp\Safran.BIATemplate.Crosscutting.Ioc\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+      </SolutionFolder>
+      <SolutionFolder Name="99 - Test" CreateOnDisk="false">
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Test">
+          temp\Safran.BIATemplate.Test\MyTemplate.vstemplate
+        </ProjectTemplateLink>
+      </SolutionFolder>    
+    </ProjectCollection>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>BIA.ProjectCreatorWizard, Version=3.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <FullClassName>BIA.ProjectCreatorWizard.RootWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

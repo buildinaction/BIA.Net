@@ -18,10 +18,7 @@ namespace BIA.ProjectCreatorWizard
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             string solutionName = RootWizard.GlobalDictionary.TryGetValue(RootWizard.SAFEROOTPROJECTNAME, out solutionName) ? solutionName : string.Empty;
-            string companyName = RootWizard.GlobalDictionary.TryGetValue(RootWizard.COMPANYNAME, out companyName) ? companyName : string.Empty;
-
             replacementsDictionary[RootWizard.SAFEROOTPROJECTNAME] = solutionName;
-            replacementsDictionary[RootWizard.COMPANYNAME] = companyName;
         }
 
         /// <inheritdoc/>

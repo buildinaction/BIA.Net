@@ -11,27 +11,23 @@ function DeleteLine($start, $end, $file) {
   $end--
   Write-Host "start " $start "end " $end "file " $file
   (Get-Content $file) | Where-Object {
-    ($i -lt $start -or $i -gt $end)
+	(($i -ne $start -1 -or $_.Trim() -ne '') -and 
+    ($i -lt $start -or $i -gt $end))
     $i++
-  } | set-content $file -Encoding utf8
+  } | set-content $file 
 }
 
 # Deletes lines between // Begin BIADemo and // End BIADemo 
-function RemoveCodeExample ($sourcePath, $excludeFolder, $excludeExtension ) {
-
-  # Call this function again, using the child folders of the current source folder.
-  Get-ChildItem -Path $sourcePath -Directory -Exclude $excludeFolder | % {RemoveCodeExample $_.FullName $excludeFolder $excludeExtension}
-
-  Get-ChildItem -Path $sourcePath -File | Where-Object { (($excludeExtension) -notcontains $_.Extension) } | Where-Object { Select-String "Begin BIADemo" $_ -Quiet } | ForEach-Object { 
+function RemoveCodeExample {
+  Get-ChildItem -File -Recurse -exclude *.ps1, *.md | Where-Object { $_.FullName -NotLike "*/node_modules/*" -and $_.FullName -NotLike "*/dist/*" -and $_.FullName -NotLike "*/scss/*" -and $_.FullName -NotLike "*/docs/*" -and $_.FullName -NotLike "*/assets/*" } | ForEach-Object { 
     $lineBegin = @()
     $file = $_.FullName
-	Write-Host "RemoveCodeExample in " $file
   
-    $searchWord = '// Begin BIADemo'
+    $searchWord = 'Begin BIADemo'
     $starts = GetLineNumber -pattern $searchWord -file $file
     $lineBegin += $starts
   
-    $searchWord = '// End BIADemo'
+    $searchWord = 'End BIADemo'
     $ends = GetLineNumber -pattern $searchWord -file $file
     $lineBegin += $ends
   
@@ -46,6 +42,36 @@ function RemoveCodeExample ($sourcePath, $excludeFolder, $excludeExtension ) {
   }
 }
 
+function RemoveBIADemoOnlyFiles {
+	foreach ($childFile in Get-ChildItem -File -Recurse | Where-Object { Select-String "// BIADemo only" $_ -Quiet } ) { 
+		$file = $childFile.FullName
+		$fileRel = Resolve-Path -Path "$file" -Relative
+		$searchWord = '// BIADemo only'
+		$starts = GetLineNumber -pattern $searchWord -file $file
+		if ($starts -eq 1)
+		{
+			Write-Verbose "Remove $fileRel" -Verbose
+			Remove-Item -Force -LiteralPath $file
+		}
+	}
+}
+
+function RemoveEmptyFolder {
+    param(
+        $Path
+    )
+    foreach ($childDirectory in Get-ChildItem -Force -Path $Path -Directory -Exclude PublishProfiles,RepoContract) {
+        RemoveEmptyFolder $childDirectory.FullName
+    }
+    $currentChildren = Get-ChildItem -Force -LiteralPath $Path
+    $isEmpty = $currentChildren -eq $null
+    if ($isEmpty) {
+	 	$fileRel = Resolve-Path -Path "$Path" -Relative
+        Write-Verbose "Removing empty folder '${fileRel}'." -Verbose
+        Remove-Item -Force -LiteralPath $Path
+    }
+}
+
 function RemoveFolder {
   param (
     [string]$path
@@ -56,13 +82,23 @@ function RemoveFolder {
   }
 }
 
-function ReplaceProjectName ($oldName,$newName,$sourcePath, $excludeFolder, $excludeExtension) 
-{
-  # Write-Host "ReplaceProjectName ($oldName) $sourcePath exclude $excludeFolder"
-  # Call this function again, using the child folders of the current source folder.
-  Get-ChildItem -Path $sourcePath -Directory -Exclude $excludeFolder | % {ReplaceProjectName $oldName $newName $_.FullName $excludeFolder $excludeExtension}
+function RemoveByExtension {
+  param (
+    [string]$path,
+    [string]$extension
+  )
+  if (Test-Path $path) {
+    Write-Host "delete " $extension " in " $path " folder" 
+    Get-ChildItem -Path $path $extension | ForEach-Object { Remove-Item -Path $_.FullName -Recurse -Force -Confirm:$false }
+  }
+}
 
-  Get-ChildItem -Path $sourcePath -File | Where-Object { (($excludeExtension) -notcontains $_.Extension) } | Where-Object { Select-String $oldName $_ -Quiet } | ForEach-Object { 
+function ReplaceProjectName {
+  param (
+    [string]$oldName,
+    [string]$newName
+  )
+  Get-ChildItem -File -Recurse -exclude *.ps1 | Where-Object { $_.FullName -NotLike "*\node_modules\*" -and $_.FullName -NotLike "*\dist\*" -and $_.FullName -NotLike "*\scss\*" -and $_.FullName -NotLike "*\docs\*" -and $_.FullName -NotLike "*\assets\*" } | ForEach-Object { 
     $oldContent = [System.IO.File]::ReadAllText($_.FullName);
     $newContent = $oldContent.Replace($oldName, $newName);
     if ($oldContent -ne $newContent) {
@@ -70,6 +106,7 @@ function ReplaceProjectName ($oldName,$newName,$sourcePath, $excludeFolder, $exc
       [System.IO.File]::WriteAllText($_.FullName, $newContent)
     }
   }
+  
 }
 
 # $oldName = Read-Host "old project name ?"
@@ -80,56 +117,74 @@ $newName = 'BIATemplate'
 Write-Host "old name: " $oldName
 Write-Host "new name: " $newName
 
-# -------------------- Begin Remove folder Angular and replace it ----------------------------
-Write-Host "Remove .\Angular"
-Remove-Item -LiteralPath "Angular" -exclude "node_modules" -Force -Recurse
 
-$from = "..\$oldName\Angular"
-$to = ".\Angular"
-Write-Host "Copy from $from"
-Write-Host "     to ..$to"
+RemoveFolder -path 'Angular'
 
-# param ex: excludeExtension = @(".md")
-function Copy-WithFilter ($sourcePath, $destPath, $excludeFolder, $excludeExtension )
-{
-	# Write-Host "Copy-WithFilter $sourcePath, $destPath"
-    # Call this function again, using the child folders of the current source folder.
-    Get-ChildItem -Path $sourcePath -Directory -Exclude $excludeFolder | % {Copy-WithFilter $_.FullName (Join-Path -Path $destPath -ChildPath $_.Name) $excludeFolder $excludeExtension}
-
-    # Create the destination directory, if it does not already exist.
-    if (!(Test-Path $destPath)) { New-Item -Path $destPath -ItemType Directory | Out-Null }
-
-    # Copy the child files from source to destination.
-    Get-ChildItem -Path $sourcePath -File | Where-Object { (($excludeExtension) -notcontains $_.Extension) } | Copy-Item -Force -Destination $destPath
-}
-Copy-WithFilter $from $to @('node_modules')
-# -------------------- End Remove folder Angular and replace it ----------------------------
+$oldPath = "..\" + $oldName + "\Angular"
+Write-Host "Copy from .$oldPath"
+#Copy-Item $oldPath '.' -Recurse
+Copy-Item -Path (Get-Item -Path "$oldPath\*" -Exclude ('dist', 'node_modules')).FullName -Destination '.\Angular' -Recurse -Force
 
 Set-Location -Path ./Angular
 
+Write-Host "Zip plane popup"
+compress-archive -path '.\src\app\features\planes\*' -destinationpath '.\docs\feature-planes-popup.zip' -compressionlevel optimal
+Write-Host "Zip plane page"
+compress-archive -path '.\src\app\features\planes-page\*' -destinationpath '.\docs\feature-planes-page.zip' -compressionlevel optimal
+Write-Host "Zip plane SignalR"
+compress-archive -path '.\src\app\features\planes-SignalR\*' -destinationpath '.\docs\feature-planes-SignalR.zip' -compressionlevel optimal
+Write-Host "Zip plane view"
+compress-archive -path '.\src\app\features\planes-view\*' -destinationpath '.\docs\feature-planes-view.zip' -compressionlevel optimal
+Write-Host "Zip airport"
+compress-archive -path '.\src\app\features\airports\*' -destinationpath '.\docs\feature-airports.zip' -compressionlevel optimal
+Write-Host "Zip airport"
+compress-archive -path '.\src\app\domains\airport-option\*' -destinationpath '.\docs\domain-airport-option.zip' -compressionlevel optimal
+
 Write-Host "RemoveFolder dist"
 RemoveFolder -path 'dist'
-# Write-Host "RemoveFolder node_modules"
-# RemoveFolder -path 'node_modules'
+Write-Host "RemoveFolder node_modules"
+RemoveFolder -path 'node_modules'
 Write-Host "RemoveFolder src\app\features\planes"
 RemoveFolder -path 'src\app\features\planes'
 Write-Host "RemoveFolder src\app\features\planes-page"
 RemoveFolder -path 'src\app\features\planes-page'
+Write-Host "RemoveFolder src\app\features\planes-view"
+RemoveFolder -path 'src\app\features\planes-view'
+Write-Host "RemoveFolder src\app\features\planes-types"
+RemoveFolder -path 'src\app\features\planes-types'
+Write-Host "RemoveFolder src\app\features\planes-signalR"
+RemoveFolder -path 'src\app\features\planes-signalR'
+Write-Host "RemoveFolder src\app\features\airports"
+RemoveFolder -path 'src\app\features\airports'
+Write-Host "RemoveFolder src\app\domains\airport-option"
+RemoveFolder -path 'src\app\domains\airport-option'
+Write-Host "RemoveFolder src\app\domains\plane-type-option"
+RemoveFolder -path 'src\app\domains\plane-type-option'
 
-Write-Host "Remove code example"
-RemoveCodeExample "." @('node_modules','dist','scss','docs','assets') @('.ps1', '.md')
+Write-Host "RemoveFolder src\assets\bia\primeng\sass"
+RemoveFolder -path 'src\assets\bia\primeng\sass'
+RemoveByExtension -path 'src\assets\bia\primeng\layout\css' -extension '*.scss'
+RemoveByExtension -path 'src\assets\bia\primeng\theme' -extension '*.scss'
+
+Write-Host "Remove BIA demo only files"
+RemoveBIADemoOnlyFiles
+
+Write-Host "Remove Empty Folder"
+RemoveEmptyFolder "."
+
+Write-Host "Remove code example partial files"
+RemoveCodeExample
 
 Write-Host "replace project name"
-ReplaceProjectName $oldName $newName "." @('node_modules','dist','scss','docs','assets') @('.ps1')
-Write-Host "replace project name lower"
-ReplaceProjectName $oldName.ToLower() $newName.ToLower() "." @('node_modules','dist','scss','docs','assets') @('.ps1')
+ReplaceProjectName -oldName $oldName -newName $newName
+ReplaceProjectName -oldName $oldName.ToLower() -newName $newName.ToLower()
 
-Write-Host "npm install"
-npm install
+# Write-Host "npm install"
+# npm install
 # Write-Host "ng build --aot"
 # ng build --aot
+
+
+Set-Location -Path ..
 Write-Host "Finish"
-
-Set-Location -Path ".."
-
 pause

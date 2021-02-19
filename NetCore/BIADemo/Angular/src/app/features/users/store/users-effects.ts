@@ -10,6 +10,7 @@ import {
   loadAllByPostSuccess,
   loadSuccess,
   remove,
+  multiRemove,
   update,
   save,
   synchronize
@@ -19,8 +20,9 @@ import { UserDas } from 'src/app/domains/user/services/user-das.service';
 import { DataResult } from 'src/app/shared/bia-shared/model/data-result';
 import { User } from 'src/app/domains/user/model/user';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/shared/bia-shared/store/state';
+import { AppState } from 'src/app/store/state';
 import { getLastLazyLoadEvent } from './user.state';
+import { UserFromADDas } from 'src/app/domains/user-from-AD/services/user-from-AD-das.service';
 
 /**
  * Effects file is for isolating and managing side effects of the application in one place
@@ -132,15 +134,15 @@ export class UsersEffects {
     )
   );
 
-  save$ = createEffect(() =>
+  multiDestroy$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(save),
-      pluck('users'),
-      concatMap((users) => of(users).pipe(withLatestFrom(this.store.select(getLastLazyLoadEvent)))),
-      switchMap(([users, event]) => {
-        return this.userDas.save(users, '').pipe(
+      ofType(multiRemove),
+      pluck('ids'),
+      concatMap((ids: number[]) => of(ids).pipe(withLatestFrom(this.store.select(getLastLazyLoadEvent)))),
+      switchMap(([ids, event]) => {
+        return this.userDas.deletes(ids).pipe(
           map(() => {
-            this.biaMessageService.showAddSuccess();
+            this.biaMessageService.showDeleteSuccess();
             return loadAllByPost({ event: event });
           }),
           catchError((err) => {
@@ -152,9 +154,34 @@ export class UsersEffects {
     )
   );
 
+  save$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(save),
+      pluck('usersFromAD'),
+      concatMap((usersFromAD) => of(usersFromAD).pipe(withLatestFrom(this.store.select(getLastLazyLoadEvent)))),
+      switchMap(([usersFromAD, event]) => {
+        return this.userFromADDas.save(usersFromAD, '').pipe(
+          map(() => {
+            this.biaMessageService.showAddSuccess();
+            return loadAllByPost({ event: event });
+          }),
+          catchError((err) => {
+            if (err.status === 303) {
+              this.biaMessageService.showErrorDetail(err.error);
+            } else {
+              this.biaMessageService.showError();
+            }
+            return of(failure({ err: { concern: 'CREATE', error: err } }));
+          })
+        );
+      })
+    )
+  );
+
   constructor(
     private actions$: Actions,
     private userDas: UserDas,
+    private userFromADDas: UserFromADDas,
     private biaMessageService: BiaMessageService,
     private store: Store<AppState>
   ) {}

@@ -60,7 +60,6 @@
             this.RemoteDesignAddressLabel.Size = new System.Drawing.Size(132, 13);
             this.RemoteDesignAddressLabel.TabIndex = 1;
             this.RemoteDesignAddressLabel.Text = "Address of remote design :";
-            this.RemoteDesignAddressLabel.Visible = false;
             // 
             // UseRemoteDesignLabel
             // 
@@ -70,7 +69,6 @@
             this.UseRemoteDesignLabel.Size = new System.Drawing.Size(101, 13);
             this.UseRemoteDesignLabel.TabIndex = 2;
             this.UseRemoteDesignLabel.Text = "Use remote design :";
-            this.UseRemoteDesignLabel.Visible = false;
             // 
             // AddressRemoteDesginTextbox
             // 
@@ -78,7 +76,6 @@
             this.AddressRemoteDesginTextbox.Name = "AddressRemoteDesginTextbox";
             this.AddressRemoteDesginTextbox.Size = new System.Drawing.Size(100, 20);
             this.AddressRemoteDesginTextbox.TabIndex = 4;
-            this.AddressRemoteDesginTextbox.Visible = false;
             // 
             // CompanyNameTextbox
             // 
@@ -95,7 +92,6 @@
             this.UseRemoteDesignCheckbox.Size = new System.Drawing.Size(15, 14);
             this.UseRemoteDesignCheckbox.TabIndex = 3;
             this.UseRemoteDesignCheckbox.UseVisualStyleBackColor = true;
-            this.UseRemoteDesignCheckbox.Visible = false;
             this.UseRemoteDesignCheckbox.CheckedChanged += new System.EventHandler(this.UseRemoteDesignCheckbox_CheckedChanged);
             // 
             // ValidateButton
@@ -114,7 +110,6 @@
             this.DivisionNameTextbox.Name = "DivisionNameTextbox";
             this.DivisionNameTextbox.Size = new System.Drawing.Size(100, 20);
             this.DivisionNameTextbox.TabIndex = 2;
-            this.DivisionNameTextbox.Visible = false;
             // 
             // label1
             // 
@@ -124,7 +119,6 @@
             this.label1.Size = new System.Drawing.Size(123, 13);
             this.label1.TabIndex = 7;
             this.label1.Text = "Division or Team Name :";
-            this.label1.Visible = false;
             // 
             // UseSupportMailCheckbox
             // 
@@ -134,7 +128,6 @@
             this.UseSupportMailCheckbox.Size = new System.Drawing.Size(15, 14);
             this.UseSupportMailCheckbox.TabIndex = 5;
             this.UseSupportMailCheckbox.UseVisualStyleBackColor = true;
-            this.UseSupportMailCheckbox.Visible = false;
             this.UseSupportMailCheckbox.CheckedChanged += new System.EventHandler(this.UseSupportMailCheckbox_CheckedChanged);
             // 
             // SupportMailTextBox
@@ -143,7 +136,6 @@
             this.SupportMailTextBox.Name = "SupportMailTextBox";
             this.SupportMailTextBox.Size = new System.Drawing.Size(100, 20);
             this.SupportMailTextBox.TabIndex = 6;
-            this.SupportMailTextBox.Visible = false;
             this.SupportMailTextBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged_1);
             // 
             // label2
@@ -154,7 +146,6 @@
             this.label2.Size = new System.Drawing.Size(165, 13);
             this.label2.TabIndex = 10;
             this.label2.Text = "Report errors on support mailbox :";
-            this.label2.Visible = false;
             // 
             // SupportMailLabel
             // 
@@ -164,7 +155,6 @@
             this.SupportMailLabel.Size = new System.Drawing.Size(79, 13);
             this.SupportMailLabel.TabIndex = 9;
             this.SupportMailLabel.Text = "Mail of support:";
-            this.SupportMailLabel.Visible = false;
             this.SupportMailLabel.Click += new System.EventHandler(this.label3_Click);
             // 
             // CompanyAndDesignOptionForm

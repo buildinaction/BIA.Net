@@ -74,7 +74,7 @@ export const memberReducers = createReducer<State>(
     return { ...state, loadingGet: true };
   }),
   on(loadAllByPostSuccess, (state, { result, event }) => {
-    const stateUpdated = membersAdapter.addAll(result.data, state);
+    const stateUpdated = membersAdapter.setAll(result.data, state);
     stateUpdated.currentMember = <Member>{};
     stateUpdated.totalCount = result.totalCount;
     stateUpdated.lastLazyLoadEvent = event;

@@ -30,7 +30,7 @@ export const INIT_STATE: State = usersAdapter.getInitialState({
 
 export const userReducers = createReducer<State>(
   INIT_STATE,
-  on(loadAllSuccess, (state, { users }) => usersAdapter.addAll(users, state))
+  on(loadAllSuccess, (state, { users }) => usersAdapter.setAll(users, state)),
 );
 
 export const getUserById = (id: number) => (state: State) => state.entities[id];

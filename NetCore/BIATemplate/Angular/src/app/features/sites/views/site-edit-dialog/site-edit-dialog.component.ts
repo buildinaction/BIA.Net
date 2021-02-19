@@ -4,7 +4,7 @@ import { update, closeDialogEdit } from '../../store/sites-actions';
 import { Observable, Subscription } from 'rxjs';
 import { getCurrentSite, getDisplayEditDialog, getSiteLoadingGet } from '../../store/site.state';
 import { Site } from '../../model/site/site';
-import { AppState } from 'src/app/shared/bia-shared/store/state';
+import { AppState } from 'src/app/store/state';
 
 @Component({
   selector: 'app-site-edit-dialog',

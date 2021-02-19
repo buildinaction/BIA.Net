@@ -18,9 +18,11 @@ import { MemberEditFormComponent } from './components/members/member-edit-form/m
 import { MemberNewFormComponent } from './components/members/member-new-form/member-new-form.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { UserModule } from 'src/app/domains/user/user.module';
-import { MemberRoleModule } from 'src/app/domains/member-role/member-role.module';
-import { PermissionGuard } from 'src/app/shared/bia-shared/guards/permission.guard';
+import { RoleModule } from 'src/app/domains/role/role.module';
+import { PermissionGuard } from 'src/app/core/bia-core/guards/permission.guard';
 import { Permission } from 'src/app/shared/permission';
+import { UserFromADModule } from 'src/app/domains/user-from-AD/user-from-AD.module';
+import { SiteTableHeaderComponent } from './components/site-table-header/site-table-header.component';
 
 const ROUTES: Routes = [
   {
@@ -56,13 +58,15 @@ const ROUTES: Routes = [
     MemberNewDialogComponent,
     MembersIndexComponent,
     MemberEditFormComponent,
-    MemberNewFormComponent
+    MemberNewFormComponent,
+    SiteTableHeaderComponent
   ],
   entryComponents: [SiteEditDialogComponent, SiteNewDialogComponent],
   imports: [
     SharedModule,
-    MemberRoleModule,
+    RoleModule,
     UserModule,
+    UserFromADModule,
     RouterModule.forChild(ROUTES),
     StoreModule.forFeature('sites', reducers),
     StoreModule.forFeature('members', memberReducers),

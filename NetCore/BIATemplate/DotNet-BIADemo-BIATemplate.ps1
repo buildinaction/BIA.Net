@@ -9,11 +9,13 @@ function DeleteLine($start, $end, $file) {
   $i = 0
   $start--
   $end--
-  Write-Host "start " $start "end " $end "file " $file
+  $fileRel = Resolve-Path -Path "$file" -Relative
+  Write-Verbose "Delete lines $start to $end in file $fileRel" -Verbose
   (Get-Content $file) | Where-Object {
-    ($i -lt $start -or $i -gt $end)
+	(($i -ne $start -1 -or $_.Trim() -ne '') -and 
+    ($i -lt $start -or $i -gt $end))
     $i++
-  } | set-content $file -Encoding utf8
+  } | set-content $file
 }
 
 # Deletes lines between // Begin BIADemo and // End BIADemo 
@@ -22,11 +24,11 @@ function RemoveCodeExample {
     $lineBegin = @()
     $file = $_.FullName
   
-    $searchWord = '// Begin BIADemo'
+    $searchWord = 'Begin BIADemo'
     $starts = GetLineNumber -pattern $searchWord -file $file
     $lineBegin += $starts
   
-    $searchWord = '// End BIADemo'
+    $searchWord = 'End BIADemo'
     $ends = GetLineNumber -pattern $searchWord -file $file
     $lineBegin += $ends
   
@@ -39,6 +41,36 @@ function RemoveCodeExample {
       }
     }
   }
+}
+
+function RemoveBIADemoOnlyFiles {
+	foreach ($childFile in Get-ChildItem -File -Recurse | Where-Object { Select-String "// BIADemo only" $_ -Quiet } ) { 
+		$file = $childFile.FullName
+		$fileRel = Resolve-Path -Path "$file" -Relative
+		$searchWord = '// BIADemo only'
+		$starts = GetLineNumber -pattern $searchWord -file $file
+		if ($starts -eq 1)
+		{
+			Write-Verbose "Remove $fileRel" -Verbose
+			Remove-Item -Force -LiteralPath $file
+		}
+	}
+}
+
+function RemoveEmptyFolder {
+    param(
+        $Path
+    )
+    foreach ($childDirectory in Get-ChildItem -Force -Path $Path -Directory -Exclude PublishProfiles,RepoContract) {
+        RemoveEmptyFolder $childDirectory.FullName
+    }
+    $currentChildren = Get-ChildItem -Force -LiteralPath $Path
+    $isEmpty = $currentChildren -eq $null
+    if ($isEmpty) {
+	 	$fileRel = Resolve-Path -Path "$Path" -Relative
+        Write-Verbose "Removing empty folder '${fileRel}'." -Verbose
+        Remove-Item -Force -LiteralPath $Path
+    }
 }
 
 function RenameFile {
@@ -62,8 +94,12 @@ function RemoveItemFolder {
     [string]$path
   )
   if (Test-Path $path) {
-    Write-Host "delete " $path " folder"
+	$fileRel = Resolve-Path -Path "$path" -Relative
+    Write-Verbose "Delete $fileRel" -Verbose
     Remove-Item $path -Recurse -Force -Confirm:$false
+  }
+  else {
+	Write-Error "Error " $path " not found"
   }
 }
 
@@ -73,14 +109,39 @@ function ReplaceProjectName {
     [string]$newName
   )
   Get-ChildItem -File -Recurse -include *.csproj, *.cs, *.sln, *.json, *.config | Where-Object { $_.FullName -NotLike "*/bin/*" -and $_.FullName -NotLike "*/obj/*" } | ForEach-Object { 
-    $oldContent = [System.IO.File]::ReadAllText($_.FullName);
+    $file = $_.FullName
+	$oldContent = [System.IO.File]::ReadAllText($file);
     $newContent = $oldContent.Replace($oldName, $newName);
     if ($oldContent -ne $newContent) {
-      Write-Host $_.FullName
-      [System.IO.File]::WriteAllText($_.FullName, $newContent)
+	  
+	  $fileRel = Resolve-Path -Path "$file" -Relative
+      Write-Verbose "Replace in $fileRel" -Verbose
+	  
+      [System.IO.File]::WriteAllText($file, $newContent)
     }
   }
 }
+
+function ReplaceInScript {
+  param (
+    [string]$oldName,
+    [string]$newName
+  )
+  Get-ChildItem -File -Recurse -include *.ps1 | Where-Object { $_.FullName -NotLike "*/bin/*" -and $_.FullName -NotLike "*/obj/*" } | ForEach-Object { 
+    $file = $_.FullName
+	$oldContent = [System.IO.File]::ReadAllText($file);
+    $newContent = $oldContent.Replace($oldName, $newName);
+    if ($oldContent -ne $newContent) {
+	  
+	  $fileRel = Resolve-Path -Path "$file" -Relative
+      Write-Verbose "Replace in $fileRel" -Verbose
+	  
+      [System.IO.File]::WriteAllText($file, $newContent)
+    }
+  }
+}
+
+$CurrentRep= Resolve-Path -Path "."
 
 # $oldName = Read-Host "old project name ?"
 $oldName = 'BIADemo'
@@ -90,51 +151,35 @@ $newName = 'BIATemplate'
 Write-Host "old name: " $oldName
 Write-Host "new name: " $newName
 
-# -------------------- Begin Remove folder DotNet and replace it ----------------------------
-Write-Host "Remove .\DotNet"
-Remove-Item -LiteralPath "DotNet" -Force -Recurse
+RemoveItemFolder -path 'DotNet'
 
-$from = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath("..\$oldName\DotNet")
-$to = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(".\DotNet")
-Write-Host "Copy from $from"
-Write-Host "     to ..$to"
+$oldPath = "..\" + $oldName + "\DotNet"
+Write-Host "Copy from .$oldPath"
+Copy-Item $oldPath '.' -Recurse
 
-# param ex: excludeExtension = @(".md")
-function Copy-WithFilter ($sourcePath, $destPath, $excludeFolder, $excludeExtension )
-{
-	Write-Host "Copy-WithFilter $sourcePath, $destPath"
-    # Call this function again, using the child folders of the current source folder.
-    Get-ChildItem -Path $sourcePath -Directory -Exclude $excludeFolder | % {Copy-WithFilter $_.FullName (Join-Path -Path $destPath -ChildPath $_.Name) $excludeFolder $excludeExtension}
-
-    # Create the destination directory, if it does not already exist.
-    if (!(Test-Path $destPath)) { New-Item -Path $destPath -ItemType Directory | Out-Null }
-
-    # Copy the child files from source to destination.
-    Get-ChildItem -Path $sourcePath -File | Where-Object { (($excludeExtension) -notcontains $_.Extension) } | Copy-Item -Force -Destination $destPath
-}
-Copy-WithFilter $from $to @('.vs', 'bin', 'obj')
-# -------------------- End Remove folder DotNet and replace it ----------------------------
+Set-Location -Path ./DotNet
 
 
-Set-Location -Path ".\DotNet"
+Write-Host "Remove .vs"
+RemoveItemFolder -path '.vs'
+Write-Host "Remove *\bin"
+RemoveItemFolder -path '*\bin'
+Write-Host "Remove *\obj"
+RemoveItemFolder -path '*\obj'
 
-Write-Host "Remove PlanesController.cs"
-RemoveItemFolder -path 'MyCompany.BIADemo.Presentation.Api\Controllers\PlanesController.cs'
-Write-Host "Remove PlaneModelBuilder.cs"
-RemoveItemFolder -path 'MyCompany.BIADemo.Infrastructure.Data\ModelBuilders\PlaneModelBuilder.cs'
 Write-Host "Remove Migrations folder"
-RemoveItemFolder -path 'MyCompany.BIADemo.Infrastructure.Data\Migrations'
-Write-Host "Remove MyCompany.BIADemo.Application\Plane"
-RemoveItemFolder -path 'MyCompany.BIADemo.Application\Plane'
-Write-Host "Remove MyCompany.BIADemo.Domain\PlaneModule"
-RemoveItemFolder -path 'MyCompany.BIADemo.Domain\PlaneModule'
-Write-Host "Remove MyCompany.BIADemo.Domain.Dto\Plane"
-RemoveItemFolder -path 'MyCompany.BIADemo.Domain.Dto\Plane'
+RemoveItemFolder -path 'Safran.BIADemo.Infrastructure.Data\Migrations'
 
-Write-Host "Remove code example"
+Write-Host "Remove BIA demo only files"
+RemoveBIADemoOnlyFiles
+
+Write-Host "Remove Empty Folder"
+RemoveEmptyFolder "."
+
+Write-Host "Remove code example partial files"
 RemoveCodeExample
 
-Write-Host "replace project name"
+Write-Host "Replace project name"
 ReplaceProjectName -oldName $oldName -newName $newName
 ReplaceProjectName -oldName $oldName.ToLower() -newName $newName.ToLower()
 
@@ -146,8 +191,11 @@ Write-Host "Rename Folder"
 RenameFolder -oldName $oldName -newName $newName
 RenameFolder -oldName $oldName.ToLower() -newName $newName.ToLower()
 
-Write-Host "Finish"
+Write-Host "Replace project name in script"
+$oldScriptVar = '"' + $oldName + '"'
+$newScriptVar = '"' + $newName + '"'
+ReplaceInScript $oldScriptVar $newScriptVar
 
-Set-Location -Path ".."
-
+Set-Location -Path ..
+write-host "finish"
 pause

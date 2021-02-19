@@ -8,26 +8,29 @@
     (close)="onCloseFilter()"
   ></app-site-filter>
   <div fxFlex="100">
-    <bia-table-header
-    [headerTitle]="'site.listOf' | translate"
-    [haveFilter]="haveFilter"
-    [showFilter]="showFilter"
-    [showBtnFilter]="true"
-    [canAdd]="canAdd"
-    (create)="onCreate()"
-    (openFilter)="onOpenFilter()"
-    ></bia-table-header>
+    <app-site-table-header
+      [headerTitle]="'site.listOf' | translate"
+      [haveFilter]="haveFilter"
+      [showFilter]="showFilter"
+      [showBtnFilter]="true"
+      [canAdd]="canAdd"
+      [canManageMembers]="canManageMembers"
+      (create)="onCreate()"
+      (openFilter)="onOpenFilter()"
+      (delete)="onDelete()"
+      (manageMembers)="onManageMember()"
+      [selectedElements]="selectedSites"
+    ></app-site-table-header>
     <bia-table-controller
       [defaultPageSize]="defaultPageSize"
       [length]="totalCount$ | async"
       [columns]="columns"
-      [(displayedColumns)]="displayedColumns"
-      [hiddenColumns]="['bia.actions']"
+      [columnToDisplays]="displayedColumns"
       (displayedColumnsChange)="displayedColumnsChanged($event)"
       (filter)="searchGlobalChanged($event)"
       (pageSizeChange)="onPageSizeChange($event)"
-      (toggleSearch)="onToggleSearch()"      
-      [tableId]="'sitesGrid'"
+      (toggleSearch)="onToggleSearch()"
+      (viewChange)="onViewChange($event)"
     ></bia-table-controller>
     <bia-table
       [elements]="sites$ | async"
@@ -38,22 +41,17 @@
       [showColSearch]="showColSearch"
       [globalSearchValue]="globalSearchValue"
       [canEdit]="canEdit"
-      [canDelete]="canDelete"
+      [canSelectElement]="canDelete"
       [loading]="loading$ | async"
       (edit)="onEdit($event)"
-      (remove)="onRemove($event)"
       (loadLazy)="onLoadLazy($event)"
+      [viewPreference]="viewPreference"
+      [advancedFilter]="advancedFilter"
+      (selectedElementsChanged)="onSelectedElementsChanged($event)"
     ></bia-table>
   </div>
 </div>
-<p-confirmDialog></p-confirmDialog>
 <!-- begin popup mode -->
 <app-site-edit-dialog></app-site-edit-dialog>
 <app-site-new-dialog></app-site-new-dialog>
 <!-- end popup mode -->
-
-
-
-
-
-

@@ -13,6 +13,8 @@ export const update = createAction('[Planes] Update (PageMode)', props<{ plane: 
 
 export const remove = createAction('[Planes] Remove (PageMode)', props<{ id: number }>());
 
+export const multiRemove = createAction('[Planes] Multi Remove (PageMode)', props<{ ids: number[] }>());
+
 export const loadAllByPostSuccess = createAction(
   '[Planes] Load all by post success (PageMode)',
   props<{ result: DataResult<Plane[]>; event: LazyLoadEvent }>()

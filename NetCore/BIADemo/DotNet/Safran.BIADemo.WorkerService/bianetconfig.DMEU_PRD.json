@@ -1,0 +1,67 @@
+{
+  "BiaNet": {
+    "WorkerFeatures": {
+      "ClientForHub": {
+        "SignalRUrl": "https://dmeu.electrical-power.safran/BIADemo/WebApi/HubForClients"
+      }
+    },
+    "Environment": {
+      "Type": "PRD"
+    },
+    "Authentication": {
+      "LdapDomains": [
+        {
+          "Name": "EU",
+          "LdapName": "eu.labinal.snecma",
+          "CredentialKeyInWindowsVault": "BIA:LDAP://eu.labinal.snecma",
+          "ContainsGroup": true,
+          "ContainsUser": true
+        },
+        {
+          "Name": "NA",
+          "LdapName": "na.labinal.snecma",
+          "CredentialKeyInWindowsVault": "BIA:LDAP://eu.labinal.snecma",
+          "ContainsGroup": true,
+          "ContainsUser": true
+        },
+        {
+          "Name": "CORP",
+          "LdapName": "corp.zodiac.lan",
+          "CredentialKeyInWindowsVault": "BIA:LDAP://corp.zodiac.lan",
+          "ContainsGroup": true,
+          "ContainsUser": true
+        },
+        {
+          "Name": "RD1RF1",
+          "LdapName": "rd1.rf1",
+          "CredentialKeyInWindowsVault": "BIA:LDAP://rd1.rf1",
+          "ContainsGroup": true,
+          "ContainsUser": false
+        }
+      ]
+    },
+    "Roles": [
+      {
+        "Label": "User",
+        "Type": "Synchro",
+        "LdapGroups": [
+          {
+            "LdapName": "RD1RF1\\RD1-SEP-DM-APP_BIADemo_PRD_User",
+            "Domain": "RD1RF1"
+          }
+        ]
+      },
+      {
+        "Label": "Admin",
+        "Type": "Ldap",
+        "LdapGroups": [
+          {
+            "RecursiveGroupsOfDomains": [ "EU", "RD1RF1" ],
+            "LdapName": "RD1RF1\\RD1-SEP-DM-APP_Admin",
+            "Domain": "RD1RF1"
+          }
+        ]
+      }
+    ]
+  }
+}

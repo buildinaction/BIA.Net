@@ -38,7 +38,7 @@ export const INIT_STATE: State = usersAdapter.getInitialState({
 export const userReducers = createReducer<State>(
   INIT_STATE,
   on(loadAllByPostSuccess, (state, { result, event }) => {
-    const stateUpdated = usersAdapter.addAll(result.data, state);
+    const stateUpdated = usersAdapter.setAll(result.data, state);
     stateUpdated.currentUser = <User>{};
     stateUpdated.totalCount = result.totalCount;
     stateUpdated.lastLazyLoadEvent = event;

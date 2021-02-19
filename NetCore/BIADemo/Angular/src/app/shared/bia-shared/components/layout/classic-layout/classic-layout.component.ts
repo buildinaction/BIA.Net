@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { BiaClassicLayoutService } from './bia-classic-layout.service';
 import { BiaThemeService } from 'src/app/core/bia-core/services/bia-theme.service';
 import { BiaTranslationService } from 'src/app/core/bia-core/services/bia-translation.service';
@@ -9,6 +9,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { BiaNavigation } from '../../../model/bia-navigation';
 import { ROUTE_DATA_CAN_NAVIGATE, ROUTE_DATA_BREADCRUMB, APP_SUPPORTED_TRANSLATIONS } from 'src/app/shared/constants';
 import { Subscription } from 'rxjs';
+import { Site } from 'src/app/domains/site/model/site';
+import { EnvironmentType } from 'src/app/domains/environment-configuration/model/environment-configuration';
 
 @Component({
   selector: 'bia-classic-layout',
@@ -29,6 +31,13 @@ export class ClassicLayoutComponent implements OnInit, OnDestroy {
   @Input() allowThemeChange = true;
   @Input() companyName = 'BIA';
   @Input() helpUrl?: string;
+  @Input() reportUrl?: string;
+  @Input() sites: Site;
+  @Input() siteId: number;
+  @Input() environmentType: EnvironmentType;
+
+  @Output() siteChange = new EventEmitter<number>();
+  @Output() setDefaultSite = new EventEmitter<number>();
 
   menuItems: MenuItem[];
   private sub = new Subscription();
@@ -61,6 +70,14 @@ export class ClassicLayoutComponent implements OnInit, OnDestroy {
     this.biaTheme.changeTheme(theme);
   }
 
+  onSiteChange(siteId: number) {
+    this.siteChange.emit(siteId);
+  }
+
+  onSetDefaultSite(siteId: number) {
+    this.setDefaultSite.emit(siteId);
+  }
+
   private updateMenuItems() {
     const menuItems = this.createBreadcrumbs(this.activatedRoute.root);
     if (menuItems !== undefined) {
@@ -70,7 +87,7 @@ export class ClassicLayoutComponent implements OnInit, OnDestroy {
 
   private createBreadcrumbs(
     route: ActivatedRoute,
-    url: string = '',
+    url = '',
     breadcrumbs: MenuItem[] = [{ icon: 'pi pi-home', routerLink: ['/'] }]
   ): MenuItem[] | undefined {
     const children: ActivatedRoute[] = route.children;

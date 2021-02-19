@@ -1,6 +1,7 @@
 <form (submit)="onSubmit()" fxLayout="column" [formGroup]="form">
   <div class="app-field-container" fxLayout="row" fxLayoutAlign="center">
     <div fxFlex="90">
+      <label>{{ 'member.roles' | translate }}:</label>
       <p-listbox
         [options]="allRoles"
         [showToggleAll]="false"

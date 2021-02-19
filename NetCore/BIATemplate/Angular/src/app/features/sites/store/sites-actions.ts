@@ -14,6 +14,8 @@ export const update = createAction('[Sites] Update', props<{ site: Site }>());
 
 export const remove = createAction('[Sites] Remove', props<{ id: number }>());
 
+export const multiRemove = createAction('[Sites] Multi Remove', props<{ ids: number[] }>());
+
 export const loadAllByPostSuccess = createAction(
   '[Sites] Load all by post success',
   props<{ result: DataResult<SiteInfo[]>; event: LazyLoadEvent }>()

@@ -20,7 +20,7 @@ export class TokenInterceptor implements HttpInterceptor {
   constructor(public authService: AuthService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (request.url.indexOf(environment.urlLogin) > -1 || request.url.indexOf(environment.urlLog) > -1) {
+    if (this.checkUrlNoToken(request.url)) {
       return next.handle(request);
     }
     if (this.isRefreshing === false) {
@@ -30,13 +30,22 @@ export class TokenInterceptor implements HttpInterceptor {
     }
   }
 
+  private checkUrlNoToken(url: string) {
+    return (
+      url.toLowerCase().indexOf(environment.urlAuth.toLowerCase()) > -1 ||
+      url.toLowerCase().indexOf(environment.urlLog.toLowerCase()) > -1 ||
+      url.toLowerCase().indexOf(environment.urlEnv.toLowerCase()) > -1 ||
+      url.toLowerCase().indexOf('./assets/') > -1
+    );
+  }
+
   private launchRequest(request: HttpRequest<any>, next: HttpHandler) {
     const jwtToken = this.authService.getToken();
     request = this.addToken(request, jwtToken);
 
     return next.handle(request).pipe(
       catchError((error) => {
-        if (error instanceof HttpErrorResponse && error.status === 401) {
+        if (error instanceof HttpErrorResponse && (error.status === 401 || error.status === 498)) {
           return this.handle401Error(request, next);
         } else {
           return throwError(error);

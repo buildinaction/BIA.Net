@@ -10,11 +10,15 @@ import { UserNewDialogComponent } from './views/user-new-dialog/user-new-dialog.
 import { SharedModule } from 'src/app/shared/shared.module';
 import { reducers as usersReducers } from 'src/app/domains/user/store/user.state';
 import { UsersEffects as DomainUsersEffects } from 'src/app/domains/user/store/users-effects';
+import { reducers as usersFromADReducers } from 'src/app/domains/user-from-AD/store/user-from-AD.state';
+import { reducers as ldapDomainsReducer } from 'src/app/domains/ldap-domain/store/ldap-domain.state';
+import { UsersFromADEffects as DomainUsersFromADEffects } from 'src/app/domains/user-from-AD/store/users-from-AD-effects';
+
 import { UserTableHeaderComponent } from './components/user-table-header/user-table-header.component';
-import { PermissionGuard } from 'src/app/shared/bia-shared/guards/permission.guard';
+import { PermissionGuard } from 'src/app/core/bia-core/guards/permission.guard';
 import { Permission } from 'src/app/shared/permission';
-import { reducers as viewsReducers } from 'src/app/domains/view/store/view.state';
-import { ViewsEffects as DomainViewsEffects } from 'src/app/domains/view/store/views-effects';
+import { LdapDomainsEffects } from 'src/app/domains/ldap-domain/store/ldap-domain-effects';
+import { LdapDomainModule } from 'src/app/domains/ldap-domain/ldap-domain.module';
 
 const ROUTES: Routes = [
   {
@@ -34,13 +38,16 @@ const ROUTES: Routes = [
   entryComponents: [UserNewDialogComponent],
   imports: [
     SharedModule,
+    LdapDomainModule,
     RouterModule.forChild(ROUTES),
     StoreModule.forFeature('users', reducers),
     StoreModule.forFeature('domain-users', usersReducers),
-    StoreModule.forFeature('domain-views', viewsReducers),
+    StoreModule.forFeature('domain-users-from-AD', usersFromADReducers),
+    StoreModule.forFeature('domain-ldap-domains', ldapDomainsReducer),
     EffectsModule.forFeature([UsersEffects]),
     EffectsModule.forFeature([DomainUsersEffects]),
-    EffectsModule.forFeature([DomainViewsEffects])
+    EffectsModule.forFeature([DomainUsersFromADEffects]),
+    EffectsModule.forFeature([LdapDomainsEffects])
   ]
 })
 export class UserModule {}

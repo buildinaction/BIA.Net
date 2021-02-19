@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 
+const MESSAGE_LIFE_DEFAULT = 3000;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -33,13 +35,29 @@ export class BiaMessageService {
     });
   }
 
-  showSuccess(detailValue: string) {
+  showSuccess(detailValue: string, life = MESSAGE_LIFE_DEFAULT) {
     const summaryValue = this.translateService.instant('bia.success');
-    this.messageService.add({ key: 'bia', severity: 'success', summary: summaryValue, detail: detailValue });
+    this.messageService.add({
+      key: 'bia',
+      severity: 'success',
+      summary: summaryValue,
+      detail: detailValue,
+      life: life
+    });
   }
 
-  showInfo(detailValue: string) {
+  showInfo(detailValue: string, life = MESSAGE_LIFE_DEFAULT) {
     const summaryValue = this.translateService.instant('bia.info');
-    this.messageService.add({ key: 'bia', severity: 'info', summary: summaryValue, detail: detailValue });
+    this.messageService.add({ key: 'bia', severity: 'info', summary: summaryValue, detail: detailValue, life: life });
+  }
+
+  showWarning(detailValue: string, life = MESSAGE_LIFE_DEFAULT) {
+    const summaryValue = this.translateService.instant('bia.warning');
+    this.messageService.add({ key: 'bia', severity: 'warn', summary: summaryValue, detail: detailValue, life: life });
+  }
+
+  showErrorDetail(detailValue: string, life = MESSAGE_LIFE_DEFAULT) {
+    const summaryValue = this.translateService.instant('bia.error');
+    this.messageService.add({ key: 'bia', severity: 'error', summary: summaryValue, detail: detailValue, life: life });
   }
 }

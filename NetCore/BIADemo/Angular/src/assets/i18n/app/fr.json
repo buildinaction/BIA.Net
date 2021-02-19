@@ -1,16 +1,54 @@
 {
   "app": {
+    "Begin BIADemo" : "To remove in project from here",
+    "administration" : "Administration",
+    "airports": "Aéroports",
     "examples": "Exemples",
+    "planes": "Avions",
+    "planesPageMode": "Avions (Mode Page)",
+    "planesViewMode": "Avions (Mode Vue)",
+    "planesSignalRMode": "Avions (Mode SignalR)",
+    "planesTypes": "Types d'avions",
+    "End BIADemo" : "To remove in project up to here",
     "members": "Membres",
     "sites": "Sites",
-    "planes": "Avions",
-    "planesPageMode":"Avions (Mode Page)",
     "users": "Utilisateurs"
   },
+  "Begin BIADemo" : "To remove in project from here",
+  "airport": {
+    "add": "Ajouter aéroport",
+    "city" : "Ville",
+    "edit": "Modifier aéroport",
+    "listOf": "Listes des aéroports",
+    "name" : "Nom"
+  },
+  "plane": {
+    "add": "Ajouter avion",
+    "capacity": "Capacité",
+    "connectingAirports": "Aéroports de connection",
+    "edit": "Modifier avion",
+    "firstFlightDate": "Date du premier vol",
+    "firstFlightTime": "Heure du premier vol",
+    "isActive": "Actif",
+    "lastFlightDate": "Date du dernier vol",
+    "listOf": "Liste des avions",
+    "msn": "Msn",
+    "planeType": "Type d'avions",
+    "site": "Compagnie aérienne"
+  },
+  "planeType": {
+    "add": "Ajouter type d'avions",
+    "certificationDate": "Date de certification",
+    "edit": "Modifier type d'avions",
+    "listOf": "Liste des types d'avions",
+    "title": "Titre"
+  },
+  "End BIADemo" : "To remove in project up to here",
   "member": {
     "add": "Ajouter membre",
     "listOfSiteMembers": "Liste des membres du site ",
     "manage": "Gérer membre",
+    "roles": "Roles",
     "rolesForSite": "Roles pour le site",
     "user": "Utilisateur"
   },
@@ -18,17 +56,6 @@
     "hideFilters": "Masquer les filtres",
     "showFilters": "Afficher les filtres",
     "welcome": "BIA est une librarie de composants, construite avec le framework Angular"
-  },
-  "plane": {
-    "add": "Ajouter avion",
-    "capacity": "Capacité",
-    "edit": "Modifier avion",
-    "firstFlightDate": "Date du premier vol",
-    "firstFlightTime": "Heure du premier vol",
-    "isActive": "Actif",
-    "lastFlightDate": "Date du dernier vol",
-    "listOf": "Liste des avions",
-    "msn": "Msn"
   },
   "site": {
     "add": "Ajouter site",
@@ -40,9 +67,9 @@
   },
   "user": {
     "add": "Ajouter utilisateur",
-    "lastName": "Nom",
     "firstName": "Prénom",
-    "login": "Login",
-    "listOf": "Liste des utilisateurs"
+    "lastName": "Nom",
+    "listOf": "Liste des utilisateurs",
+    "login": "Login"
   }
 }

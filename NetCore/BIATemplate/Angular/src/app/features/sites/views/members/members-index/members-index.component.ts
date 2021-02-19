@@ -1,23 +1,23 @@
 import { Component, HostBinding, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { ConfirmationService, Confirmation, LazyLoadEvent } from 'primeng/api';
+import { LazyLoadEvent } from 'primeng/api';
 import { map, switchMap } from 'rxjs/operators';
 import * as fromSites from '../../../store/site.state';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Member } from '../../../model/user/member';
 import { Site } from '../../../model/site/site';
 import { getAllMembers, getMembersTotalCount, getMemberLoadingGetAll } from '../../../store/members/member.state';
-import { remove, loadAllByPost, load, openDialogNew, openDialogEdit } from '../../../store/members/members-actions';
+import { multiRemove, loadAllByPost, load, openDialogNew, openDialogEdit } from '../../../store/members/members-actions';
 import { BiaTableComponent } from 'src/app/shared/bia-shared/components/table/bia-table/bia-table.component';
 import { BiaListConfig, PrimeTableColumn } from 'src/app/shared/bia-shared/components/table/bia-table/bia-table-config';
-import { AppState } from 'src/app/shared/bia-shared/store/state';
-import { BiaDialogService } from 'src/app/core/bia-core/services/bia-dialog.service';
-import { Role } from 'src/app/domains/member-role/model/role';
-import { getAllRoles } from 'src/app/domains/member-role/store/member-role.state';
+import { AppState } from 'src/app/store/state';
+import { Role } from 'src/app/domains/role/model/role';
+import { getAllRoles } from 'src/app/domains/role/store/role.state';
 import { DEFAULT_PAGE_SIZE } from 'src/app/shared/constants';
 import { AuthService } from 'src/app/core/bia-core/services/auth.service';
 import { Permission } from 'src/app/shared/permission';
+import { KeyValuePair } from 'src/app/shared/bia-shared/model/key-value-pair';
 
 interface MemberListVM {
   id: number;
@@ -29,8 +29,7 @@ interface MemberListVM {
 @Component({
   selector: 'app-members-index',
   templateUrl: './members-index.component.html',
-  styleUrls: ['./members-index.component.scss'],
-  providers: [ConfirmationService]
+  styleUrls: ['./members-index.component.scss']
 })
 export class MembersIndexComponent implements OnInit, OnDestroy {
   @HostBinding('class.bia-flex') flex = true;
@@ -43,6 +42,7 @@ export class MembersIndexComponent implements OnInit, OnDestroy {
   totalRecords: number;
   roles: Role[];
   members$: Observable<MemberListVM[]>;
+  selectedMembers: MemberListVM[];
   totalCount$: Observable<number>;
   private sub = new Subscription();
   siteRoute = ['/sites'];
@@ -53,14 +53,12 @@ export class MembersIndexComponent implements OnInit, OnDestroy {
   canAdd = false;
 
   tableConfiguration: BiaListConfig;
-  columns: string[];
-  displayedColumns: string[] = this.columns;
+  columns: KeyValuePair[];
+  displayedColumns: KeyValuePair[] = this.columns;
 
   constructor(
     private route: ActivatedRoute,
     private store: Store<AppState>,
-    private confirmationService: ConfirmationService,
-    private biaDialogService: BiaDialogService,
     private router: Router,
     private authService: AuthService
   ) {}
@@ -68,40 +66,11 @@ export class MembersIndexComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.initTableConfiguration();
     this.setPermissions();
-
-    // Roles
-    this.sub.add(
-      this.store
-        .select(getAllRoles)
-        .pipe()
-        .subscribe((roles: Role[]) => (this.roles = roles))
-    );
-
-    // Members
-    this.members$ = this.store
-      .select(getAllMembers)
-      .pipe()
-      .pipe(map((members) => members.map((member) => this.toMemberListVM(member))));
-
-    // Members Total Count
-    this.totalCount$ = this.store.select(getMembersTotalCount).pipe();
-
-    // Site
-    this.sub.add(
-      this.route.params
-        .pipe(
-          map((params: Params) => params['id']),
-          switchMap((selectedSiteId) => this.store.select(fromSites.getSiteById(selectedSiteId)).pipe())
-        )
-        .subscribe((site) => {
-          if (site) {
-            this.currentSite = site;
-          } else {
-            this.router.navigate(this.siteRoute);
-          }
-        })
-    );
-    this.loading$ = this.store.select(getMemberLoadingGetAll).pipe();
+    this.initRoles();
+    this.initMembers();
+    this.initTotalCount();
+    this.initSite();
+    this.initLoading();
   }
 
   ngOnDestroy() {
@@ -119,14 +88,14 @@ export class MembersIndexComponent implements OnInit, OnDestroy {
     this.store.dispatch(openDialogEdit());
   }
 
-  onRemove(memberId: number) {
-    const confirmation: Confirmation = {
-      ...this.biaDialogService.getDeleteConfirmation(),
-      accept: () => {
-        this.store.dispatch(remove({ id: memberId }));
-      }
-    };
-    this.confirmationService.confirm(confirmation);
+  onDelete() {
+    if (this.selectedMembers) {
+      this.store.dispatch(multiRemove({ ids: this.selectedMembers.map((x) => x.id) }));
+    }
+  }
+
+  onSelectedElementsChanged(planes: MemberListVM[]) {
+    this.selectedMembers = planes;
   }
 
   onPageSizeChange(pageSize: number) {
@@ -144,7 +113,7 @@ export class MembersIndexComponent implements OnInit, OnDestroy {
     this.globalSearchValue = value;
   }
 
-  displayedColumnsChanged(values: string[]) {
+  displayedColumnsChanged(values: KeyValuePair[]) {
     this.displayedColumns = values;
   }
 
@@ -174,7 +143,6 @@ export class MembersIndexComponent implements OnInit, OnDestroy {
 
   private initTableConfiguration() {
     this.tableConfiguration = {
-      customButtons: [],
       columns: [
         Object.assign(new PrimeTableColumn('displayName', 'member.user'), {
           isSortable: false,
@@ -187,7 +155,48 @@ export class MembersIndexComponent implements OnInit, OnDestroy {
       ]
     };
 
-    this.columns = this.tableConfiguration.columns.map((col) => col.header);
-    this.displayedColumns = this.columns;
+    this.columns = this.tableConfiguration.columns.map((col) => <KeyValuePair>{ key: col.field, value: col.header });
+    this.displayedColumns = [...this.columns];
+  }
+
+  private initLoading() {
+    this.loading$ = this.store.select(getMemberLoadingGetAll).pipe();
+  }
+
+  private initSite() {
+    this.sub.add(
+      this.route.params
+        .pipe(
+          map((params: Params) => params['id']),
+          switchMap((selectedSiteId) => this.store.select(fromSites.getSiteById(selectedSiteId)).pipe())
+        )
+        .subscribe((site) => {
+          if (site) {
+            this.currentSite = site;
+          } else {
+            this.router.navigate(this.siteRoute);
+          }
+        })
+    );
+  }
+
+  private initTotalCount() {
+    this.totalCount$ = this.store.select(getMembersTotalCount).pipe();
+  }
+
+  private initMembers() {
+    this.members$ = this.store
+      .select(getAllMembers)
+      .pipe()
+      .pipe(map((members) => members.map((member) => this.toMemberListVM(member))));
+  }
+
+  private initRoles() {
+    this.sub.add(
+      this.store
+        .select(getAllRoles)
+        .pipe()
+        .subscribe((roles: Role[]) => (this.roles = roles))
+    );
   }
 }

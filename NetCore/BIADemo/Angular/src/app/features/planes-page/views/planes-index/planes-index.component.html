@@ -6,18 +6,19 @@
       [canExportCSV]="true"
       (create)="onCreate()"
       (exportCSV)="onExportCSV()"
+      (delete)="onDelete()"
+      [selectedElements]="selectedPlanes"
     ></bia-table-header>
     <bia-table-controller
       [defaultPageSize]="defaultPageSize"
       [length]="totalCount$ | async"
       [columns]="columns"
-      [(displayedColumns)]="displayedColumns"
-      [hiddenColumns]="['bia.actions']"
+      [columnToDisplays]="displayedColumns"
       (displayedColumnsChange)="displayedColumnsChanged($event)"
       (filter)="searchGlobalChanged($event)"
       (pageSizeChange)="onPageSizeChange($event)"
       (toggleSearch)="onToggleSearch()"
-      [tableId]="'planesPageGrid'"
+      (viewChange)="onViewChange($event)"
     ></bia-table-controller>
     <bia-table
       [elements]="planes$ | async"
@@ -28,12 +29,12 @@
       [showColSearch]="showColSearch"
       [globalSearchValue]="globalSearchValue"
       [canEdit]="canEdit"
-      [canDelete]="canDelete"
+      [canSelectElement]="canDelete"
       [loading]="loading$ | async"
       (edit)="onEdit($event)"
-      (remove)="onRemove($event)"
       (loadLazy)="onLoadLazy($event)"
+      [viewPreference]="viewPreference"
+      (selectedElementsChanged)="onSelectedElementsChanged($event)"
     ></bia-table>
   </div>
 </div>
-<p-confirmDialog></p-confirmDialog>

@@ -10,14 +10,15 @@ import {
   loadAllByPostSuccess,
   loadSuccess,
   remove,
+  multiRemove,
   update
 } from './planes-actions';
 import { PlaneDas } from '../services/plane-das.service';
 import { Store } from '@ngrx/store';
 import { getLastLazyLoadEvent } from './plane.state';
-import { Plane } from '../model/plane';
+import { PlaneListItem } from '../model/plane';
 import { DataResult } from 'src/app/shared/bia-shared/model/data-result';
-import { AppState } from 'src/app/shared/bia-shared/store/state';
+import { AppState } from 'src/app/store/state';
 import { BiaMessageService } from 'src/app/core/bia-core/services/bia-message.service';
 import { LazyLoadEvent } from 'primeng/api';
 
@@ -33,8 +34,8 @@ export class PlanesEffects {
       ofType(loadAllByPost),
       pluck('event'),
       switchMap((event) =>
-        this.planeDas.getListByPost(event).pipe(
-          map((result: DataResult<Plane[]>) => loadAllByPostSuccess({ result: result, event: event })),
+        this.planeDas.getAllByPost(event).pipe(
+          map((result: DataResult<PlaneListItem[]>) => loadAllByPostSuccess({ result: result, event: event })),
           catchError((err) => {
             this.biaMessageService.showError();
             return of(failure({ error: err }));
@@ -69,7 +70,10 @@ export class PlanesEffects {
         return this.planeDas.post(plane).pipe(
           map(() => {
             this.biaMessageService.showAddSuccess();
+            // Uncomment this if you do not use SignalR to refresh
             return loadAllByPost({ event: <LazyLoadEvent>event });
+            // Uncomment this if you use SignalR to refresh
+            // return biaSuccessWaitRefreshSignalR();
           }),
           catchError((err) => {
             this.biaMessageService.showError();
@@ -89,7 +93,10 @@ export class PlanesEffects {
         return this.planeDas.put(plane, plane.id).pipe(
           map(() => {
             this.biaMessageService.showUpdateSuccess();
+            // Uncomment this if you do not use SignalR to refresh
             return loadAllByPost({ event: <LazyLoadEvent>event });
+            // Uncomment this if you use SignalR to refresh
+            // return biaSuccessWaitRefreshSignalR();
           }),
           catchError((err) => {
             this.biaMessageService.showError();
@@ -109,7 +116,10 @@ export class PlanesEffects {
         return this.planeDas.delete(id).pipe(
           map(() => {
             this.biaMessageService.showDeleteSuccess();
+            // Uncomment this if you do not use SignalR to refresh
             return loadAllByPost({ event: <LazyLoadEvent>event });
+            // Uncomment this if you use SignalR to refresh
+            // return biaSuccessWaitRefreshSignalR();
           }),
           catchError((err) => {
             this.biaMessageService.showError();
@@ -119,6 +129,30 @@ export class PlanesEffects {
       })
     )
   );
+
+  multiDestroy$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(multiRemove),
+      pluck('ids'),
+      concatMap((ids: number[]) => of(ids).pipe(withLatestFrom(this.store.select(getLastLazyLoadEvent)))),
+      switchMap(([ids, event]) => {
+        return this.planeDas.deletes(ids).pipe(
+          map(() => {
+            this.biaMessageService.showDeleteSuccess();
+            // Uncomment this if you do not use SignalR to refresh
+            return loadAllByPost({ event: <LazyLoadEvent>event });
+            // Uncomment this if you use SignalR to refresh
+            // return biaSuccessWaitRefreshSignalR();
+          }),
+          catchError((err) => {
+            this.biaMessageService.showError();
+            return of(failure({ error: err }));
+          })
+        );
+      })
+    )
+  );
+
 
   constructor(
     private actions$: Actions,

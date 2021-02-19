@@ -2,6 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { User } from 'src/app/domains/user/model/user';
 import { LazyLoadEvent } from 'primeng/api';
 import { DataResult } from 'src/app/shared/bia-shared/model/data-result';
+import { UserFromAD } from 'src/app/domains/user-from-AD/model/user-from-AD';
 
 export const loadAllByPost = createAction('[Users] Load all by post', props<{ event: LazyLoadEvent }>());
 
@@ -13,7 +14,9 @@ export const update = createAction('[Users] Update', props<{ user: User }>());
 
 export const remove = createAction('[Users] Remove', props<{ id: number }>());
 
-export const save = createAction('[Users] Save', props<{ users: User[] }>());
+export const multiRemove = createAction('[Users] Multi Remove', props<{ ids: number[] }>());
+
+export const save = createAction('[Users] Save', props<{ usersFromAD: UserFromAD[] }>());
 
 export const synchronize = createAction('[Users] Synchronize');
 

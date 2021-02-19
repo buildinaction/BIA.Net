@@ -13,6 +13,8 @@ export const update = createAction('[Members] Update', props<{ member: Member }>
 
 export const remove = createAction('[Members] Remove', props<{ id: number }>());
 
+export const multiRemove = createAction('[Members] Multi Remove', props<{ ids: number[] }>());
+
 export const save = createAction('[Members] Save', props<{ members: Member[] }>());
 
 export const loadAllByPostSuccess = createAction(

@@ -10,7 +10,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { PlaneNewComponent } from './views/plane-new/plane-new.component';
 import { PlaneEditComponent } from './views/plane-edit/plane-edit.component';
 import { Permission } from 'src/app/shared/permission';
-import { PermissionGuard } from 'src/app/shared/bia-shared/guards/permission.guard';
+import { PermissionGuard } from 'src/app/core/bia-core/guards/permission.guard';
 
 const ROUTES: Routes = [
   {

@@ -1,20 +1,27 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Safran Framework
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+Safran Framework is a development platform for building RWD web applications (compatible with Mobile and Desktop) using .NET Core for the Backend and Angular for the Frontend.
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+## New Project
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+If you want to start a new project, you have to create the Frontend and/or the Backend project(s) depending on your needs.
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+You have to respect the structure below (same as BIADemo) for your project :  
+
+![Structure of Project's folder](./Docs/Images/folderStructure.png)
+
+To accomplish this, follow the steps below in the right order : 
+1. Clone the Git repository from Azure DevOps.
+2. In your project folder copy the .gitignore file you can find at the root of the BIADemo project.
+3. Create the README.md file that will be the entry point for your documentation, and the Docs folder that will contains others .md files.
+4. Create the Angular folder and follow the steps on [this page](./Angular/docs/NEW_PROJECT.md).
+5. Create the DotNet folder and follow the steps on [this page](./DotNet/Docs/NEW_PROJECT.md).
+
+Your should now be able to launch you project !
+
+## Changelog
+
+Learn about the latest improvements checking those links.
+
+- [Angular](./Angular/CHANGELOG.md)
+- [DotNet](./DotNet/CHANGELOG.md)

@@ -17,11 +17,13 @@ export class BiaClassicLayoutService {
   private mainBarPortal = new BehaviorSubject<Portal<any> | null>(null);
   private mainBarHidden = new BehaviorSubject<boolean>(false);
   private footerHidden = new BehaviorSubject<boolean>(false);
+  private breadcrumbHidden = new BehaviorSubject<boolean>(false);
 
   footerPortal$ = this.footerPortal.asObservable();
   mainBarPortal$ = this.mainBarPortal.asObservable();
   mainBarHidden$ = this.mainBarHidden.asObservable();
   footerHidden$ = this.footerHidden.asObservable();
+  breadcrumbHidden$ = this.breadcrumbHidden.asObservable();
 
   changeFooter<T, D>(
     componentOrTemplateRef: ComponentType<T> | TemplateRef<T> | null,
@@ -63,6 +65,14 @@ export class BiaClassicLayoutService {
 
   showFooter() {
     this.footerHidden.next(false);
+  }
+
+  hideBreadcrumb() {
+    this.breadcrumbHidden.next(true);
+  }
+
+  showBreadcrumb() {
+    this.breadcrumbHidden.next(false);
   }
 
   private setPortal<T, D>(

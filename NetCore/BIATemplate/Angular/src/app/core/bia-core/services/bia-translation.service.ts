@@ -15,12 +15,12 @@ export const getInitialLang = (supportedLangs: string[]) => {
     lang = localStorage.getItem(STORAGE_LANG_KEY);
   } catch {}
   if (!lang) {
-    lang = navigator.language.split('-')[0];
+    lang = navigator.language;
   }
   if (supportedLangs.indexOf(lang) !== -1) {
     return lang;
   }
-  return supportedLangs[0];
+  return 'en-US';
 };
 
 export interface DateFormat {
@@ -117,19 +117,19 @@ export class BiaTranslationService {
     switch (culture) {
       case 'de-DE':
         dateFormat = 'dd.MM.yyyy';
-        timeFormat = 'hh:mm';
+        timeFormat = 'HH:mm';
         break;
       case 'es-ES':
         dateFormat = 'dd/MM/yyyy';
-        timeFormat = 'h:mm';
+        timeFormat = 'H:mm';
         break;
       case 'fr-FR':
         dateFormat = 'dd/MM/yyyy';
-        timeFormat = 'hh:mm';
+        timeFormat = 'HH:mm';
         break;
       case 'en-GB':
         dateFormat = 'dd/MM/yyyy';
-        timeFormat = 'hh:mm';
+        timeFormat = 'HH:mm';
         break;
       case 'es-MX':
         dateFormat = 'dd/MM/yyyy';
@@ -141,7 +141,7 @@ export class BiaTranslationService {
         break;
       default:
         dateFormat = 'yyyy-MM-dd';
-        timeFormat = 'hh:mm';
+        timeFormat = 'HH:mm';
         break;
     }
     return { dateFormat: dateFormat, dateTimeFormat: `${dateFormat} ${timeFormat}`, timeFormat: timeFormat };

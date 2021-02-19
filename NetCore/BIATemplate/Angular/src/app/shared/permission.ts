@@ -1,4 +1,4 @@
-﻿export enum Permission {
+export enum Permission {
   Home_Access = 'Home_Access',
   Member_Create = 'Member_Create',
   Member_Delete = 'Member_Delete',
@@ -19,8 +19,15 @@
   User_ListAD = 'User_ListAD',
   User_List_Access = 'User_List_Access',
   User_Sync = 'User_Sync',
+  LdapDomains_List = 'LdapDomains_List',
   View_List = 'View_List',
-  View_Delete_UserView = 'View_Delete_UserView',
-  View_Delete_SiteView = 'View_Delete_SiteView',
-  View_Set_Default_UserView= 'View_Set_Default_UserView'
+  View_AddUserView = 'View_Add_UserView',
+  View_AddSiteView = 'View_Add_SiteView',
+  View_UpdateUserView = 'View_Update_UserView',
+  View_UpdateSiteView = 'View_Update_SiteView',
+  View_DeleteUserView = 'View_Delete_UserView',
+  View_DeleteSiteView = 'View_Delete_SiteView',
+  View_SetDefaultUserView = 'View_Set_Default_UserView',
+  View_SetDefaultSiteView = 'View_Set_Default_SiteView',
+  View_AssignToSite = 'View_Assign_To_Site'
 }

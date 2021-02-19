@@ -1,19 +1,29 @@
+#Before launch the script:
+#		- Extract the project templateFiles of solution BIATemplate (use Ctrl+E Ctrl+X in visual studio)
+#		- Verify path $RepSource
+#		- Verify that in path $RepSource there is only the BIATemplate projects (9 items)
+#		- Veriy the path $RepAdditionalFiles
+
+
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 $projectTemplateName = "BIATemplate"
-$projectsNameSpace = "MyCompany.BIATemplate."
-$curentUserName = $env:UserName
-$RepSource="C:\Users\$curentUserName\Documents\Visual Studio 2019\My Exported Templates"
-$pathZZProjectInstaller = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(".")
+$RepSource="C:\Users\L025308\Documents\Visual Studio 2019\My Exported Templates"
+$RepAdditionalFiles="..\..\BIATemplate\DotNet"
+#$pathZZProjectInstaller = "D:\Sources\Azure.DevOps.Safran\Digital Manufacturing\BIAVSExtension\BIAProjectCreator"
 
-# $pathZZProjectKit= $pathZZProjectInstaller + "\ZZProjectKit"
-$RepTarget= $pathZZProjectInstaller + "\BIA.ProjectKit\Temp"
-# $RepTargetProjectTemplates= $pathZZProjectInstaller + "\BIA.ProjectCreator\ProjectTemplates"
+#$RepTarget= $pathZZProjectInstaller + "\BIA.ProjectCreatorTemplateV3\Temp"
+$RepTarget= Resolve-Path -Path ".\BIA.ProjectCreatorTemplateV3\Temp"
+$RepTargetAdditionalFiles= Resolve-Path -Path ".\BIA.ProjectCreator\AdditionalFiles"
+
+
+if (!(Test-Path -path $RepTarget)) {New-Item $RepTarget -Type Directory}
 
 Remove-Item -Recurse -Force -path "$RepTarget\*"
 
-Write-Host "Copy template $projectsNameSpace*.zip from : $RepSource"
-Copy-Item "$RepSource\$projectsNameSpace*.zip" "$RepTarget\"
+Write-Host "Copy $RepSource\*.zip to $RepTarget\" 
+Copy-Item "$RepSource\*.zip" "$RepTarget\" -Recurse -Force
+
 
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 function Unzip
@@ -29,54 +39,52 @@ function Zip ([string]$zipfile, [string]$outpath) {
 $zipFiles = Get-ChildItem "$RepTarget" *.zip
 foreach ($file in $zipFiles)
 {
-	$dirname = (Get-Item "$RepTarget\$file").Basename.substring($projectsNameSpace.length);
-	# $dirname = (Get-Item "$RepTarget\$file").Basename
+	$dirname = (Get-Item "$RepTarget\$file").Basename
     New-Item -Force -ItemType directory -Path "$RepTarget\$dirname"
 	Unzip "$RepTarget\$file" "$RepTarget\$dirname\"
 }
 
 Remove-Item "$RepTarget\*.zip"
 
-Write-Host "Treate file : "
+
 $allFiles = Get-ChildItem -File -Path "$RepTarget" -Exclude "*.vstemplate" -rec | Where-Object { Select-String $projectTemplateName $_ -Quiet }
 foreach ($file in $allFiles)
 {
 	$filePath = $file.FullName
-	$shortFilePath = $filePath.Replace($RepTarget,"")
-	Write-Host " - $shortFilePath"
+	Write-Host "Treate file : $filePath"
 	$text = [IO.File]::ReadAllText("$filePath") -replace $projectTemplateName, "`$saferootprojectname`$"
-	$text = $text -replace "MyCompany", "`$companyName`$"
-	# $text = $text -replace "ZZDivisionNameZZ", "`$divisionName`$"
-	# $text = $text -replace "ZZSupportMailZZ", "`$supportMail`$"
 	[IO.File]::WriteAllText("$filePath", $text)
 }
 
-# $file = "$RepTarget/MVC/Web.config"
-# $text = [IO.File]::ReadAllText("$file") -replace "http://localhost/static", "`$staticAddress`$"
-# [IO.File]::WriteAllText("$file", $text)
-
-# $file = "$RepTarget/MVC/packages.config"
-# $text = [IO.File]::ReadAllText("$file") -replace "</packages>", "`$packageResources`
-# </packages>"
-# [IO.File]::WriteAllText("$file", $text)
-Write-Host "Treate vstemplate file :"
 $templateFiles = Get-ChildItem -File -Path "$RepTarget" *.vstemplate -rec | Where-Object { Select-String "</VSTemplate>" $_ -Quiet }
 foreach ($file in $templateFiles)
 {
 	$filePath = $file.FullName
-	$shortFilePath = $filePath.Replace($RepTarget,"")
-	Write-Host " - $shortFilePath"
+	Write-Host "Treate file : $filePath"
 	$text = [IO.File]::ReadAllText("$filePath") -replace "</VSTemplate>", "  <WizardExtension>
-    <Assembly>BIA.ProjectCreatorWizard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
+    <Assembly>BIA.ProjectCreatorWizard, Version=3.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
     <FullClassName>BIA.ProjectCreatorWizard.ChildWizard</FullClassName>
   </WizardExtension>
 </VSTemplate>"
 	[IO.File]::WriteAllText("$filePath", $text)
 }
 
+Copy-Item "$RepAdditionalFiles\Safran.ruleset" "$RepTargetAdditionalFiles\" -Force
+Copy-Item "$RepAdditionalFiles\Directory.Build.props" "$RepTargetAdditionalFiles\" -Force
+Copy-Item "$RepAdditionalFiles\*.ps1" "$RepTargetAdditionalFiles\" -Force
+
 # $file = "$RepTarget/SyncDatabase/MyTemplate.vstemplate"
 # $text = [IO.File]::ReadAllText("$file") -replace 'ReplaceParameters="false" (TargetFileName="[A-Za-z0-9\-_]*.scmp")', 'ReplaceParameters="true" $1'
 # [IO.File]::WriteAllText("$file", $text)
+
+# $ScmpFiles = Get-ChildItem -File -Path "$RepTarget\SyncDatabase\Scmp" * | Where-Object { Select-String "VM-ISDT-DEV" $_ -Quiet }
+# foreach ($file in $ScmpFiles)
+# {
+# 	$filePath = $file.FullName
+# 	Write-Host "Treate file : $filePath"
+# 	$text = [IO.File]::ReadAllText("$filePath") -replace "VM-ISDT-DEV", "."
+# 	[IO.File]::WriteAllText("$filePath", $text)
+# }
 
 # $file = "Model/MyTemplate.vstemplate"
 # Write-Host "Treate file : $file"

@@ -51,6 +51,7 @@ import { ToastModule } from 'primeng/toast';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
+import { FileUploadModule } from 'primeng/fileupload';
 
 // PrimeNG Services
 import { MessageService } from 'primeng/api';
@@ -68,8 +69,15 @@ import { BiaTableComponent } from './components/table/bia-table/bia-table.compon
 import { LayoutComponent } from './components/layout/layout.component';
 import { PageLayoutComponent } from './components/layout/page-layout.component';
 import { PrimengCalendarLocaleDirective } from './directives/primeng-calendar-locale.directive';
-import { BiaSafeHtmlPipe } from './pipes/bia-safe-html.pipe';
-import { ViewDialogComponent } from './components/view/view-dialog/view-dialog.component';
+import { ViewListComponent } from './features/view/views/view-list/view-list.component';
+import { ViewDialogComponent } from './features/view/views/view-dialog/view-dialog.component';
+import { ViewSiteTableComponent } from './features/view/components/view-site-table/view-site-table.component';
+import { ViewUserTableComponent } from './features/view/components/view-user-table/view-user-table.component';
+import { StoreModule } from '@ngrx/store';
+import { reducers } from './features/view/store/view.state';
+import { EffectsModule } from '@ngrx/effects';
+import { ViewsEffects } from './features/view/store/views-effects';
+import { ViewFormComponent } from './features/view/components/view-form/view-form.component';
 
 const PRIMENG_MODULES = [
   AutoCompleteModule,
@@ -114,7 +122,8 @@ const PRIMENG_MODULES = [
   ToastModule,
   ToggleButtonModule,
   ToolbarModule,
-  TooltipModule
+  TooltipModule,
+  FileUploadModule
 ];
 
 const MODULES = [
@@ -139,17 +148,24 @@ const COMPONENTS = [
   BiaTableControllerComponent,
   LayoutComponent,
   PageLayoutComponent,
-  PrimengCalendarLocaleDirective,
-  ViewDialogComponent
+  PrimengCalendarLocaleDirective
 ];
+
+const VIEW_COMPONENTS = [
+  ViewListComponent,
+  ViewDialogComponent,
+  ViewSiteTableComponent,
+  ViewUserTableComponent,
+  ViewFormComponent
+];
+
+const VIEW_IMPORTS = [StoreModule.forFeature('views', reducers), EffectsModule.forFeature([ViewsEffects])];
 
 const SERVICES = [MessageService];
 
-const PIPES = [BiaSafeHtmlPipe];
-
 @NgModule({
-  imports: [...PRIMENG_MODULES, ...MODULES],
-  declarations: [...COMPONENTS, ...PIPES],
+  imports: [...PRIMENG_MODULES, ...MODULES, ...VIEW_IMPORTS],
+  declarations: [...COMPONENTS, ...VIEW_COMPONENTS],
   exports: [...PRIMENG_MODULES, ...MODULES, ...COMPONENTS],
   providers: [...SERVICES]
 })

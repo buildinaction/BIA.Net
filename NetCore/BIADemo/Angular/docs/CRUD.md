@@ -1,27 +1,25 @@
 # CRUD
-This document explains how to quickly create a CRUD.<br/>
-<u>For this example, we imagine that we want to create a new feature with the name: <span style="background-color:yellow">aircrafts</span>.<br/></u>
+This document explains how to quickly create a CRUD.   
+<u>For this example, we imagine that we want to create a new feature with the name: <span style="background-color:yellow">aircrafts</span>.   </u>
 
 ## Prerequisite
 The back-end is ready, i.e. the <span style="background-color:yellow">Aircraft</span> controller exists as well as permissions such as `Aircraft_List_Access`.
 
 ## Create a new feature
-First, create a new <span style="background-color:yellow">aircrafts</span> folder under the <b>src\app\features</b> folder of your project.<br/>
-Then copy and paste the contents of the folder
-<ul>
-<i><b>BIADemo\Angular\src\app\features\planes</b> if you want a CRUD with popup</i>
-<i><b>BIADemo\Angular\src\app\features\planes-page-mode</b> if you want a CRUD with page</i>
-</ul> into the feature <span style="background-color:yellow">aircrafts</span>  folder.
+First, create a new <span style="background-color:yellow">aircrafts</span> folder under the **src\app\features** folder of your project.   
+Then copy, paste and unzip into this feature <span style="background-color:yellow">aircrafts</span> folder the contents of :
+* **Angular\docs\planes-popup.zip** if you want a CRUD with popup
+* **Angular\docs\planes-page.zip** if you want a CRUD with page
 
-Then, inside the folder of your new feature, execute the file <b>new-crud.ps1</b><br/>
-For <b>old crud name? (singular)</b>, type plane<br/>
-For <b>old crud name? (plural)</b>, type planes<br/>
-For <b>new crud name? (singular)</b>, type <span style="background-color:yellow">aircraft</span><br/>
-For <b>new crud name? (plural)</b>, type <span style="background-color:yellow">aircrafts</span><br/>
-When finished, you can delete <b>new-crud.ps1</b><br/>
+Then, inside the folder of your new feature, execute the file **new-crud.ps1**   
+For **old crud name? (singular)**, type plane   
+For **old crud name? (plural)**, type planes   
+For **new crud name? (singular)**, type <span style="background-color:yellow">aircraft</span>   
+For **new crud name? (plural)**, type <span style="background-color:yellow">aircrafts</span>   
+When finished, you can delete **new-crud.ps1**   
 
 ## Update navigation
-Open the file <b>src\app\shared\constants.ts</b> and in the <b>Permission</b> enum, add
+Open the file **src\app\shared\permission.ts** and in the **Permission** enum, add
 ```typescript
   Aircraft_Create = 'Aircraft_Create',
   Aircraft_Delete = 'Aircraft_Delete',
@@ -32,16 +30,16 @@ Open the file <b>src\app\shared\constants.ts</b> and in the <b>Permission</b> en
 ```
 
 ## Update navigation
-Open the file <b>src\app\shared\constants.ts</b> and in the array <b>NAVIGATION</b>, add 
+Open the file **src\app\shared\navigation.ts** and in the array **NAVIGATION**, add 
 ```typescript
 {
   labelKey: 'app.aircrafts',
-  permissions: [Permission.Plane_List_Access],
+  permissions: [Permission.Aircraft_List_Access],
   path: ['/aircrafts']
 }
 ```
 ## Update routing
-Open the file <b>src\app\app-routing.module.ts</b> and in the array <b>routes</b>, add 
+Open the file **src\app\app-routing.module.ts** and in the array **routes**, add 
 ```typescript
 {
   path: 'aircrafts',
@@ -53,13 +51,13 @@ Open the file <b>src\app\app-routing.module.ts</b> and in the array <b>routes</b
 }
 ```
 ## Create the model
-Use the back-end with swagger to retrieve a json from the new entity.<br/>
-Use this site to convert the json to interface TypeScript:<br/>
-http://json2ts.com/<br/>
-And then, copy the generated code in <b>src\app\features\aircrafts\model\aircraft.ts</b>
+Use the back-end with swagger to retrieve a json from the new entity.   
+Use this site to convert the json to interface TypeScript:   
+http://json2ts.com/   
+And then, copy the generated code in **src\app\features\aircrafts\model\aircraft.ts**
 
 ## Update translations
-Open the file <b>src\assets\i18n\app\en.json</b> and<br/>
+Open the file **src\assets\i18n\app\en.json** and   
 add in `"app"`
 ```json
 "app": {
@@ -77,7 +75,7 @@ add
 ```
 and add translations of interface properties.
 
-Open the file <b>src\assets\i18n\app\fr.json</b> and
+Open the file **src\assets\i18n\app\fr.json** and
 add in `"app"`
 ```json
 "app": {
@@ -95,7 +93,7 @@ add
 ```
 and add translations of interface properties.
 
-Open the file <b>src\assets\i18n\app\es.json</b> and
+Open the file **src\assets\i18n\app\es.json** and
 add in `"app"`
 ```json
 "app": {
@@ -118,11 +116,11 @@ https://novicelab.org/jsonabc/
 
 ## Form
 Change the following form component to match the business requirements:
-<b>src\app\features\aircrafts\components\aircraft-form</b>
+**src\app\features\aircrafts\components\aircraft-form**
 
 ## Table
-Open the following file <b>src\app\features\aircrafts\views\aircrafts-index\aircrafts-index.component.ts</b><br/>
-Change columns field of the `tableConfiguration` variable according to the columns in the table you want to display.<br/>
+Open the following file **src\app\features\aircrafts\views\aircrafts-index\aircrafts-index.component.ts**   
+Change columns field of the `tableConfiguration` variable according to the columns in the table you want to display.   
 If it is a simple string type column with filter and possible sorting, then use this column line to define your column.
 ```typescript
 new PrimeTableColumn('msn', 'aircraft.msn'),
@@ -136,6 +134,38 @@ Object.assign(new PrimeTableColumn('msn', 'aircraft.msn'), {
       })
 ```
 
+## Enable Views
 
+To enable views on this feature, set the **aircrafts-index.component.ts** file.  
+Add this import:
+```typescript
+import { loadAllView } from 'src/app/shared/bia-shared/features/view/store/views-actions';
+```
+in `ngOnInit`, add:
+```typescript
+ngOnInit() {
+  ...
+  this.store.dispatch(loadAllView());
+}
+```
+add this property:
+```typescript
+tableStateKey = 'aircraftsGrid';
+```
+Set the **aircrafts-index.component.html** file.  
+Add the input parameter `tableStateKey` for the `bia-table-controller` and `bia-table` like this:
 
+```html
+<bia-table-controller
+...
+[tableStateKey]="tableStateKey"
+></bia-table-controller>
+```
+
+```html
+<bia-table
+...
+[tableStateKey]="tableStateKey"
+></bia-table>
+```
 

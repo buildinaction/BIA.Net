@@ -3,7 +3,8 @@ export interface User {
   lastName: string;
   firstName: string;
   login: string;
-  displayName: string;
   guid: string;
   siteIds: number[];
+  // Computed by Angular when data receive
+  displayName: string;
 }

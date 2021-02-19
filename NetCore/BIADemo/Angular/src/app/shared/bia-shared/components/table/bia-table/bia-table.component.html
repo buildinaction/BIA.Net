@@ -1,34 +1,39 @@
 <p-table
   *ngIf="configuration"
   #dt
+  [autoLayout]="true"
+  [reorderableColumns]="true"
   [columns]="displayedColumns"
   [value]="elements"
-  [paginator]="true"
+  [paginator]="paginator"
   [rows]="pageSize"
   (onFilter)="onFilter()"
   [totalRecords]="totalRecord"
   [lazy]="true"
-  [loading]="loading"
+  [loading]="loading && (showLoading$ | async) !== null"
   (onLazyLoad)="onLoadLazy($event)"
-  [stateStorage]="'local'"
-  [stateKey]="tableId"
-  [lazyLoadOnInit]="false"
+  [stateStorage]="'session'"
+  [stateKey]="tableStateKey"
+  [lazyLoadOnInit]="getLazyLoadOnInit()"
   [sortField]="sortFieldValue"
+  [sortOrder]="sortOrderValue"
+  (onStateSave)="onStateSave($event)"
+  (selectionChange)="onSelectionChange()"
 >
   <ng-template pTemplate="header" let-columns>
     <tr>
+      <th *ngIf="canSelectElement">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
       <ng-container *ngFor="let col of columns">
-        <th *ngIf="col.isSortable === true" [pSortableColumn]="col.field">
-          {{ col.header | translate }}
+        <th *ngIf="col?.isSortable === true" [pSortableColumn]="col.field">
+          {{ col?.header | translate }}
           <p-sortIcon [field]="col.field"></p-sortIcon>
         </th>
-        <th *ngIf="col.isSortable !== true">
-          {{ col.header | translate }}
+        <th *ngIf="col?.isSortable !== true">
+          {{ col?.header | translate }}
         </th>
       </ng-container>
-      <th *ngIf="showActionCol()" class="app-last-col">
-        {{ 'bia.actions' | translate }}
-      </th>
     </tr>
     <tr *ngIf="showColSearch">
       <th *ngFor="let col of columns" [ngSwitch]="col.field">
@@ -36,58 +41,28 @@
           <input
             pInputText
             class="input-search"
-            type="text"
+            type="{{ col.type === 'Number' ? 'number' : 'text' }}"
+            placeholder="{{ col.type === 'Date' ? ('bia.dateIso8601' | translate) : '' }}"
             (input)="dt.filter($event.target.value, col.field, col.filterMode)"
             [value]="dt.filters[col.field]?.value"
-            [ngClass]="{'ui-state-filled': dt.filters[col.field]?.value != ''}"
+            [ngClass]="{ 'ui-state-filled': dt.filters[col.field]?.value != '' }"
           />
-          <label for="name">{{ 'bia.filter' | translate }}</label>
         </span>
       </th>
-      <th *ngIf="showActionCol()" class="app-last-col"></th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-rowData let-columns="columns">
     <tr [pSelectableRow]="rowData">
-      <td *ngFor="let col of columns">
+      <td *ngIf="canSelectElement">
+        <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+      </td>
+      <td (click)="editElement(rowData.id)" *ngFor="let col of columns">
         <ng-container *ngIf="col.type === 'Boolean'">
           <i class="ui-icon-check" *ngIf="rowData[col.field] === true"></i>
         </ng-container>
         <ng-container *ngIf="col.type !== 'Boolean'">
           {{ col.type === 'Date' ? (rowData[col.field] | date: col.formatDate) : rowData[col.field] }}
         </ng-container>
-      </td>
-      <td *ngIf="showActionCol()" class="app-last-col">
-        <div fxLayout="row" fxLayoutGap="2px" fxLayoutAlign="end end">
-          <ng-container *ngIf="configuration?.customButtons?.length > 0">
-            <ng-container *ngFor="let customButton of configuration?.customButtons">
-              <i
-                *ngIf="hasPermission(customButton.permission)"
-                class="{{ customButton.classValue }}"
-                [routerLink]="getRouterLink(customButton.routerLinkValue, rowData.id)"
-                pTooltip="{{ customButton.pTooltipValue | translate }}"
-                tooltipPosition="top"
-                placeholder="Top"
-              ></i>
-            </ng-container>
-          </ng-container>
-          <i
-            *ngIf="canEdit"
-            class="ui-icon-edit bia-pointer"
-            (click)="editElement(rowData.id)"
-            pTooltip="{{ 'bia.edit' | translate }}"
-            tooltipPosition="top"
-            placeholder="Top"
-          ></i>
-          <i
-            *ngIf="canDelete"
-            class="ui-icon-delete bia-pointer"
-            (click)="deleteElement(rowData.id)"
-            pTooltip="{{ 'bia.delete' | translate }}"
-            tooltipPosition="top"
-            placeholder="Top"
-          ></i>
-        </div>
       </td>
     </tr>
   </ng-template>

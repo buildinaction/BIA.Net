@@ -2,15 +2,14 @@ import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angu
 import { Store } from '@ngrx/store';
 import { save, closeDialogNew } from '../../../store/members/members-actions';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Site } from '../../../model/site/site';
 import { Member } from '../../../model/user/member';
-import { AppState } from 'src/app/shared/bia-shared/store/state';
+import { AppState } from 'src/app/store/state';
 import { Subscription } from 'rxjs';
 import { getDisplayNewDialog } from '../../../store/members/member.state';
-import { Role } from 'src/app/domains/member-role/model/role';
+import { Role } from 'src/app/domains/role/model/role';
 import { User } from 'src/app/domains/user/model/user';
-import { getAllRoles } from 'src/app/domains/member-role/store/member-role.state';
+import { getAllRoles } from 'src/app/domains/role/store/role.state';
 import { getAllUsers } from 'src/app/domains/user/store/user.state';
 import { loadAllByFilter } from 'src/app/domains/user/store/users-actions';
 
@@ -33,16 +32,7 @@ export class MemberNewDialogComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.allRoles$ = this.store.select(getAllRoles).pipe();
     this.users$ = this.store
-      .select(getAllUsers)
-      .pipe()
-      .pipe(
-        map((users: User[]) => {
-          users.forEach((user: User) => {
-            user.displayName = `${user.firstName} ${user.lastName} (${user.login})`;
-          });
-          return users;
-        })
-      );
+      .select(getAllUsers);
     this.sub.add(
       this.store
         .select(getDisplayNewDialog)

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { failure, loadAllSuccess, loadAllByFilter, loadAllADByFilter } from './users-actions';
+import { failure, loadAllSuccess, loadAllByFilter } from './users-actions';
 import { BiaMessageService } from 'src/app/core/bia-core/services/bia-message.service';
 import { UserDas } from '../services/user-das.service';
 
@@ -13,26 +13,12 @@ import { UserDas } from '../services/user-das.service';
 
 @Injectable()
 export class UsersEffects {
+
   loadAllByFilter$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadAllByFilter) /* When action is dispatched */,
       switchMap((action) => {
         return this.userDas.getAllByFilter(action.filter).pipe(
-          map((users) => loadAllSuccess({ users })),
-          catchError((err) => {
-            this.biaMessageService.showError();
-            return of(failure({ error: err }));
-          })
-        );
-      })
-    )
-  );
-
-  loadAllADByFilter$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(loadAllADByFilter) /* When action is dispatched */,
-      switchMap((action) => {
-        return this.userDas.getAllADByFilter(action.filter).pipe(
           map((users) => loadAllSuccess({ users })),
           catchError((err) => {
             this.biaMessageService.showError();

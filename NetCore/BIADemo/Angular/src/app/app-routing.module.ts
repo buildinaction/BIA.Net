@@ -37,7 +37,39 @@ const routes: Routes = [
                   canNavigate: true
                 },
                 loadChildren: () => import('./features/planes-page/plane.module').then((m) => m.PlaneModule)
-              }
+              },
+              {
+                path: 'planes-view',
+                data: {
+                  breadcrumb: 'app.planes',
+                  canNavigate: true
+                },
+                loadChildren: () => import('./features/planes-view/plane.module').then((m) => m.PlaneModule)
+              },
+              {
+                path: 'planes-signalR',
+                data: {
+                  breadcrumb: 'app.planes',
+                  canNavigate: true
+                },
+                loadChildren: () => import('./features/planes-signalR/plane.module').then((m) => m.PlaneModule)
+              },
+              {
+                path: 'airports',
+                data: {
+                  breadcrumb: 'app.airports',
+                  canNavigate: true
+                },
+                loadChildren: () => import('./features/airports/airport.module').then((m) => m.AirportModule)
+              },
+              {
+                path: 'planes-types',
+                data: {
+                  breadcrumb: 'app.planesTypes',
+                  canNavigate: true
+                },
+                loadChildren: () => import('./features/planes-types/plane-type.module').then((m) => m.PlaneTypeModule)
+              },
             ]
           },
           // End BIADemo

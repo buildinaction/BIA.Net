@@ -5,8 +5,7 @@
 namespace BIA.ProjectCreatorWizard
 {
     using System.Collections.Generic;
-    using System.Windows.Forms;
-    using BIA.ProjectCreatorWizard.UI;
+    using System.IO;
     using EnvDTE;
     using Microsoft.VisualStudio.TemplateWizard;
 
@@ -27,46 +26,34 @@ namespace BIA.ProjectCreatorWizard
         public const string SAFEPROJECTNAME = "$safeprojectname$";
 
         /// <summary>
-        /// The projectName.
-        /// </summary>
-        public const string PROJECTNAME = "$projectname$";
-
-        /// <summary>
-        /// The company name.
-        /// </summary>
-        public const string COMPANYNAME = "$companyName$";
-
-        /// <summary>
         /// The global dictionary.
         /// </summary>
         public static readonly Dictionary<string, string> GlobalDictionary = new Dictionary<string, string>();
 
+        /// <summary>
+        /// Destinaion Folder for solution.
+        /// </summary>
+        private DirectoryInfo destFolder;
+
+        /// <summary>
+        /// The solution name.
+        /// </summary>
+        private string solutionName;
+
         /// <inheritdoc/>
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
+            this.destFolder = Directory.GetParent(replacementsDictionary["$destinationdirectory$"]);
 
+            this.solutionName = replacementsDictionary[SAFEPROJECTNAME];
+            string companyName = "Safran";
+            string combineName = string.Join(".", companyName, this.solutionName);
 
-            CompanyAndDesignOptionViewModel _viewModel = new CompanyAndDesignOptionViewModel();
-            CompanyAndDesignOptionForm window = new CompanyAndDesignOptionForm(_viewModel);
-            DialogResult showDialog = window.ShowDialog();
+            GlobalDictionary[SAFEPROJECTNAME] = combineName;
+            GlobalDictionary[SAFEROOTPROJECTNAME] = this.solutionName;
 
-            if (showDialog != DialogResult.OK)
-            {
-                throw new WizardBackoutException();
-            }
-
-            string solutionName = replacementsDictionary[SAFEPROJECTNAME];
-            string companyName = _viewModel.CompanyName;
-            string safeProjectName = string.Join(".", companyName, solutionName);
-
-            GlobalDictionary[SAFEPROJECTNAME] = safeProjectName;
-            GlobalDictionary[SAFEROOTPROJECTNAME] = solutionName;
-            GlobalDictionary[COMPANYNAME] = companyName;
-
-            replacementsDictionary[SAFEROOTPROJECTNAME] = solutionName;
-            replacementsDictionary[SAFEPROJECTNAME] = safeProjectName;
-            //replacementsDictionary[PROJECTNAME] = combineName;
-            replacementsDictionary[COMPANYNAME] = companyName;
+            replacementsDictionary[SAFEROOTPROJECTNAME] = this.solutionName;
+            replacementsDictionary[SAFEPROJECTNAME] = combineName;
         }
 
         /// <inheritdoc/>
@@ -78,7 +65,11 @@ namespace BIA.ProjectCreatorWizard
         /// <inheritdoc/>
         public void RunFinished()
         {
-            // Method intentionally left empty.
+            this.PlaceAdditionnalFilesInSolutionFolder();
+            /*this.PlaceFileInSolutionFolder("Safran.ruleset");
+            this.PlaceFileInSolutionFolder("Directory.Build.props");
+            this.PlaceFileInSolutionFolder("Switch-To-Nuget.ps1");
+            this.PlaceFileInSolutionFolder("Switch-To-Project.ps1");*/
         }
 
         /// <inheritdoc/>
@@ -97,6 +88,50 @@ namespace BIA.ProjectCreatorWizard
         public void ProjectFinishedGenerating(Project project)
         {
             // Method intentionally left empty.
+        }
+
+        /// <summary>
+        /// Copy files for VSIX AdditionnalFiles folder to the root solution folder.
+        /// </summary>
+        /// <param name="fileName">file to copy.</param>
+        private void PlaceAdditionnalFilesInSolutionFolder()
+        {
+            var destPath = Path.Combine(this.destFolder.FullName, this.solutionName);
+
+            string path_codebase = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
+
+            string path_dir = Path.GetDirectoryName(path_codebase).Replace("file:\\", string.Empty) + "\\AdditionalFiles\\";
+
+            this.Copy(path_dir, destPath);
+        }
+
+        /// <summary>
+        /// Copy files for VSIX AdditionnalFiles folder to the root solution folder.
+        /// </summary>
+        /// <param name="sourceDir">source folder.</param>
+        /// <param name="targetDir">target folder.</param>
+        private void Copy(string sourceDir, string targetDir)
+        {
+            Directory.CreateDirectory(targetDir);
+
+            foreach (var file in Directory.GetFiles(sourceDir))
+            {
+                string targetFile = Path.Combine(targetDir, Path.GetFileName(file));
+                File.Copy(file, targetFile, true);
+                this.ReplaceInFile(targetFile, "BIATemplate", this.solutionName);
+            }
+
+            foreach (var directory in Directory.GetDirectories(sourceDir))
+            {
+                Copy(directory, Path.Combine(targetDir, Path.GetFileName(directory)));
+            }
+        }
+
+        private void ReplaceInFile(string filePath, string oldValue, string newValue)
+        {
+            string text = File.ReadAllText(filePath);
+            text = text.Replace(oldValue, newValue);
+            File.WriteAllText(filePath, text);
         }
     }
 }

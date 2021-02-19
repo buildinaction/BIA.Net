@@ -9,6 +9,7 @@ import {
   Input
 } from '@angular/core';
 import { User } from 'src/app/domains/user/model/user';
+import { SiteAdvancedFilter } from '../../model/site/site-advanced-filter';
 
 @Component({
   selector: 'app-site-filter',
@@ -16,15 +17,13 @@ import { User } from 'src/app/domains/user/model/user';
   styleUrls: ['./site-filter.component.scss']
 })
 export class SiteFilterComponent implements OnInit {
-  public static queryParamUser = 'user';
-
   @ViewChild('template', { static: true }) template: TemplateRef<HTMLElement>;
   @Input() fxFlexValue: string;
   @Input() users: User[];
   @Input() hidden = false;
   @Output() close = new EventEmitter();
   @Output() searchUsers = new EventEmitter<string>();
-  @Output() filter = new EventEmitter<number>();
+  @Output() filter = new EventEmitter<SiteAdvancedFilter>();
 
   userSelected: User;
 
@@ -45,7 +44,10 @@ export class SiteFilterComponent implements OnInit {
   }
 
   onFilter() {
-    this.filter.emit(this.userSelected ? this.userSelected.id : 0);
+    const advancedFilter = <SiteAdvancedFilter>{
+      userId: this.userSelected ? this.userSelected.id : 0
+    };
+    this.filter.emit(advancedFilter);
   }
 
   onSearchUsers(event: any) {

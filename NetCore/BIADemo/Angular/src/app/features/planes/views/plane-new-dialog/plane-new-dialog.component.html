@@ -11,5 +11,10 @@
   <p-header>
     {{ 'plane.add' | translate }}
   </p-header>
-  <app-plane-form [plane]="plane" (cancel)="onCancelled()" (save)="onSubmitted($event)"></app-plane-form>
+  <app-plane-form 
+    [plane]="plane" 
+    [airportOptions]="airportOptions$ | async"
+    [planeTypeOptions]="planeTypeOptions$ | async"
+    (cancel)="onCancelled()" 
+    (save)="onSubmitted($event)"></app-plane-form>
 </p-dialog>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="BIA.ProjectCreator.acde96dc-7727-44e4-9c2b-6591ab80580a" Version="3.0.2.0" Language="en-US" Publisher="Gwenael Fillon" />
+        <Identity Id="BIA.ProjectCreator.acde96dc-7727-44e4-9c2b-6591ab80580a" Version="3.3.0.0" Language="en-US" Publisher="Gwenael Fillon" />
         <DisplayName>BIA Project Creator</DisplayName>
         <Description xml:space="preserve">Template from powerfull application with a WebServer. 
 Contain sample for UI in MVC, Heavy Client, or HTML. 
@@ -17,8 +17,8 @@ And layers for secure acces to datas.</Description>
         <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
     </Dependencies>
     <Assets>
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="BIA.ProjectCreatorWizard" Path="|BIA.ProjectCreatorWizard|" AssemblyName="|BIA.ProjectCreatorWizard;AssemblyName|" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="BIA.ProjectKit" d:TargetPath="|BIA.ProjectKit;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
+        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="%CurrentProject%Wizard" Path="|BIA.ProjectCreatorWizard|" AssemblyName="|BIA.ProjectCreatorWizard;AssemblyName|" />
+        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="%CurrentProject%TemplateV3" d:TargetPath="|BIA.ProjectCreatorTemplateV3;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
     </Assets>
     <Prerequisites>
         <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,17.0)" DisplayName="Visual Studio core editor" />

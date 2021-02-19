@@ -1,12 +1,15 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { save } from '../../store/users-actions';
-import { User } from 'src/app/domains/user/model/user';
-import { AppState } from 'src/app/shared/bia-shared/store/state';
+import { AppState } from 'src/app/store/state';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { loadAllADByFilter } from 'src/app/domains/user/store/users-actions';
-import { getAllUsers } from 'src/app/domains/user/store/user.state';
+import { loadAllByFilter } from 'src/app/domains/user-from-AD/store/users-from-AD-actions';
+import { getAllUsersFromAD } from 'src/app/domains/user-from-AD/store/user-from-AD.state';
+import { getAllLdapDomain } from 'src/app/domains/ldap-domain/store/ldap-domain.state';
+import { UserFromAD } from 'src/app/domains/user-from-AD/model/user-from-AD';
+import { LdapDomain } from 'src/app/domains/ldap-domain/model/ldap-domain';
+import { loadAll as loadAllLdapDomains } from 'src/app/domains/ldap-domain/store/ldap-domain-actions';
+import { UserFilter } from '../../model/UserFilter';
 
 @Component({
   selector: 'app-user-new-dialog',
@@ -23,26 +26,21 @@ export class UserNewDialogComponent implements OnInit {
   }
 
   @Output() displayChange = new EventEmitter<boolean>();
-  users$: Observable<User[]>;
+  usersFromAD$: Observable<UserFromAD[]>;
+  ldapDomains$: Observable<LdapDomain[]>;
 
   constructor(private store: Store<AppState>) {}
 
-  ngOnInit() {
-    this.users$ = this.store
-      .select(getAllUsers)
-      .pipe()
-      .pipe(
-        map((users: User[]) => {
-          users.forEach((user: User) => {
-            user.displayName = `${user.firstName} ${user.lastName} (${user.login})`;
-          });
-          return users;
-        })
-      );
+  async ngOnInit() {
+    this.usersFromAD$ = this.store.select(getAllUsersFromAD).pipe();
+
+    this.ldapDomains$ = this.store.select(getAllLdapDomain).pipe();
+
+    this.store.dispatch(loadAllLdapDomains());
   }
 
-  onSubmitted(userToCreates: User[]) {
-    this.store.dispatch(save({ users: userToCreates }));
+  onSubmitted(userToCreates: UserFromAD[]) {
+    this.store.dispatch(save({ usersFromAD: userToCreates }));
     this.close();
   }
 
@@ -54,7 +52,7 @@ export class UserNewDialogComponent implements OnInit {
     this.display = false;
   }
 
-  onSearchUsers(value: string) {
-    this.store.dispatch(loadAllADByFilter({ filter: value }));
+  onSearchUsers(userFilter: UserFilter) {
+    this.store.dispatch(loadAllByFilter({ userFilter }));
   }
 }

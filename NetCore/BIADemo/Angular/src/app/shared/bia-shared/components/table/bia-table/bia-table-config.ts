@@ -1,5 +1,3 @@
-export let ROUTER_LINK_ID = '%ID%';
-
 export enum PrimeNGFiltering {
   StartsWith = 'startsWith',
   Contains = 'contains',
@@ -22,7 +20,7 @@ export enum TypeTS {
 
 export interface CustomButton {
   classValue: string;
-  routerLinkValue: string[];
+  numEvent: number;
   pTooltipValue: string;
   permission: string;
 }
@@ -48,6 +46,5 @@ export class PrimeTableColumn {
 }
 
 export interface BiaListConfig {
-  customButtons: CustomButton[];
   columns: PrimeTableColumn[];
 }

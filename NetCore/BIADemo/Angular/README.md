@@ -1,6 +1,6 @@
-# MyCompany Framework
+# Safran Framework
 
-MyCompany Framework is a development platform for building mobile and desktop web applications using Angular.
+Safran Framework is a development platform for building mobile and desktop web applications using Angular.
 
 ## New Project
 

@@ -1,12 +1,12 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import * as fromRoles from 'src/app/domains/member-role/store/member-role.state';
+import * as fromRoles from 'src/app/domains/role/store/role.state';
 import { Member } from '../../../model/user/member';
 import { getCurrentMember, getMemberLoadingGet, getDisplayEditDialog } from '../../../store/members/member.state';
 import { update, closeDialogEdit } from '../../../store/members/members-actions';
-import { AppState } from 'src/app/shared/bia-shared/store/state';
-import { Role } from 'src/app/domains/member-role/model/role';
+import { AppState } from 'src/app/store/state';
+import { Role } from 'src/app/domains/role/model/role';
 
 @Component({
   selector: 'app-member-edit-dialog',

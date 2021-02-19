@@ -1,16 +1,54 @@
 {
   "app": {
+    "Begin BIADemo" : "To remove in project from here",
+    "administration" : "Administration",
+    "airports": "Airports",
     "examples": "Examples",
-    "members": "Members",
-    "sites": "Sites",
     "planes": "Planes",
     "planesPageMode": "Planes (Page Mode)",
+    "planesViewMode": "Planes (View Mode)",
+    "planesSignalRMode": "Planes (SignalR Mode)",
+    "planesTypes": "Planes types",
+    "End BIADemo" : "To remove in project up to here",
+    "members": "Members",
+    "sites": "Sites",
     "users": "Users"
   },
+  "Begin BIADemo" : "To remove in project from here",
+  "airport": {
+    "add": "Add airport",
+    "city" : "City",
+    "edit": "Edit airport",
+    "listOf": "List of airports",
+    "name" : "Name"
+  },
+  "plane": {
+    "add": "Add plane",
+    "capacity": "Capacity",
+    "connectingAirports": "Connecting Airports",
+    "edit": "Edit plane",
+    "firstFlightDate": "First flight date",
+    "firstFlightTime": "First flight time",
+    "isActive": "Active",
+    "lastFlightDate": "Last flight date",
+    "listOf": "List of planes",
+    "msn": "Msn",
+    "planeType": "Plane Type",
+    "site": "Airline"
+  },
+  "planesTypes": {
+    "add": "Add type of planes",
+    "certificationDate": "Certification date",
+    "edit": "Edit type of planes",
+    "listOf": "List of types of planes",
+    "title" : "Title"
+  },
+  "End BIADemo" : "To remove in project up to here",
   "member": {
     "add": "Add member",
     "listOfSiteMembers": "List of members of site ",
     "manage": "Manage member",
+    "roles": "Roles",
     "rolesForSite": "Roles for the site",
     "user": "User"
   },
@@ -18,17 +56,6 @@
     "hideFilters": "Hide filters",
     "showFilters": "Show filters",
     "welcome": "BIA is a component library, built with the Angular framework"
-  },
-  "plane": {
-    "add": "Add Plane",
-    "capacity": "Capacity",
-    "edit": "Edit Plane",
-    "firstFlightDate": "First Flight Date",
-    "firstFlightTime": "First Flight Time",
-    "isActive": "Active",
-    "lastFlightDate": "Last Flight Date",
-    "listOf": "List of planes",
-    "msn": "Msn"
   },
   "site": {
     "add": "Add site",
@@ -40,9 +67,9 @@
   },
   "user": {
     "add": "Add user",
-    "lastName": "Last Name",
     "firstName": "First Name",
-    "login": "Login",
-    "listOf": "List of users"
+    "lastName": "Last Name",
+    "listOf": "List of users",
+    "login": "Login"
   }
 }

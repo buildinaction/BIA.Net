@@ -2,14 +2,24 @@ import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { catchError, map, pluck, switchMap, withLatestFrom, concatMap } from 'rxjs/operators';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { create, failure, load, loadAllByPost, loadAllByPostSuccess, loadSuccess, remove, update } from './sites-actions';
+import {
+  create,
+  failure,
+  load,
+  loadAllByPost,
+  loadAllByPostSuccess,
+  loadSuccess,
+  remove,
+  multiRemove,
+  update
+} from './sites-actions';
 import { SiteDas } from '../services/site-das.service';
 import { SiteInfo } from '../model/site/site-info';
 import { SiteInfoDas } from '../services/site-info-das.service';
 import { Store } from '@ngrx/store';
 import { getLastLazyLoadEvent } from './site.state';
 import { DataResult } from 'src/app/shared/bia-shared/model/data-result';
-import { AppState } from 'src/app/shared/bia-shared/store/state';
+import { AppState } from 'src/app/store/state';
 import { BiaMessageService } from 'src/app/core/bia-core/services/bia-message.service';
 import { LazyLoadEvent } from 'primeng/api';
 
@@ -17,7 +27,6 @@ import { LazyLoadEvent } from 'primeng/api';
  * Effects file is for isolating and managing side effects of the application in one place
  * Http requests, Sockets, Routing, LocalStorage, etc
  */
-
 @Injectable()
 export class SitesEffects {
   loadAllByPost$ = createEffect(() =>
@@ -102,6 +111,29 @@ export class SitesEffects {
           map(() => {
             this.biaMessageService.showDeleteSuccess();
             return loadAllByPost({ event: <LazyLoadEvent>event });
+          }),
+          catchError((err) => {
+            this.biaMessageService.showError();
+            return of(failure({ error: err }));
+          })
+        );
+      })
+    )
+  );
+
+  multiDestroy$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(multiRemove),
+      pluck('ids'),
+      concatMap((ids: number[]) => of(ids).pipe(withLatestFrom(this.store.select(getLastLazyLoadEvent)))),
+      switchMap(([ids, event]) => {
+        return this.siteDas.deletes(ids).pipe(
+          map(() => {
+            this.biaMessageService.showDeleteSuccess();
+            // Uncomment this if you do not use SignalR to refresh
+            return loadAllByPost({ event: <LazyLoadEvent>event });
+            // Uncomment this if you use SignalR to refresh
+            // return biaSuccessWaitRefreshSignalR();
           }),
           catchError((err) => {
             this.biaMessageService.showError();

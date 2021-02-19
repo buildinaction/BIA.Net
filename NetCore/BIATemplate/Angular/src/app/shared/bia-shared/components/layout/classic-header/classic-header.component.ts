@@ -6,6 +6,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { BiaNavigation } from '../../../model/bia-navigation';
 import { Subscription, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { THEME_LIGHT, THEME_DARK } from 'src/app/shared/constants';
+import { Site } from 'src/app/domains/site/model/site';
+import { EnvironmentType } from 'src/app/domains/environment-configuration/model/environment-configuration';
 
 @Component({
   selector: 'bia-classic-header',
@@ -24,6 +27,12 @@ export class ClassicHeaderComponent implements OnDestroy {
   @Input() appTitle: string;
   @Input() version: string;
   @Input()
+  set environmentType(env: EnvironmentType) {
+    if (env) {
+      this.cssClassEnv = `env-${env.toLowerCase()}`;
+    }
+  }
+  @Input()
   set menus(navigations: BiaNavigation[]) {
     if (navigations && navigations.length > 0) {
       this.navigations = navigations;
@@ -35,19 +44,38 @@ export class ClassicHeaderComponent implements OnDestroy {
   @Input() supportedLangs: string[];
   @Input() allowThemeChange?: boolean;
   @Input() helpUrl?: string;
+  @Input() reportUrl?: string;
+  allSites: Site[];
+  @Input()
+  set sites(sites: Site[]) {
+    this.allSites = sites;
+    this.initDropdownSite();
+  }
+  currentSite: Site;
+  currentSiteId: number;
+  @Input()
+  set siteId(currentSiteId: number) {
+    this.currentSiteId = currentSiteId;
+    this.initDropdownSite();
+  }
 
   @Output() language = new EventEmitter<string>();
   @Output() theme = new EventEmitter<string>();
+  @Output() siteChange = new EventEmitter<number>();
+  @Output() setDefaultSite = new EventEmitter<number>();
 
   usernameParam: { name: string };
   navigations: BiaNavigation[];
   fullscreenMode = false;
   isIE = this.platform.TRIDENT;
   urlAppIcon = environment.urlAppIcon;
+  urlDMIndex = environment.urlDMIndex;
+  displaySiteList = false;
+  cssClassEnv: string;
 
   private sub = new Subscription();
 
-  topBarMenuItems: MenuItem[];
+  topBarMenuItems: any; // MenuItem[]; // bug v9 primeNG
   navMenuItems: MenuItem[];
   appIcon$: Observable<string>;
 
@@ -67,18 +95,25 @@ export class ClassicHeaderComponent implements OnDestroy {
     this.fullscreenMode = !this.fullscreenMode;
     if (this.fullscreenMode === true) {
       this.layoutService.hideFooter();
+      this.layoutService.hideBreadcrumb();
     } else {
       this.layoutService.showFooter();
+      this.layoutService.showBreadcrumb();
     }
   }
 
   refresh() {
     localStorage.clear();
+    sessionStorage.clear();
     location.reload();
   }
 
   openHelp() {
     window.open(this.helpUrl, 'blank');
+  }
+
+  openReport() {
+    window.open(this.reportUrl, 'blank');
   }
 
   private onChangeTheme(theme: string) {
@@ -87,6 +122,22 @@ export class ClassicHeaderComponent implements OnDestroy {
 
   private onChangeLanguage(lang: string) {
     this.language.emit(lang);
+  }
+
+  onSiteChange() {
+    this.siteChange.emit(this.currentSite.id);
+  }
+
+  onSetDefaultSite() {
+    this.setDefaultSite.emit(this.currentSite.id);
+  }
+
+  private initDropdownSite() {
+    this.displaySiteList = false;
+    if (this.currentSiteId > 0 && this.allSites && this.allSites.length > 1) {
+      this.currentSite = this.allSites.filter((x) => x.id === this.currentSiteId)[0];
+      this.displaySiteList = true;
+    }
   }
 
   buildNavigation() {
@@ -172,13 +223,13 @@ export class ClassicHeaderComponent implements OnDestroy {
                     {
                       label: translations['bia.themeLight'],
                       command: () => {
-                        this.onChangeTheme('light');
+                        this.onChangeTheme(THEME_LIGHT);
                       }
                     },
                     {
                       label: translations['bia.themeDark'],
                       command: () => {
-                        this.onChangeTheme('dark');
+                        this.onChangeTheme(THEME_DARK);
                       }
                     }
                   ]

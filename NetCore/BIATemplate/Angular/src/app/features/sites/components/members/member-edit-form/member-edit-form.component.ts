@@ -12,7 +12,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Member } from '../../../model/user/member';
 import { MemberRole } from '../../../model/user/member-role';
 import { DtoState } from 'src/app/shared/bia-shared/model/dto-state.enum';
-import { Role } from 'src/app/domains/member-role/model/role';
+import { Role } from 'src/app/domains/role/model/role';
 
 export interface MemberEditFormVM {
   roles: Role[] | null;
@@ -35,9 +35,7 @@ export class MemberEditFormComponent implements OnInit, OnChanges {
   form: FormGroup;
 
   constructor(public formBuilder: FormBuilder) {
-    this.form = this.formBuilder.group({
-      roles: [this.memberEditFormData.roles]
-    });
+    this.initForm();
   }
 
   ngOnInit() {}
@@ -49,6 +47,12 @@ export class MemberEditFormComponent implements OnInit, OnChanges {
       };
       this.form.patchValue({ ...vm });
     }
+  }
+
+  private initForm() {
+    this.form = this.formBuilder.group({
+      roles: [this.memberEditFormData.roles]
+    });
   }
 
   onCancel() {

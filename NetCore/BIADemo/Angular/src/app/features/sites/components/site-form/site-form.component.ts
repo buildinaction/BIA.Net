@@ -26,10 +26,7 @@ export class SiteFormComponent implements OnInit, OnChanges {
   form: FormGroup;
 
   constructor(public formBuilder: FormBuilder) {
-    this.form = this.formBuilder.group({
-      id: [this.site.id],
-      title: [this.site.title, Validators.required]
-    });
+    this.initForm();
   }
 
   ngOnInit() {}
@@ -41,6 +38,13 @@ export class SiteFormComponent implements OnInit, OnChanges {
         this.form.patchValue({ ...this.site });
       }
     }
+  }
+
+  private initForm() {
+    this.form = this.formBuilder.group({
+      id: [this.site.id],
+      title: [this.site.title, Validators.required]
+    });
   }
 
   onCancel() {

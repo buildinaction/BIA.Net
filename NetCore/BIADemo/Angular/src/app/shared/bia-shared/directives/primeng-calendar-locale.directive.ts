@@ -1,9 +1,9 @@
 import { Directive, OnDestroy } from '@angular/core';
-import { Calendar } from 'primeng/primeng';
 import { Observable, Subscription } from 'rxjs';
 import { PrimeLocale } from '../model/prime-locale';
 import { TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
+import { Calendar } from 'primeng';
 
 @Directive({
   selector: '[biaLocale]'

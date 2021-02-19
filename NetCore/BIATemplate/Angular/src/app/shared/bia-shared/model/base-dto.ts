@@ -1,6 +1,6 @@
 import { DtoState } from './dto-state.enum';
 
-export interface BaseDto {
+export class BaseDto {
   id: number;
   dtoState: DtoState;
 }

@@ -1,15 +1,21 @@
 import {NgxLoggerLevel} from 'ngx-logger';
 
 export const environment = {
+  helpUrl: '',
+  reportUrl: '',
   apiUrl: '../WebApi/api',
-  urlLogin: '/api/Auth/login',
+  hubUrl: '../WebApi/HubForClients',
+  urlAuth: '/api/Auth',
   urlLog: '/api/logs',
+  urlEnv: '/api/Environment',
   urlErrorPage: '/static/error.htm',
+  urlDMIndex: '/DMIndex',
   urlAppIcon: 'assets/bia/AppIcon.svg',
   useXhrWithCred: false,
   production: true,
   appTitle: 'BIATemplate',
-  version: 'v1.0.0',
+  companyName: 'Safran',
+  version: '1.3.0',
   logging: {
     conf: {
       serverLoggingUrl: '../WebApi/api/logs',

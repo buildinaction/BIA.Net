@@ -12,11 +12,11 @@ import {
   failure
 } from './planes-actions';
 import { LazyLoadEvent } from 'primeng/api';
-import { Plane } from '../model/plane';
+import { Plane, PlaneListItem } from '../model/plane';
 
 // This adapter will allow is to manipulate planes (mostly CRUD operations)
-export const planesAdapter = createEntityAdapter<Plane>({
-  selectId: (plane: Plane) => plane.id,
+export const planesAdapter = createEntityAdapter<PlaneListItem>({
+  selectId: (plane: PlaneListItem) => plane.id,
   sortComparer: false
 });
 
@@ -31,7 +31,7 @@ export const planesAdapter = createEntityAdapter<Plane>({
 // -> ids arrays allow us to sort data easily
 // -> entities map allows us to access the data quickly without iterating/filtering though an array of objects
 
-export interface State extends EntityState<Plane> {
+export interface State extends EntityState<PlaneListItem> {
   // additional props here
   totalCount: number;
   currentPlane: Plane;
@@ -74,8 +74,7 @@ export const planeReducers = createReducer<State>(
     return { ...state, loadingGet: true };
   }),
   on(loadAllByPostSuccess, (state, { result, event }) => {
-    const stateUpdated = planesAdapter.addAll(result.data, state);
-    stateUpdated.currentPlane = <Plane>{};
+    const stateUpdated = planesAdapter.setAll(result.data, state);
     stateUpdated.totalCount = result.totalCount;
     stateUpdated.lastLazyLoadEvent = event;
     stateUpdated.loadingGetAll = false;

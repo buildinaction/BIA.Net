@@ -1,4 +1,4 @@
-// @import '../../../scss/typography';
+@import '../../../../../../scss/bia/bia-variables';
 
 :host {
   display: flex;
@@ -6,15 +6,15 @@
 
 .topbar {
   height: 35px;
-  // button {
-  //   @include bia-typography-level-to-styles($oswald-typography, body-1);
-  // }
 }
 
 .logos {
   .separator {
     height: 24px;
     border-left: 1px solid;
+  }
+  a {
+    display: flex;
   }
 }
 
@@ -24,15 +24,14 @@
   z-index: 1;
   // ----
   nav {
-    // button {
-    //   @include bia-typography-level-to-styles($oswald-typography, headline);
-    // }
     .nav-button {
       text-transform: uppercase;
     }
   }
-  .help {
-    padding-right: 16px;
+
+  .action {
+    padding-right: 8px;
+    width: 80px;
   }
 
   .project-title {
@@ -40,13 +39,11 @@
     padding-left: 16px;
     font-family: 'oswald-regular';
     font-size: 19px;
-    // @include bia-typography-level-to-styles($oswald-typography, display-1);
   }
 
   .project-version {
     font-family: 'oswald-regular';
     font-size: 10px;
-    // @include bia-typography-level-to-styles($oswald-typography, caption);
   }
 
   .app-logo {
@@ -56,6 +53,34 @@
     // https://codepen.io/sosuke/pen/Pjoqqp
     // hexa: #f8a92b
     filter: invert(60%) sepia(92%) saturate(376%) hue-rotate(356deg) brightness(98%) contrast(98%);
+  }
+
+  &.env-dev {
+    background-color: rgba($color: $biaBlue, $alpha: 0.5);
+    .project-title {
+      background-color: rgba($color: $biaBlue, $alpha: 0);
+    }
+  }
+
+  &.env-int {
+    background-color: rgba($color: $biaGreen, $alpha: 0.5);
+    .project-title {
+      background-color: rgba($color: $biaGreen, $alpha: 0);
+    }
+  }
+
+  &.env-uat {
+    background-color: rgba($color: $biaOrange, $alpha: 0.5);
+    .project-title {
+      background-color: rgba($color: $biaOrange, $alpha: 0);
+    }
+  }
+
+  &.env-pra {
+    background-color: rgba($color: $biaRed, $alpha: 0.5);
+    .project-title {
+      background-color: rgba($color: $biaRed, $alpha: 0);
+    }
   }
 }
 
@@ -67,13 +92,11 @@
 }
 
 .app-full-screen {
-  margin-top: auto;
-  margin-bottom: auto;
   margin-right: 16px;
   margin-left: 8px;
 }
 
-.app-refresh {
+.app-icon-header {
   margin-top: auto;
   margin-bottom: auto;
 }
@@ -93,7 +116,6 @@
     }
     p-menubarsub:first-child > ul > li > a > .ui-menuitem-text {
       font-family: 'oswald-regular';
-      // @include bia-typography-level-to-styles($oswald-typography, body-1);
       font-weight: 400 !important;
       font-size: 18px !important;
       text-transform: uppercase !important;
@@ -104,6 +126,9 @@
   }
 
   p-megamenu {
+    .ui-menuitem-link {
+      padding-top: 0.3em;
+    }
     .ui-megamenu-panel {
       width: 10em;
     }
@@ -126,7 +151,14 @@
 
     .ui-menuitem-text {
       font-family: 'oswald-light';
-      // @include bia-typography-level-to-styles($oswald-typography, body-1);
     }
+  }
+
+  p-dropdown .ui-dropdown-trigger-icon {
+    color: white !important;
+  }
+
+  .ui-dropdown {
+    background-image: linear-gradient(to bottom, white, white), linear-gradient(to bottom, white, white);
   }
 }

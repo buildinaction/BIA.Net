@@ -2,21 +2,21 @@
   <div fxFlex="100">
     <bia-table-header
       [headerTitle]="('member.listOfSiteMembers' | translate) + (currentSite.title)"
-      [btnBackRouterLink]="siteRoute"
       [canAdd]="canAdd"
+      [canBack]="true"
       (create)="onCreate()"
+      (delete)="onDelete()"
+      [selectedElements]="selectedMembers"
     ></bia-table-header>
     <bia-table-controller
       [defaultPageSize]="defaultPageSize"
       [length]="totalCount$ | async"
       [columns]="columns"
-      [(displayedColumns)]="displayedColumns"
-      [hiddenColumns]="['bia.actions']"
+      [columnToDisplays]="displayedColumns"
       (displayedColumnsChange)="displayedColumnsChanged($event)"
       (filter)="searchGlobalChanged($event)"
       (pageSizeChange)="onPageSizeChange($event)"
       (toggleSearch)="onToggleSearch()"
-      [tableId]="'membersGrid'"
     ></bia-table-controller>
     <bia-table
       [elements]="members$ | async"
@@ -27,15 +27,14 @@
       [showColSearch]="showColSearch"
       [globalSearchValue]="globalSearchValue"
       [canEdit]="canEdit"
-      [canDelete]="canDelete"
+      [canSelectElement]="canDelete"
       [loading]="loading$ | async"
       (edit)="onEdit($event)"
-      (remove)="onRemove($event)"
       (loadLazy)="onLoadLazy($event)"
+      (selectedElementsChanged)="onSelectedElementsChanged($event)"
     ></bia-table>
   </div>
 </div>
-<p-confirmDialog></p-confirmDialog>
 <!-- begin popup mode -->
 <app-member-edit-dialog></app-member-edit-dialog>
 <app-member-new-dialog [site]="currentSite"></app-member-new-dialog>

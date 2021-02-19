@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/cor
 import { Store } from '@ngrx/store';
 import { create, closeDialogNew } from '../../store/sites-actions';
 import { Site } from '../../model/site/site';
-import { AppState } from 'src/app/shared/bia-shared/store/state';
+import { AppState } from 'src/app/store/state';
 import { Subscription } from 'rxjs';
 import { getDisplayNewDialog } from '../../store/site.state';
 
