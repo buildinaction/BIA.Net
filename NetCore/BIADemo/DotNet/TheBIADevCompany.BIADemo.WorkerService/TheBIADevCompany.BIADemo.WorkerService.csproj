@@ -30,42 +30,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="appsettings.TheBIADevTeam_INT.json">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Update="appsettings.TheBIADevTeam_PRA.json">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Update="appsettings.TheBIADevTeam_PRD.json">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Update="appsettings.TheBIADevTeam_UAT.json">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Update="bianetconfig.Development.json">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Update="bianetconfig.TheBIADevTeam_INT.json">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Update="bianetconfig.TheBIADevTeam_PRA.json">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Update="bianetconfig.TheBIADevTeam_PRD.json">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Update="bianetconfig.TheBIADevTeam_UAT.json">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-    <Content Update="bianetconfig.json">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
     <Content Update="web.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
   </ItemGroup>
-
+  
   <ItemGroup>
     <PackageReference Update="SonarAnalyzer.CSharp" Version="8.13.1.21947">
       <PrivateAssets>all</PrivateAssets>
