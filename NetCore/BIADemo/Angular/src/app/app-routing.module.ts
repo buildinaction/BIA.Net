@@ -31,6 +31,14 @@ const routes: Routes = [
                 loadChildren: () => import('./features/planes/plane.module').then((m) => m.PlaneModule)
               },
               {
+                path: 'planes-popup',
+                data: {
+                  breadcrumb: 'app.planes',
+                  canNavigate: true
+                },
+                loadChildren: () => import('./features/planes-popup/plane.module').then((m) => m.PlaneModule)
+              },
+              {
                 path: 'planes-page',
                 data: {
                   breadcrumb: 'app.planes',
@@ -42,7 +50,8 @@ const routes: Routes = [
                 path: 'planes-view',
                 data: {
                   breadcrumb: 'app.planes',
-                  canNavigate: true
+                  canNavigate: true,
+                  // noMargin: true // Add noMargin if you wish the content of a route to stick to the borders of the screen.
                 },
                 loadChildren: () => import('./features/planes-view/plane.module').then((m) => m.PlaneModule)
               },
@@ -53,6 +62,14 @@ const routes: Routes = [
                   canNavigate: true
                 },
                 loadChildren: () => import('./features/planes-signalR/plane.module').then((m) => m.PlaneModule)
+              },
+              {
+                path: 'planes-calc',
+                data: {
+                  breadcrumb: 'app.planes',
+                  canNavigate: true
+                },
+                loadChildren: () => import('./features/planes-calc/plane.module').then((m) => m.PlaneModule)
               },
               {
                 path: 'airports',
@@ -100,4 +117,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

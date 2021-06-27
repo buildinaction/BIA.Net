@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 const STORAGE_SITEID_KEY = 'currentSiteId';
 const STORAGE_RELOADED_KEY = 'isReloaded';
+const STORAGE_ROLEID_KEY = 'currentRoleId';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,7 @@ export class AuthService extends AbstractDas<AuthInfo> implements OnDestroy {
     this.authInfo$.subscribe((authInfo: AuthInfo | null) => {
       if (authInfo && authInfo.additionalInfos && authInfo.additionalInfos.userData) {
         this.setCurrentSiteId(authInfo.additionalInfos.userData.currentSiteId);
+        this.setCurrentRoleId(authInfo.additionalInfos.userData.currentRoleId);
       }
     });
   }
@@ -102,11 +104,28 @@ export class AuthService extends AbstractDas<AuthInfo> implements OnDestroy {
     return 0;
   }
 
+  public getCurrentRoleId(): number {
+    const value = sessionStorage.getItem(STORAGE_ROLEID_KEY);
+    if (value) {
+      return +value;
+    }
+
+    return 0;
+  }
+
   public setCurrentSiteId(siteId: number) {
     if (siteId > 0) {
       sessionStorage.setItem(STORAGE_SITEID_KEY, siteId.toString());
     } else {
       sessionStorage.removeItem(STORAGE_SITEID_KEY);
+    }
+  }
+
+  public setCurrentRoleId(roleId: number) {
+    if (roleId > 0) {
+      sessionStorage.setItem(STORAGE_ROLEID_KEY, roleId.toString());
+    } else {
+      sessionStorage.removeItem(STORAGE_ROLEID_KEY);
     }
   }
 
@@ -137,10 +156,15 @@ export class AuthService extends AbstractDas<AuthInfo> implements OnDestroy {
   protected buildUrlLogin() {
     let url: string;
     const siteId = this.getCurrentSiteId();
+    const roleId = this.getCurrentRoleId();
     if (siteId > 0) {
-      url = `${this.route}login/site/${siteId}`;
+      if (roleId > 0) {
+        url = `${this.route}login/site/${siteId}/${environment.singleRoleMode}/${roleId}`;
+      } else {
+        url = `${this.route}login/site/${siteId}/${environment.singleRoleMode}`;
+      }
     } else {
-      url = `${this.route}login`;
+      url = `${this.route}login/${environment.singleRoleMode}`;
     }
     return url;
   }

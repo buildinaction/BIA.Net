@@ -6,6 +6,8 @@ import {
   failure,
   load,
   loadAllSites,
+  loadAllSitesByUser,
+  loadAllSitesByUserSuccess,
   loadAllSuccess,
   loadSuccess,
   setDefaultSite
@@ -13,6 +15,7 @@ import {
 import { BiaMessageService } from 'src/app/core/bia-core/services/bia-message.service';
 import { SiteDas } from '../services/site-das.service';
 import { MemberDas } from '../services/member-das.service';
+import { LazyLoadEvent } from 'primeng';
 
 /**
  * Effects file is for isolating and managing side effects of the application in one place
@@ -23,14 +26,26 @@ import { MemberDas } from '../services/member-das.service';
 export class SitesEffects {
   loadAll$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(loadAllSites) /* When action is dispatched */,
-      /* startWith(loadAll()), */
-      /* Hit the Sites Index endpoint of our REST API */
-      /* Dispatch LoadAllSuccess action to the central store with id list returned by the backend as id*/
-      /* 'Sites Reducers' will take care of the rest */
+      ofType(loadAllSites),
       switchMap(() =>
         this.siteDas.getList().pipe(
           map((sites) => loadAllSuccess({ sites })),
+          catchError((err) => {
+            this.biaMessageService.showError();
+            return of(failure({ error: err }));
+          })
+        )
+      )
+    )
+  );
+
+  loadAllByUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loadAllSitesByUser),
+      pluck('userId'),
+      switchMap((userId) =>
+        this.siteDas.getListByPost(<LazyLoadEvent>{ userId: userId }).pipe(
+          map((result) => loadAllSitesByUserSuccess({ sites: result.data })),
           catchError((err) => {
             this.biaMessageService.showError();
             return of(failure({ error: err }));

@@ -13,16 +13,3 @@ export interface Plane {
   connectingAirports: OptionDto[];
   planeType: OptionDto | null;
 }
-
-export interface PlaneListItem {
-  id: number;
-  msn: string;
-  isActive: boolean;
-  firstFlightDate: Date;
-  firstFlightTime: Date;
-  lastFlightDate: Date;
-  capacity: number;
-  site: string;
-  connectingAirports: string;
-  planeType: string;
-}

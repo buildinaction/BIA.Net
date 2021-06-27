@@ -9,7 +9,7 @@ import { BiaTableComponent } from 'src/app/shared/bia-shared/components/table/bi
 import {
   BiaListConfig,
   PrimeTableColumn,
-  TypeTS,
+  PropType,
   PrimeNGFiltering
 } from 'src/app/shared/bia-shared/components/table/bia-table/bia-table-config';
 import { AppState } from 'src/app/store/state';
@@ -45,7 +45,7 @@ export class PlanesIndexComponent implements OnInit {
   canDelete = false;
   canAdd = false;
   createPlaneRoute = '/examples/planes-view/create';
-  editPlaneRoute = '/examples/planes-view/edit/';
+  indexPlaneRoute = '/examples/planes-view/';
   tableConfiguration: BiaListConfig;
   columns: KeyValuePair[];
   displayedColumns: KeyValuePair[];
@@ -75,7 +75,7 @@ export class PlanesIndexComponent implements OnInit {
   }
 
   onEdit(planeId: number) {
-    this.router.navigate([this.editPlaneRoute + planeId]);
+    this.router.navigate([this.indexPlaneRoute + planeId + '/edit']);
   }
 
   onDelete() {
@@ -135,24 +135,24 @@ export class PlanesIndexComponent implements OnInit {
           Object.assign(new PrimeTableColumn('isActive', 'plane.isActive'), {
             isSearchable: false,
             isSortable: false,
-            type: TypeTS.Boolean
+            type: PropType.Boolean
           }),
           Object.assign(new PrimeTableColumn('firstFlightDate', 'plane.firstFlightDate'), {
-            type: TypeTS.Date,
+            type: PropType.Date,
             formatDate: dateFormat.dateFormat
           }),
           Object.assign(new PrimeTableColumn('firstFlightTime', 'plane.firstFlightTime'), {
             isSearchable: false,
             isSortable: false,
-            type: TypeTS.Date,
+            type: PropType.Date,
             formatDate: dateFormat.timeFormat
           }),
           Object.assign(new PrimeTableColumn('lastFlightDate', 'plane.lastFlightDate'), {
-            type: TypeTS.Date,
+            type: PropType.Date,
             formatDate: dateFormat.dateTimeFormat
           }),
           Object.assign(new PrimeTableColumn('capacity', 'plane.capacity'), {
-            type: TypeTS.Number,
+            type: PropType.Number,
             filterMode: PrimeNGFiltering.Equals
           })
         ]

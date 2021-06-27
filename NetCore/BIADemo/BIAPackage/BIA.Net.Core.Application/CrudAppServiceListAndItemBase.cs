@@ -47,9 +47,10 @@ namespace BIA.Net.Core.Application
             Specification<TEntity> specification = null,
             Expression<Func<TEntity, bool>> filter = null,
             string accessMode = AccessMode.Read,
-            string queryMode = QueryMode.ReadList)
+            string queryMode = QueryMode.ReadList,
+            string mapperMode = null)
         {
-            return await this.GetRangeAsync<TDtoListItem, TMapperListItem, TFilterDto>(filters: filters, id: id, specification: specification, filter: filter, accessMode: accessMode, queryMode: queryMode);
+            return await this.GetRangeAsync<TDtoListItem, TMapperListItem, TFilterDto>(filters: filters, id: id, specification: specification, filter: filter, accessMode: accessMode, queryMode: queryMode, mapperMode: mapperMode);
         }
 
 
@@ -62,9 +63,10 @@ namespace BIA.Net.Core.Application
             int pageCount = 0,
             Expression<Func<TEntity, object>>[] includes = null,
             string accessMode = AccessMode.Read,
-            string queryMode = null)
+            string queryMode = null,
+            string mapperMode = null)
         {
-            return await this.GetAllAsync<TDtoListItem, TMapperListItem>(id: id, specification: specification, filter: filter, queryOrder: queryOrder, firstElement: firstElement, pageCount: pageCount, includes: includes, accessMode: accessMode, queryMode: queryMode);
+            return await this.GetAllAsync<TDtoListItem, TMapperListItem>(id: id, specification: specification, filter: filter, queryOrder: queryOrder, firstElement: firstElement, pageCount: pageCount, includes: includes, accessMode: accessMode, queryMode: queryMode, mapperMode: mapperMode);
         }
 
         public new virtual async Task<IEnumerable<TDtoListItem>> GetAllAsync<TKey>(Expression<Func<TEntity, TKey>> orderByExpression, bool ascending,
@@ -75,9 +77,10 @@ namespace BIA.Net.Core.Application
             int pageCount = 0,
             Expression<Func<TEntity, object>>[] includes = null,
             string accessMode = AccessMode.Read,
-            string queryMode = null)
+            string queryMode = null,
+            string mapperMode = null)
         {
-            return await this.GetAllAsync<TDtoListItem, TMapperListItem, TKey>(orderByExpression, ascending, id: id, specification: specification, filter: filter, firstElement: firstElement, pageCount: pageCount, includes: includes, accessMode: accessMode, queryMode: queryMode);
+            return await this.GetAllAsync<TDtoListItem, TMapperListItem, TKey>(orderByExpression, ascending, id: id, specification: specification, filter: filter, firstElement: firstElement, pageCount: pageCount, includes: includes, accessMode: accessMode, queryMode: queryMode, mapperMode: mapperMode);
         }
 
         protected new virtual async Task<byte[]> GetCsvAsync(
@@ -86,10 +89,11 @@ namespace BIA.Net.Core.Application
             Specification<TEntity> specification = null,
             Expression<Func<TEntity, bool>> filter = null,
             string accessMode = AccessMode.Read,
-            string queryMode = QueryMode.ReadList
+            string queryMode = QueryMode.ReadList,
+            string mapperMode = null
             )
         {
-            return await this.GetCsvAsync<TDtoListItem, TMapperListItem, TFilterDto>(filters: filters, id: id, specification: specification, filter: filter, accessMode: accessMode, queryMode: queryMode);
+            return await this.GetCsvAsync<TDtoListItem, TMapperListItem, TFilterDto>(filters: filters, id: id, specification: specification, filter: filter, accessMode: accessMode, queryMode: queryMode, mapperMode: mapperMode);
         }
 
         public new virtual async Task<byte[]> GetCsvAsync<TOtherFilter>(
@@ -98,11 +102,12 @@ namespace BIA.Net.Core.Application
             Specification<TEntity> specification = null,
             Expression<Func<TEntity, bool>> filter = null,
             string accessMode = AccessMode.Read,
-            string queryMode = QueryMode.ReadList
+            string queryMode = QueryMode.ReadList,
+            string mapperMode = null
             )
             where TOtherFilter : LazyLoadDto, new()
         {
-            return await this.GetCsvAsync<TDtoListItem, TMapperListItem, TOtherFilter>(filters: filters, id: id, specification: specification, filter: filter, accessMode: accessMode, queryMode: queryMode);
+            return await this.GetCsvAsync<TDtoListItem, TMapperListItem, TOtherFilter>(filters: filters, id: id, specification: specification, filter: filter, accessMode: accessMode, queryMode: queryMode, mapperMode: mapperMode);
         }
     }
 }

@@ -51,7 +51,8 @@ namespace BIA.Net.Core.Application
             Specification<TEntity> specification = null,
             Expression<Func<TEntity, bool>> filter = null,
             string accessMode = AccessMode.Read, 
-            string queryMode = QueryMode.ReadList)
+            string queryMode = QueryMode.ReadList,
+            string mapperMode = null)
             where TOtherMapper : BaseMapper<TOtherDto, TEntity>, new()
             where TOtherDto : BaseDto, new()
             where TOtherFilterDto : LazyLoadDto, new()
@@ -66,7 +67,7 @@ namespace BIA.Net.Core.Application
             var queryOrder = this.GetQueryOrder(mapper.ExpressionCollection, filters?.SortField, filters?.SortOrder == 1);
 
             var results = await this.Repository.GetRangeResultAsync(
-                mapper.EntityToDto(),
+                mapper.EntityToDto(mapperMode),
                 id: id,
                 specification: spec,
                 filter: filter,
@@ -88,12 +89,13 @@ namespace BIA.Net.Core.Application
             int pageCount = 0,
             Expression<Func<TEntity, object>>[] includes = null,
             string accessMode = AccessMode.Read,
-            string queryMode = null)
+            string queryMode = null,
+            string mapperMode = null)
             where TOtherMapper : BaseMapper<TOtherDto, TEntity>, new()
             where TOtherDto : BaseDto, new()
         {
             return await this.Repository.GetAllResultAsync(
-                selectResult: new TOtherMapper().EntityToDto(),
+                selectResult: new TOtherMapper().EntityToDto(mapperMode),
                 id: id,
                 specification: GetFilterSpecification(accessMode, filtersContext) & specification, 
                 filter: filter, 
@@ -114,12 +116,13 @@ namespace BIA.Net.Core.Application
             int pageCount = 0,
             Expression<Func<TEntity, object>>[] includes = null,
             string accessMode = AccessMode.Read,
-            string queryMode = null)
+            string queryMode = null,
+            string mapperMode = null)
             where TOtherMapper : BaseMapper<TOtherDto, TEntity>, new()
             where TOtherDto : BaseDto, new()
         {
             return await this.Repository.GetAllResultAsync(
-                 new TOtherMapper().EntityToDto(),
+                 new TOtherMapper().EntityToDto(mapperMode),
                 orderByExpression,
                 ascending,
                 id: id,
@@ -138,7 +141,8 @@ namespace BIA.Net.Core.Application
             Specification<TEntity> specification = null,
             Expression<Func<TEntity, bool>> filter = null,
             string accessMode = AccessMode.Read,
-            string queryMode = QueryMode.ReadList
+            string queryMode = QueryMode.ReadList,
+            string mapperMode = null
             )
             where TOtherMapper : BaseMapper<TOtherDto, TEntity>, new()
             where TOtherDto : BaseDto, new()
@@ -156,7 +160,7 @@ namespace BIA.Net.Core.Application
 
             IEnumerable<TOtherDto> results = (await this.GetRangeAsync<TOtherDto, TOtherMapper, TOtherFilterDto>(filters: filters, id:id, specification: specification, filter:filter, accessMode: accessMode, queryMode: queryMode)).results;
 
-            List<object[]> records = results.Select(new TOtherMapper().DtoToRecord()).ToList();
+            List<object[]> records = results.Select(new TOtherMapper().DtoToRecord(mapperMode)).ToList();
 
             StringBuilder csv = new StringBuilder();
             records.ForEach(line =>
@@ -174,13 +178,14 @@ namespace BIA.Net.Core.Application
             Expression<Func<TEntity, bool>> filter = null,
             Expression<Func<TEntity, object>>[] includes = null,
             string accessMode = AccessMode.Read, 
-            string queryMode = QueryMode.Read)
+            string queryMode = QueryMode.Read,
+            string mapperMode = null)
 
             where TOtherMapper : BaseMapper<TOtherDto, TEntity>, new()
             where TOtherDto : BaseDto, new()
         {
             var mapper = new TOtherMapper();
-            var result = await this.Repository.GetResultAsync(mapper.EntityToDto(), 
+            var result = await this.Repository.GetResultAsync(mapper.EntityToDto(mapperMode), 
                 id: id, 
                 specification: GetFilterSpecification(accessMode, filtersContext) & specification, 
                 filter: filter,
@@ -194,14 +199,15 @@ namespace BIA.Net.Core.Application
             return result;
         }
 
-        public virtual async Task<TOtherDto> AddAsync<TOtherDto, TOtherMapper>(TOtherDto dto)
+        public virtual async Task<TOtherDto> AddAsync<TOtherDto, TOtherMapper>(TOtherDto dto,
+            string mapperMode = null)
             where TOtherMapper : BaseMapper<TOtherDto, TEntity>, new()
             where TOtherDto : BaseDto, new()
         {
             if (dto != null)
             {
                 var entity = new TEntity();
-                new TOtherMapper().DtoToEntity(dto, entity);
+                new TOtherMapper().DtoToEntity(dto, entity, mapperMode);
                 this.Repository.Add(entity);
                 await this.Repository.UnitOfWork.CommitAsync();
                 dto.Id = entity.Id;
@@ -210,7 +216,11 @@ namespace BIA.Net.Core.Application
             return dto;
         }
 
-        public virtual async Task<TOtherDto> UpdateAsync<TOtherDto, TOtherMapper>(TOtherDto dto, string accessMode = AccessMode.Update, string queryMode = QueryMode.Update)
+        public virtual async Task<TOtherDto> UpdateAsync<TOtherDto, TOtherMapper>(
+            TOtherDto dto, 
+            string accessMode = AccessMode.Update, 
+            string queryMode = QueryMode.Update,
+            string mapperMode = null)
             where TOtherMapper : BaseMapper<TOtherDto, TEntity>, new()
             where TOtherDto : BaseDto, new()
         {
@@ -218,13 +228,13 @@ namespace BIA.Net.Core.Application
             {
                 var mapper = new TOtherMapper();
 
-                var entity = await this.Repository.GetEntityAsync(id: dto.Id, specification: GetFilterSpecification(accessMode, filtersContext), includes: mapper.IncludesForUpdate(), queryMode: queryMode);
+                var entity = await this.Repository.GetEntityAsync(id: dto.Id, specification: GetFilterSpecification(accessMode, filtersContext), includes: mapper.IncludesForUpdate(mapperMode), queryMode: queryMode);
                 if (entity == null)
                 {
                     throw new ElementNotFoundException();
                 }
 
-                mapper.DtoToEntity(dto, entity);
+                mapper.DtoToEntity(dto, entity, mapperMode);
                 this.Repository.Update(entity);
                 await this.Repository.UnitOfWork.CommitAsync();
                 dto.DtoState = DtoState.Unchanged;
@@ -234,7 +244,10 @@ namespace BIA.Net.Core.Application
         }
 
 
-        public virtual async Task RemoveAsync(int id, string accessMode = AccessMode.Delete, string queryMode = QueryMode.Delete)
+        public virtual async Task RemoveAsync(
+            int id, 
+            string accessMode = AccessMode.Delete, 
+            string queryMode = QueryMode.Delete)
         {
             var entity = await this.Repository.GetEntityAsync(id: id, specification: GetFilterSpecification(accessMode, filtersContext), queryMode: queryMode);
             if (entity == null)
@@ -246,7 +259,10 @@ namespace BIA.Net.Core.Application
             await this.Repository.UnitOfWork.CommitAsync();
         }
 
-        public virtual async Task SaveAsync<TOtherDto, TOtherMapper>(IEnumerable<TOtherDto> dtos)
+        public virtual async Task SaveAsync<TOtherDto, TOtherMapper>(IEnumerable<TOtherDto> dtos,
+            string accessMode = null,
+            string queryMode = null,
+            string mapperMode = null)
             where TOtherMapper : BaseMapper<TOtherDto, TEntity>, new()
             where TOtherDto : BaseDto, new()
         {
@@ -260,7 +276,7 @@ namespace BIA.Net.Core.Application
             {
                 foreach (var dto in dtoList)
                 {
-                    await this.SaveAsync<TOtherDto, TOtherMapper>(dto);
+                    await this.SaveAsync<TOtherDto, TOtherMapper>(dto, accessMode: accessMode, queryMode: queryMode, mapperMode: mapperMode);
                 }
 
                 transaction.Complete();
@@ -272,22 +288,31 @@ namespace BIA.Net.Core.Application
         /// </summary>
         /// <param name="dto">The dto to save.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        public virtual async Task SaveAsync<TOtherDto, TOtherMapper>(TOtherDto dto)
+        public virtual async Task SaveAsync<TOtherDto, TOtherMapper>(TOtherDto dto,
+            string accessMode = null,
+            string queryMode = null,
+            string mapperMode = null)
             where TOtherMapper : BaseMapper<TOtherDto, TEntity>, new()
             where TOtherDto : BaseDto, new()
         {
             switch (dto.DtoState)
             {
                 case DtoState.Added:
-                    await this.AddAsync<TOtherDto, TOtherMapper>(dto);
+                    await this.AddAsync<TOtherDto, TOtherMapper>(dto,
+                        mapperMode: mapperMode);
                     break;
 
                 case DtoState.Modified:
-                    await this.UpdateAsync<TOtherDto, TOtherMapper>(dto);
+                    await this.UpdateAsync<TOtherDto, TOtherMapper>(dto,
+                        accessMode: accessMode != null ? accessMode : AccessMode.Update,
+                        queryMode: queryMode!=null? queryMode : QueryMode.Update,
+                        mapperMode: mapperMode);
                     break;
 
                 case DtoState.Deleted:
-                    await this.RemoveAsync(dto.Id);
+                    await this.RemoveAsync(dto.Id,
+                        accessMode: accessMode != null ? accessMode : AccessMode.Delete,
+                        queryMode: queryMode != null ? queryMode : QueryMode.Delete);
                     break;
 
                 default:

@@ -1,23 +1,14 @@
-# Safran Framework
+# BIA Framework
 
-Safran Framework is a development platform for building RWD web applications (compatible with Mobile and Desktop) using .NET Core for the Backend and Angular for the Frontend.
+BIA Framework is a development platform for building RWD web applications (compatible with Mobile and Desktop) using .NET Core for the Backend and Angular for the Frontend.
 
-## New Project
+## Documentation
 
-If you want to start a new project, you have to create the Frontend and/or the Backend project(s) depending on your needs.
-
-You have to respect the structure below (same as BIADemo) for your project :  
-
-![Structure of Project's folder](./Docs/Images/folderStructure.png)
-
-To accomplish this, follow the steps below in the right order : 
-1. Clone the Git repository from Azure DevOps.
-2. In your project folder copy the .gitignore file you can find at the root of the BIADemo project.
-3. Create the README.md file that will be the entry point for your documentation, and the Docs folder that will contains others .md files.
-4. Create the Angular folder and follow the steps on [this page](./Angular/docs/NEW_PROJECT.md).
-5. Create the DotNet folder and follow the steps on [this page](./DotNet/Docs/NEW_PROJECT.md).
-
-Your should now be able to launch you project !
+- If you want to **start a new project**, follow this documentation : [NEW_PROJECT](./Docs/NEW_PROJECT.md)
+- If you want to **migrate an existing project**, follow this documentation : [MIGRATION](./Docs/MIGRATION.md)
+- If you want to **use the framework founctionnalities**, follow those documentations : 
+    - Angular : [README](./Angular/README.md)
+    - DotNet : [README](./DotNet/README.md)
 
 ## Changelog
 

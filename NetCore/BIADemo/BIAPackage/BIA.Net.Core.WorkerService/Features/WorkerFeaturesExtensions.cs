@@ -130,7 +130,10 @@
                 //    })
                 //    /*.RequireAuthorization(HangfirePolicyName)*/;
                 //});
-
+                app.UseHangfireDashboardCustomOptions(new HangfireDashboardCustomOptions
+                {
+                    DashboardTitle = () => options.HangfireServer.ServerName,
+                });
 
                 app.UseHangfireDashboard("/hangfire", new DashboardOptions
                 {

@@ -15,7 +15,7 @@ import { BiaTableComponent } from 'src/app/shared/bia-shared/components/table/bi
 import {
   BiaListConfig,
   PrimeTableColumn,
-  TypeTS
+  PropType
 } from 'src/app/shared/bia-shared/components/table/bia-table/bia-table-config';
 import { AppState } from 'src/app/store/state';
 import { DEFAULT_PAGE_SIZE } from 'src/app/shared/constants';
@@ -132,7 +132,7 @@ export class PlanesTypesIndexComponent implements OnInit {
         columns: [
           new PrimeTableColumn('title', 'planeType.title'),
           Object.assign(new PrimeTableColumn('certificationDate', 'planeType.certificationDate'), {
-            type: TypeTS.Date,
+            type: PropType.Date,
             formatDate: dateFormat.dateTimeFormat
           })
         ]

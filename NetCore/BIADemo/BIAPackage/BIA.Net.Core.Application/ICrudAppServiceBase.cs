@@ -41,7 +41,8 @@ namespace BIA.Net.Core.Application
             Specification<TEntity> specification = null,
             Expression<Func<TEntity, bool>> filter = null,
             string accessMode = AccessMode.Read,
-            string queryMode = QueryMode.ReadList);
+            string queryMode = QueryMode.ReadList,
+            string mapperMode = null);
 
         /// <summary>
         /// Get the csv with other filter.
@@ -59,7 +60,8 @@ namespace BIA.Net.Core.Application
             Specification<TEntity> specification = null,
             Expression<Func<TEntity, bool>> filter = null,
             string accessMode = AccessMode.Read,
-            string queryMode = QueryMode.ReadList
+            string queryMode = QueryMode.ReadList,
+            string mapperMode = null
             );
 
         /// <summary>
@@ -77,7 +79,8 @@ namespace BIA.Net.Core.Application
             Specification<TEntity> specification = null,
             Expression<Func<TEntity, bool>> filter = null,
             string accessMode = AccessMode.Read,
-            string queryMode = QueryMode.ReadList
+            string queryMode = QueryMode.ReadList,
+            string mapperMode = null
             )
              where TOtherFilter : LazyLoadDto, new();
 
@@ -103,7 +106,8 @@ namespace BIA.Net.Core.Application
             int pageCount = 0,
             Expression<Func<TEntity, object>>[] includes = null,
             string accessMode = AccessMode.Read,
-            string queryMode = null);
+            string queryMode = null,
+            string mapperMode = null);
 
         /// <summary>
         /// Returns data in csv format.
@@ -128,7 +132,8 @@ namespace BIA.Net.Core.Application
             int pageCount = 0,
             Expression<Func<TEntity, object>>[] includes = null,
             string accessMode = AccessMode.Read,
-            string queryMode = null);
+            string queryMode = null,
+            string mapperMode = null);
 
         /// <summary>
         /// Return a DTO for a given identifier.
@@ -145,21 +150,24 @@ namespace BIA.Net.Core.Application
             Expression<Func<TEntity, bool>> filter = null,
             Expression<Func<TEntity, object>>[] includes = null,
             string accessMode = AccessMode.Read,
-            string queryMode = QueryMode.Read);
+            string queryMode = QueryMode.Read,
+            string mapperMode = null);
 
         /// <summary>
         /// Transform the DTO into the corresponding entity and add it to the DB.
         /// </summary>
         /// <param name="dto">The DTO.</param>
         /// <returns>The DTO with id updated.</returns>
-        Task<TDto> AddAsync(TDto dto);
+        Task<TDto> AddAsync(TDto dto,
+            string mapperMode = null);
 
         /// <summary>
         /// Update an entity in DB with the DTO values.
         /// </summary>
         /// <param name="dto">The DTO.</param>
         /// <returns>The DTO updated.</returns>
-        Task<TDto> UpdateAsync(TDto dto, string accessMode = AccessMode.Update, string queryMode = QueryMode.Update);
+        Task<TDto> UpdateAsync(TDto dto, string accessMode = AccessMode.Update, string queryMode = QueryMode.Update,
+            string mapperMode = null);
 
         /// <summary>
         /// Remove an entity with its identifier.
@@ -173,13 +181,19 @@ namespace BIA.Net.Core.Application
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        Task SaveAsync(TDto dto);
+        Task SaveAsync(TDto dto,
+            string accessMode = null,
+            string queryMode = null,
+            string mapperMode = null);
 
         /// <summary>
         /// Save the list of DTO in DB regarding to theirs state.
         /// </summary>
         /// <param name="dtos">The list of DTO to save.</param>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        Task SaveAsync(IEnumerable<TDto> dtos);
+        Task SaveAsync(IEnumerable<TDto> dtos,
+            string accessMode = null,
+            string queryMode = null,
+            string mapperMode = null);
     }
 }

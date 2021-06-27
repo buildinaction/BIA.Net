@@ -2,10 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>3.3.0</Version>
+    <Copyright>Copyright © BIA 2020</Copyright>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <Version>3.3.1</Version>
+    <PackageIcon>LogoBIA.png</PackageIcon>
+    <PackageIconUrl />
+    <Authors>BIA Team</Authors>
+    <Company>BIA</Company>
+    <Description>WorkerService layer classes for BIA.Net Core Framework</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Hangfire.Dashboard.Customize" Version="1.0.1" />
     <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="3.1.8" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.8" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.11" />
@@ -20,6 +29,13 @@
 
   <ItemGroup>
     <Folder Include="Authentication\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Images\LogoBIA.png" Link="LogoBIA.png">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
   </ItemGroup>
 
 </Project>

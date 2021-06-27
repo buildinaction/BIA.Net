@@ -16,7 +16,9 @@ import { BiaThemeService } from './services/bia-theme.service';
 import { BiaTranslationService } from './services/bia-translation.service';
 import { BiaAppInitService } from './services/bia-app-init.service';
 import { SiteModule } from 'src/app/domains/site/site.module';
+import { RoleModule } from 'src/app/domains/role/role.module';
 import { EnvironmentConfigurationModule } from 'src/app/domains/environment-configuration/environment-configuration.module';
+import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 
 export function initializeApp(appInitService: BiaAppInitService) {
   return (): Promise<any> => {
@@ -24,12 +26,20 @@ export function initializeApp(appInitService: BiaAppInitService) {
   };
 }
 
-const MODULES = [HttpClientModule, SiteModule, EnvironmentConfigurationModule];
+const MODULES = [HttpClientModule, SiteModule, RoleModule, EnvironmentConfigurationModule];
 
 /* Warning: the order matters */
 const INTERCEPTORS = [standardEncodeHttpParamsInterceptor, biaXhrWithCredInterceptor, biaTokenInterceptor];
 
 const SERVICES = [MessageService, AuthService, BiaThemeService, BiaTranslationService];
+
+const BASE_HREF = [
+  {
+    provide: APP_BASE_HREF,
+    useFactory: (s: PlatformLocation) => s.getBaseHrefFromDOM(),
+    deps: [PlatformLocation]
+  }
+];
 
 @NgModule({
   imports: [...MODULES],
@@ -37,6 +47,7 @@ const SERVICES = [MessageService, AuthService, BiaThemeService, BiaTranslationSe
   providers: [
     ...INTERCEPTORS,
     ...SERVICES,
+    ...BASE_HREF,
     BiaAppInitService,
     { provide: APP_INITIALIZER, useFactory: initializeApp, deps: [BiaAppInitService], multi: true }
   ]

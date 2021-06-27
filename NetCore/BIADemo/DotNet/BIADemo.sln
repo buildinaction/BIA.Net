@@ -1,40 +1,43 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 - Presentation", "01 - Presentation", "{CD137582-30F5-4875-8481-C9017FAC9AE3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Safran.BIADemo.Presentation.Api", "Safran.BIADemo.Presentation.Api\Safran.BIADemo.Presentation.Api.csproj", "{2B3C0DF8-44C3-4F12-A248-19C370D32DCE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBIADevCompany.BIADemo.Presentation.Api", "TheBIADevCompany.BIADemo.Presentation.Api\TheBIADevCompany.BIADemo.Presentation.Api.csproj", "{2B3C0DF8-44C3-4F12-A248-19C370D32DCE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02 - Application", "02 - Application", "{EBD788A9-9C14-4751-AF22-5C8928D09525}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Safran.BIADemo.Application", "Safran.BIADemo.Application\Safran.BIADemo.Application.csproj", "{3931751C-8C65-4B60-AC65-93E799C751F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBIADevCompany.BIADemo.Application", "TheBIADevCompany.BIADemo.Application\TheBIADevCompany.BIADemo.Application.csproj", "{3931751C-8C65-4B60-AC65-93E799C751F0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03 - Domain", "03 - Domain", "{5D661929-3F9A-4617-8406-46A3C133BB2E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Safran.BIADemo.Domain", "Safran.BIADemo.Domain\Safran.BIADemo.Domain.csproj", "{91A9AE09-5D12-4B93-B9CD-F69732C976B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBIADevCompany.BIADemo.Domain", "TheBIADevCompany.BIADemo.Domain\TheBIADevCompany.BIADemo.Domain.csproj", "{91A9AE09-5D12-4B93-B9CD-F69732C976B3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Safran.BIADemo.Domain.Dto", "Safran.BIADemo.Domain.Dto\Safran.BIADemo.Domain.Dto.csproj", "{7363EC20-0B47-4BC6-8A33-DCD852346660}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBIADevCompany.BIADemo.Domain.Dto", "TheBIADevCompany.BIADemo.Domain.Dto\TheBIADevCompany.BIADemo.Domain.Dto.csproj", "{7363EC20-0B47-4BC6-8A33-DCD852346660}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04 - Infrastructure", "04 - Infrastructure", "{C9EE7482-A883-4D78-86C1-9575FDF7C1BE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Safran.BIADemo.Infrastructure.Data", "Safran.BIADemo.Infrastructure.Data\Safran.BIADemo.Infrastructure.Data.csproj", "{11BE99EE-6C10-48DF-9F01-45D057E5F8C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBIADevCompany.BIADemo.Infrastructure.Data", "TheBIADevCompany.BIADemo.Infrastructure.Data\TheBIADevCompany.BIADemo.Infrastructure.Data.csproj", "{11BE99EE-6C10-48DF-9F01-45D057E5F8C0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05 - Crosscutting", "05 - Crosscutting", "{F7D547DD-7A5D-4CD0-9AE2-07E6CF683025}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Safran.BIADemo.Crosscutting.Common", "Safran.BIADemo.Crosscutting.Common\Safran.BIADemo.Crosscutting.Common.csproj", "{61BC44EC-19C2-44C5-A352-D99F19C832CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBIADevCompany.BIADemo.Crosscutting.Common", "TheBIADevCompany.BIADemo.Crosscutting.Common\TheBIADevCompany.BIADemo.Crosscutting.Common.csproj", "{61BC44EC-19C2-44C5-A352-D99F19C832CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Safran.BIADemo.Crosscutting.Ioc", "Safran.BIADemo.Crosscutting.Ioc\Safran.BIADemo.Crosscutting.Ioc.csproj", "{AD8DDF03-2484-43D6-B68A-F34EB70B1EDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBIADevCompany.BIADemo.Crosscutting.Ioc", "TheBIADevCompany.BIADemo.Crosscutting.Ioc\TheBIADevCompany.BIADemo.Crosscutting.Ioc.csproj", "{AD8DDF03-2484-43D6-B68A-F34EB70B1EDB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Safran.BIADemo.Infrastructure.Service", "Safran.BIADemo.Infrastructure.Service\Safran.BIADemo.Infrastructure.Service.csproj", "{814971AB-8B45-4EDF-A529-336CAD3D1ECE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBIADevCompany.BIADemo.Infrastructure.Service", "TheBIADevCompany.BIADemo.Infrastructure.Service\TheBIADevCompany.BIADemo.Infrastructure.Service.csproj", "{814971AB-8B45-4EDF-A529-336CAD3D1ECE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Safran.BIADemo.WorkerService", "Safran.BIADemo.WorkerService\Safran.BIADemo.WorkerService.csproj", "{6C976803-D3F2-44B0-B7F6-6B8AAD8DD333}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBIADevCompany.BIADemo.WorkerService", "TheBIADevCompany.BIADemo.WorkerService\TheBIADevCompany.BIADemo.WorkerService.csproj", "{6C976803-D3F2-44B0-B7F6-6B8AAD8DD333}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdditionalFiles", "AdditionalFiles", "{25ADA917-6580-4F47-A856-CF04AB8CE7B7}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		BIA.ruleset = BIA.ruleset
+		CHANGELOG.md = CHANGELOG.md
 		Directory.Build.props = Directory.Build.props
+		README.md = README.md
 		Switch-To-Nuget.ps1 = Switch-To-Nuget.ps1
 		Switch-To-Project.ps1 = Switch-To-Project.ps1
 	EndProjectSection
@@ -42,30 +45,16 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{90DD0210-8503-485D-831A-28FC09BC7011}"
 	ProjectSection(SolutionItems) = preProject
 		CHANGELOG.md = CHANGELOG.md
-		Docs\EXAMPLE_IN_PROJECTS.md = Docs\EXAMPLE_IN_PROJECTS.md
-		Docs\NEW_PROJECT.md = Docs\NEW_PROJECT.md
 		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "99 - Test", "99 - Test", "{416ECC3A-996F-4D16-BE5F-0774094FCA27}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Safran.BIADemo.Test", "Safran.BIADemo.Test\Safran.BIADemo.Test.csproj", "{99D1E791-6C11-4512-9779-1540FCAAA18C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBIADevCompany.BIADemo.Test", "TheBIADevCompany.BIADemo.Test\TheBIADevCompany.BIADemo.Test.csproj", "{99D1E791-6C11-4512-9779-1540FCAAA18C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Features", "Features", "{79A0DA02-E79F-413F-9C18-12E5B269B299}"
-	ProjectSection(SolutionItems) = preProject
-		Docs\Features\CLIENT_FOR_HUB.md = Docs\Features\CLIENT_FOR_HUB.md
-		Docs\Features\DATABASE_HANDLER.md = Docs\Features\DATABASE_HANDLER.md
-		Docs\Features\DELEGATE_JOB_TO_WORKER.md = Docs\Features\DELEGATE_JOB_TO_WORKER.md
-		Docs\Features\HUB_FOR_CLIENTS.md = Docs\Features\HUB_FOR_CLIENTS.md
-		Docs\Features\SWAGGER.md = Docs\Features\SWAGGER.md
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBIADevCompany.BIADemo.DeployDB", "TheBIADevCompany.BIADemo.DeployDB\TheBIADevCompany.BIADemo.DeployDB.csproj", "{56D0D92E-471F-48F9-B0C1-A801BCE01F9B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projects", "Projects", "{8D3E2080-0BA0-4DFD-B281-7213BD9BFBE2}"
-	ProjectSection(SolutionItems) = preProject
-		Docs\Projects\00 - SOLUTION.md = Docs\Projects\00 - SOLUTION.md
-		Docs\Projects\01 - WORKER_SERVICE.md = Docs\Projects\01 - WORKER_SERVICE.md
-		Docs\Projects\99 - TEST.md = Docs\Projects\99 - TEST.md
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Docs", "Docs\Docs.csproj", "{97D11137-4483-4AD1-95E2-648582C12F1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -113,6 +102,14 @@ Global
 		{99D1E791-6C11-4512-9779-1540FCAAA18C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99D1E791-6C11-4512-9779-1540FCAAA18C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99D1E791-6C11-4512-9779-1540FCAAA18C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56D0D92E-471F-48F9-B0C1-A801BCE01F9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56D0D92E-471F-48F9-B0C1-A801BCE01F9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56D0D92E-471F-48F9-B0C1-A801BCE01F9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56D0D92E-471F-48F9-B0C1-A801BCE01F9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97D11137-4483-4AD1-95E2-648582C12F1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97D11137-4483-4AD1-95E2-648582C12F1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97D11137-4483-4AD1-95E2-648582C12F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97D11137-4483-4AD1-95E2-648582C12F1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -128,8 +125,8 @@ Global
 		{814971AB-8B45-4EDF-A529-336CAD3D1ECE} = {C9EE7482-A883-4D78-86C1-9575FDF7C1BE}
 		{6C976803-D3F2-44B0-B7F6-6B8AAD8DD333} = {CD137582-30F5-4875-8481-C9017FAC9AE3}
 		{99D1E791-6C11-4512-9779-1540FCAAA18C} = {416ECC3A-996F-4D16-BE5F-0774094FCA27}
-		{79A0DA02-E79F-413F-9C18-12E5B269B299} = {90DD0210-8503-485D-831A-28FC09BC7011}
-		{8D3E2080-0BA0-4DFD-B281-7213BD9BFBE2} = {90DD0210-8503-485D-831A-28FC09BC7011}
+		{56D0D92E-471F-48F9-B0C1-A801BCE01F9B} = {CD137582-30F5-4875-8481-C9017FAC9AE3}
+		{97D11137-4483-4AD1-95E2-648582C12F1C} = {90DD0210-8503-485D-831A-28FC09BC7011}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6D07EDEA-2197-4E6C-8665-3D76E7D31E14}

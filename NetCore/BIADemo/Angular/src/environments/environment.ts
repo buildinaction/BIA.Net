@@ -14,13 +14,14 @@ export const environment = {
   useXhrWithCred: true,
   production: false,
   appTitle: 'BIADemo',
-  companyName: 'Safran',
-  version: '1.3.0',
+  companyName: 'TheBIADevCompany',
+  version: '1.3.3',
   logging: {
     conf: {
       serverLoggingUrl: 'http://localhost/BIADemo/WebApi/api/logs',
       level: NgxLoggerLevel.DEBUG,
       serverLogLevel: NgxLoggerLevel.ERROR
     }
-  }
+  },
+  singleRoleMode: false
 };

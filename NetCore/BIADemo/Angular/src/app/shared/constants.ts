@@ -3,6 +3,7 @@ export const DEFAULT_PAGE_SIZE = 10;
 
 export const ROUTE_DATA_BREADCRUMB = 'breadcrumb';
 export const ROUTE_DATA_CAN_NAVIGATE = 'canNavigate';
+export const ROUTE_DATA_NO_MARGIN = 'noMargin';
 
 export const THEME_LIGHT = 'light';
 export const THEME_DARK = 'dark';

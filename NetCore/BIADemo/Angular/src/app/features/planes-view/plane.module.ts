@@ -11,6 +11,7 @@ import { PlaneNewComponent } from './views/plane-new/plane-new.component';
 import { PlaneEditComponent } from './views/plane-edit/plane-edit.component';
 import { Permission } from 'src/app/shared/permission';
 import { PermissionGuard } from 'src/app/core/bia-core/guards/permission.guard';
+import { PlaneItemComponent } from './views/plane-item/plane-item.component';
 
 const ROUTES: Routes = [
   {
@@ -33,20 +34,41 @@ const ROUTES: Routes = [
     canActivate: [PermissionGuard]
   },
   {
-    path: 'edit/:id',
+    path: ':planeId',
     data: {
-      breadcrumb: 'bia.edit',
-      canNavigate: false,
-      permission: Permission.Plane_Update
+      breadcrumb: '',
+      canNavigate: true,
     },
-    component: PlaneEditComponent,
-    canActivate: [PermissionGuard]
+    component: PlaneItemComponent,
+    canActivate: [PermissionGuard],
+    children: [
+      {
+        path: 'edit',
+        data: {
+          breadcrumb: 'bia.edit',
+          canNavigate: true,
+          permission: Permission.Plane_Update
+        },
+        component: PlaneEditComponent,
+        canActivate: [PermissionGuard]
+      },
+      {
+        path: '',
+        redirectTo: 'edit'
+      },
+    ]
   },
   { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
-  declarations: [PlaneFormComponent, PlanesIndexComponent, PlaneNewComponent, PlaneEditComponent],
+  declarations: [
+    PlaneFormComponent,
+    PlanesIndexComponent,
+    PlaneItemComponent,
+    PlaneNewComponent,
+    PlaneEditComponent
+  ],
   imports: [
     SharedModule,
     RouterModule.forChild(ROUTES),
@@ -54,4 +76,4 @@ const ROUTES: Routes = [
     EffectsModule.forFeature([PlanesEffects])
   ]
 })
-export class PlaneModule {}
+export class PlaneModule { }

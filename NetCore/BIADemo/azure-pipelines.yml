@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  name: 'DMEU_BUILD'
+  name: 'TheBIADevTeam_BUILD'
 
 variables:
   solution: '**/*.sln'

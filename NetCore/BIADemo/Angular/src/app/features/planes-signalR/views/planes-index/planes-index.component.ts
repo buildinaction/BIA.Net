@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnInit, ViewChild } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { getAllPlanes, getPlanesTotalCount, getPlaneLoadingGetAll } from '../../store/plane.state';
 import { multiRemove, loadAllByPost, load, openDialogEdit, openDialogNew } from '../../store/planes-actions';
@@ -9,7 +9,7 @@ import { BiaTableComponent } from 'src/app/shared/bia-shared/components/table/bi
 import {
   BiaListConfig,
   PrimeTableColumn,
-  TypeTS,
+  PropType,
   PrimeNGFiltering
 } from 'src/app/shared/bia-shared/components/table/bia-table/bia-table-config';
 import { AppState } from 'src/app/store/state';
@@ -28,7 +28,7 @@ import { PlanesSignalRService } from '../../services/plane-signalr.service';
   templateUrl: './planes-index.component.html',
   styleUrls: ['./planes-index.component.scss']
 })
-export class PlanesIndexComponent implements OnInit {
+export class PlanesIndexComponent implements OnInit, OnDestroy {
   @HostBinding('class.bia-flex') flex = true;
   @ViewChild(BiaTableComponent, { static: false }) planeListComponent: BiaTableComponent;
   showColSearch = false;
@@ -65,6 +65,10 @@ export class PlanesIndexComponent implements OnInit {
     this.planes$ = this.store.select(getAllPlanes).pipe();
     this.totalCount$ = this.store.select(getPlanesTotalCount).pipe();
     this.loading$ = this.store.select(getPlaneLoadingGetAll).pipe();
+  }
+
+  ngOnDestroy() {
+    this.planesSignalRService.destroy();
   }
 
   onCreate() {
@@ -133,24 +137,24 @@ export class PlanesIndexComponent implements OnInit {
           Object.assign(new PrimeTableColumn('isActive', 'plane.isActive'), {
             isSearchable: false,
             isSortable: false,
-            type: TypeTS.Boolean
+            type: PropType.Boolean
           }),
           Object.assign(new PrimeTableColumn('firstFlightDate', 'plane.firstFlightDate'), {
-            type: TypeTS.Date,
+            type: PropType.Date,
             formatDate: dateFormat.dateFormat
           }),
           Object.assign(new PrimeTableColumn('firstFlightTime', 'plane.firstFlightTime'), {
             isSearchable: false,
             isSortable: false,
-            type: TypeTS.Date,
+            type: PropType.Date,
             formatDate: dateFormat.timeFormat
           }),
           Object.assign(new PrimeTableColumn('lastFlightDate', 'plane.lastFlightDate'), {
-            type: TypeTS.Date,
+            type: PropType.Date,
             formatDate: dateFormat.dateTimeFormat
           }),
           Object.assign(new PrimeTableColumn('capacity', 'plane.capacity'), {
-            type: TypeTS.Number,
+            type: PropType.Number,
             filterMode: PrimeNGFiltering.Equals
           })
         ]

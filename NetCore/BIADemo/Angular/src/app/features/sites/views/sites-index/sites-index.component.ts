@@ -17,7 +17,7 @@ import { AuthService } from 'src/app/core/bia-core/services/auth.service';
 import { Permission } from 'src/app/shared/permission';
 import { KeyValuePair } from 'src/app/shared/bia-shared/model/key-value-pair';
 import { SiteAdvancedFilter } from '../../model/site/site-advanced-filter';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 interface SiteListVM {
   id: number;
@@ -55,7 +55,7 @@ export class SitesIndexComponent implements OnInit {
   viewPreference: string;
   advancedFilter: SiteAdvancedFilter;
 
-  constructor(private store: Store<AppState>, private authService: AuthService, private router: Router) {}
+  constructor(private store: Store<AppState>, private authService: AuthService, private router: Router, public route: ActivatedRoute) { }
 
   ngOnInit() {
     this.initTableConfiguration();
@@ -70,9 +70,11 @@ export class SitesIndexComponent implements OnInit {
     this.store.dispatch(openDialogNew());
   }
 
-  onEdit(siteId: number) {
-    this.store.dispatch(load({ id: siteId }));
-    this.store.dispatch(openDialogEdit());
+  onEdit() {
+    if (this.selectedSites && this.selectedSites.length === 1) {
+      this.store.dispatch(load({ id: this.selectedSites[0].id }));
+      this.store.dispatch(openDialogEdit());
+    }
   }
 
   onDelete() {
@@ -85,9 +87,9 @@ export class SitesIndexComponent implements OnInit {
     this.selectedSites = planesTypes;
   }
 
-  onManageMember() {
-    if (this.selectedSites && this.selectedSites.length === 1) {
-      this.router.navigate(['/sites', this.selectedSites[0].id, 'members']);
+  onManageMember(siteId: number) {
+    if (siteId && siteId > 0) {
+      this.router.navigate(['/sites', siteId, 'members']);
     }
   }
 
@@ -140,8 +142,8 @@ export class SitesIndexComponent implements OnInit {
       title: site.title,
       siteAdmin: site.siteAdmins
         ? site.siteAdmins
-            .map((siteMember: SiteMember) => `${siteMember.userLastName} ${siteMember.userFirstName}`)
-            .join(', ')
+          .map((siteMember: SiteMember) => `${siteMember.userLastName} ${siteMember.userFirstName}`)
+          .join(', ')
         : ''
     };
   }

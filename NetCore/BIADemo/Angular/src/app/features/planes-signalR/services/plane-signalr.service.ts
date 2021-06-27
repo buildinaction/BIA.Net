@@ -29,14 +29,8 @@ export class PlanesSignalRService {
    * Note: this method has been created so that we have to call one method on this class, otherwise dependency injection is not working.
    */
   initialize() {
-    this.registerOnServerEvents();
-  }
-
-  /**
-   * Register SignalR specific events.
-   */
-  private registerOnServerEvents(): void {
-    this.signalRService.getHubConnection().on('refresh-planes', () => {
+    console.log('%c [PlanesSignalR] Register SignalR : refresh-planesSignalR', 'color: purple; font-weight: bold');
+    this.signalRService.addMethod('refresh-planesSignalR', () => {
       this.store.select(getLastLazyLoadEvent).pipe(first()).subscribe(
         (event) => {
           console.log('%c [PlanesSignalR] RefreshSuccess', 'color: green; font-weight: bold');
@@ -44,5 +38,10 @@ export class PlanesSignalRService {
         }
       );
     });
+  }
+
+  destroy() {
+    console.log('%c [PlanesSignalR] Unregister refresh-planesSignalR', 'color: purple; font-weight: bold');
+    this.signalRService.removeMethod('refresh-planesSignalR');
   }
 }

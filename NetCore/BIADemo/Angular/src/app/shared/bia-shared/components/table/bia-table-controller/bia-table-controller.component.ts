@@ -85,7 +85,7 @@ export class BiaTableControllerComponent implements OnChanges, OnInit, OnDestroy
 
   onViewChange(event: string) {
     this.setControlByViewState(event);
-    this.viewChange.emit(event);
+    setTimeout(() => this.viewChange.emit(event));
   }
 
   private onColumnsChange(changes: SimpleChanges) {

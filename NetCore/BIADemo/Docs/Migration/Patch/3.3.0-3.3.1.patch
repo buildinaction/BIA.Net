@@ -1,0 +1,1557 @@
+diff --git a/Angular/README.md b/Angular/README.md
+index dad711a..e424485 100644
+--- a/Angular/README.md
++++ b/Angular/README.md
+@@ -1,14 +1,24 @@
+-# TheBIADevCompany Framework
++# BIA Framework
+ 
+-TheBIADevCompany Framework is a development platform for building mobile and desktop web applications using Angular.
++BIA Framework is a development platform for building mobile and desktop web applications using Angular.
+ 
+ ## New Project
+ 
+ [Get started a new project][newproject].
+ 
++## Generate a crud
++
++[Generate a new crud feature][crud].
++
++## Generate an option module
++
++[Generate a new option module in domain][option].
++
+ ## Changelog
+ 
+ [Learn about the latest improvements][changelog].
+ 
+ [newproject]: ./docs/NEW_PROJECT.md
+-[changelog]: ./CHANGELOG.md
+\ No newline at end of file
++[changelog]: ./CHANGELOG.md
++[crud]: ./docs/CRUD.md
++[option]: ./docs/OPTION.md
+\ No newline at end of file
+diff --git a/Angular/docs/CRUD.md b/Angular/docs/CRUD.md
+index c5cacad..ebe90c6 100644
+--- a/Angular/docs/CRUD.md
++++ b/Angular/docs/CRUD.md
+@@ -1,5 +1,5 @@
+ # CRUD
+-This document explains how to quickly create a CRUD.   
++This document explains how to quickly create a CRUD module feature.   
+ <u>For this example, we imagine that we want to create a new feature with the name: <span style="background-color:yellow">aircrafts</span>.   </u>
+ 
+ ## Prerequisite
+@@ -8,14 +8,17 @@ The back-end is ready, i.e. the <span style="background-color:yellow">Aircraft</
+ ## Create a new feature
+ First, create a new <span style="background-color:yellow">aircrafts</span> folder under the **src\app\features** folder of your project.   
+ Then copy, paste and unzip into this feature <span style="background-color:yellow">aircrafts</span> folder the contents of :
+-* **Angular\docs\planes-popup.zip** if you want a CRUD with popup
+-* **Angular\docs\planes-page.zip** if you want a CRUD with page
++* If you want a CRUD without relation (generaly use in Administrative parameter list):
++  * **Angular\docs\feature-airports.zip** 
++* If you want a CRUD with relation, like option selectable (this requiered that you create the option module before), or filter by site:
++  * **Angular\docs\feature-planes-popup.zip** open the edit form in a popup
++  * **Angular\docs\feature-planes-page.zip** open the edit form in a full screen page
++  * **Angular\docs\feature-planes-SignalR.zip** open the edit form in a popup and list is refreshed by SignalR if there is modification detected by the back.
++  * **Angular\docs\feature-planes-view.zip** open the edit form in a popup and add the view system to filter the lists.
+ 
+ Then, inside the folder of your new feature, execute the file **new-crud.ps1**   
+-For **old crud name? (singular)**, type plane   
+-For **old crud name? (plural)**, type planes   
+-For **new crud name? (singular)**, type <span style="background-color:yellow">aircraft</span>   
+-For **new crud name? (plural)**, type <span style="background-color:yellow">aircrafts</span>   
++For **new crud name? (singular)**, type <span style="background-color:yellow">aircraft</span>   (use - in complexe name example : plane-type)
++For **new crud name? (plural)**, type <span style="background-color:yellow">aircrafts</span>    (use - in complexe name example : planes-types)
+ When finished, you can delete **new-crud.ps1**   
+ 
+ ## Update navigation
+@@ -28,6 +31,8 @@ Open the file **src\app\shared\permission.ts** and in the **Permission** enum, a
+   Aircraft_Save = 'Aircraft_Save',
+   Aircraft_Update = 'Aircraft_Update',
+ ```
++For complexe name use : PlaneType_Create = 'PlaneType_Create',
++
+ 
+ ## Update navigation
+ Open the file **src\app\shared\navigation.ts** and in the array **NAVIGATION**, add 
+@@ -38,6 +43,15 @@ Open the file **src\app\shared\navigation.ts** and in the array **NAVIGATION**,
+   path: ['/aircrafts']
+ }
+ ```
++example for complexe name:
++```typescript
++{
++  labelKey: 'app.planesTypes',
++  permissions: [Permission.PlaneType_List_Access],
++  path: ['/examples/planes-types']
++}
++```
++
+ ## Update routing
+ Open the file **src\app\app-routing.module.ts** and in the array **routes**, add 
+ ```typescript
+@@ -50,26 +64,43 @@ Open the file **src\app\app-routing.module.ts** and in the array **routes**, add
+     loadChildren: () => import('./features/aircrafts/aircraft.module').then((m) => m.AircraftModule)
+ }
+ ```
++example for complexe name:
++```typescript
++{
++  path: 'planes-types',
++  data: {
++    breadcrumb: 'app.planesTypes',
++    canNavigate: true
++  },
++  loadChildren: () => import('./features/planes-types/plane-type.module').then((m) => m.PlaneTypeModule)
++}
++```
++
+ ## Create the model
+ Use the back-end with swagger to retrieve a json from the new entity.   
+ Use this site to convert the json to interface TypeScript:   
+ http://json2ts.com/   
+ And then, copy the generated code in **src\app\features\aircrafts\model\aircraft.ts**
+ 
++If you have a related model you have 2 models to generate :
++- one for the item display in the list <span style="background-color:yellow">Aircraft</span>ListItem (based on the swagger result of /api/<span style="background-color:yellow">Aircrafts</span>/all)
++- one for the item display in the list <span style="background-color:yellow">Aircraft</span> (based on the swagger result of /api/<span style="background-color:yellow">Aircrafts</span>/{id}  and replace all any and object generated (except Site) by OptionDto)
++
++
+ ## Update translations
+ Open the file **src\assets\i18n\app\en.json** and   
+-add in `"app"`
++add in `"app"` (use camel case : "planesTypes": "Planes types",)
+ ```json
+ "app": {
+     ...
+     "aircrafts": "Aircrafts"
+   }
+ ```
+-add
++add (use Camel case in the json labe ex: "planeType": { )
+ ```json
+ "aircraft": {
+-  "add": "Add Aircraft",
+-  "edit": "Edit Aircraft",
++  "add": "Add aircraft",
++  "edit": "Edit aircraft",
+   "listOf": "List of aircrafts"
+   }
+ ```
+@@ -86,8 +117,8 @@ add in `"app"`
+ add
+ ```json
+ "aircraft": {
+-    "add": "Ajouter Aéronef",
+-    "edit": "Modifier Aéronef",
++    "add": "Ajouter aéronef",
++    "edit": "Modifier aéronef",
+     "listOf": "Liste des aéronefs"
+   }
+ ```
+@@ -104,8 +135,8 @@ add in `"app"`
+ add
+ ```json
+ "aircraft": {
+-   "add": "Añadir Aeronave",
+-    "edit": "Editar Aeronave",
++   "add": "Añadir aeronave",
++    "edit": "Editar aeronave",
+     "listOf": "Lista de aeronaves"
+   }
+ ```
+@@ -134,6 +165,17 @@ Object.assign(new PrimeTableColumn('msn', 'aircraft.msn'), {
+       })
+ ```
+ 
++## Relation to Option
++Adapt (or supress if not use) the differente relation to Option:
++In ngOnInit function of the two files:
++* **src\app\features\aircrafts\views\aircrafts-edit-dialog\aircrafts-edit-dialog.component.ts**
++* **src\app\features\aircrafts\views\aircrafts-new-dialog\aircrafts-new-dialog.component.ts**
++For example, add the following lines two have the option list synchronized (for the type : PlaneType):
++```typescript
++    this.planeTypeOptions$ = this.store.select(getAllPlaneTypeOptions).pipe();
++    this.store.dispatch(loadAllPlaneTypeOptions());
++```
++
+ ## Enable Views
+ 
+ To enable views on this feature, set the **aircrafts-index.component.ts** file.  
+@@ -169,3 +211,53 @@ Add the input parameter `tableStateKey` for the `bia-table-controller` and `bia-
+ ></bia-table>
+ ```
+ 
++## Enable SignalR:
++* Use the **Angular\docs\feature-planes-SignalR.zip** and the new_crud.ps1 to generate the files at the right name.
++  Copy the <span style="background-color:yellow">aircraft</span>-signalR.service.ts in your features/<span style="background-color:yellow">aircrafts</span>/services folder
++* In the <span style="background-color:yellow">aircraft</span>-index.component.ts constructor add (replace aircraft by your feature name):
++  ```typescript
++    constructor(
++        private store: Store<AppState>,
++        private authService: AuthService,
++        private planeDas: PlaneDas,
++        private translateService: TranslateService,
++        private biaTranslationService: BiaTranslationService,
++        private aircraftsSignalRService: PlanesSignalRService
++      ) {
++        this.aircraftsSignalRService.initialize();
++      }
++  ```
++* In <span style="background-color:yellow">aircraft</span>.module.ts add the provider after import:
++  ```typescript
++    imports: [
++        ...
++    ],
++    providers: [
++      AircraftsSignalRService
++    ]
++  ```
++* In the <span style="background-color:yellow">aircrafts</span>-effects.ts modify create, update, remove, multiRemove to not more use return loadAllByPost but use biaSuccessWaitRefreshSignalR() :
++  ```typescript
++    create$ = createEffect(() =>
++      this.actions$.pipe(
++        ofType(create),
++        pluck('aircraft'),
++        concatMap((aircraft) => of(aircraft).pipe(withLatestFrom(this.store.select(getLastLazyLoadEvent)))),
++        switchMap(([aircraft, event]) => {
++          return this.aircraftDas.post(aircraft).pipe(
++            map(() => {
++              this.biaMessageService.showAddSuccess();
++              // Uncomment this if you do not use SignalR to refresh
++              // return loadAllByPost({ event: <LazyLoadEvent>event });
++              // Uncomment this if you use SignalR to refresh
++              return biaSuccessWaitRefreshSignalR();
++            }),
++            catchError((err) => {
++              this.biaMessageService.showError();
++              return of(failure({ error: err }));
++            })
++          );
++        })
++      )
++    );
++  ```
+diff --git a/Angular/docs/NEW_PROJECT.md b/Angular/docs/NEW_PROJECT.md
+index a38b300..5ef0d72 100644
+--- a/Angular/docs/NEW_PROJECT.md
++++ b/Angular/docs/NEW_PROJECT.md
+@@ -63,7 +63,7 @@ Open your **.gitconfig** file and add this configuration:
+ 
+ 
+ ## Create a new project
+-Retrieve the latest version of the **[BIA Template](https://inshare.collab.group.thebiadevcompany/bao/DevOps/BIAV3/Shared%20Documents/AngularTemplates)**.   
++Retrieve the latest version of the **[BIA.AngularTemplate.X.Y.Z.zip](../../Docs/BIAExtension)**.   
+ Copy/Paste the contents of the zip into the Angular folder of your new project.   
+ Inside the Angular folder of your new project, run the powershell script `new-angular-project.ps1`.   
+ For **old project name?**, type **BIATemplate**   
+diff --git a/Angular/docs/OPTION.md b/Angular/docs/OPTION.md
+new file mode 100644
+index 0000000..e472891
+--- /dev/null
++++ b/Angular/docs/OPTION.md
+@@ -0,0 +1,16 @@
++# OTPION
++This document explains how to quickly create a option module in domain. It will be use to populate combo list and multiselect in features forms.   
++<u>For this example, we imagine that we want to create a new feature with the name: <span style="background-color:yellow">aircrafts</span>.   </u>
++
++## Prerequisite
++The back-end is ready, i.e. the <span style="background-color:yellow">Aircraft</span> controller exists as well as permissions such as `Aircraft_Option`. This controller should have a GetAllOptions function that return a list of OptionDto
++
++## Create a new domain
++First, create a new <span style="background-color:yellow">aircrafts</span> folder under the **src\app\domains** folder of your project.   
++Then copy, paste and unzip into this feature <span style="background-color:yellow">aircrafts</span> folder the contents of :
++  * **Angular\docs\domain-airport-option.zip** 
++
++Then, inside the folder of your new feature, execute the file **new-option-module.ps1**   
++For **new option name? (singular)**, type <span style="background-color:yellow">aircraft</span>   
++For **new option name? (plural)**, type <span style="background-color:yellow">aircrafts</span>   
++When finished, you can delete **new-option-module.ps1**   
+diff --git a/Angular/docs/START_EXISTING_PROJECT.md b/Angular/docs/START_EXISTING_PROJECT.md
+new file mode 100644
+index 0000000..5a78f3f
+--- /dev/null
++++ b/Angular/docs/START_EXISTING_PROJECT.md
+@@ -0,0 +1,7 @@
++
++
++
++
++Clone the project
++- In Angular project do  npm install
++- do npm start
+\ No newline at end of file
+diff --git a/Angular/mypatch.patch b/Angular/mypatch.patch
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/Angular/src/app/core/bia-core/bia-core.module.ts b/Angular/src/app/core/bia-core/bia-core.module.ts
+index 26c5112..66d2771 100644
+--- a/Angular/src/app/core/bia-core/bia-core.module.ts
++++ b/Angular/src/app/core/bia-core/bia-core.module.ts
+@@ -17,6 +17,7 @@ import { BiaTranslationService } from './services/bia-translation.service';
+ import { BiaAppInitService } from './services/bia-app-init.service';
+ import { SiteModule } from 'src/app/domains/site/site.module';
+ import { EnvironmentConfigurationModule } from 'src/app/domains/environment-configuration/environment-configuration.module';
++import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
+ 
+ export function initializeApp(appInitService: BiaAppInitService) {
+   return (): Promise<any> => {
+@@ -31,12 +32,21 @@ const INTERCEPTORS = [standardEncodeHttpParamsInterceptor, biaXhrWithCredInterce
+ 
+ const SERVICES = [MessageService, AuthService, BiaThemeService, BiaTranslationService];
+ 
++const BASE_HREF = [
++  {
++    provide: APP_BASE_HREF,
++    useFactory: (s: PlatformLocation) => s.getBaseHrefFromDOM(),
++    deps: [PlatformLocation]
++  }
++];
++
+ @NgModule({
+   imports: [...MODULES],
+   exports: [...MODULES],
+   providers: [
+     ...INTERCEPTORS,
+     ...SERVICES,
++    ...BASE_HREF,
+     BiaAppInitService,
+     { provide: APP_INITIALIZER, useFactory: initializeApp, deps: [BiaAppInitService], multi: true }
+   ]
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/layout.component.ts b/Angular/src/app/shared/bia-shared/components/layout/layout.component.ts
+index a1c625f..75606f1 100644
+--- a/Angular/src/app/shared/bia-shared/components/layout/layout.component.ts
++++ b/Angular/src/app/shared/bia-shared/components/layout/layout.component.ts
+@@ -1,4 +1,4 @@
+-import { Component, HostBinding, OnInit } from '@angular/core';
++import { Component, HostBinding, Inject, OnInit } from '@angular/core';
+ import { environment } from 'src/environments/environment';
+ import { APP_SUPPORTED_TRANSLATIONS, THEME_LIGHT, THEME_DARK } from '../../../constants';
+ import { AuthInfo } from '../../model/auth-info';
+@@ -18,6 +18,7 @@ import { getLocaleId } from 'src/app/app.module';
+ import { filter, map } from 'rxjs/operators';
+ import { EnvironmentType } from 'src/app/domains/environment-configuration/model/environment-configuration';
+ import { getEnvironmentConfiguration } from 'src/app/domains/environment-configuration/store/environment-configuration.state';
++import { APP_BASE_HREF } from '@angular/common';
+ 
+ @Component({
+   selector: 'app-bia-layout',
+@@ -67,7 +68,8 @@ export class LayoutComponent implements OnInit {
+     private navigationService: NavigationService,
+     private authService: AuthService,
+     private biaThemeService: BiaThemeService,
+-    private store: Store<AppState>
++    private store: Store<AppState>,
++    @Inject(APP_BASE_HREF) public baseHref: string
+   ) {}
+ 
+   ngOnInit() {
+@@ -89,9 +91,8 @@ export class LayoutComponent implements OnInit {
+   }
+ 
+   onSiteChange(siteId: number) {
+-    // this.store.dispatch(setDefaultSite({ id: siteId }));
+     this.authService.setCurrentSiteId(siteId);
+-    location.assign('/');
++    location.assign(this.baseHref);
+   }
+ 
+   onSetDefaultSite(siteId: number) {
+diff --git a/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.html b/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.html
+index 6e94a70..078a3a3 100644
+--- a/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.html
++++ b/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.html
+@@ -36,6 +36,7 @@
+       </ng-container>
+     </tr>
+     <tr *ngIf="showColSearch">
++      <th *ngIf="canSelectElement"></th>
+       <th *ngFor="let col of columns" [ngSwitch]="col.field">
+         <span *ngIf="col.isSearchable === true" class="md-inputfield">
+           <input
+diff --git a/Docs/PACKAGING.md b/Docs/PACKAGING.md
+new file mode 100644
+index 0000000..5e20f9a
+--- /dev/null
++++ b/Docs/PACKAGING.md
+@@ -0,0 +1,99 @@
++# Package a new version of the Framework:
++
++## Refine the BIADemo project
++- In the .Net Part: put comments "// BIADemo only" at the beginning of each file which must not appear in the template
++- Put behind comments "// Begin BIADemo" and "// End BIADemo" the parts of the files to make disappear in the template
++- Remove all warnings.
++- Change the framework version in 
++  - **..\BIADemo\DotNet\TheBIADevCompany.BIADemo.Crosscutting.Common\Constants.cs**
++  - **..\BIADemo\Angular\src\app\shared\bia-shared\framework-version.ts**
++- Verify project version in
++  - **..\BIADemo\DotNet\TheBIADevCompany.BIADemo.Crosscutting.Common\Constants.cs**
++  - **..\BIADemo\Angular\src\environments\environment.ts**
++  - **..\BIADemo\Angular\src\environments\environment.prod.ts**
++- COMMIT BIADemo
++
++## Compile the BIA packages:
++- Change the version number of all BIA.Net.Core packages to match the version to be released.
++- Compile the whole solution in release
++- Publish all the packages (right click on each project, publish, "Copy to NuGetPackage folder", Publish)
++
++## Switch the BIADemo project to nuget
++- Start the script **...\BIADemo\DotNet\Switch-To-Project.ps1**
++- Check that the solution compiles (need to have configured a local source nuget to ...\BIADemo\BIAPackage\NuGetPackage)
++- test the BIADemo project.
++- DO NOT COMMIT BIADemo here (this will block the build 24H because the packages are not published on nuget.org)
++
++## Prepare BIATemplate:
++- Launch **...\BIATemplate\DotNet-BIADemo-BIATemplate.ps1**
++- Launch **...\BIATemplate\Angular-BIADemo-BIATemplate.ps1** (if some files are to exclude modify the script)
++- Compile the solution BIATemplate, Test and verify the absence of warning.
++- DO NOT COMMIT BIATemplate here (this will block the build 24H because the packages are not published on nuget.org)
++
++## Publish BIAPackage
++- If everything is ok Publish the packages on nuget.org
++- Wait the confirmation by mail of all packages
++- COMMIT BIADemo and BIATemplate
++
++## Prepare the VSExtension
++- In BIATemplate project extract the tempate for all projects:
++  - Use Ctrl+E, Ctrl+X to dislay wizard
++  - Select the project (should be done for all projects)
++  - Click next
++  - Uncheck the 2 combo
++  - Click Finish
++- In *...\BIAVSExtension\BIAProjectCreator\RefreshKit.ps1** check than the path ($RepSource) is correct 
++- Launch **...\BIAVSExtension\BIAProjectCreator\RefreshKit.ps1** (it refresh the files in BIAVSExtension\BIAProjectCreator\BIA.ProjectCreatorTemplateV3 from the template extrated)
++- Open the solution **..\BIAVSExtension\BIAVSExtension.sln**
++- If project have been added in the BIATemplate update **...\BIAVSExtension\BIAProjectCreator\BIA.ProjectCreatorTemplateV3\BIA.vstemplate**
++- Change the version number in the name tag of the file **...\BIAVSExtension\BIAProjectCreator\BIA.ProjectCreatorTemplateV3\BIA.vstemplate**
++- Change the version number (add a .0 to be on 4 digits) in **...\BIAVSExtension\BIAProjectCreator\BIA.ProjectCreator\source.extension.vsixmanifest**
++- Check that all the Additional Files and Docs are added to the project and have the properties: Build action = Content, Include In VSIX = true-. If not verify the BIA.ProjectCreator.csproj if should content:
++```XML
++  <ItemGroup>
++    <Content Include="AdditionalFiles\*" >
++      <IncludeInVSIX>true</IncludeInVSIX>
++    </Content>
++    <Content Include="AdditionalFiles\*\*" >
++      <IncludeInVSIX>true</IncludeInVSIX>
++    </Content>
++    <Content Include="AdditionalFiles\*\*\*" >
++      <IncludeInVSIX>true</IncludeInVSIX>
++    </Content>
++    <Content Include="AdditionalFiles\*\*\*\*" >
++      <IncludeInVSIX>true</IncludeInVSIX>
++    </Content>
++    <Content Include="AdditionalFiles\*\*\*\*\*" >
++      <IncludeInVSIX>true</IncludeInVSIX>
++    </Content>
++    <Content Include="AdditionalFiles\*\*\*\*\*\*">
++      <IncludeInVSIX>true</IncludeInVSIX>
++    </Content>
++    <Content Include="AdditionalFiles\*\*\*\*\*\*\*" >
++      <IncludeInVSIX>true</IncludeInVSIX>
++    </Content>
++    <Content Include="AdditionalFiles\*\*\*\*\*\*\*\*" >
++      <IncludeInVSIX>true</IncludeInVSIX>
++    </Content>
++    <None Include="source.extension.vsixmanifest">
++      <SubType>Designer</SubType>
++    </None>
++  </ItemGroup>
++```
++- You can test the project BIAProjectCreator in debug ... when it start, create a new project and select BIA V... Template.
++- Rebuild solution in release.
++- COMMIT the BIAVSExtension solution.
++
++## Store the BIAExtensions in BIADemo repository
++- In folder ..\BIADemo\Docs\BIAExtension create a new folder VX.Y.Z with (X.Y.Z = version)
++- Move the generated file **...\BIADemo\Docs\BIAExtension\BIA.ProjectCreator.vsix** to  **...\BIADemo\Docs\BIAExtension\VX.Y.Z\BIA.ProjectCreator.vsix**
++- Zip the **...\BIATemplate\Angular** folder to  **...\BIADemo\Docs\BIAExtension\VX.Y.Z\BIA.AngularTemplate.X.Y.Z.zip**
++- COMMIT the BIADemo repository.
++
++## Deliver the version
++- Set the tag of the version in the 2 repository BIADemo and BIATemplate
++- Mail all developer to informe than a new version is available.
++
++## Prepare Migration
++Follow those step:
++- [PREPARE MIGRATION](./PREPARE MIGRATION.md)
+\ No newline at end of file
+diff --git a/Docs/PREPARE MIGRATION.md b/Docs/PREPARE MIGRATION.md
+new file mode 100644
+index 0000000..94972cc
+--- /dev/null
++++ b/Docs/PREPARE MIGRATION.md	
+@@ -0,0 +1,43 @@
++# Prepare Migration
++
++## If it was not done at the delivery set tags on project BIATEMPLATE at the last commit of the delivery
++1. To have the full log history open powersheel:
++```ps
++cd ...\BIATemplate
++git log --pretty=format:"%h - %an, %ad"
++```
++2. select the correct commit id corresponding to the date 
++3. Create the tag directly in the azure devops interface:
++https://azure.devops.thebiadevcompany/TheBIADevCompanyElectricalAndPower/Digital%20Manufacturing/_git/BIATemplate/tags
++4. Sync your local repository BIATemplate
++
++## Create the git differential patch 
++1. use git batch (V2.30.1 or higher) and run command (ex for V3.2.0 to V3.2.2):
++```ps
++cd "...\\BIATemplate"
++git diff V3.2.0 V3.2.2 > ..\\BIADemo\\Docs\\Migration\\Patch\\3.2.0-3.2.2.patch
++```
++
++2. Copy the .patch file in BIADemo\Docs\Migration
++
++## Add notice to apply the migration 
++* in the migration document in folder BIADemo\Docs\Migration creation a migration file with folowing instruction (change the version number and remove the \ before ```):
++```md
++## AUTOMATIC MIGRATION
++1. Apply the patch
++* Copy the file [3.2.2-3.3.0.patch](./Patch/3.2.2-3.3.0.patch) in the project folder.
++* Remplace BIATemplate by the name of your project
++* Remplace biatemplate by the name of your project in lower case
++* Run the following command in Git Batch
++\```ps
++cd "...\\YourProject"
++git apply --reject --whitespace=fix "3.2.2-3.3.0.patch"
++\```
++
++2. Analyse the .rej file that have been created in your project folder
++=> It is change that cannot be apply automaticaly.
++=> Apply manualy the change.
++```
++
++* Complete the migration document : Write custom change to apply to back and front.
++...
+\ No newline at end of file
+diff --git a/DotNet-BIADemo-BIATemplate.ps1 b/DotNet-BIADemo-BIATemplate.ps1
+index 983de36..eaf9836 100644
+--- a/DotNet-BIADemo-BIATemplate.ps1
++++ b/DotNet-BIADemo-BIATemplate.ps1
+@@ -167,8 +167,9 @@ RemoveItemFolder -path '*\bin'
+ Write-Host "Remove *\obj"
+ RemoveItemFolder -path '*\obj'
+ 
+-Write-Host "Remove Migrations folder"
+-RemoveItemFolder -path 'TheBIADevCompany.BIADemo.Infrastructure.Data\Migrations'
++Write-Host "Remove Migrations and keep .editconfig"
++# RemoveItemFolder -path 'TheBIADevCompany.BIADemo.Infrastructure.Data\Migrations'
++Remove-Item 'TheBIADevCompany.BIADemo.Infrastructure.Data\Migrations\*.cs' -Recurse -Force -Confirm:$false
+ 
+ Write-Host "Remove BIA demo only files"
+ RemoveBIADemoOnlyFiles
+diff --git a/DotNet/BIATemplate.sln b/DotNet/BIATemplate.sln
+index 9e00f28..397cd89 100644
+--- a/DotNet/BIATemplate.sln
++++ b/DotNet/BIATemplate.sln
+@@ -67,6 +67,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projects", "Projects", "{8D
+ 		Docs\Projects\99 - TEST.md = Docs\Projects\99 - TEST.md
+ 	EndProjectSection
+ EndProject
++Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBIADevCompany.BIATemplate.DeployDB", "TheBIADevCompany.BIATemplate.DeployDB\TheBIADevCompany.BIATemplate.DeployDB.csproj", "{56D0D92E-471F-48F9-B0C1-A801BCE01F9B}"
++EndProject
+ Global
+ 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+ 		Debug|Any CPU = Debug|Any CPU
+@@ -113,6 +115,10 @@ Global
+ 		{99D1E791-6C11-4512-9779-1540FCAAA18C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+ 		{99D1E791-6C11-4512-9779-1540FCAAA18C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+ 		{99D1E791-6C11-4512-9779-1540FCAAA18C}.Release|Any CPU.Build.0 = Release|Any CPU
++		{56D0D92E-471F-48F9-B0C1-A801BCE01F9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++		{56D0D92E-471F-48F9-B0C1-A801BCE01F9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
++		{56D0D92E-471F-48F9-B0C1-A801BCE01F9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
++		{56D0D92E-471F-48F9-B0C1-A801BCE01F9B}.Release|Any CPU.Build.0 = Release|Any CPU
+ 	EndGlobalSection
+ 	GlobalSection(SolutionProperties) = preSolution
+ 		HideSolutionNode = FALSE
+@@ -130,6 +136,7 @@ Global
+ 		{99D1E791-6C11-4512-9779-1540FCAAA18C} = {416ECC3A-996F-4D16-BE5F-0774094FCA27}
+ 		{79A0DA02-E79F-413F-9C18-12E5B269B299} = {90DD0210-8503-485D-831A-28FC09BC7011}
+ 		{8D3E2080-0BA0-4DFD-B281-7213BD9BFBE2} = {90DD0210-8503-485D-831A-28FC09BC7011}
++		{56D0D92E-471F-48F9-B0C1-A801BCE01F9B} = {CD137582-30F5-4875-8481-C9017FAC9AE3}
+ 	EndGlobalSection
+ 	GlobalSection(ExtensibilityGlobals) = postSolution
+ 		SolutionGuid = {6D07EDEA-2197-4E6C-8665-3D76E7D31E14}
+diff --git a/DotNet/CHANGELOG.md b/DotNet/CHANGELOG.md
+index d602d98..63bfdfd 100644
+--- a/DotNet/CHANGELOG.md
++++ b/DotNet/CHANGELOG.md
+@@ -1,10 +1,17 @@
++### [3.3.1] (2021-04-01)
++* DeployDB use native code First mecanism
++* Use the new clusterised database
++* Add the MapperMode flag in FilteredService to not multiplicate mapper when only a part of the field are to update.
++* Add the project title on hangfire dashboard.
++* Suppress all warning in test and generated code.
+ ### [3.3.0] (2021-01-15)
+-* Add feature management (posibilit� to activate and desactivate powerfull feature like swagger, SignalR...)
++* Add feature management (posibilité to activate and desactivate powerfull feature like swagger, SignalR...)
+ * Add Unitary Test
+ * Add feature in Api HubForClients (use SignalR to push messge to all client connected, compatible with multi front) 
+ * Add feature in Api DelegateJobToWorker (use Hangfire to launch job in the worker) 
+ * Add feature in worker DatabaseHandler (detect the change in db immediatlty)
+ * Add feature in worker HubForClients (use the Api feture HubForClients to push message to all web client connected)
++* WorkerService is now a web api with the hangfire Dashboard.
+ ### [3.2.2] (2020-10-16)
+ * Solve bug with Zodiac user
+ * Desactivate swagger in no dev environment
+diff --git a/DotNet/Docs/CONFIGURE_YOUR_DEV_ENVIRONMENT.md b/DotNet/Docs/CONFIGURE_YOUR_DEV_ENVIRONMENT.md
+new file mode 100644
+index 0000000..cf6e817
+--- /dev/null
++++ b/DotNet/Docs/CONFIGURE_YOUR_DEV_ENVIRONMENT.md
+@@ -0,0 +1,38 @@
++# Configure your development environment:
++
++## Minimum requierement
++
++### Visual Studio 2019 & components
++Install [Visual Studio 2019](https://visualstudio.microsoft.com/fr/vs/) and be sure to add the latest SDK of .NET Core from the components list.
++Add those components during installation :
++- [Git for Visual Studio](https://subscription.packtpub.com/book/programming/9781789530094/9/ch09lvl1sec71/installing-git-for-visual-studio-2019)
++- [Development Time IIS Support](https://devblogs.microsoft.com/aspnet/development-time-iis-support-for-asp-net-core-applications/)
++
++If Visual Studio 2019 is already install, you can add thoses component by launching the VS Installer.
++
++### Variable Environment
++create the following system environment variable:  
++Name: ASPNETCORE_ENVIRONMENT  
++Value: Development  
++
++## TheBIADevCompany Customisation
++
++### Configuration for the TheBIADevCompany proxy
++[Add the following **User** environment variables :](https://www.tenforums.com/tutorials/121664-set-new-user-system-environment-variables-windows.html#option1)  
++* HTTP_PROXY: http://10.179.8.30:3128/
++* HTTPS_PROXY: http://10.179.8.30:3128/
++* NO_PROXY: https://tfsdm.eu.labinal.snecma
++
++### Git config
++To find the path to the **.gitconfig** file, type the following command:  
++`git config --list --show-origin`  
++
++Open your **.gitconfig** file (usualy located in your user folder) and add this configuration:
++```
++[http "https://tfsdm.eu.labinal.snecma/"]
++                sslVerify = false
++                proxy = ""
++[http "https://azure.devops.thebiadevcompany/"]
++                sslVerify = false
++                proxy = ""
++```
+diff --git a/DotNet/Docs/EXAMPLE_IN_PROJECTS.md b/DotNet/Docs/EXAMPLE_IN_PROJECTS.md
+index 405f424..b0acf3c 100644
+--- a/DotNet/Docs/EXAMPLE_IN_PROJECTS.md
++++ b/DotNet/Docs/EXAMPLE_IN_PROJECTS.md
+@@ -19,7 +19,9 @@ Open this file to see connector usage: [ConnectorsUsage.xls ](http://nateamwork.
+ * ADPConnector
+ 
+ **Upload files**
+-* iDo
++* iDo => But produce error 401 in other project
++* ESNAuto Line (Angular\src\app\features\extremity-configurations\components\extremity-configuration-attachment-new-dialog)
++* ChangeNote (Angular\src\app\features\physical-harnesses\components\physical-harness-form)
+ 
+ ## BackEnd
+ **Use SQL view (Utilisation Vue SQL)**
+diff --git a/DotNet/Docs/Features/DATABASE_HANDLER.md b/DotNet/Docs/Features/DATABASE_HANDLER.md
+index 98f4727..5f3e506 100644
+--- a/DotNet/Docs/Features/DATABASE_HANDLER.md
++++ b/DotNet/Docs/Features/DATABASE_HANDLER.md
+@@ -15,6 +15,48 @@ ALTER DATABASE [YourProjectDatabase] SET ENABLE_BROKER;
+ ALTER DATABASE [YourProjectDatabase] SET MULTI_USER WITH ROLLBACK IMMEDIATE
+ ```
+ 
++WARNING: If the database is in an availability group, you should remove the database from availability group before apply this script.
++And readded after (requiered to delete before the databse in secondary server).
++
++Give the right to the YourUserRW to read and write the database and run this script (replace the YourUserRW by the corresponding user):
++ 
++```SQL
++USE [YourProjectDatabase];
++
++--create user for schema ownership
++CREATE USER SqlDependencySchemaOwner WITHOUT LOGIN;
++GO
++
++--create schema for SqlDependency ojbects
++CREATE SCHEMA SqlDependency AUTHORIZATION SqlDependencySchemaOwner;
++GO
++
++--set the default schema of minimally privileged user to SqlDependency
++ALTER USER "YourUserRW" WITH DEFAULT_SCHEMA = SqlDependency;
++
++--grant user control permissions on SqlDependency schema
++GRANT CONTROL ON SCHEMA::SqlDependency TO "YourUserRW";
++
++--grant user impersonate permissions on SqlDependency schema owner
++GRANT IMPERSONATE ON USER::SqlDependencySchemaOwner TO "YourUserRW";
++GO
++
++--grant database permissions needed to create and use SqlDependency objects
++GRANT CREATE PROCEDURE TO "YourUserRW";
++GRANT CREATE QUEUE TO "YourUserRW";
++GRANT CREATE SERVICE TO "YourUserRW";
++GRANT REFERENCES ON
++    CONTRACT::[http://schemas.microsoft.com/SQL/Notifications/PostQueryNotification] TO "YourUserRW";
++GRANT VIEW DEFINITION TO "YourUserRW";
++GRANT SELECT to "YourUserRW";
++GRANT SUBSCRIBE QUERY NOTIFICATIONS TO "YourUserRW";
++GRANT RECEIVE ON QueryNotificationErrorsQueue TO "YourUserRW";
++GO
++```
++=> TODO : - Test� une seule fois sur BIADemo
++- N'a march� qu'apr�s avoir tourn� une premiere fois en dbowner (sans le shema)
++- Comprend pourquoi il faut faire tourner une fois en Owner avant (est ce premiere database BIADemo...)
++
+ ## Overview
+ * The worker service run code when there is change on the database.
+ * A fine selection of the rows to track can be done with a SQL query.
+@@ -73,22 +115,21 @@ In the callback function :
+ - If the 3th paramter of the base constructor is empty the reader parameter is null.
+ 
+ ### Parameters those repositories
+-In startup.cs you should pass the list of all yours database handler repositories class in the function config.DatabaseHandler.Activate.
++In program.cs you should pass the list of all yours database handler repositories class in the function config.DatabaseHandler.Activate.
+ Example from BIADemo:
+ ```CSharp
+-    // Begin BIA Standard service
+-    services.AddBiaWorkerFeatures( config =>
++        services.AddBiaWorkerFeatures(config =>
+         {
+-            config.BiaNetSection = biaNetSection;
+-            config.DistributedCache.Activate(configuration.GetConnectionString("BIADemoDatabase"));
+-            if (biaNetSection.WorkerFeatures.DatabaseHandler.Activate)
++            config.Configuration = hostContext.Configuration;
++            var biaNetSection = new BiaNetSection();
++            config.Configuration.GetSection("BiaNet").Bind(biaNetSection);
++
++            if (biaNetSection.WorkerFeatures.DatabaseHandler.IsActive)
+             {
+                 config.DatabaseHandler.Activate(new List<DatabaseHandlerRepository>()
+                 {
+-                    new PlaneHandlerRepository(configuration),
++                    new PlaneHandlerRepository(hostContext.Configuration),
+                 });
+             }
+         });
+-
+-    // End BIA Standard service
+ ```
+diff --git a/DotNet/Docs/NEW_PROJECT.md b/DotNet/Docs/NEW_PROJECT.md
+index 623f18b..6ce416a 100644
+--- a/DotNet/Docs/NEW_PROJECT.md
++++ b/DotNet/Docs/NEW_PROJECT.md
+@@ -7,68 +7,32 @@ This document explains how to create a new .NET Core project based on the BIA fr
+ * [C# 8](https://docs.microsoft.com/fr-fr/dotnet/csharp/)
+ * [.NET Core 3.1](https://docs.microsoft.com/fr-fr/dotnet/core/)
+ 
+-### Configuration for the TheBIADevCompany proxy
+-[Add the following **User** environment variables :](https://www.tenforums.com/tutorials/121664-set-new-user-system-environment-variables-windows.html#option1)  
+-* HTTP_PROXY: http://10.179.8.30:3128/
+-* HTTPS_PROXY: http://10.179.8.30:3128/
+-* NO_PROXY: https://tfsdm.eu.labinal.snecma
++### Configure your environment
++* Follow the steps in [CONFIGURE_YOUR_DEV_ENVIRONMENT.md](./CONFIGURE_YOUR_DEV_ENVIRONMENT.md)
+ 
+-### Visual Studio 2019 & components
+-Install [Visual Studio 2019](https://visualstudio.microsoft.com/fr/vs/) and be sure to add the latest SDK of .NET Core from the components list.
+-Add those components during installation :
+-- [Git for Visual Studio](https://subscription.packtpub.com/book/programming/9781789530094/9/ch09lvl1sec71/installing-git-for-visual-studio-2019)
+-- [Development Time IIS Support](https://devblogs.microsoft.com/aspnet/development-time-iis-support-for-asp-net-core-applications/)
+-
+-If Visual Studio 2019 is already install, you can add thoses component by launching the VS Installer.
+-
+-### Git config
+-To find the path to the **.gitconfig** file, type the following command:  
+-`git config --list --show-origin`  
+-
+-Open your **.gitconfig** file (usualy located in your user folder) and add this configuration:
+-```
+-[http "https://tfsdm.eu.labinal.snecma/"]
+-                sslVerify = false
+-                proxy = ""
+-[http "https://azure.devops.thebiadevcompany/"]
+-                sslVerify = false
+-                proxy = ""
+-```
+-### Variable Environment
+-create the following system environment variable:  
+-Name: ASPNETCORE_ENVIRONMENT  
+-Value: Development  
+-
+-## Create a new project
++## Create a new project ...
+ You must respect the following tree structure:   
+ **ProjectName\Angular** and **ProjectName\DotNet**    
+    
+-Install the latest version of the **[BIA Project Creator](https://inshare.collab.group.thebiadevcompany/bao/DevOps/BIAV3/Shared%20Documents/VSExtensions)** extension for Visual Studio 2019.  
++Install the latest version of the **[BIA.ProjectCreator.vsix](../../Docs/BIAExtension)** extension for Visual Studio 2019.  
+ You can now go to File > New > Project in Visual Studio.  
+ Select the BIA template in the type of projects and click on Next button.  
+ Fill **Project name** field. For **Location**, type [MyLocationSourceCode]\\[ProjectName]\DotNet and check **Place solution and project in the same directory**.  
+ 
+-## Setup project
+-Once your solution is created, you need to update some files.  
+-1. Create the corresponding database on your computer. 
+-2. Open the appsettings.json file and update the connection string to the database.
+-3. Launch the Package Manager Console in VS 2019 (Tools > Nuget Package Manager > Package Manager Console).
+-4. Be sure to have the project **TheBIADevCompany.[ProjectName].Infrastructure.Data** selected as the Default Project in the console and the project **TheBIADevCompany.[ProjectName].Presentation.Api** as the Startup Project of your solution.
+-5. Run the **Add-Migration** command to initialize the migrations for the database project. `Add-Migration [nameOfYourMigration]`
+-6. Run the **Update-Database** command to update you database schema (you can check if everything is fine in SQL Server Management Studio).
+-7. Update the Roles section in the bianetconfig.json file to use the correct AD groups or the Fakes roles.
+-8. Update the version of the application. To do this, change the variable: **TheBIADevCompany.[ProjectName].Crosscutting.Common.Constants.Application.Version**.
++## ... Or Clone an existing one
+ 
+-## Launch project
++## Prepare the Presentation WebApi:
++* Follow the steps "Prepare the Presentation WebApi" in [01 - PRESENTATION.API.md](./Projects/01%20-%20PRESENTATION.API.md)
+ 
+-To launch your project, you have to use **only IIS** (not compatible with IIS Express).
+-Your IIS pool must be in "No Managed Code".
+-For the user launching the pool, you have two options :
+-- Use your own account but your will not be able to manage Users in the associated CRUD.
+-- Use a Service account which have sufficient rights on AD. If you choose this option, don't forget to allow this user to access your database in SQL Server Management Studio.
++## Prepare the database
++* Follow the steps " Preparation of the Database" in [04 - INFRASTRUCTURE.DATA.md](./Projects/04%20-%20INFRASTRUCTURE.DATA.md)
+ 
++## Run the project
++* you can now run the project Presentation Api in IIS 
++* In the swagger page verify that the login work by clicking on the "BIA Log In" button  at the bottom right.
+ 
+ ## Use standard BIA Framework Component
+ 
+-To use the project created by the framework have a look in the docs in [this folder](./Projects).
+-To use the features proposed by the framework have a look in the docs in [this folder](./Features).
++* To use the project created by the framework have a look in the docs in [this folder](./Projects).
++
++* To use the features proposed by the framework have a look in the docs in [this folder](./Features).
+diff --git a/DotNet/Docs/Projects/01 - PRESENTATION.API.md b/DotNet/Docs/Projects/01 - PRESENTATION.API.md
+new file mode 100644
+index 0000000..0ecbb3c
+--- /dev/null
++++ b/DotNet/Docs/Projects/01 - PRESENTATION.API.md	
+@@ -0,0 +1,29 @@
++# Presentation API project
++
++## Prepare the Presentation WebApi:
++1. Compile the solution 
++- Set Presentation Api as startup project
++- Launch it a first time with IIS
++
++2. Open IIS manager. 
++- Set the physical path of the Folder (with the name of the application [ProjectName]) to d:\www\[ProjectName] (in basic settings)
++- On the [ProjectName]\WepApi site :
++    - Open Basic setting 
++    - Note the name of the application pool (automaticaly created by Visual studio during the first run)
++    - Move the Wepi Api Application Pool to an other one (no importance of witch one it is temporary)
++- In Application Pool 
++    - Rename the automaticaly created application pool to [ProjectName]WebApi
++    - The pool must be in "No Managed Code".
++    - In advanced settings > identity Set an account, you have 2 options:
++      - Your user account (you will change the pass every time you udate it) 
++      - Use a Service account which have sufficient rights on AD. If you choose this option, don't forget to allow this user to access your database in SQL Server Management Studio.
++- On the [ProjectName]\WepApi site :
++    - Open Basic setting 
++    - Move the Wepi Api Application Pool to [ProjectName]WebApi
++    - Verify the authentication : Anonymous and windows authentication should be enable.
++
++3. Restart Visual Studio
++- Close Visual Studio
++- Restart Visual Studio and open the solution
++- Launch it with IIS
++
+diff --git a/DotNet/Docs/Projects/04 - INFRASTRUCTURE.DATA.md b/DotNet/Docs/Projects/04 - INFRASTRUCTURE.DATA.md
+new file mode 100644
+index 0000000..d8362cf
+--- /dev/null
++++ b/DotNet/Docs/Projects/04 - INFRASTRUCTURE.DATA.md	
+@@ -0,0 +1,12 @@
++# Infrastructure.Data project
++
++## Preparation of the Database
++
++1. Create the database on your local instance
++    - The name of the database should be the name of the project you can verify the connection string in the appsettings.json file and the declined files by environment
++2. Launch the Package Manager Console in VS 2019 (Tools > Nuget Package Manager > Package Manager Console).
++3. Be sure to have the project **TheBIADevCompany.[ProjectName].Infrastructure.Data** selected as the Default Project in the console and the project **TheBIADevCompany.[ProjectName].Presentation.Api** as the Startup Project of your solution.
++4. (ONLY if no migration have been done = new project or never use) Run the **Add-Migration** command to initialize the migrations for the database project. `Add-Migration [nameOfYourMigration]`
++5. Run the **Update-Database** command to update you database schema (you can check if everything is fine in SQL Server Management Studio).
++6. (OPTIONNALY) Update the Roles section in the bianetconfig.json file and the declined files by environment to use the correct AD groups or the Fakes roles.
++7. (OPTIONNALY) Update the version of the application. To do this, change the variable: **TheBIADevCompany.[ProjectName].Crosscutting.Common.Constants.Application.Version**.
+\ No newline at end of file
+diff --git a/DotNet/README.md b/DotNet/README.md
+index de1304f..85c8773 100644
+--- a/DotNet/README.md
++++ b/DotNet/README.md
+@@ -1,19 +1,23 @@
+-# TheBIADevCompany Framework
++# BIA Framework
+ 
+-TheBIADevCompany Framework is a development platform for building mobile and desktop web applications using .NET Core and Angular.
++BIA Framework is a development platform for building mobile and desktop web applications using .NET Core and Angular.
+ 
+ ## New Project
+ 
+ [Get started a new project](./Docs/NEW_PROJECT.md).
+ 
+-## Changelog
+-
+-[Learn about the latest improvements](./CHANGELOG.md).
+-
+ ## Features
+ 
+ [See the framework features](./Docs/Features/).
+ 
+ ## Detail on projects of the solution
+ 
+-[See the framework projects](./Docs/Projects/).
+\ No newline at end of file
++[See the framework projects](./Docs/Projects/).
++
++## Example in projects
++
++[See how existing project have implement functionnalities](./Docs/EXAMPLE_IN_PROJECTS.md)
++
++## Changelog
++
++[Learn about the latest improvements](./CHANGELOG.md).
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Application/TheBIADevCompany.BIATemplate.Application.csproj b/DotNet/TheBIADevCompany.BIATemplate.Application/TheBIADevCompany.BIATemplate.Application.csproj
+index 1ab6679..dcbc05e 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Application/TheBIADevCompany.BIATemplate.Application.csproj
++++ b/DotNet/TheBIADevCompany.BIATemplate.Application/TheBIADevCompany.BIATemplate.Application.csproj
+@@ -7,7 +7,7 @@
+   </PropertyGroup>
+ 
+   <ItemGroup>
+-    <PackageReference Include="BIA.Net.Core.Application" Version="3.3.0" />
++    <PackageReference Include="BIA.Net.Core.Application" Version="3.3.1.1" />
+     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.11" />
+   </ItemGroup>
+ 
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Ioc/TheBIADevCompany.BIATemplate.Crosscutting.Ioc.csproj b/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Ioc/TheBIADevCompany.BIATemplate.Crosscutting.Ioc.csproj
+index 8790579..d01d3f0 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Ioc/TheBIADevCompany.BIATemplate.Crosscutting.Ioc.csproj
++++ b/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Ioc/TheBIADevCompany.BIATemplate.Crosscutting.Ioc.csproj
+@@ -7,7 +7,7 @@
+   </PropertyGroup>
+ 
+   <ItemGroup>
+-    <PackageReference Include="BIA.Net.Core.Ioc" Version="3.3.0" />
++    <PackageReference Include="BIA.Net.Core.Ioc" Version="3.3.0.1" />
+     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.8" />
+     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.8" />
+   </ItemGroup>
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.DeployDB/DeployDBService.cs b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/DeployDBService.cs
+new file mode 100644
+index 0000000..fc6b9ce
+--- /dev/null
++++ b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/DeployDBService.cs
+@@ -0,0 +1,86 @@
++// <copyright file="DeployDBService.cs" company="TheBIADevCompany">
++// Copyright (c) TheBIADevCompany. All rights reserved.
++// </copyright>
++
++namespace TheBIADevCompany.BIATemplate.DeployDB
++{
++    using System;
++    using System.Threading;
++    using System.Threading.Tasks;
++    using Microsoft.EntityFrameworkCore;
++    using Microsoft.Extensions.Hosting;
++    using Microsoft.Extensions.Logging;
++    using TheBIADevCompany.BIATemplate.Infrastructure.Data;
++
++    /// <summary>
++    /// Service to deploy DB DataContext.
++    /// </summary>
++    internal sealed class DeployDBService : IHostedService
++    {
++        private readonly ILogger logger;
++        private readonly IHostApplicationLifetime appLifetime;
++
++        private readonly DataContext dataContext;
++
++        /// <summary>
++        /// Initializes a new instance of the <see cref="DeployDBService"/> class.
++        /// </summary>
++        /// <param name="logger">the logger.</param>
++        /// <param name="appLifetime">the app life time.</param>
++        /// <param name="dataContext">the data context.</param>
++        public DeployDBService(
++            ILogger<DeployDBService> logger,
++            IHostApplicationLifetime appLifetime,
++            DataContext dataContext)
++        {
++            this.logger = logger;
++            this.appLifetime = appLifetime;
++            this.dataContext = dataContext;
++        }
++
++        /// <summary>
++        /// The Deployement of the db.
++        /// </summary>
++        /// <param name="cancellationToken">Cancellation Token.</param>
++        /// <returns>Task.CompletedTask.</returns>
++        public Task StartAsync(CancellationToken cancellationToken)
++        {
++            this.logger.LogDebug($"Starting with arguments: {string.Join(" ", Environment.GetCommandLineArgs())}");
++
++            this.appLifetime.ApplicationStarted.Register(() =>
++            {
++                Task.Run(() =>
++                {
++                    try
++                    {
++                        this.logger.LogInformation("Start Migration!");
++
++                        this.dataContext.Database.Migrate();
++                    }
++                    catch (Exception ex)
++                    {
++                        this.logger.LogError(ex, "Unhandled exception!");
++                    }
++                    finally
++                    {
++                        // Stop the application once the work is done
++                        this.appLifetime.StopApplication();
++                    }
++                });
++            });
++
++            return Task.CompletedTask;
++        }
++
++        /// <summary>
++        /// The stop.
++        /// </summary>
++        /// <param name="cancellationToken">Cancellation Token.</param>
++        /// <returns>Task.CompletedTask.</returns>
++        public Task StopAsync(CancellationToken cancellationToken)
++        {
++            this.dataContext.Dispose();
++            return Task.CompletedTask;
++        }
++    }
++}
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.DeployDB/Program.cs b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/Program.cs
+new file mode 100644
+index 0000000..bfafe2b
+--- /dev/null
++++ b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/Program.cs
+@@ -0,0 +1,58 @@
++// <copyright file="Program.cs" company="TheBIADevCompany">
++// Copyright (c) TheBIADevCompany. All rights reserved.
++// </copyright>
++
++namespace TheBIADevCompany.BIATemplate.DeployDB
++{
++    using System;
++    using System.Threading.Tasks;
++    using Hangfire;
++    using Microsoft.EntityFrameworkCore;
++    using Microsoft.Extensions.Configuration;
++    using Microsoft.Extensions.DependencyInjection;
++    using Microsoft.Extensions.Hosting;
++    using TheBIADevCompany.BIATemplate.Infrastructure.Data;
++
++    /// <summary>
++    /// The base program class.
++    /// </summary>
++    public static class Program
++    {
++        /// <summary>
++        /// The main method that start the project.
++        /// </summary>
++        /// <param name="args">The command line arguments.</param>
++        /// <returns>Task.</returns>
++        public static async Task Main(string[] args)
++        {
++            await new HostBuilder()
++                .ConfigureAppConfiguration((hostingContext, config) =>
++                {
++                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
++                    config.AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true, reloadOnChange: true);
++                })
++                .ConfigureServices((hostingContext, services) =>
++                {
++                    IConfiguration configuration = hostingContext.Configuration;
++                    services.AddDbContext<DataContext>(options =>
++                    {
++                        options.UseSqlServer(configuration.GetConnectionString("BIATemplateDatabase"));
++                    });
++                    services.AddHostedService<DeployDBService>();
++
++                    // Comment those lines if you do not use hangfire
++                    services.AddHangfireServer(hfOptions =>
++                    {
++                        hfOptions.ServerName = "DeployHangfireDB";
++                    });
++                    services.AddHangfire(config =>
++                    {
++                        config
++                            .UseSqlServerStorage(
++                               configuration.GetConnectionString("BIATemplateDatabase"));
++                    });
++                })
++                .RunConsoleAsync();
++        }
++    }
++}
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.DeployDB/TheBIADevCompany.BIATemplate.DeployDB.csproj b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/TheBIADevCompany.BIATemplate.DeployDB.csproj
+new file mode 100644
+index 0000000..e0578ca
+--- /dev/null
++++ b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/TheBIADevCompany.BIATemplate.DeployDB.csproj
+@@ -0,0 +1,47 @@
++<Project Sdk="Microsoft.NET.Sdk">
++
++  <PropertyGroup>
++    <OutputType>Exe</OutputType>
++    <TargetFramework>netcoreapp3.1</TargetFramework>
++  </PropertyGroup>
++
++  <ItemGroup>
++    <None Remove="appsettings.Development.json" />
++    <None Remove="appsettings.TheBIADevTeam_INT.json" />
++    <None Remove="appsettings.TheBIADevTeam_PRA.json" />
++    <None Remove="appsettings.TheBIADevTeam_PRD.json" />
++    <None Remove="appsettings.TheBIADevTeam_UAT.json" />
++    <None Remove="appsettings.json" />
++  </ItemGroup>
++
++  <ItemGroup>
++    <Content Include="appsettings.Development.json">
++      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
++    </Content>
++    <Content Include="appsettings.TheBIADevTeam_INT.json">
++      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
++    </Content>
++    <Content Include="appsettings.TheBIADevTeam_PRA.json">
++      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
++    </Content>
++    <Content Include="appsettings.TheBIADevTeam_PRD.json">
++      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
++    </Content>
++    <Content Include="appsettings.TheBIADevTeam_UAT.json">
++      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
++    </Content>
++    <Content Include="appsettings.json">
++      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
++    </Content>
++  </ItemGroup>
++
++  <ItemGroup>
++    <PackageReference Include="Hangfire" Version="1.7.18" />
++    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.8" />
++  </ItemGroup>
++
++  <ItemGroup>
++    <ProjectReference Include="..\TheBIADevCompany.BIATemplate.Infrastructure.Data\TheBIADevCompany.BIATemplate.Infrastructure.Data.csproj" />
++  </ItemGroup>
++
++</Project>
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.TheBIADevTeam_INT.json b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.TheBIADevTeam_INT.json
+new file mode 100644
+index 0000000..3f4ba13
+--- /dev/null
++++ b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.TheBIADevTeam_INT.json
+@@ -0,0 +1,5 @@
++{
++  "ConnectionStrings": {
++    "BIATemplateDatabase": "data source=dmeu-db-int.electrical-power.thebiadevcompany\\SEPDMAPPINT;initial catalog=BIATemplate_INT;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
++  }
++}
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.TheBIADevTeam_PRA.json b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.TheBIADevTeam_PRA.json
+new file mode 100644
+index 0000000..c7a24b1
+--- /dev/null
++++ b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.TheBIADevTeam_PRA.json
+@@ -0,0 +1,5 @@
++{
++  "ConnectionStrings": {
++    "BIATemplateDatabase": "data source=dmeu-db-pra.electrical-power.thebiadevcompany\\SEPDMAPPPRA;initial catalog=BIATemplate_PRD;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
++  }
++}
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.TheBIADevTeam_PRD.json b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.TheBIADevTeam_PRD.json
+new file mode 100644
+index 0000000..48c2fb0
+--- /dev/null
++++ b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.TheBIADevTeam_PRD.json
+@@ -0,0 +1,5 @@
++{
++  "ConnectionStrings": {
++    "BIATemplateDatabase": "data source=dmeu-db-prd.electrical-power.thebiadevcompany\\SEPDMAPPPRD;initial catalog=BIATemplate_PRD;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
++  }
++}
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.TheBIADevTeam_UAT.json b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.TheBIADevTeam_UAT.json
+new file mode 100644
+index 0000000..cf2f22d
+--- /dev/null
++++ b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.TheBIADevTeam_UAT.json
+@@ -0,0 +1,5 @@
++{
++  "ConnectionStrings": {
++    "BIATemplateDatabase": "data source=dmeu-db-uat.electrical-power.thebiadevcompany\\SEPDMAPPUAT;initial catalog=BIATemplate_UAT;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
++  }
++}
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.Development.json b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.Development.json
+new file mode 100644
+index 0000000..5ed19dd
+--- /dev/null
++++ b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.Development.json
+@@ -0,0 +1,19 @@
++{
++  "ConnectionStrings": {
++    "BIATemplateDatabase": "data source=localhost;initial catalog=BIATemplate;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
++  },
++  "Logging": {
++    "LogLevel": {
++      "Default": "Information",
++      "Microsoft": "Warning",
++      "Microsoft.Hosting.Lifetime": "Information"
++    }
++  },
++  "NLog": {
++    "targets": {
++      "fileLog": {
++        "fileName": "D:\\Logs\\BIATemplate\\${shortdate}_TheBIADevCompany.BIATemplate_WorkerService.log"
++      }
++    }
++  }
++}
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.json b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.json
+new file mode 100644
+index 0000000..90f6973
+--- /dev/null
++++ b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.json
+@@ -0,0 +1,5 @@
++{
++  "ConnectionStrings": {
++    "BIATemplateDatabase": "data source=localhost;initial catalog=BIATemplate;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate;Column Encryption Setting=enabled"
++  }
++}
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Domain/TheBIADevCompany.BIATemplate.Domain.csproj b/DotNet/TheBIADevCompany.BIATemplate.Domain/TheBIADevCompany.BIATemplate.Domain.csproj
+index 4682391..49e8f15 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Domain/TheBIADevCompany.BIATemplate.Domain.csproj
++++ b/DotNet/TheBIADevCompany.BIATemplate.Domain/TheBIADevCompany.BIATemplate.Domain.csproj
+@@ -7,7 +7,7 @@
+   </PropertyGroup>
+ 
+   <ItemGroup>
+-    <PackageReference Include="BIA.Net.Core.Domain" Version="3.3.0" />
++    <PackageReference Include="BIA.Net.Core.Domain" Version="3.3.1.1" />
+     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.8" />
+     <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.8" />
+   </ItemGroup>
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Data/Migrations/.editorconfig b/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Data/Migrations/.editorconfig
+new file mode 100644
+index 0000000..63153d2
+--- /dev/null
++++ b/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Data/Migrations/.editorconfig
+@@ -0,0 +1,2 @@
++﻿[*.cs]
++generated_code = true
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/AuthController.cs b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/AuthController.cs
+index 3ed0601..350b711 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/AuthController.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/AuthController.cs
+@@ -4,6 +4,7 @@
+ 
+ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+ {
++    using System;
+     using System.Collections.Generic;
+     using System.Linq;
+     using System.Threading.Tasks;
+@@ -131,7 +132,14 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+             if (userRolesFromUserDirectory.Contains(Constants.Role.User))
+             {
+                 userInfo = await this.userAppService.GetCreateUserInfoAsync(sid);
+-                await this.userAppService.UpdateLastLoginDateAndActivate(userInfo.Id);
++                try
++                {
++                    await this.userAppService.UpdateLastLoginDateAndActivate(userInfo.Id);
++                }
++                catch (Exception)
++                {
++                    this.logger.LogWarning("Cannot update last login date... Probably database is read only...");
++                }
+             }
+             else
+             {
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.TheBIADevTeam_INT.json b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.TheBIADevTeam_INT.json
+index 8caff96..9e3a99d 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.TheBIADevTeam_INT.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.TheBIADevTeam_INT.json
+@@ -1,6 +1,6 @@
+ {
+   "ConnectionStrings": {
+-    "BIATemplateDatabase": "data source=DS002AWO\\SEPDMAPPINT;initial catalog=BIATemplate_INT;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
++    "BIATemplateDatabase": "data source=dmeu-db-int.electrical-power.thebiadevcompany\\SEPDMAPPINT;initial catalog=BIATemplate_INT;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
+   },
+   "Logging": {
+     "LogLevel": {
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.TheBIADevTeam_PRA.json b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.TheBIADevTeam_PRA.json
+index a75939c..c7a24b1 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.TheBIADevTeam_PRA.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.TheBIADevTeam_PRA.json
+@@ -1,5 +1,5 @@
+ {
+   "ConnectionStrings": {
+-    "BIATemplateDatabase": "data source=DS002SAF\\SEPDMAPPPRA;initial catalog=BIATemplate_PRA;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
++    "BIATemplateDatabase": "data source=dmeu-db-pra.electrical-power.thebiadevcompany\\SEPDMAPPPRA;initial catalog=BIATemplate_PRD;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
+   }
+ }
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.TheBIADevTeam_PRD.json b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.TheBIADevTeam_PRD.json
+index 03bc92c..48c2fb0 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.TheBIADevTeam_PRD.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.TheBIADevTeam_PRD.json
+@@ -1,5 +1,5 @@
+ {
+   "ConnectionStrings": {
+-    "BIATemplateDatabase": "data source=DS002S40\\SEPDMAPPPRD;initial catalog=BIATemplate_PRD;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
++    "BIATemplateDatabase": "data source=dmeu-db-prd.electrical-power.thebiadevcompany\\SEPDMAPPPRD;initial catalog=BIATemplate_PRD;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
+   }
+ }
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.TheBIADevTeam_UAT.json b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.TheBIADevTeam_UAT.json
+index 1018062..cf2f22d 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.TheBIADevTeam_UAT.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.TheBIADevTeam_UAT.json
+@@ -1,5 +1,5 @@
+ {
+   "ConnectionStrings": {
+-    "BIATemplateDatabase": "data source=DS002RZ9\\SEPDMAPPUAT;initial catalog=BIATemplate_UAT;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
++    "BIATemplateDatabase": "data source=dmeu-db-uat.electrical-power.thebiadevcompany\\SEPDMAPPUAT;initial catalog=BIATemplate_UAT;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
+   }
+ }
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.Development.json b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.Development.json
+index 28328a1..6768d87 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.Development.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.Development.json
+@@ -1,6 +1,6 @@
+ {
+   "ConnectionStrings": {
+-    "BIATemplateDatabase": "data source=localhost;initial catalog=BIATemplate;integrated security=False;User Id=DMUser;Password=DigitalManuf2020:);MultipleActiveResultSets=True;App=BIATemplate"
++    "BIATemplateDatabase": "data source=localhost;initial catalog=BIATemplate;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
+   },
+   "Logging": {
+     "LogLevel": {
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.json b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.json
+index 9229a39..9941a23 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.json
+@@ -1,7 +1,4 @@
+ {
+-  "ConnectionStrings": {
+-    "BIATemplateDatabase": "data source=localhost;initial catalog=BIATemplate;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
+-  },
+   "Logging": {
+     "LogLevel": {
+       "Default": "Information",
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Test/GlobalSuppressions.cs b/DotNet/TheBIADevCompany.BIATemplate.Test/GlobalSuppressions.cs
+new file mode 100644
+index 0000000..93cf9cc
+--- /dev/null
++++ b/DotNet/TheBIADevCompany.BIATemplate.Test/GlobalSuppressions.cs
+@@ -0,0 +1,9 @@
++﻿// <copyright file="GlobalSuppressions.cs" company="TheBIADevCompany">
++//     Copyright (c) TheBIADevCompany. All rights reserved.
++// </copyright>
++
++using System.Diagnostics.CodeAnalysis;
++
++[assembly: SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1123:Do not place regions within elements", Justification = "Simplify the read of the test.")]
++[assembly: SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:Do not use regions", Justification = "Simplify the read of the test.")]
++[assembly: SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1123:Do not place regions within elements", Justification = "Simplify the read of the test.")]
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Job/WakeUpTask.cs b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Job/WakeUpTask.cs
+index d1518f4..9fd48fb 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Job/WakeUpTask.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Job/WakeUpTask.cs
+@@ -29,7 +29,6 @@ namespace TheBIADevCompany.BIATemplate.WorkerService.Job
+         {
+         }
+ 
+-
+         /// <summary>
+         /// Call all urls in Tasks:WakeUp:Url split by '|'.
+         /// </summary>
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Program.cs b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Program.cs
+index 9630ed0..b856f25 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Program.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Program.cs
+@@ -5,9 +5,7 @@
+ namespace TheBIADevCompany.BIATemplate.WorkerService
+ {
+     using System;
+-    using System.Collections.Generic;
+     using BIA.Net.Core.WorkerService.Features;
+-    using BIA.Net.Core.WorkerService.Features.DataBaseHandler;
+     using Microsoft.AspNetCore;
+     using Microsoft.AspNetCore.Hosting;
+     using Microsoft.Extensions.Configuration;
+@@ -16,7 +14,6 @@ namespace TheBIADevCompany.BIATemplate.WorkerService
+     using NLog;
+     using NLog.Extensions.Logging;
+     using NLog.Web;
+-    using TheBIADevCompany.BIATemplate.WorkerService.Features;
+ 
+     /// <summary>
+     /// The base program class.
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/TheBIADevCompany.BIATemplate.WorkerService.csproj b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/TheBIADevCompany.BIATemplate.WorkerService.csproj
+index 74e6bfa..0c94a55 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/TheBIADevCompany.BIATemplate.WorkerService.csproj
++++ b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/TheBIADevCompany.BIATemplate.WorkerService.csproj
+@@ -10,7 +10,7 @@
+   </PropertyGroup>
+ 
+   <ItemGroup>
+-    <PackageReference Include="BIA.Net.Core.WorkerService" Version="3.3.0" />
++    <PackageReference Include="BIA.Net.Core.WorkerService" Version="3.3.1" />
+     <PackageReference Include="Hangfire" Version="1.7.18" />
+     <PackageReference Include="Hangfire.Core" Version="1.7.18" />
+     <PackageReference Include="Hangfire.SqlServer" Version="1.7.18" />
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Startup.cs b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Startup.cs
+index 9652b5e..09f1995 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Startup.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Startup.cs
+@@ -81,7 +81,8 @@ namespace TheBIADevCompany.BIATemplate.WorkerService
+             app.UseAuthentication();
+             app.UseAuthorization();
+ 
+-            app.UseBiaWorkerFeatures(config => {
++            app.UseBiaWorkerFeatures(config =>
++            {
+                 config.Configuration = this.configuration;
+                 config.HangfireServer.Authorization = new[] { new HangfireAuthorizationFilter(userAppService) };
+             });
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Worker.cs b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Worker.cs
+index bc3f736..2728491 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Worker.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Worker.cs
+@@ -5,12 +5,10 @@
+ namespace TheBIADevCompany.BIATemplate.WorkerService
+ {
+     using System;
+-    using System.Security.Cryptography;
+     using System.Threading;
+     using System.Threading.Tasks;
+     using BIA.Net.Core.WorkerService;
+     using Hangfire;
+-    using Hangfire.States;
+     using Microsoft.Extensions.Configuration;
+     using Microsoft.Extensions.Hosting;
+     using TheBIADevCompany.BIATemplate.WorkerService.Job;
+@@ -46,7 +44,9 @@ namespace TheBIADevCompany.BIATemplate.WorkerService
+         /// </summary>
+         /// <param name="stoppingToken">Triggered when <see cref="M:Microsoft.Extensions.Hosting.IHostedService.StopAsync(System.Threading.CancellationToken)" /> is called.</param>
+         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
++#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
++#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+         {
+             Console.WriteLine(DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss") + ": BIATemplate Server started.");
+         }
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.TheBIADevTeam_INT.json b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.TheBIADevTeam_INT.json
+index 8caff96..9e3a99d 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.TheBIADevTeam_INT.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.TheBIADevTeam_INT.json
+@@ -1,6 +1,6 @@
+ {
+   "ConnectionStrings": {
+-    "BIATemplateDatabase": "data source=DS002AWO\\SEPDMAPPINT;initial catalog=BIATemplate_INT;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
++    "BIATemplateDatabase": "data source=dmeu-db-int.electrical-power.thebiadevcompany\\SEPDMAPPINT;initial catalog=BIATemplate_INT;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
+   },
+   "Logging": {
+     "LogLevel": {
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.TheBIADevTeam_PRA.json b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.TheBIADevTeam_PRA.json
+index a75939c..c7a24b1 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.TheBIADevTeam_PRA.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.TheBIADevTeam_PRA.json
+@@ -1,5 +1,5 @@
+ {
+   "ConnectionStrings": {
+-    "BIATemplateDatabase": "data source=DS002SAF\\SEPDMAPPPRA;initial catalog=BIATemplate_PRA;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
++    "BIATemplateDatabase": "data source=dmeu-db-pra.electrical-power.thebiadevcompany\\SEPDMAPPPRA;initial catalog=BIATemplate_PRD;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
+   }
+ }
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.TheBIADevTeam_PRD.json b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.TheBIADevTeam_PRD.json
+index 03bc92c..48c2fb0 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.TheBIADevTeam_PRD.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.TheBIADevTeam_PRD.json
+@@ -1,5 +1,5 @@
+ {
+   "ConnectionStrings": {
+-    "BIATemplateDatabase": "data source=DS002S40\\SEPDMAPPPRD;initial catalog=BIATemplate_PRD;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
++    "BIATemplateDatabase": "data source=dmeu-db-prd.electrical-power.thebiadevcompany\\SEPDMAPPPRD;initial catalog=BIATemplate_PRD;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
+   }
+ }
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.TheBIADevTeam_UAT.json b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.TheBIADevTeam_UAT.json
+index 1018062..cf2f22d 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.TheBIADevTeam_UAT.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.TheBIADevTeam_UAT.json
+@@ -1,5 +1,5 @@
+ {
+   "ConnectionStrings": {
+-    "BIATemplateDatabase": "data source=DS002RZ9\\SEPDMAPPUAT;initial catalog=BIATemplate_UAT;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
++    "BIATemplateDatabase": "data source=dmeu-db-uat.electrical-power.thebiadevcompany\\SEPDMAPPUAT;initial catalog=BIATemplate_UAT;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
+   }
+ }
+\ No newline at end of file
+diff --git a/README.md b/README.md
+index 0ca446a..67dcd62 100644
+--- a/README.md
++++ b/README.md
+@@ -1,20 +1,7 @@
+-# Introduction 
+-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
++# BIA Template
++This project is use to package the BiaDemo Project in Zip and VSExtension usable by the developer.
++It contains solution to make an automatique migration.
+ 
+-# Getting Started
+-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
+-1.	Installation process
+-2.	Software dependencies
+-3.	Latest releases
+-4.	API references
+-
+-# Build and Test
+-TODO: Describe and show how to build your code and run the tests. 
+-
+-# Contribute
+-TODO: Explain how other users and developers can contribute to make your code better. 
+-
+-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
+-- [ASP.NET Core](https://github.com/aspnet/Home)
+-- [Visual Studio Code](https://github.com/Microsoft/vscode)
+-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+\ No newline at end of file
++## Documentation
++- To **Package** the BiaDemo project, follow this documentation : [PACKAGING](./Docs/PACKAGING.md)
++- To **Prepare the migration** : [PREPARE MIGRATION](./Docs/PREPARE MIGRATION.md)
+diff --git a/package-lock.json b/package-lock.json
+new file mode 100644
+index 0000000..48e341a
+--- /dev/null
++++ b/package-lock.json
+@@ -0,0 +1,3 @@
++{
++  "lockfileVersion": 1
++}

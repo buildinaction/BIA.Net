@@ -26,7 +26,6 @@ export class SiteEditDialogComponent implements OnInit, OnDestroy {
     this.sub.add(
       this.store
         .select(getDisplayEditDialog)
-        .pipe()
         .subscribe((x) => (this.display = x))
     );
   }

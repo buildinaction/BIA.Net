@@ -5,18 +5,14 @@ import {
   loadAllByPostSuccess,
   loadAllByPost,
   load,
-  openDialogEdit,
-  closeDialogEdit,
-  openDialogNew,
-  closeDialogNew,
   failure
 } from './planes-actions';
 import { LazyLoadEvent } from 'primeng/api';
-import { Plane, PlaneListItem } from '../model/plane';
+import { Plane } from '../model/plane';
 
 // This adapter will allow is to manipulate planes (mostly CRUD operations)
-export const planesAdapter = createEntityAdapter<PlaneListItem>({
-  selectId: (plane: PlaneListItem) => plane.id,
+export const planesAdapter = createEntityAdapter<Plane>({
+  selectId: (plane: Plane) => plane.id,
   sortComparer: false
 });
 
@@ -31,15 +27,13 @@ export const planesAdapter = createEntityAdapter<PlaneListItem>({
 // -> ids arrays allow us to sort data easily
 // -> entities map allows us to access the data quickly without iterating/filtering though an array of objects
 
-export interface State extends EntityState<PlaneListItem> {
+export interface State extends EntityState<Plane> {
   // additional props here
   totalCount: number;
   currentPlane: Plane;
   lastLazyLoadEvent: LazyLoadEvent;
   loadingGet: boolean;
   loadingGetAll: boolean;
-  displayEditDialog: boolean;
-  displayNewDialog: boolean;
 }
 
 export const INIT_STATE: State = planesAdapter.getInitialState({
@@ -49,24 +43,10 @@ export const INIT_STATE: State = planesAdapter.getInitialState({
   lastLazyLoadEvent: <LazyLoadEvent>{},
   loadingGet: false,
   loadingGetAll: false,
-  displayEditDialog: false,
-  displayNewDialog: false
 });
 
 export const planeReducers = createReducer<State>(
   INIT_STATE,
-  on(openDialogNew, (state) => {
-    return { ...state, displayNewDialog: true };
-  }),
-  on(closeDialogNew, (state) => {
-    return { ...state, displayNewDialog: false };
-  }),
-  on(openDialogEdit, (state) => {
-    return { ...state, displayEditDialog: true };
-  }),
-  on(closeDialogEdit, (state) => {
-    return { ...state, displayEditDialog: false };
-  }),
   on(loadAllByPost, (state, { event }) => {
     return { ...state, loadingGetAll: true };
   }),

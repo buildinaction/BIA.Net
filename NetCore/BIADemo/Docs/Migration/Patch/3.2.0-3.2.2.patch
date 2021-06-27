@@ -1,0 +1,1423 @@
+diff --git a/.vs/slnx.sqlite b/.vs/slnx.sqlite
+deleted file mode 100644
+index f2280d6..0000000
+Binary files a/.vs/slnx.sqlite and /dev/null differ
+diff --git a/Angular/CHANGELOG.md b/Angular/CHANGELOG.md
+index de7b44e..0d43f3b 100644
+--- a/Angular/CHANGELOG.md
++++ b/Angular/CHANGELOG.md
+@@ -1,3 +1,5 @@
++### [3.2.2] (2020-11-24)
++*  Color by env.
+ ### [3.2.0] (2020-06-26)
+ *  angular 9.1.12
+ ### [3.1.1] (2020-06-26)
+diff --git a/Angular/docs/NEW_PROJECT.md b/Angular/docs/NEW_PROJECT.md
+index 4acf5a2..a38b300 100644
+--- a/Angular/docs/NEW_PROJECT.md
++++ b/Angular/docs/NEW_PROJECT.md
+@@ -68,7 +68,9 @@ Copy/Paste the contents of the zip into the Angular folder of your new project.
+ Inside the Angular folder of your new project, run the powershell script `new-angular-project.ps1`.   
+ For **old project name?**, type **BIATemplate**   
+ For **new project name?**, type the name of your project   
+-Update the version of the application. To do this, change the `version` variable in **src\environments\environment.ts** and **src\environments\environment.prod.ts**.
++Update the version of the application. To do this, change the `version` variable in **src\environments\environment.ts** and **src\environments\environment.prod.ts**.   
++Warning in **src\environments\environment.ts** the apiUrl could be : 'http://localhost/[ProjectName]/**WebApi**/api' or 'http://localhost/[ProjectName]/api' it depend how you have configure the backend api in IIS (or properties of the Visual studio project)
++And serverLoggingUrl: 'http://localhost/JobMonitor/**WebApi**/api/logs' or http://localhost/JobMonitor/api/logs'
+ 
+ ## File not to be modified
+ Some files are part of the Framework and should not be modified.
+diff --git a/Angular/docs/planes-page.zip b/Angular/docs/planes-page.zip
+index 175d972..9c6092a 100644
+Binary files a/Angular/docs/planes-page.zip and b/Angular/docs/planes-page.zip differ
+diff --git a/Angular/docs/planes-popup.zip b/Angular/docs/planes-popup.zip
+index aa62b13..766aa8c 100644
+Binary files a/Angular/docs/planes-popup.zip and b/Angular/docs/planes-popup.zip differ
+diff --git a/Angular/package-lock.json b/Angular/package-lock.json
+index 0f2b013..7370149 100644
+--- a/Angular/package-lock.json
++++ b/Angular/package-lock.json
+@@ -3014,9 +3014,9 @@
+       "dev": true
+     },
+     "chart.js": {
+-      "version": "2.9.3",
+-      "resolved": "https://registry.npmjs.org/chart.js/-/chart.js-2.9.3.tgz",
+-      "integrity": "sha512-+2jlOobSk52c1VU6fzkh3UwqHMdSlgH1xFv9FKMqHiNCpXsGPQa/+81AFa+i3jZ253Mq9aAycPwDjnn1XbRNNw==",
++      "version": "2.9.4",
++      "resolved": "https://registry.npmjs.org/chart.js/-/chart.js-2.9.4.tgz",
++      "integrity": "sha512-B07aAzxcrikjAPyV+01j7BmOpxtQETxTSlQ26BEYJ+3iUkbNKaOJ/nDbT6JjyqYxseM0ON12COHYdU2cTIjC7A==",
+       "requires": {
+         "chartjs-color": "^2.1.0",
+         "moment": "^2.10.2"
+@@ -4906,9 +4906,9 @@
+       }
+     },
+     "file-saver": {
+-      "version": "2.0.2",
+-      "resolved": "https://registry.npmjs.org/file-saver/-/file-saver-2.0.2.tgz",
+-      "integrity": "sha512-Wz3c3XQ5xroCxd1G8b7yL0Ehkf0TC9oYC6buPFkNnU9EnaPlifeAFCyCh+iewXTyFRcg0a6j3J7FmJsIhlhBdw=="
++      "version": "2.0.5",
++      "resolved": "https://registry.npmjs.org/file-saver/-/file-saver-2.0.5.tgz",
++      "integrity": "sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA=="
+     },
+     "fill-range": {
+       "version": "7.0.1",
+@@ -7099,9 +7099,9 @@
+       }
+     },
+     "moment": {
+-      "version": "2.27.0",
+-      "resolved": "https://registry.npmjs.org/moment/-/moment-2.27.0.tgz",
+-      "integrity": "sha512-al0MUK7cpIcglMv3YF13qSgdAIqxHTO7brRtaz3DlSULbqfazqkc5kEjNrLDOM7fsjshoFIihnU8snrP7zUvhQ=="
++      "version": "2.29.1",
++      "resolved": "https://registry.npmjs.org/moment/-/moment-2.29.1.tgz",
++      "integrity": "sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ=="
+     },
+     "move-concurrently": {
+       "version": "1.0.1",
+@@ -9450,9 +9450,9 @@
+       }
+     },
+     "rxjs": {
+-      "version": "6.6.2",
+-      "resolved": "https://registry.npmjs.org/rxjs/-/rxjs-6.6.2.tgz",
+-      "integrity": "sha512-BHdBMVoWC2sL26w//BCu3YzKT4s2jip/WhwsGEDmeKYBhKDZeYezVUnHatYB7L85v5xs0BAQmg6BEYJEKxBabg==",
++      "version": "6.6.3",
++      "resolved": "https://registry.npmjs.org/rxjs/-/rxjs-6.6.3.tgz",
++      "integrity": "sha512-trsQc+xYYXZ3urjOiJOuCOa5N3jAZ3eiSpQB5hIT8zGlL2QfnHLJ2r7GMkBGuIausdJN1OneaI6gQlsqNHHmZQ==",
+       "requires": {
+         "tslib": "^1.9.0"
+       }
+@@ -10897,9 +10897,9 @@
+       }
+     },
+     "tslib": {
+-      "version": "1.13.0",
+-      "resolved": "https://registry.npmjs.org/tslib/-/tslib-1.13.0.tgz",
+-      "integrity": "sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q=="
++      "version": "1.14.1",
++      "resolved": "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz",
++      "integrity": "sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg=="
+     },
+     "tslint": {
+       "version": "6.1.3",
+diff --git a/Angular/package.json b/Angular/package.json
+index d19a618..a77aba3 100644
+--- a/Angular/package.json
++++ b/Angular/package.json
+@@ -8,7 +8,7 @@
+     "test": "ng test",
+     "lint": "ng lint",
+     "e2e": "ng e2e",
+-    "build:aot": "ng build --aot",
++    "build:aot": "ng build --aot --base-href /BIATemplate/App/",
+     "build:prod": "ng build --prod --base-href /BIATemplate/App/"
+   },
+   "private": true,
+@@ -34,10 +34,10 @@
+     "@ngrx/store-devtools": "^9.2.0",
+     "@ngx-translate/core": "^11.0.0",
+     "@types/file-saver": "^2.0.1",
+-    "chart.js": "^2.9.3",
++    "chart.js": "^2.9.4",
+     "codelyzer": "^5.2.2",
+     "deepmerge": "^4.2.2",
+-    "file-saver": "^2.0.2",
++    "file-saver": "^2.0.5",
+     "hammerjs": "^2.0.0",
+     "intl": "^1.2.5",
+     "ngrx-store-logger": "^0.2.4",
+@@ -46,8 +46,8 @@
+     "primeicons": "^2.0.0",
+     "primeng": "^9.1.3",
+     "quill": "^1.3.7",
+-    "rxjs": "~6.6.2",
+-    "tslib": "^1.13.0",
++    "rxjs": "~6.6.3",
++    "tslib": "^1.14.1",
+     "tslint-angular": "^3.0.3",
+     "web-animations-js": "^2.3.2",
+     "zone.js": "~0.10.3"
+diff --git a/Angular/src/app/app.module.ts b/Angular/src/app/app.module.ts
+index a4506a6..3cd9f49 100644
+--- a/Angular/src/app/app.module.ts
++++ b/Angular/src/app/app.module.ts
+@@ -30,7 +30,11 @@ export function createTranslateLoader(http: HttpClient, store: TranslateStore) {
+     BrowserModule,
+     BrowserAnimationsModule,
+     StoreModule.forRoot(ROOT_REDUCERS, {
+-      metaReducers
++      metaReducers,
++      runtimeChecks: {
++        strictStateImmutability: false,
++        strictActionImmutability: false
++      }
+     }) /* Initialise the Central Store with Application's main reducer*/,
+     EffectsModule.forRoot([]) /* Start monitoring app's side effects */,
+     AppRoutingModule,
+diff --git a/Angular/src/app/core/bia-core/bia-core.module.ts b/Angular/src/app/core/bia-core/bia-core.module.ts
+index 100b465..d8cd07b 100644
+--- a/Angular/src/app/core/bia-core/bia-core.module.ts
++++ b/Angular/src/app/core/bia-core/bia-core.module.ts
+@@ -16,6 +16,7 @@ import { BiaThemeService } from './services/bia-theme.service';
+ import { BiaTranslationService } from './services/bia-translation.service';
+ import { BiaAppInitService } from './services/bia-app-init.service';
+ import { SiteModule } from 'src/app/domains/site/site.module';
++import { BiaEnvironmentService } from './services/bia-environment.service';
+ 
+ export function initializeApp(appInitService: BiaAppInitService) {
+   return (): Promise<any> => {
+@@ -28,7 +29,7 @@ const MODULES = [HttpClientModule, SiteModule];
+ /* Warning: the order matters */
+ const INTERCEPTORS = [standardEncodeHttpParamsInterceptor, biaXhrWithCredInterceptor, biaTokenInterceptor];
+ 
+-const SERVICES = [MessageService, AuthService, BiaThemeService, BiaTranslationService];
++const SERVICES = [MessageService, AuthService, BiaThemeService, BiaTranslationService, BiaEnvironmentService];
+ 
+ @NgModule({
+   imports: [...MODULES],
+diff --git a/Angular/src/app/core/bia-core/interceptors/token.interceptor.ts b/Angular/src/app/core/bia-core/interceptors/token.interceptor.ts
+index abe666a..e6c2311 100644
+--- a/Angular/src/app/core/bia-core/interceptors/token.interceptor.ts
++++ b/Angular/src/app/core/bia-core/interceptors/token.interceptor.ts
+@@ -20,7 +20,7 @@ export class TokenInterceptor implements HttpInterceptor {
+   constructor(public authService: AuthService) {}
+ 
+   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+-    if (request.url.indexOf(environment.urlAuth) > -1 || request.url.indexOf(environment.urlLog) > -1) {
++    if (this.checkUrlNoToken(request.url)) {
+       return next.handle(request);
+     }
+     if (this.isRefreshing === false) {
+@@ -30,13 +30,22 @@ export class TokenInterceptor implements HttpInterceptor {
+     }
+   }
+ 
++  private checkUrlNoToken(url: string) {
++    return (
++      url.toLowerCase().indexOf(environment.urlAuth.toLowerCase()) > -1 ||
++      url.toLowerCase().indexOf(environment.urlLog.toLowerCase()) > -1 ||
++      url.toLowerCase().indexOf(environment.urlEnv.toLowerCase()) > -1 ||
++      url.toLowerCase().indexOf('./assets/') > -1
++    );
++  }
++
+   private launchRequest(request: HttpRequest<any>, next: HttpHandler) {
+     const jwtToken = this.authService.getToken();
+     request = this.addToken(request, jwtToken);
+ 
+     return next.handle(request).pipe(
+       catchError((error) => {
+-        if (error instanceof HttpErrorResponse && error.status === 401) {
++        if (error instanceof HttpErrorResponse && (error.status === 401 || error.status === 498)) {
+           return this.handle401Error(request, next);
+         } else {
+           return throwError(error);
+diff --git a/Angular/src/app/core/bia-core/services/bia-environment.service.ts b/Angular/src/app/core/bia-core/services/bia-environment.service.ts
+new file mode 100644
+index 0000000..93537be
+--- /dev/null
++++ b/Angular/src/app/core/bia-core/services/bia-environment.service.ts
+@@ -0,0 +1,19 @@
++import { Injectable } from '@angular/core';
++import { Observable } from 'rxjs';
++import { GenericDas } from './generic-das.service';
++import { EnvironmentType } from 'src/app/shared/constants';
++import { HttpClient } from '@angular/common/http';
++
++@Injectable({
++  providedIn: 'root'
++})
++export class BiaEnvironmentService {
++  private route: string;
++  constructor(private http: HttpClient) {
++    this.route = GenericDas.buildRoute('environment');
++  }
++
++  getType(): Observable<EnvironmentType> {
++    return this.http.get<EnvironmentType>(`${this.route}type`);
++  }
++}
+diff --git a/Angular/src/app/core/bia-core/shared/bia-error-handler.ts b/Angular/src/app/core/bia-core/shared/bia-error-handler.ts
+index ff1677f..771f271 100644
+--- a/Angular/src/app/core/bia-core/shared/bia-error-handler.ts
++++ b/Angular/src/app/core/bia-core/shared/bia-error-handler.ts
+@@ -8,6 +8,7 @@ export class BiaErrorHandler implements ErrorHandler {
+ 
+   constructor(private injector: Injector) {
+     this.logger = this.injector.get<NGXLogger>(NGXLogger);
++    this.logger.setWithCredentialsOptionValue(true);
+   }
+ 
+   handleError(error: Error | HttpErrorResponse) {
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.html b/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.html
+index 44ad3ec..26deb82 100644
+--- a/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.html
++++ b/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.html
+@@ -45,6 +45,7 @@
+   <div
+     *ngIf="(layoutService.mainBarHidden$ | async) === false"
+     class="mainbar mat-elevation-z2 bia-relative"
++    [ngClass]="cssClassEnv"
+     fxLayout="row"
+     fxLayoutAlign="stretch"
+   >
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.scss b/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.scss
+index 345e5c4..9445ca5 100644
+--- a/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.scss
++++ b/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.scss
+@@ -1,3 +1,5 @@
++@import '../../../../../../scss/bia/bia-variables';
++
+ :host {
+   display: flex;
+ }
+@@ -50,6 +52,34 @@
+     // hexa: #f8a92b
+     filter: invert(60%) sepia(92%) saturate(376%) hue-rotate(356deg) brightness(98%) contrast(98%);
+   }
++
++  &.env-dev {
++    background-color: rgba($color: $biaBlue, $alpha: 0.5);
++    .project-title {
++      background-color: rgba($color: $biaBlue, $alpha: 0);
++    }
++  }
++
++  &.env-int {
++    background-color: rgba($color: $biaGreen, $alpha: 0.5);
++    .project-title {
++      background-color: rgba($color: $biaGreen, $alpha: 0);
++    }
++  }
++
++  &.env-uat {
++    background-color: rgba($color: $biaOrange, $alpha: 0.5);
++    .project-title {
++      background-color: rgba($color: $biaOrange, $alpha: 0);
++    }
++  }
++
++  &.env-pra {
++    background-color: rgba($color: $biaRed, $alpha: 0.5);
++    .project-title {
++      background-color: rgba($color: $biaRed, $alpha: 0);
++    }
++  }
+ }
+ 
+ .fullscreen-exit {
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.ts b/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.ts
+index edaf051..102dc43 100644
+--- a/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.ts
++++ b/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.ts
+@@ -6,7 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
+ import { BiaNavigation } from '../../../model/bia-navigation';
+ import { Subscription, Observable } from 'rxjs';
+ import { environment } from 'src/environments/environment';
+-import { THEME_LIGHT, THEME_DARK } from 'src/app/shared/constants';
++import { THEME_LIGHT, THEME_DARK, EnvironmentType } from 'src/app/shared/constants';
+ import { Site } from 'src/app/domains/site/model/site';
+ 
+ @Component({
+@@ -26,6 +26,12 @@ export class ClassicHeaderComponent implements OnDestroy {
+   @Input() appTitle: string;
+   @Input() version: string;
+   @Input()
++  set environmentType(env: EnvironmentType) {
++    if (env) {
++      this.cssClassEnv = `env-${env.toLowerCase()}`;
++    }
++  }
++  @Input()
+   set menus(navigations: BiaNavigation[]) {
+     if (navigations && navigations.length > 0) {
+       this.navigations = navigations;
+@@ -63,6 +69,7 @@ export class ClassicHeaderComponent implements OnDestroy {
+   urlAppIcon = environment.urlAppIcon;
+   urlDMIndex = environment.urlDMIndex;
+   displaySiteList = false;
++  cssClassEnv: string;
+ 
+   private sub = new Subscription();
+ 
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/classic-layout/classic-layout.component.html b/Angular/src/app/shared/bia-shared/components/layout/classic-layout/classic-layout.component.html
+index b256a61..ea48cf3 100644
+--- a/Angular/src/app/shared/bia-shared/components/layout/classic-layout/classic-layout.component.html
++++ b/Angular/src/app/shared/bia-shared/components/layout/classic-layout/classic-layout.component.html
+@@ -9,6 +9,7 @@
+   [helpUrl]="helpUrl"
+   [sites]="sites"
+   [siteId]="siteId"
++  [environmentType]="environmentType"
+   (language)="onLanguageChange($event)"
+   (theme)="onThemeChange($event)"
+   (siteChange)="onSiteChange($event)"
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/classic-layout/classic-layout.component.ts b/Angular/src/app/shared/bia-shared/components/layout/classic-layout/classic-layout.component.ts
+index 5aa2d69..f37e38f 100644
+--- a/Angular/src/app/shared/bia-shared/components/layout/classic-layout/classic-layout.component.ts
++++ b/Angular/src/app/shared/bia-shared/components/layout/classic-layout/classic-layout.component.ts
+@@ -7,7 +7,7 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+ import { filter } from 'rxjs/operators';
+ import { TranslateService } from '@ngx-translate/core';
+ import { BiaNavigation } from '../../../model/bia-navigation';
+-import { ROUTE_DATA_CAN_NAVIGATE, ROUTE_DATA_BREADCRUMB, APP_SUPPORTED_TRANSLATIONS } from 'src/app/shared/constants';
++import { ROUTE_DATA_CAN_NAVIGATE, ROUTE_DATA_BREADCRUMB, APP_SUPPORTED_TRANSLATIONS, EnvironmentType } from 'src/app/shared/constants';
+ import { Subscription } from 'rxjs';
+ import { Site } from 'src/app/domains/site/model/site';
+ 
+@@ -32,6 +32,7 @@ export class ClassicLayoutComponent implements OnInit, OnDestroy {
+   @Input() helpUrl?: string;
+   @Input() sites: Site;
+   @Input() siteId: number;
++  @Input() environmentType: EnvironmentType;
+ 
+   @Output() siteChange = new EventEmitter<number>();
+   @Output() setDefaultSite = new EventEmitter<number>();
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/layout.component.ts b/Angular/src/app/shared/bia-shared/components/layout/layout.component.ts
+index 8838300..0e27f34 100644
+--- a/Angular/src/app/shared/bia-shared/components/layout/layout.component.ts
++++ b/Angular/src/app/shared/bia-shared/components/layout/layout.component.ts
+@@ -1,9 +1,10 @@
+ import { Component, HostBinding, OnInit } from '@angular/core';
+ import { environment } from 'src/environments/environment';
+-import { APP_SUPPORTED_TRANSLATIONS, THEME_LIGHT, THEME_DARK } from '../../../constants';
++import { APP_SUPPORTED_TRANSLATIONS, THEME_LIGHT, THEME_DARK, EnvironmentType } from '../../../constants';
+ import { AuthInfo } from '../../model/auth-info';
+ import { AuthService } from 'src/app/core/bia-core/services/auth.service';
+ import { BiaThemeService } from 'src/app/core/bia-core/services/bia-theme.service';
++import { BiaEnvironmentService } from 'src/app/core/bia-core/services/bia-environment.service';
+ import { NavigationService } from 'src/app/core/bia-core/services/navigation.service';
+ import { BiaTranslationService } from 'src/app/core/bia-core/services/bia-translation.service';
+ import { BiaNavigation } from '../../model/bia-navigation';
+@@ -29,6 +30,7 @@ import { loadAllSites, setDefaultSite } from 'src/app/domains/site/store/sites-a
+       [appTitle]="appTitle"
+       [sites]="sites$ | async"
+       [siteId]="currentSiteId"
++      [environmentType]="environmentType$ | async"
+       [companyName]="companyName"
+       (siteChange)="onSiteChange($event)"
+       (setDefaultSite)="onSetDefaultSite($event)"
+@@ -50,6 +52,7 @@ export class LayoutComponent implements OnInit {
+   footerLogo = 'assets/bia/Footer.png';
+   supportedLangs = APP_SUPPORTED_TRANSLATIONS;
+   sites$: Observable<Site[]>;
++  environmentType$: Observable<EnvironmentType>;
+   currentSiteId: number;
+ 
+   constructor(
+@@ -57,15 +60,21 @@ export class LayoutComponent implements OnInit {
+     private navigationService: NavigationService,
+     private authService: AuthService,
+     private biaThemeService: BiaThemeService,
++    private biaEnvironmentService: BiaEnvironmentService,
+     private store: Store<AppState>
+   ) {}
+ 
+   ngOnInit() {
++    this.initEnvironment();
+     this.initSites();
+     this.setAllParamByUserInfo();
+     this.initHeaderLogos();
+   }
+ 
++  private initEnvironment() {
++    this.environmentType$ = this.biaEnvironmentService.getType();
++  }
++
+   private initSites() {
+     this.sites$ = this.store.select(getAllSites).pipe();
+   }
+diff --git a/Angular/src/app/shared/bia-shared/framework-version.ts b/Angular/src/app/shared/bia-shared/framework-version.ts
+index c1d7ec0..3bc5f46 100644
+--- a/Angular/src/app/shared/bia-shared/framework-version.ts
++++ b/Angular/src/app/shared/bia-shared/framework-version.ts
+@@ -1 +1 @@
+-export const FRAMEWORK_VERSION = '3.2.0';
++export const FRAMEWORK_VERSION = '3.2.2';
+diff --git a/Angular/src/app/shared/constants.ts b/Angular/src/app/shared/constants.ts
+index 13f3f7a..d1f8a82 100644
+--- a/Angular/src/app/shared/constants.ts
++++ b/Angular/src/app/shared/constants.ts
+@@ -16,3 +16,10 @@ export enum ViewType {
+   Site = 1,
+   User = 2
+ }
++
++export enum EnvironmentType {
++  INT = 'INT',
++  UAT = 'UAT',
++  PRA = 'PRA',
++  PRD = 'PRD'
++}
+diff --git a/Angular/src/environments/environment.prod.ts b/Angular/src/environments/environment.prod.ts
+index ef2a195..286bf4f 100644
+--- a/Angular/src/environments/environment.prod.ts
++++ b/Angular/src/environments/environment.prod.ts
+@@ -4,6 +4,7 @@ export const environment = {
+   apiUrl: '../WebApi/api',
+   urlAuth: '/api/Auth',
+   urlLog: '/api/logs',
++  urlEnv: '/api/Environment',
+   urlErrorPage: '/static/error.htm',
+   urlDMIndex: '/DMIndex',
+   urlAppIcon: 'assets/bia/AppIcon.svg',
+@@ -11,7 +12,7 @@ export const environment = {
+   production: true,
+   appTitle: 'BIATemplate',
+   companyName: 'TheBIADevCompany',
+-  version: '1.2.0',
++  version: '1.2.2',
+   logging: {
+     conf: {
+       serverLoggingUrl: '../WebApi/api/logs',
+diff --git a/Angular/src/environments/environment.ts b/Angular/src/environments/environment.ts
+index 82240fe..64196a8 100644
+--- a/Angular/src/environments/environment.ts
++++ b/Angular/src/environments/environment.ts
+@@ -1,9 +1,10 @@
+ import {NgxLoggerLevel} from 'ngx-logger';
+ 
+ export const environment = {
+-  apiUrl: 'http://localhost/BIATemplate/api',
++  apiUrl: 'http://localhost/BIATemplate/WebApi/api',
+   urlAuth: '/api/Auth',
+   urlLog: '/api/logs',
++  urlEnv: '/api/Environment',
+   urlErrorPage: 'http://localhost/static/error.htm',
+   urlDMIndex: 'http://localhost/DMIndex',
+   urlAppIcon: 'assets/bia/AppIcon.svg',
+@@ -11,10 +12,10 @@ export const environment = {
+   production: false,
+   appTitle: 'BIATemplate',
+   companyName: 'TheBIADevCompany',
+-  version: '1.2.0',
++  version: '1.2.2',
+   logging: {
+     conf: {
+-      serverLoggingUrl: 'http://localhost/BIATemplate/api/logs',
++      serverLoggingUrl: 'http://localhost/BIATemplate/WebApi/api/logs',
+       level: NgxLoggerLevel.DEBUG,
+       serverLogLevel: NgxLoggerLevel.ERROR
+     }
+diff --git a/Angular/src/web.config b/Angular/src/web.config
+index b2c654e..1e80f82 100644
+--- a/Angular/src/web.config
++++ b/Angular/src/web.config
+@@ -1,5 +1,11 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <configuration>
++  <system.web>
++		<httpCookies domain="TheBIADevCompany" 
++      		httpOnlyCookies="true" 
++         	requireSSL="true" />
++
++  </system.web>
+   <system.webServer>
+     <staticContent>
+       <remove fileExtension=".woff2" />
+diff --git a/DotNet-BIADemo-BIATemplate.ps1 b/DotNet-BIADemo-BIATemplate.ps1
+index 6ca1ba7..bcad3d7 100644
+--- a/DotNet-BIADemo-BIATemplate.ps1
++++ b/DotNet-BIADemo-BIATemplate.ps1
+@@ -9,7 +9,8 @@ function DeleteLine($start, $end, $file) {
+   $i = 0
+   $start--
+   $end--
+-  Write-Host "start " $start "end " $end "file " $file
++  $fileRel = Resolve-Path -Path "$file" -Relative
++  Write-Verbose "Delete lines $start to $end in file $fileRel" -Verbose
+   (Get-Content $file) | Where-Object {
+     ($i -lt $start -or $i -gt $end)
+     $i++
+@@ -62,9 +63,13 @@ function RemoveItemFolder {
+     [string]$path
+   )
+   if (Test-Path $path) {
+-    Write-Host "delete " $path " folder"
++	$fileRel = Resolve-Path -Path "$path" -Relative
++    Write-Verbose "Delete $fileRel" -Verbose
+     Remove-Item $path -Recurse -Force -Confirm:$false
+   }
++  else {
++	Write-Error "Error " $path " not found"
++  }
+ }
+ 
+ function ReplaceProjectName {
+@@ -73,15 +78,52 @@ function ReplaceProjectName {
+     [string]$newName
+   )
+   Get-ChildItem -File -Recurse -include *.csproj, *.cs, *.sln, *.json, *.config | Where-Object { $_.FullName -NotLike "*/bin/*" -and $_.FullName -NotLike "*/obj/*" } | ForEach-Object { 
+-    $oldContent = [System.IO.File]::ReadAllText($_.FullName);
++    $file = $_.FullName
++	$oldContent = [System.IO.File]::ReadAllText($file);
+     $newContent = $oldContent.Replace($oldName, $newName);
+     if ($oldContent -ne $newContent) {
+-      Write-Host $_.FullName
+-      [System.IO.File]::WriteAllText($_.FullName, $newContent)
++	  
++	  $fileRel = Resolve-Path -Path "$file" -Relative
++      Write-Verbose "Replace in $fileRel" -Verbose
++	  
++      [System.IO.File]::WriteAllText($file, $newContent)
+     }
+   }
+ }
+ 
++function RemoveBIADemoOnlyFiles {
++	foreach ($childFile in Get-ChildItem -File -Recurse | Where-Object { Select-String "// BIADemo only" $_ -Quiet } ) { 
++		$file = $childFile.FullName
++		$fileRel = Resolve-Path -Path "$file" -Relative
++		$searchWord = '// BIADemo only'
++		$starts = GetLineNumber -pattern $searchWord -file $file
++		if ($starts -eq 1)
++		{
++			Write-Verbose "Remove $fileRel" -Verbose
++			Remove-Item -Force -LiteralPath $file
++		}
++	}
++}
++
++function RemoveEmptyFolder {
++    param(
++        $Path
++    )
++    foreach ($childDirectory in Get-ChildItem -Force -Path $Path -Directory -Exclude PublishProfiles,RepoContract) {
++        RemoveEmptyFolder $childDirectory.FullName
++    }
++    $currentChildren = Get-ChildItem -Force -LiteralPath $Path
++    $isEmpty = $currentChildren -eq $null
++    if ($isEmpty) {
++	 	$fileRel = Resolve-Path -Path "$Path" -Relative
++        Write-Verbose "Removing empty folder '${fileRel}'." -Verbose
++        Remove-Item -Force -LiteralPath $Path
++    }
++}
++
++
++$CurrentRep= Resolve-Path -Path "."
++
+ # $oldName = Read-Host "old project name ?"
+ $oldName = 'BIADemo'
+ # $newName = Read-Host "new project name ?"
+@@ -110,20 +152,30 @@ Write-Host "Remove *\obj"
+ RemoveItemFolder -path '*\obj'
+ 
+ 
+-Write-Host "Remove PlanesController.cs"
+-RemoveItemFolder -path 'TheBIADevCompany.BIADemo.Presentation.Api\Controllers\PlanesController.cs'
+-Write-Host "Remove PlaneModelBuilder.cs"
+-RemoveItemFolder -path 'TheBIADevCompany.BIADemo.Infrastructure.Data\ModelBuilders\PlaneModelBuilder.cs'
++
++Write-Host "Remove BIA demo only files"
++RemoveBIADemoOnlyFiles
++
++# Write-Host "Remove PlanesController.cs"
++# RemoveItemFolder -path 'TheBIADevCompany.BIADemo.Presentation.Api\Controllers\PlanesController.cs'
++# Write-Host "Remove PlaneModelBuilder.cs"
++# RemoveItemFolder -path 'TheBIADevCompany.BIADemo.Infrastructure.Data\ModelBuilders\PlaneModelBuilder.cs'
++# Write-Host "Remove TheBIADevCompany.BIADemo.Application\Plane"
++# RemoveItemFolder -path 'TheBIADevCompany.BIADemo.Application\Plane'
++# Write-Host "Remove TheBIADevCompany.BIADemo.Domain\PlaneModule"
++# RemoveItemFolder -path 'TheBIADevCompany.BIADemo.Domain\PlaneModule'
++# Write-Host "Remove TheBIADevCompany.BIADemo.Domain.Dto\Plane"
++# RemoveItemFolder -path 'TheBIADevCompany.BIADemo.Domain.Dto\Plane'
++
+ Write-Host "Remove Migrations folder"
+ RemoveItemFolder -path 'TheBIADevCompany.BIADemo.Infrastructure.Data\Migrations'
+-Write-Host "Remove TheBIADevCompany.BIADemo.Application\Plane"
+-RemoveItemFolder -path 'TheBIADevCompany.BIADemo.Application\Plane'
+-Write-Host "Remove TheBIADevCompany.BIADemo.Domain\PlaneModule"
+-RemoveItemFolder -path 'TheBIADevCompany.BIADemo.Domain\PlaneModule'
+-Write-Host "Remove TheBIADevCompany.BIADemo.Domain.Dto\Plane"
+-RemoveItemFolder -path 'TheBIADevCompany.BIADemo.Domain.Dto\Plane'
+-
+-Write-Host "Remove code example"
++
++Write-Host "Remove Empty Folder"
++RemoveEmptyFolder "."
++
++
++Write-Host "Remove code example partial files"
++
+ RemoveCodeExample
+ 
+ Write-Host "replace project name"
+diff --git a/DotNet/BIATemplate.sln b/DotNet/BIATemplate.sln
+index 4834dd9..a8f9fae 100644
+--- a/DotNet/BIATemplate.sln
++++ b/DotNet/BIATemplate.sln
+@@ -31,6 +31,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBIADevCompany.BIATemplate.Infrastr
+ EndProject
+ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBIADevCompany.BIATemplate.WorkerService", "TheBIADevCompany.BIATemplate.WorkerService\TheBIADevCompany.BIATemplate.WorkerService.csproj", "{6C976803-D3F2-44B0-B7F6-6B8AAD8DD333}"
+ EndProject
++Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdditionalFiles", "AdditionalFiles", "{25ADA917-6580-4F47-A856-CF04AB8CE7B7}"
++	ProjectSection(SolutionItems) = preProject
++		.gitignore = .gitignore
++		Directory.Build.props = Directory.Build.props
++	EndProjectSection
++EndProject
++Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{90DD0210-8503-485D-831A-28FC09BC7011}"
++	ProjectSection(SolutionItems) = preProject
++		Docs\NEW_PROJECT.md = Docs\NEW_PROJECT.md
++	EndProjectSection
++EndProject
+ Global
+ 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+ 		Debug|Any CPU = Debug|Any CPU
+diff --git a/DotNet/CHANGELOG.md b/DotNet/CHANGELOG.md
+index a66a20b..c1ae6bd 100644
+--- a/DotNet/CHANGELOG.md
++++ b/DotNet/CHANGELOG.md
+@@ -1,3 +1,17 @@
++### [3.2.2] (2020-10-16)
++* Solve bug with Zodiac user
++* Desactivate swagger in no dev environment
++* Add color by environment
++* Remove the popup when token expire
++* Generate a new secretkey at deployement
++### [3.2.1] (2020-10-16)
++* Add the worker service (hangfire)
++### [3.2.0] (2020-10-16)
++* Use of BIA.core nugetpackage (1 by layer)
++* Compatibility with multi ad environmemt (usage of user sid) => change the database model
++### [3.2.0] (2020-10-16)
++* Use of BIA.core nugetpackage (1 by layer)
++* Compatibility with multi ad environmemt
+ ### [3.1.0] (2020-05-04)
+ * views
+ ### [3.0.0] (2020-10-02)
+diff --git a/DotNet/Docs/NEW_PROJECT.md b/DotNet/Docs/NEW_PROJECT.md
+index cfd7687..f101054 100644
+--- a/DotNet/Docs/NEW_PROJECT.md
++++ b/DotNet/Docs/NEW_PROJECT.md
+@@ -47,7 +47,6 @@ Install the latest version of the **[BIA Project Creator](https://inshare.collab
+ You can now go to File > New > Project in Visual Studio.  
+ Select the BIA template in the type of projects and click on Next button.  
+ Fill **Project name** field. For **Location**, type [MyLocationSourceCode]\\[ProjectName]\DotNet and check **Place solution and project in the same directory**.  
+-Retrieve the last version of **[BIA Additional Files](https://inshare.collab.group.thebiadevcompany/bao/DevOps/BIAV3/Shared%20Documents/AdditionalFiles)** and unzip the contents into the **DotNet** folder of your new project.
+ 
+ ## Setup project
+ Once your solution is created, you need to update some files.  
+diff --git a/DotNet/NuGet.Config b/DotNet/NuGet.Config
+deleted file mode 100644
+index 6ccf80b..0000000
+--- a/DotNet/NuGet.Config
++++ /dev/null
+@@ -1,8 +0,0 @@
+-﻿<?xml version="1.0" encoding="utf-8"?>
+-<configuration>
+-  <packageSources>
+-  <add key="DM_Feed" value="https://azure.devops.thebiadevcompany/TheBIADevCompanyElectricalAndPower/_packaging/DM_Feed/nuget/v3/index.json" />
+-</packageSources>
+-  <disabledPackageSources>
+-  </disabledPackageSources>
+-</configuration>
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/Constants.cs b/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/Constants.cs
+index b36c597..a34c73e 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/Constants.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/Constants.cs
+@@ -17,17 +17,17 @@ namespace TheBIADevCompany.BIATemplate.Crosscutting.Common
+             /// <summary>
+             /// The back end version.
+             /// </summary>
+-            public const string BackEndVersion = "1.2.0";
++            public const string BackEndVersion = "1.2.2";
+ 
+             /// <summary>
+             /// The front end version.
+             /// </summary>
+-            public const string FrontEndVersion = "1.2.0";
++            public const string FrontEndVersion = "1.2.2";
+ 
+             /// <summary>
+             /// The framework version.
+             /// </summary>
+-            public const string FrameworkVersion = "3.2.0";
++            public const string FrameworkVersion = "3.2.2";
+         }
+ 
+         /// <summary>
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/TheBIADevCompany.BIATemplate.Crosscutting.Common.csproj b/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/TheBIADevCompany.BIATemplate.Crosscutting.Common.csproj
+index 3a9cc5b..c6f0de8 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/TheBIADevCompany.BIATemplate.Crosscutting.Common.csproj
++++ b/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/TheBIADevCompany.BIATemplate.Crosscutting.Common.csproj
+@@ -7,7 +7,7 @@
+   </PropertyGroup>
+ 
+   <ItemGroup>
+-    <PackageReference Include="BIA.Net.Core.Common" Version="3.2.1" />
++    <PackageReference Include="BIA.Net.Core.Common" Version="3.2.2" />
+     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+     <PackageReference Include="System.Security.Principal.Windows" Version="4.7.0" />
+   </ItemGroup>
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Domain.Dto/stylecop.json b/DotNet/TheBIADevCompany.BIATemplate.Domain.Dto/stylecop.json
+deleted file mode 100644
+index 42fb1f8..0000000
+--- a/DotNet/TheBIADevCompany.BIATemplate.Domain.Dto/stylecop.json
++++ /dev/null
+@@ -1,14 +0,0 @@
+-﻿{
+-  // ACTION REQUIRED: This file was automatically added to your project, but it
+-  // will not take effect until additional steps are taken to enable it. See the
+-  // following page for additional information:
+-  //
+-  // https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/EnableConfiguration.md
+-
+-  "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+-  "settings": {
+-    "documentationRules": {
+-      "companyName": "PlaceholderCompany"
+-    }
+-  }
+-}
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Aggregate/UserFromDirectory.cs b/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Aggregate/UserFromDirectory.cs
+index 850ce87..7398a14 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Aggregate/UserFromDirectory.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Aggregate/UserFromDirectory.cs
+@@ -119,16 +119,16 @@ namespace TheBIADevCompany.BIATemplate.Domain.UserModule.Aggregate
+             user.IsActive = true;
+             user.Country = userDirectory.Country?.Length > 10 ? userDirectory.Country?.Substring(0, 10) : userDirectory.Country ?? string.Empty;
+             user.Department = userDirectory.Department?.Length > 50 ? userDirectory.Department?.Substring(0, 50) : userDirectory.Department ?? string.Empty;
+-            user.DistinguishedName = userDirectory.DistinguishedName?.Length > 250 ? userDirectory.DistinguishedName?.Substring(0, 250) : userDirectory.DistinguishedName;
++            user.DistinguishedName = userDirectory.DistinguishedName?.Length > 250 ? userDirectory.DistinguishedName?.Substring(0, 250) : userDirectory.DistinguishedName ?? string.Empty;
+             user.Manager = userDirectory.Manager?.Length > 250 ? userDirectory.Manager?.Substring(0, 250) : userDirectory.Manager;
+             user.Email = userDirectory.Email?.Length > 256 ? userDirectory.Email?.Substring(0, 256) : userDirectory.Email ?? string.Empty;
+             user.ExternalCompany = userDirectory.ExternalCompany?.Length > 50 ? userDirectory.ExternalCompany?.Substring(0, 50) : userDirectory.ExternalCompany;
+             user.IsEmployee = userDirectory.IsEmployee;
+             user.IsExternal = userDirectory.IsExternal;
+-            user.Company = userDirectory.Company?.Length > 50 ? userDirectory.Company?.Substring(0, 50) : userDirectory.Company;
++            user.Company = userDirectory.Company?.Length > 50 ? userDirectory.Company?.Substring(0, 50) : userDirectory.Company ?? string.Empty;
+             user.DaiDate = DateTime.Now;
+             user.Office = userDirectory.Office?.Length > 20 ? userDirectory.Office?.Substring(0, 20) : userDirectory.Office ?? string.Empty;
+-            user.Site = userDirectory.Site?.Length > 50 ? userDirectory.Site?.Substring(0, 50) : userDirectory.Site;
++            user.Site = userDirectory.Site?.Length > 50 ? userDirectory.Site?.Substring(0, 50) : userDirectory.Site ?? string.Empty;
+             user.SubDepartment = userDirectory.SubDepartment?.Length > 50 ? userDirectory.SubDepartment?.Substring(0, 50) : userDirectory.SubDepartment;
+         }
+     }
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Service/UserSynchronizeDomainService.cs b/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Service/UserSynchronizeDomainService.cs
+index 880e248..2a69bb6 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Service/UserSynchronizeDomainService.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Service/UserSynchronizeDomainService.cs
+@@ -75,7 +75,8 @@ namespace TheBIADevCompany.BIATemplate.Domain.UserModule.Service
+                         user.IsActive = false;
+                         this.repository.Update(user);
+                     }
+-                    else if (fullSynchro)
++
++                    if (fullSynchro && usersSidInDirectory.Contains(user.Sid))
+                     {
+                         resynchronizeTasks.Add(this.ResynchronizeUser(user));
+                     }
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Data/ModelBuilders/UserModelBuilder.cs b/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Data/ModelBuilders/UserModelBuilder.cs
+index 783909d..dd0e755 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Data/ModelBuilders/UserModelBuilder.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Data/ModelBuilders/UserModelBuilder.cs
+@@ -50,16 +50,16 @@ namespace TheBIADevCompany.BIATemplate.Infrastructure.Data.ModelBuilders
+             modelBuilder.Entity<User>().Property(u => u.LastName).IsRequired().HasMaxLength(50);
+             modelBuilder.Entity<User>().Property(u => u.Login).IsRequired().HasMaxLength(50);
+             modelBuilder.Entity<User>().Property(u => u.DistinguishedName).IsRequired().HasMaxLength(250);
+-            modelBuilder.Entity<User>().Property(u => u.IsEmployee).IsRequired();
+-            modelBuilder.Entity<User>().Property(u => u.IsExternal).IsRequired();
++            modelBuilder.Entity<User>().Property(u => u.IsEmployee);
++            modelBuilder.Entity<User>().Property(u => u.IsExternal);
+             modelBuilder.Entity<User>().Property(u => u.ExternalCompany).HasMaxLength(50);
+-            modelBuilder.Entity<User>().Property(u => u.Company).IsRequired().HasMaxLength(50);
+-            modelBuilder.Entity<User>().Property(u => u.Site).IsRequired().HasMaxLength(50);
++            modelBuilder.Entity<User>().Property(u => u.Company).HasMaxLength(50);
++            modelBuilder.Entity<User>().Property(u => u.Site).HasMaxLength(50);
+             modelBuilder.Entity<User>().Property(u => u.Manager).HasMaxLength(250);
+-            modelBuilder.Entity<User>().Property(u => u.Department).IsRequired().HasMaxLength(50);
++            modelBuilder.Entity<User>().Property(u => u.Department).HasMaxLength(50);
+             modelBuilder.Entity<User>().Property(u => u.SubDepartment).HasMaxLength(50);
+-            modelBuilder.Entity<User>().Property(u => u.Office).IsRequired().HasMaxLength(20);
+-            modelBuilder.Entity<User>().Property(u => u.Country).IsRequired().HasMaxLength(10);
++            modelBuilder.Entity<User>().Property(u => u.Office).HasMaxLength(20);
++            modelBuilder.Entity<User>().Property(u => u.Country).HasMaxLength(10);
+             modelBuilder.Entity<User>().Property(u => u.DaiDate).IsRequired();
+             modelBuilder.Entity<User>().Property(u => u.Guid).IsRequired();
+             modelBuilder.Entity<User>().Property(u => u.IsActive).IsRequired();
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Data/TheBIADevCompany.BIATemplate.Infrastructure.Data.csproj b/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Data/TheBIADevCompany.BIATemplate.Infrastructure.Data.csproj
+index 8f98872..c77ff1b 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Data/TheBIADevCompany.BIATemplate.Infrastructure.Data.csproj
++++ b/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Data/TheBIADevCompany.BIATemplate.Infrastructure.Data.csproj
+@@ -16,7 +16,7 @@
+   </ItemGroup>
+ 
+   <ItemGroup>
+-    <PackageReference Include="BIA.Net.Core.Infrastructure.Data" Version="3.2.0" />
++    <PackageReference Include="BIA.Net.Core.Infrastructure.Data" Version="3.2.2" />
+     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
+     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.8" />
+     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.8" />
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Service/Repositories/LdapRepository.cs b/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Service/Repositories/LdapRepository.cs
+index 1e3a620..1c6cc1d 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Service/Repositories/LdapRepository.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Service/Repositories/LdapRepository.cs
+@@ -55,7 +55,7 @@ namespace TheBIADevCompany.BIATemplate.Infrastructure.Service.Repositories
+                 IsEmployee = true,
+                 Manager = entry.Properties["manager"].Value?.ToString(),
+                 Office = entry.Properties["physicalDeliveryOfficeName"].Value?.ToString(),
+-                Site = entry.Properties["description"].Value?.ToString(),
++                Site = domainKey == "CORP" ? entry.Properties["physicalDeliveryOfficeName"].Value?.ToString() : entry.Properties["description"].Value?.ToString(),
+             };
+ 
+             // Set external company
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Service/TheBIADevCompany.BIATemplate.Infrastructure.Service.csproj b/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Service/TheBIADevCompany.BIATemplate.Infrastructure.Service.csproj
+index bb3694e..32578c4 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Service/TheBIADevCompany.BIATemplate.Infrastructure.Service.csproj
++++ b/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Service/TheBIADevCompany.BIATemplate.Infrastructure.Service.csproj
+@@ -7,7 +7,7 @@
+   </PropertyGroup>
+ 
+   <ItemGroup>
+-    <PackageReference Include="BIA.Net.Core.Infrastructure.Service" Version="3.2.0" />
++    <PackageReference Include="BIA.Net.Core.Infrastructure.Service" Version="3.2.1" />
+     <PackageReference Include="MailKit" Version="2.9.0" />
+     <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.8" />
+     <PackageReference Include="System.DirectoryServices" Version="4.7.0" />
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/AuthController.cs b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/AuthController.cs
+index d7b1d26..7500ca6 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/AuthController.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/AuthController.cs
+@@ -9,6 +9,7 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+     using System.Threading.Tasks;
+     using BIA.Net.Core.Domain.Dto.User;
+     using BIA.Net.Core.Presentation.Api.Authentication;
++    using BIA.Net.Presentation.Api.Controllers.Base;
+     using Microsoft.AspNetCore.Http;
+     using Microsoft.AspNetCore.Mvc;
+     using Microsoft.Extensions.Logging;
+@@ -20,11 +21,7 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+     /// <summary>
+     /// The API controller used to authenticate users.
+     /// </summary>
+-    [Route("api/[controller]")]
+-    [ApiController]
+-    [Produces("application/json")]
+-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+-    public class AuthController : ControllerBase
++    public class AuthController : BiaControllerBaseNoToken
+     {
+         /// <summary>
+         /// The JWT factory.
+@@ -44,7 +41,7 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+         /// <summary>
+         /// The logger.
+         /// </summary>
+-        private readonly ILogger<LogsController> logger;
++        private readonly ILogger<AuthController> logger;
+ 
+         /// <summary>
+         /// Initializes a new instance of the <see cref="AuthController"/> class.
+@@ -53,7 +50,7 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+         /// <param name="userAppService">The user application service.</param>
+         /// <param name="siteAppService">The site application service.</param>
+         /// <param name="logger">The logger.</param>
+-        public AuthController(IJwtFactory jwtFactory, IUserAppService userAppService, ISiteAppService siteAppService, ILogger<LogsController> logger)
++        public AuthController(IJwtFactory jwtFactory, IUserAppService userAppService, ISiteAppService siteAppService, ILogger<AuthController> logger)
+         {
+             this.jwtFactory = jwtFactory;
+             this.userAppService = userAppService;
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/LogsController.cs b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/LogsController.cs
+deleted file mode 100644
+index 38d3eee..0000000
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/LogsController.cs
++++ /dev/null
+@@ -1,99 +0,0 @@
+-// <copyright file="LogsController.cs" company="TheBIADevCompany">
+-//     Copyright (c) TheBIADevCompany. All rights reserved.
+-// </copyright>
+-
+-namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+-{
+-    using System;
+-    using BIA.Net.Core.Common.Enum;
+-    using BIA.Net.Core.Domain.Dto;
+-    using Microsoft.AspNetCore.Http;
+-    using Microsoft.AspNetCore.Mvc;
+-    using Microsoft.Extensions.Logging;
+-
+-    /// <summary>
+-    /// The API controller used to manage users.
+-    /// </summary>
+-    [Route("api/[controller]")]
+-    [ApiController]
+-    [Produces("application/json")]
+-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+-    public class LogsController : ControllerBase
+-    {
+-        /// <summary>
+-        /// The logger.
+-        /// </summary>
+-        private readonly ILogger<LogsController> logger;
+-
+-        /// <summary>
+-        /// Initializes a new instance of the <see cref="LogsController"/> class.
+-        /// </summary>
+-        /// <param name="logger">The logger.</param>
+-        public LogsController(ILogger<LogsController> logger)
+-        {
+-            this.logger = logger;
+-        }
+-
+-        /// <summary>
+-        /// Create a log according to the information in parameter.
+-        /// </summary>
+-        /// <param name="log">The log information (message, level, etc...)</param>
+-        /// <returns>A return code.</returns>
+-        [HttpPost]
+-        [ProducesResponseType(StatusCodes.Status200OK)]
+-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+-        public IActionResult CreateLog(LogDto log)
+-        {
+-            if (log == null)
+-            {
+-                return this.BadRequest();
+-            }
+-
+-            string logMessage = $"From Angular file {log.FileName} one line {log.LineNumber} : {log.Message}";
+-
+-            switch (log.Level)
+-            {
+-                case NgxLogLevel.Trace:
+-                    this.logger.LogTrace(logMessage);
+-                    break;
+-
+-                case NgxLogLevel.Debug:
+-                    this.logger.LogDebug(logMessage);
+-                    break;
+-
+-                case NgxLogLevel.Info:
+-                    this.logger.LogInformation(logMessage);
+-                    break;
+-
+-                case NgxLogLevel.Warning:
+-                    this.logger.LogWarning(logMessage);
+-                    break;
+-
+-                case NgxLogLevel.Error:
+-                    this.logger.LogError(logMessage);
+-                    break;
+-
+-                case NgxLogLevel.Fatal:
+-                    this.logger.LogCritical(logMessage);
+-                    break;
+-
+-                default:
+-                    this.logger.LogTrace(logMessage);
+-                    break;
+-            }
+-
+-            return this.Ok();
+-        }
+-
+-        /// <summary>
+-        /// Ping to test response.
+-        /// </summary>
+-        /// <returns>The JWT if authenticated.</returns>
+-        [HttpGet("ping")]
+-        [ProducesResponseType(StatusCodes.Status200OK)]
+-        public IActionResult Ping()
+-        {
+-            return this.Ok(System.Net.Dns.GetHostName() + " Ping OK : " + DateTime.Now);
+-        }
+-    }
+-}
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/TheBIADevCompany.BIATemplate.Presentation.Api.csproj b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/TheBIADevCompany.BIATemplate.Presentation.Api.csproj
+index 8073a0f..7e6d3e0 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/TheBIADevCompany.BIATemplate.Presentation.Api.csproj
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/TheBIADevCompany.BIATemplate.Presentation.Api.csproj
+@@ -9,7 +9,7 @@
+   </PropertyGroup>
+ 
+   <ItemGroup>
+-    <PackageReference Include="BIA.Net.Core.Presentation.Api" Version="3.2.1" />
++    <PackageReference Include="BIA.Net.Core.Presentation.Api" Version="3.2.2.1" />
+     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.8" />
+     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.8">
+       <PrivateAssets>all</PrivateAssets>
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Startup.cs b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Startup.cs
+index c4b83b5..afc10b9 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Startup.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Startup.cs
+@@ -32,12 +32,19 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api
+         /// </summary>
+         private readonly BiaNetSection biaNetSection;
+ 
++        /// <summary>
++        /// The current environment.
++        /// </summary>
++        private readonly IWebHostEnvironment currentEnvironment;
++
+         /// <summary>
+         /// Initializes a new instance of the <see cref="Startup"/> class.
+         /// </summary>
+         /// <param name="configuration">The configuration.</param>
+-        public Startup(IConfiguration configuration)
++        /// <param name="env">The environment.</param>
++        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+         {
++            this.currentEnvironment = env;
+             this.configuration = configuration;
+             this.biaNetSection = new BiaNetSection();
+             this.configuration.GetSection("BiaNet").Bind(this.biaNetSection);
+@@ -53,30 +60,34 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api
+             services.AddCors();
+             services.AddResponseCompression();
+ 
+-            services.AddSwaggerGen(a =>
++            if (this.currentEnvironment.IsDevelopment())
+             {
+-                var apiScheme = new OpenApiSecurityScheme
++
++                services.AddSwaggerGen(a =>
+                 {
+-                    Name = "Authorization",
+-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+-                    In = ParameterLocation.Header,
+-                    Type = SecuritySchemeType.Http,
+-                    Scheme = "bearer",
+-                    Reference = new OpenApiReference
++                    var apiScheme = new OpenApiSecurityScheme
+                     {
+-                        Type = ReferenceType.SecurityScheme,
+-                        Id = "Bearer",
+-                    },
+-                };
+-                var securityRequirement = new OpenApiSecurityRequirement();
+-                securityRequirement.Add(apiScheme, new[] { "Bearer" });
+-
+-                a.SwaggerDoc("BIATemplateApi", new OpenApiInfo { Title = "BIATemplateApi", Version = "v1.0" });
+-                a.AddSecurityDefinition(
+-                    "Bearer",
+-                    apiScheme);
+-                a.AddSecurityRequirement(securityRequirement);
+-            });
++                        Name = "Authorization",
++                        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
++                        In = ParameterLocation.Header,
++                        Type = SecuritySchemeType.Http,
++                        Scheme = "bearer",
++                        Reference = new OpenApiReference
++                        {
++                            Type = ReferenceType.SecurityScheme,
++                            Id = "Bearer",
++                        },
++                    };
++                    var securityRequirement = new OpenApiSecurityRequirement();
++                    securityRequirement.Add(apiScheme, new[] { "Bearer" });
++
++                    a.SwaggerDoc("BIATemplateApi", new OpenApiInfo { Title = "BIATemplateApi", Version = "v1.0" });
++                    a.AddSecurityDefinition(
++                        "Bearer",
++                        apiScheme);
++                    a.AddSecurityRequirement(securityRequirement);
++                });
++            }
+ 
+             // Used to get a unique identifier for each HTTP request and track it.
+             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+@@ -105,6 +116,7 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api
+         /// <param name="env">The environment.</param>
+         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+         {
++
+             if (env.IsDevelopment())
+             {
+                 app.UseDeveloperExceptionPage();
+@@ -118,25 +130,23 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api
+                     .AllowAnyHeader()
+                     .AllowCredentials()
+                     .WithExposedHeaders(Constants.HttpHeaders.TotalCount));
++                app.UseStaticFiles();
++                app.UseSwagger();
++                app.UseSwaggerUI(c =>
++                {
++                    c.SwaggerEndpoint("BIATemplateApi/swagger.json", "v1.0");
++                    c.InjectJavascript("./jquery.min.js");
++                    c.InjectJavascript("./AutoLogin.js");
++                    c.InjectStylesheet("./AutoLogin.css");
++                });
+             }
+             else
+             {
+                 app.UseHsts();
+             }
+ 
+-            app.UseStaticFiles();
+-
+             app.UseResponseCompression();
+ 
+-            app.UseSwagger();
+-            app.UseSwaggerUI(c =>
+-            {
+-                c.SwaggerEndpoint("BIATemplateApi/swagger.json", "v1.0");
+-                c.InjectJavascript("./jquery.min.js");
+-                c.InjectJavascript("./AutoLogin.js");
+-                c.InjectStylesheet("./AutoLogin.css");
+-            });
+-
+             app.UseRouting();
+ 
+             app.UseAuthentication();
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.TheBIADevTeam_INT.json b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.TheBIADevTeam_INT.json
+index e80da7b..db6ff58 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.TheBIADevTeam_INT.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.TheBIADevTeam_INT.json
+@@ -1,5 +1,8 @@
+ {
+   "BiaNet": {
++    "Environment": {
++      "Type": "INT"
++    },
+     "Authentication": {
+       "LdapDomains": [
+         {
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.TheBIADevTeam_PRA.json b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.TheBIADevTeam_PRA.json
+index c91baf7..e05813f 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.TheBIADevTeam_PRA.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.TheBIADevTeam_PRA.json
+@@ -1,5 +1,8 @@
+ {
+   "BiaNet": {
++    "Environment": {
++      "Type": "PRA"
++    },
+     "Authentication": {
+       "LdapDomains": [
+         {
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.TheBIADevTeam_PRD.json b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.TheBIADevTeam_PRD.json
+index c91baf7..b7145ec 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.TheBIADevTeam_PRD.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.TheBIADevTeam_PRD.json
+@@ -1,5 +1,8 @@
+ {
+   "BiaNet": {
++    "Environment": {
++      "Type": "PRD"
++    },
+     "Authentication": {
+       "LdapDomains": [
+         {
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.TheBIADevTeam_UAT.json b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.TheBIADevTeam_UAT.json
+index 9f6f333..319b578 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.TheBIADevTeam_UAT.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.TheBIADevTeam_UAT.json
+@@ -1,5 +1,8 @@
+ {
+   "BiaNet": {
++    "Environment": {
++      "Type": "UAT"
++    },
+     "Authentication": {
+       "LdapDomains": [
+         {
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.Development.json b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.Development.json
+index 72dc72b..9c15f89 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.Development.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.Development.json
+@@ -1,5 +1,8 @@
+ {
+   "BiaNet": {
++    "Environment": {
++      "Type": "DEV"
++    },
+     "EmailConfiguration": {
+       "From": "noreply-BIATemplate@thebiadevcompanygroup.com",
+       "SmtpHost": "127.0.0.1",
+@@ -18,7 +21,7 @@
+           "LdapName": "na.labinal.snecma",
+           "ContainsGroup": true,
+           "ContainsUser": true
+-        },
++        }
+         //{
+         //  "Name": "CORP",
+         //  "LdapName": "corp.zodiac.lan",
+@@ -36,43 +39,43 @@
+       ]
+     },
+     "Roles": [
+-      {
+-        "Label": "User",
+-        "Type": "Fake"
+-      },
+-      {
+-        "Label": "Admin",
+-        "Type": "Fake"
+-      }
+       //{
+       //  "Label": "User",
+-      //  "Type": "Ldap",
+-      //  "LdapGroups": [
+-      //    {
+-      //      "AddUsersOfDomains": [ "EU", "NA" ],
+-      //      "RecursiveGroupsOfDomains": [ "EU", "NA" ],
+-      //      "LdapName": "EU\\P_LPS_DM_EU_BIATemplate_User",
+-      //      "Domain": "EU"
+-      //    }
+-      //    //{
+-      //    //  "AddUsersOfDomains": [ "CORP" ],
+-      //    //  "RecursiveGroupsOfDomains": [ "CORP", "RD1RF1" ],
+-      //    //  "LdapName": "RD1RF1\\RD1-SEP-DM-APP_BIATemplate_INT_User",
+-      //    //  "Domain": "RD1RF1"
+-      //    //}
+-      //  ]
++      //  "Type": "Fake"
+       //},
+       //{
+       //  "Label": "Admin",
+-      //  "Type": "Ldap",
+-      //  "LdapGroups": [
+-      //    {
+-      //      "RecursiveGroupsOfDomains": [ "EU", "NA" ],
+-      //      "LdapName": "EU\\P_LPS_DM_EU_BIATemplate_Admin",
+-      //      "Domain": "EU"
+-      //    }
+-      //  ]
++      //  "Type": "Fake"
+       //}
++      {
++        "Label": "User",
++        "Type": "Ldap",
++        "LdapGroups": [
++          {
++            "AddUsersOfDomains": [ "EU", "NA" ],
++            "RecursiveGroupsOfDomains": [ "EU", "NA" ],
++            "LdapName": "EU\\P_LPS_DM_EU_BIATemplate_User",
++            "Domain": "EU"
++          }
++          //{
++          //  "AddUsersOfDomains": [ "CORP" ],
++          //  "RecursiveGroupsOfDomains": [ "CORP", "RD1RF1" ],
++          //  "LdapName": "RD1RF1\\RD1-SEP-DM-APP_BIATemplate_INT_User",
++          //  "Domain": "RD1RF1"
++          //}
++        ]
++      },
++      {
++        "Label": "Admin",
++        "Type": "Ldap",
++        "LdapGroups": [
++          {
++            "RecursiveGroupsOfDomains": [ "EU", "NA" ],
++            "LdapName": "EU\\P_LPS_DM_EU_BIATemplate_Admin",
++            "Domain": "EU"
++          }
++        ]
++      }
+     ],
+     "UserProfile": {
+       "url": "http://intdm/DMIndex/UserProfile/GetUserProfile"
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.json b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.json
+index b4adf3d..be3863c 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.json
+@@ -13,7 +13,8 @@
+       "Issuer": "BIATemplateApi",
+       "Audience": "http://localhost:4200",
+       //Regenerate the SecretKey at each installation => It force reauthent => Checks the client version during authentication to force the client to refresh
+-      "SecretKey": "0BA9AE2BDC6FBA1056D86EB2ACB45D53072F786FBD94C658240FAE6198F5DC64DE018FE517E68410B9D41B9BE106532345D21090549B0BC396437DCEF3AADAAC"
++      //"SecretKey": "0BA9AE2BDC6FBA1056D86EB2ACB45D53072F786FBD94C658240FAE6198F5DC64DE018FE517E68410B9D41B9BE106532345D21090549B0BC396437DCEF3AADAAC",
++      "SecretKey": "7C14439A64673E9AF75EE7AF5B71A7C8D901C90B078EB7F2315C153D31B6275B22663F51A898EEEC7027A2911D7D643038AAFE768AF2E47F8488B6129F66AFA3"
+     },
+     "Roles": [
+     ],
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/web.config b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/web.config
+index 2745e2c..052b9fe 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/web.config
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/web.config
+@@ -1,5 +1,10 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <configuration>
++  <system.web>
++    <httpCookies domain="TheBIADevCompany"
++      		httpOnlyCookies="true"
++         	requireSSL="true" />
++  </system.web>
+ 	<location path="." inheritInChildApplications="false">
+ 		<system.webServer>
+ 			<handlers>
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Job/Shared/BaseJob.cs b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Job/Shared/BaseJob.cs
+index 30898fd..29dbba4 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Job/Shared/BaseJob.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/Job/Shared/BaseJob.cs
+@@ -16,7 +16,7 @@ namespace TheBIADevCompany.BIATemplate.Presentation.WorkerService.Job.Shared
+     /// <seealso cref="TheBIADevCompany.BIATemplate.Presentation.WorkerService.Job.Shared.Interface.IBaseJob" />
+     public class BaseJob
+     {
+-        private readonly ILogger logger;
++        protected readonly ILogger logger;
+ 
+         /// <summary>
+         /// Initializes a new instance of the <see cref="BaseJob"/> class.
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.TheBIADevTeam_INT.json b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.TheBIADevTeam_INT.json
+index e80da7b..db6ff58 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.TheBIADevTeam_INT.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.TheBIADevTeam_INT.json
+@@ -1,5 +1,8 @@
+ {
+   "BiaNet": {
++    "Environment": {
++      "Type": "INT"
++    },
+     "Authentication": {
+       "LdapDomains": [
+         {
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.TheBIADevTeam_PRA.json b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.TheBIADevTeam_PRA.json
+index c91baf7..e05813f 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.TheBIADevTeam_PRA.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.TheBIADevTeam_PRA.json
+@@ -1,5 +1,8 @@
+ {
+   "BiaNet": {
++    "Environment": {
++      "Type": "PRA"
++    },
+     "Authentication": {
+       "LdapDomains": [
+         {
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.TheBIADevTeam_PRD.json b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.TheBIADevTeam_PRD.json
+index c91baf7..b7145ec 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.TheBIADevTeam_PRD.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.TheBIADevTeam_PRD.json
+@@ -1,5 +1,8 @@
+ {
+   "BiaNet": {
++    "Environment": {
++      "Type": "PRD"
++    },
+     "Authentication": {
+       "LdapDomains": [
+         {
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.TheBIADevTeam_UAT.json b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.TheBIADevTeam_UAT.json
+index 9f6f333..319b578 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.TheBIADevTeam_UAT.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.TheBIADevTeam_UAT.json
+@@ -1,5 +1,8 @@
+ {
+   "BiaNet": {
++    "Environment": {
++      "Type": "UAT"
++    },
+     "Authentication": {
+       "LdapDomains": [
+         {
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.Development.json b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.Development.json
+index 41f9c03..9c15f89 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.Development.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.Development.json
+@@ -1,5 +1,8 @@
+ {
+   "BiaNet": {
++    "Environment": {
++      "Type": "DEV"
++    },
+     "EmailConfiguration": {
+       "From": "noreply-BIATemplate@thebiadevcompanygroup.com",
+       "SmtpHost": "127.0.0.1",

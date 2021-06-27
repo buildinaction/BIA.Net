@@ -1,6 +1,6 @@
 $RelativePathToBIAPackage = "..\..\BIADemo\BIAPackage"
 $SolutionName = "BIADemo"
-$ProjectPrefix = "Safran." + $SolutionName
+$ProjectPrefix = "TheBIADevCompany." + $SolutionName
 
 function AddBIAProjectToSolution
 {

@@ -23,6 +23,11 @@ export const NAVIGATION: BiaNavigation[] = [
         path: ['/examples/planes']
       },
       {
+        labelKey: 'app.planesPopupMode',
+        permissions: [Permission.Plane_List_Access],
+        path: ['/examples/planes-popup']
+      },
+      {
         labelKey: 'app.planesPageMode',
         permissions: [Permission.Plane_List_Access],
         path: ['/examples/planes-page']
@@ -36,7 +41,12 @@ export const NAVIGATION: BiaNavigation[] = [
         labelKey: 'app.planesSignalRMode',
         permissions: [Permission.Plane_List_Access],
         path: ['/examples/planes-signalR']
-      }
+      },
+      {
+        labelKey: 'app.planesCalcMode',
+        permissions: [Permission.Plane_List_Access],
+        path: ['/examples/planes-calc']
+      },
     ]
   },
   {

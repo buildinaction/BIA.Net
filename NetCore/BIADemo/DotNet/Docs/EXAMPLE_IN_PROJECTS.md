@@ -7,36 +7,29 @@ This files list the functionnalities use in different project build with the fra
 Open this file to see connector usage: [ConnectorsUsage.xls ](http://nateamwork.labinal.snecma/sep/is/PDMnDM/DM/Documents/300_ARCHI_INFRA/330_APPLICATION/ConnectorsUsage.xlsx).
 
 
-## Scheduled task (Tache planifiée)
+## Scheduled task (Tache planifiÃ©e)
 **Windows Service / WorkerService**
 * SkillPower
 * JobMonitor
 
 ## Image computing(Traitement d'image)
 
-## Data loading(Chargement de données)
+## Data loading(Chargement de donnÃ©es)
 **Load DB to DB with SSIS (Chargement d'une BDD vers une autre via SSIS)**
 * ADPConnector
 
 **Upload files**
-* iDo
+* iDo => But produce error 401 in other project
+* ESNAuto Line (Angular\src\app\features\extremity-configurations\components\extremity-configuration-attachment-new-dialog)
+* ChangeNote (Angular\src\app\features\physical-harnesses\components\physical-harness-form)
 
 ## BackEnd
 **Use SQL view (Utilisation Vue SQL)**
 * SkillPower
 
 ## FrontEnd
-**Print client Side (Impression côté client)**
-* FastTrack
+(moved to EXAMPLE_IN_PROJECTS.md in Angular folder)
 
-**Drag And Drop**
-* iDo
-
-**Utilisation des contrôles Telerik/Kendo**
-* ePlan
-
-**HighCharts usage**
-* ePlan
 
 ## Manipulation de document Document
 **Creation/Lecture PDF avec PDF Sharp**

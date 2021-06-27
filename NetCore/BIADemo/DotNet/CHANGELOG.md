@@ -1,10 +1,20 @@
+### [3.3.3] (2021-06-25)
+* New helper in common to compare string.
+### [3.3.2] (2021-05-28)
+### [3.3.1] (2021-03-31)
+* DeployDB use native code First mechanism
+* Use the new clustered database
+* Add the MapperMode flag in FilteredService to not multiplicate mapper when only a part of the field are to update.
+* Add the project title on hangfire dashboard.
+* Suppress all warning in test and generated code.
 ### [3.3.0] (2021-01-15)
-* Add feature management (posibilité to activate and desactivate powerfull feature like swagger, SignalR...)
+* Add feature management (posibilitÃ© to activate and desactivate powerfull feature like swagger, SignalR...)
 * Add Unitary Test
 * Add feature in Api HubForClients (use SignalR to push messge to all client connected, compatible with multi front) 
 * Add feature in Api DelegateJobToWorker (use Hangfire to launch job in the worker) 
 * Add feature in worker DatabaseHandler (detect the change in db immediatlty)
 * Add feature in worker HubForClients (use the Api feture HubForClients to push message to all web client connected)
+* WorkerService is now a web api with the hangfire Dashboard.
 ### [3.2.2] (2020-10-16)
 * Solve bug with Zodiac user
 * Desactivate swagger in no dev environment

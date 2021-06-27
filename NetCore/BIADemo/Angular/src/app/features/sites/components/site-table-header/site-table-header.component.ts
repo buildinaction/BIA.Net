@@ -12,6 +12,6 @@ import { BiaTableHeaderComponent } from 'src/app/shared/bia-shared/components/ta
   providers: [ConfirmationService]
 })
 export class SiteTableHeaderComponent extends BiaTableHeaderComponent {
-  @Input() canManageMembers = false;
-  @Output() manageMembers = new EventEmitter();
+  @Input() canEdit = false;
+  @Output() edit = new EventEmitter();
 }

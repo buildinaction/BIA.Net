@@ -1,13 +1,11 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { update, load } from '../../store/planes-actions';
-import { Observable, Subscription } from 'rxjs';
-import { getCurrentPlane, getPlaneLoadingGet } from '../../store/plane.state';
+import { update } from '../../store/planes-actions';
+import { Subscription } from 'rxjs';
 import { Plane } from '../../model/plane';
 import { AppState } from 'src/app/store/state';
 import { Location } from '@angular/common';
-import { ActivatedRoute, Params } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { PlaneService } from '../../services/plane.service';
 
 @Component({
   selector: 'app-plane-edit',
@@ -16,22 +14,15 @@ import { filter } from 'rxjs/operators';
 })
 export class PlaneEditComponent implements OnInit, OnDestroy {
   @Output() displayChange = new EventEmitter<boolean>();
-  loading$: Observable<boolean>;
-  plane$: Observable<Plane>;
   private sub = new Subscription();
-  private planeId: number;
 
-  constructor(private store: Store<AppState>, private location: Location, private route: ActivatedRoute) {}
+  constructor(
+    private store: Store<AppState>,
+    private location: Location,
+    public planeService: PlaneService
+  ) { }
 
   ngOnInit() {
-    this.loading$ = this.store.select(getPlaneLoadingGet).pipe();
-    this.plane$ = this.store.select(getCurrentPlane).pipe(filter((plane) => plane.id > 0));
-    this.sub.add(
-      this.route.params.subscribe((params: Params) => {
-        this.planeId = +params['id'];
-        this.store.dispatch(load({ id: this.planeId }));
-      })
-    );
   }
 
   ngOnDestroy() {

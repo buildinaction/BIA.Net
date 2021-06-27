@@ -1,8 +1,8 @@
-﻿// <copyright file="AirportDto.cs" company="Safran">
+﻿// <copyright file="OptionDto.cs" company="BIA">
 //     BIA. All rights reserved.
 // </copyright>
 
-namespace Safran.BIADemo.Domain.Dto.Option
+namespace BIA.Net.Core.Domain.Dto.Option
 {
     using BIA.Net.Core.Domain.Dto.Base;
 

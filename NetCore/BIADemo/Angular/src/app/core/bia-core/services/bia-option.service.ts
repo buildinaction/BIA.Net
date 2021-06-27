@@ -12,7 +12,7 @@ export class BiaOptionService {
 
   public static Differential<T extends BaseDto>(newList: T[], oldList: T[]) {
     let differential: T[] = [];
-    if (oldList) {
+    if (oldList && Array.isArray(oldList)) {
       // Delete items
       const toDeletedConnectingAirports = oldList
         .filter((s) => !newList || !newList.map(x => x.id).includes(s.id))

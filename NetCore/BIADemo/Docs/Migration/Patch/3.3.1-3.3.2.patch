@@ -1,0 +1,4259 @@
+diff --git a/Angular-BIADemo-BIATemplate.ps1 b/Angular-BIADemo-BIATemplate.ps1
+index 4960c8b..2ea6a43 100644
+--- a/Angular-BIADemo-BIATemplate.ps1
++++ b/Angular-BIADemo-BIATemplate.ps1
+@@ -135,10 +135,21 @@ Write-Host "Zip plane SignalR"
+ compress-archive -path '.\src\app\features\planes-SignalR\*' -destinationpath '.\docs\feature-planes-SignalR.zip' -compressionlevel optimal
+ Write-Host "Zip plane view"
+ compress-archive -path '.\src\app\features\planes-view\*' -destinationpath '.\docs\feature-planes-view.zip' -compressionlevel optimal
++Write-Host "Zip plane calc"
++compress-archive -path '.\src\app\features\planes-calc\*' -destinationpath '.\docs\feature-planes-calc.zip' -compressionlevel optimal
+ Write-Host "Zip airport"
+ compress-archive -path '.\src\app\features\airports\*' -destinationpath '.\docs\feature-airports.zip' -compressionlevel optimal
+ Write-Host "Zip airport"
+ compress-archive -path '.\src\app\domains\airport-option\*' -destinationpath '.\docs\domain-airport-option.zip' -compressionlevel optimal
++Write-Host "Zip site-children"
++New-Item '.\src\app\features\sites-children\views\site-item\' -Type Directory
++Copy-Item -Path '.\src\app\features\sites\views\site-item\*' -Destination '.\src\app\features\sites-children\views\site-item\' -Recurse -Force
++New-Item '.\src\app\features\sites-children\services\' -Type Directory
++Copy-Item -Path '.\src\app\features\sites\services\site.service.ts' -Destination '.\src\app\features\sites-children\services\' 
++New-Item '.\src\app\features\sites-children\children\' -Type Directory
++Copy-Item -Path '.\src\app\features\sites\new-crud.ps1' -Destination '.\src\app\features\sites-children\new-crud.ps1'
++compress-archive -path '.\src\app\features\sites-children\*' -destinationpath '.\docs\features-sites-children.zip' -compressionlevel optimal
++RemoveFolder -path '.\src\app\features\sites-children'
+ 
+ Write-Host "RemoveFolder dist"
+ RemoveFolder -path 'dist'
+@@ -154,6 +165,8 @@ Write-Host "RemoveFolder src\app\features\planes-types"
+ RemoveFolder -path 'src\app\features\planes-types'
+ Write-Host "RemoveFolder src\app\features\planes-signalR"
+ RemoveFolder -path 'src\app\features\planes-signalR'
++Write-Host "RemoveFolder src\app\features\planes-calc"
++RemoveFolder -path 'src\app\features\planes-calc'
+ Write-Host "RemoveFolder src\app\features\airports"
+ RemoveFolder -path 'src\app\features\airports'
+ Write-Host "RemoveFolder src\app\domains\airport-option"
+diff --git a/Angular/docs/CRUD.md b/Angular/docs/CRUD.md
+index ebe90c6..8a5fe3b 100644
+--- a/Angular/docs/CRUD.md
++++ b/Angular/docs/CRUD.md
+@@ -15,6 +15,7 @@ Then copy, paste and unzip into this feature <span style="background-color:yello
+   * **Angular\docs\feature-planes-page.zip** open the edit form in a full screen page
+   * **Angular\docs\feature-planes-SignalR.zip** open the edit form in a popup and list is refreshed by SignalR if there is modification detected by the back.
+   * **Angular\docs\feature-planes-view.zip** open the edit form in a popup and add the view system to filter the lists.
++  * **Angular\docs\feature-planes-calc.zip** spreadsheet mode.
+ 
+ Then, inside the folder of your new feature, execute the file **new-crud.ps1**   
+ For **new crud name? (singular)**, type <span style="background-color:yellow">aircraft</span>   (use - in complexe name example : plane-type)
+@@ -261,3 +262,63 @@ Add the input parameter `tableStateKey` for the `bia-table-controller` and `bia-
+       )
+     );
+   ```
++
++## Spreadsheet mode
++### OneToMany / ManyToMany
++In your view **index.component.ts**, you must define the property **type**
++```typescript
++  private initTableConfiguration() {
++   ...
++          Object.assign(new PrimeTableColumn('planeType', 'plane.planeType'), {
++            type: PropType.OneToMany
++          }),
++          Object.assign(new PrimeTableColumn('connectingAirports', 'plane.connectingAirports'), {
++            type: PropType.ManyToMany
++          })
++
++```
++
++You must then pass your optionDtos via the observable **dictOptionDtos$**. You must respect the order of the observables in **combineLatest** and the order of creation of **DictOptionDto**
++
++```typescript
++ngOnInit() {
++  ...
++this.dictOptionDtos$ = combineLatest([planeTypeOptions$, airportOptions$]).pipe(
++      map(
++        (options) =>
++          <DictOptionDto[]>[
++            new DictOptionDto('planeType', options[0]),
++            new DictOptionDto('connectingAirports', options[1])
++          ]
++      )
++    );
++```
++Don't forget to pass the **dictOptionDtos$** observable in your html 
++```html
++<app-plane-table
++      [elements]="planes$ | async"
++      [dictOptionDtos]="dictOptionDtos$ | async"
++```
++
++### Specific Input
++For specific properties that are not managed by the Framework, your table component must have an html. In this html, you have to copy/paste the content of the html from **bia-calc-table.component.html**.
++
++In this html, you must add your components in the **SPECIFIC INPUT** zone and **SPECIFIC OUTPUT** zone.
++
++```html
++<!-- Begin Add here specific input -->
++<!-- End Add here specific input -->
++...
++<!-- Begin Add here specific output -->
++<!-- End Add here specific output -->
++```
++
++in your typescript file, you must fill the **specificInputs** property.
++
++``` typescript
++specificInputs: string[] = [
++    'potting',
++    'locking',
++    ...
++  ];
++```
+diff --git a/Angular/docs/EXAMPLE_IN_PROJECT.md b/Angular/docs/EXAMPLE_IN_PROJECT.md
+new file mode 100644
+index 0000000..79b1101
+--- /dev/null
++++ b/Angular/docs/EXAMPLE_IN_PROJECT.md
+@@ -0,0 +1,24 @@
++# Example of functionnalities in projects
++
++This files list the functionnalities use in different project build with the framework V3.
++**Every developer should contribute to this file**
++
++## FrontEnd
++**Print client Side (Impression côté client)**
++* FastTrack
++
++**Drag And Drop:**
++* iDo
++* ePlan (Gantt Chart)
++
++**HighCharts usage:**
++* ePlan (Gantt & Combined Chart)
++* ==> Check **HIGHCHARTS.md** for more details <==
++
++**Time-Series Chart with Day/Week/Month grouping:**
++* ePlan
++
++**CRUD SpreadSheet Mode**
++* Simple example: eHarnessDef, feature device-types
++* Using relation OneToMany and ManyToMany: BIADemo, feature planes-calc
++* Using specific input: eHarnessDef, feature devices
+diff --git a/Angular/docs/HIGHCHARTS.md b/Angular/docs/HIGHCHARTS.md
+new file mode 100644
+index 0000000..ead9c83
+--- /dev/null
++++ b/Angular/docs/HIGHCHARTS.md
+@@ -0,0 +1,56 @@
++# Highcharts details for Framework V3
++
++This files list the details about how to use Highcharts in DM Framework V3 with Angular
++**Every developer who use this component should contribute to this file**
++
++## Documentation:
++* Highchart-Angular Wrapper Doc: https://www.npmjs.com/package/highcharts-angular
++* Highchart Official Doc: https://www.highcharts.com/docs/index
++
++## Highchart Demos:
++* https://www.highcharts.com/demo
++* https://www.highcharts.com/demo/gantt
++* https://www.highcharts.com/demo/maps
++* https://www.highcharts.com/demo/stock
++
++## Example in Project:
++* ePlan (Using Highcharts with Day/Week/Month grouping, and Highcharts Gantt with drag & drop)
++
++## When to use Highcharts:
++Highcharts is best used over PrimeNG components when you need advanced chart options, like:
++* Combined graphs (Lines + Stacked bars, etc...)
++* Gantt Chart
++* Advanced controls (Like Zooming, Exporting, Range Selector)
++
++## Installation:
++* 1- Use the npm package (Follow the instructions on the Documentation part)
++* 2- Import Highcharts to the modules you want to use instructions
++```import { HighchartsChartModule } from 'highcharts-angular'; ```
++
++* 3- Add/Set up highchart as components inside your feature(s)
++* 4- Link your Views to the highchart component as childs be displayed (Input and Output mecanism)
++
++## Extra Modules:
++When you import highcharts, highchart component will have vanilla/basic functions.
++* If you need to add specific functions to the chart (like Drag & Drop, Exporting functions, or Range Selector) you need to import extra highchart modules.
++* (See highchart documentation and modules requirement for the full details)
++* Below an example using the export data function, range Selector and drag drop:
++
++```
++**example file: workcapacity-chart.component.ts**
++
++import { Component, Input, OnInit } from '@angular/core';
++import * as Highcharts from 'highcharts';
++import draggablepoint from 'highcharts/modules/draggable-points';
++import { ChartData } from '../../model/gantthelper';
++import exporting from 'highcharts/modules/exporting';
++import exportdata from 'highcharts/modules/export-data';
++import accessibility from 'highcharts/modules/accessibility';
++import { XAxisOptions } from 'highcharts';
++import { UnitType } from '../../model/unittype';
++
++draggablepoint(Highcharts);
++exporting(Highcharts);
++exportdata(Highcharts);
++accessibility(Highcharts);
++```
+\ No newline at end of file
+diff --git a/Angular/docs/feature-planes-SignalR.zip b/Angular/docs/feature-planes-SignalR.zip
+index f5fd452..8c1d4de 100644
+Binary files a/Angular/docs/feature-planes-SignalR.zip and b/Angular/docs/feature-planes-SignalR.zip differ
+diff --git a/Angular/docs/feature-planes-calc.zip b/Angular/docs/feature-planes-calc.zip
+new file mode 100644
+index 0000000..d4d807c
+Binary files /dev/null and b/Angular/docs/feature-planes-calc.zip differ
+diff --git a/Angular/docs/feature-planes-page.zip b/Angular/docs/feature-planes-page.zip
+index e349ebc..9cb4f1b 100644
+Binary files a/Angular/docs/feature-planes-page.zip and b/Angular/docs/feature-planes-page.zip differ
+diff --git a/Angular/docs/feature-planes-popup.zip b/Angular/docs/feature-planes-popup.zip
+index 0e2db7b..12a231d 100644
+Binary files a/Angular/docs/feature-planes-popup.zip and b/Angular/docs/feature-planes-popup.zip differ
+diff --git a/Angular/docs/feature-planes-view.zip b/Angular/docs/feature-planes-view.zip
+index 6c3fccf..3170364 100644
+Binary files a/Angular/docs/feature-planes-view.zip and b/Angular/docs/feature-planes-view.zip differ
+diff --git a/Angular/docs/features-sites-children.zip b/Angular/docs/features-sites-children.zip
+new file mode 100644
+index 0000000..2128ed5
+Binary files /dev/null and b/Angular/docs/features-sites-children.zip differ
+diff --git a/Angular/launch.json b/Angular/launch.json
+index 360f2e3..dcc867a 100644
+--- a/Angular/launch.json
++++ b/Angular/launch.json
+@@ -5,9 +5,9 @@
+     "version": "0.2.0",
+     "configurations": [
+         {
+-            "type": "chrome",
++            "type": "edge",
+             "request": "launch",
+-            "name": "Launch Chrome against localhost",
++            "name": "Launch Edge against localhost",
+             "url": "http://localhost:4200",
+             "webRoot": "${workspaceFolder}"
+         }
+diff --git a/Angular/src/app/app-routing.module.ts b/Angular/src/app/app-routing.module.ts
+index 6fe5733..3a7e3ac 100644
+--- a/Angular/src/app/app-routing.module.ts
++++ b/Angular/src/app/app-routing.module.ts
+@@ -41,4 +41,4 @@ const routes: Routes = [
+   imports: [RouterModule.forRoot(routes)],
+   exports: [RouterModule]
+ })
+-export class AppRoutingModule {}
++export class AppRoutingModule { }
+diff --git a/Angular/src/app/core/bia-core/bia-core.module.ts b/Angular/src/app/core/bia-core/bia-core.module.ts
+index 66d2771..79850f2 100644
+--- a/Angular/src/app/core/bia-core/bia-core.module.ts
++++ b/Angular/src/app/core/bia-core/bia-core.module.ts
+@@ -16,6 +16,7 @@ import { BiaThemeService } from './services/bia-theme.service';
+ import { BiaTranslationService } from './services/bia-translation.service';
+ import { BiaAppInitService } from './services/bia-app-init.service';
+ import { SiteModule } from 'src/app/domains/site/site.module';
++import { RoleModule } from 'src/app/domains/role/role.module';
+ import { EnvironmentConfigurationModule } from 'src/app/domains/environment-configuration/environment-configuration.module';
+ import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
+ 
+@@ -25,7 +26,7 @@ export function initializeApp(appInitService: BiaAppInitService) {
+   };
+ }
+ 
+-const MODULES = [HttpClientModule, SiteModule, EnvironmentConfigurationModule];
++const MODULES = [HttpClientModule, SiteModule, RoleModule, EnvironmentConfigurationModule];
+ 
+ /* Warning: the order matters */
+ const INTERCEPTORS = [standardEncodeHttpParamsInterceptor, biaXhrWithCredInterceptor, biaTokenInterceptor];
+diff --git a/Angular/src/app/core/bia-core/services/auth.service.ts b/Angular/src/app/core/bia-core/services/auth.service.ts
+index 6e361c8..405d7e5 100644
+--- a/Angular/src/app/core/bia-core/services/auth.service.ts
++++ b/Angular/src/app/core/bia-core/services/auth.service.ts
+@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
+ 
+ const STORAGE_SITEID_KEY = 'currentSiteId';
+ const STORAGE_RELOADED_KEY = 'isReloaded';
++const STORAGE_ROLEID_KEY = 'currentRoleId';
+ 
+ @Injectable({
+   providedIn: 'root'
+@@ -33,6 +34,7 @@ export class AuthService extends AbstractDas<AuthInfo> implements OnDestroy {
+     this.authInfo$.subscribe((authInfo: AuthInfo | null) => {
+       if (authInfo && authInfo.additionalInfos && authInfo.additionalInfos.userData) {
+         this.setCurrentSiteId(authInfo.additionalInfos.userData.currentSiteId);
++        this.setCurrentRoleId(authInfo.additionalInfos.userData.currentRoleId);
+       }
+     });
+   }
+@@ -102,6 +104,15 @@ export class AuthService extends AbstractDas<AuthInfo> implements OnDestroy {
+     return 0;
+   }
+ 
++  public getCurrentRoleId(): number {
++    const value = sessionStorage.getItem(STORAGE_ROLEID_KEY);
++    if (value) {
++      return +value;
++    }
++
++    return 0;
++  }
++
+   public setCurrentSiteId(siteId: number) {
+     if (siteId > 0) {
+       sessionStorage.setItem(STORAGE_SITEID_KEY, siteId.toString());
+@@ -110,6 +121,14 @@ export class AuthService extends AbstractDas<AuthInfo> implements OnDestroy {
+     }
+   }
+ 
++  public setCurrentRoleId(roleId: number) {
++    if (roleId > 0) {
++      sessionStorage.setItem(STORAGE_ROLEID_KEY, roleId.toString());
++    } else {
++      sessionStorage.removeItem(STORAGE_ROLEID_KEY);
++    }
++  }
++
+   public getFrontEndVersion(): Observable<string> {
+     return this.http.get<string>(`${this.route}frontEndVersion`);
+   }
+@@ -137,10 +156,15 @@ export class AuthService extends AbstractDas<AuthInfo> implements OnDestroy {
+   protected buildUrlLogin() {
+     let url: string;
+     const siteId = this.getCurrentSiteId();
++    const roleId = this.getCurrentRoleId();
+     if (siteId > 0) {
+-      url = `${this.route}login/site/${siteId}`;
++      if (roleId > 0) {
++        url = `${this.route}login/site/${siteId}/${environment.singleRoleMode}/${roleId}`;
++      } else {
++        url = `${this.route}login/site/${siteId}/${environment.singleRoleMode}`;
++      }
+     } else {
+-      url = `${this.route}login`;
++      url = `${this.route}login/${environment.singleRoleMode}`;
+     }
+     return url;
+   }
+diff --git a/Angular/src/app/core/bia-core/services/bia-app-init.service.ts b/Angular/src/app/core/bia-core/services/bia-app-init.service.ts
+index bc56d59..628f170 100644
+--- a/Angular/src/app/core/bia-core/services/bia-app-init.service.ts
++++ b/Angular/src/app/core/bia-core/services/bia-app-init.service.ts
+@@ -7,13 +7,14 @@ import { isDevMode } from '@angular/core';
+ import { Store } from '@ngrx/store';
+ import { AppState } from 'src/app/store/state';
+ import { loadAllSites } from 'src/app/domains/site/store/sites-actions';
++import { loadAllRoles, loadMemberRoles } from 'src/app/domains/role/store/roles-actions';
+ 
+ @Injectable({
+   providedIn: 'root'
+ })
+ export class BiaAppInitService implements OnDestroy {
+   private sub: Subscription;
+-  constructor(private authService: AuthService, private store: Store<AppState>) {}
++  constructor(private authService: AuthService, private store: Store<AppState>) { }
+   Init() {
+     return this.initAuth();
+   }
+@@ -32,6 +33,12 @@ export class BiaAppInitService implements OnDestroy {
+         )
+         .subscribe(() => {
+           this.store.dispatch(loadAllSites());
++          this.store.dispatch(loadAllRoles());
++
++          if (environment.singleRoleMode === true) {
++            this.store.dispatch(loadMemberRoles({ siteId: this.authService.getCurrentSiteId() }));
++          }
++
+           resolve();
+         });
+     });
+diff --git a/Angular/src/app/core/bia-core/services/bia-dialog.service.ts b/Angular/src/app/core/bia-core/services/bia-dialog.service.ts
+index c370000..21e8bf9 100644
+--- a/Angular/src/app/core/bia-core/services/bia-dialog.service.ts
++++ b/Angular/src/app/core/bia-core/services/bia-dialog.service.ts
+@@ -8,9 +8,10 @@ import { Confirmation } from 'primeng/api';
+ export class BiaDialogService {
+   constructor(private translateService: TranslateService) {}
+ 
+-  public getDeleteConfirmation(): Confirmation {
++  public getDeleteConfirmation(key?: string): Confirmation {
+     const translates = this.translateService.instant(['biaMsg.confirmDelete', 'bia.confirm', 'bia.yes', 'bia.no']);
+     const confirmation: Confirmation = {
++      key: key,
+       message: translates['biaMsg.confirmDelete'],
+       header: translates['bia.confirm'],
+       icon: 'pi pi-exclamation-triangle',
+diff --git a/Angular/src/app/core/bia-core/services/bia-option.service.ts b/Angular/src/app/core/bia-core/services/bia-option.service.ts
+index cf3b05e..a7264a8 100644
+--- a/Angular/src/app/core/bia-core/services/bia-option.service.ts
++++ b/Angular/src/app/core/bia-core/services/bia-option.service.ts
+@@ -12,7 +12,7 @@ export class BiaOptionService {
+ 
+   public static Differential<T extends BaseDto>(newList: T[], oldList: T[]) {
+     let differential: T[] = [];
+-    if (oldList) {
++    if (oldList && Array.isArray(oldList)) {
+       // Delete items
+       const toDeletedConnectingAirports = oldList
+         .filter((s) => !newList || !newList.map(x => x.id).includes(s.id))
+diff --git a/Angular/src/app/domains/role/model/role.ts b/Angular/src/app/domains/role/model/role.ts
+index cc61ba9..d8da3aa 100644
+--- a/Angular/src/app/domains/role/model/role.ts
++++ b/Angular/src/app/domains/role/model/role.ts
+@@ -1,4 +1,7 @@
+ export interface Role {
+   id: number;
+-  label: string;
++  labelEn: string;
++  labelFr: string;
++  labelEs: string;
++  isDefault: boolean;
+ }
+diff --git a/Angular/src/app/domains/role/services/role-das.service.ts b/Angular/src/app/domains/role/services/role-das.service.ts
+index 952b3d7..04caedc 100644
+--- a/Angular/src/app/domains/role/services/role-das.service.ts
++++ b/Angular/src/app/domains/role/services/role-das.service.ts
+@@ -1,4 +1,5 @@
+ import { Injectable, Injector } from '@angular/core';
++import { Observable } from 'rxjs';
+ import { AbstractDas } from 'src/app/core/bia-core/services/abstract-das.service';
+ import { Role } from '../model/role';
+ 
+@@ -7,6 +8,10 @@ import { Role } from '../model/role';
+ })
+ export class RoleDas extends AbstractDas<Role> {
+   constructor(injector: Injector) {
+-    super(injector, 'Roles');
++    super(injector, 'roles');
++  }
++
++  getMemberRoles(siteId: number): Observable<Role[]> {
++    return this.getList(`${siteId}`);
+   }
+ }
+diff --git a/Angular/src/app/domains/role/store/role.state.ts b/Angular/src/app/domains/role/store/role.state.ts
+index c89f096..eda49e5 100644
+--- a/Angular/src/app/domains/role/store/role.state.ts
++++ b/Angular/src/app/domains/role/store/role.state.ts
+@@ -24,6 +24,11 @@ export const getRolesEntitiesState = createSelector(
+   (state) => state.roles
+ );
+ 
++export const getMemberRoles = createSelector(
++  getRolesState,
++  (state) => state.roles?.memberRoles ?? []
++);
++
+ export const { selectAll: getAllRoles } = fromRoles.rolesAdapter.getSelectors(
+   getRolesEntitiesState
+ );
+diff --git a/Angular/src/app/domains/role/store/roles-actions.ts b/Angular/src/app/domains/role/store/roles-actions.ts
+index 52be61f..4dd8c14 100644
+--- a/Angular/src/app/domains/role/store/roles-actions.ts
++++ b/Angular/src/app/domains/role/store/roles-actions.ts
+@@ -3,6 +3,13 @@ import { Role } from '../model/role';
+ 
+ export const loadAllRoles = createAction('[Domain Roles] Load all');
+ 
++export const loadMemberRoles = createAction('[Domain Roles] Load member roles', props<{ siteId: number }>());
++
++export const loadMemberRolesSuccess = createAction(
++    '[Domain Roles] Load member roles success',
++    props<{ roles: Role[] }>()
++);
++
+ export const load = createAction('[Domain Roles] Load', props<{ id: number }>());
+ 
+ export const loadAllSuccess = createAction('[Domain Roles] Load all success', props<{ roles: Role[] }>());
+@@ -10,3 +17,7 @@ export const loadAllSuccess = createAction('[Domain Roles] Load all success', pr
+ export const loadSuccess = createAction('[Domain Roles] Load success', props<{ role: Role }>());
+ 
+ export const failure = createAction('[Domain Roles] Failure', props<{ error: any }>());
++
++export const setDefaultRole = createAction('[Domain Roles] Set default role', props<{ id: number, siteId: number }>());
++
++export const setDefaultRoleSuccess = createAction('[Domain Roles] Set default role success');
+diff --git a/Angular/src/app/domains/role/store/roles-effects.ts b/Angular/src/app/domains/role/store/roles-effects.ts
+index b8c2295..d83ddde 100644
+--- a/Angular/src/app/domains/role/store/roles-effects.ts
++++ b/Angular/src/app/domains/role/store/roles-effects.ts
+@@ -1,16 +1,20 @@
+ import { Injectable } from '@angular/core';
+ import { of } from 'rxjs';
+-import { catchError, map, pluck, switchMap, startWith } from 'rxjs/operators';
++import { catchError, map, pluck, switchMap } from 'rxjs/operators';
+ import { Actions, createEffect, ofType } from '@ngrx/effects';
+ import {
+   failure,
+   load,
++  loadMemberRoles,
+   loadAllRoles,
+   loadAllSuccess,
+-  loadSuccess
++  loadSuccess,
++  loadMemberRolesSuccess,
++  setDefaultRole
+ } from './roles-actions';
+ import { BiaMessageService } from 'src/app/core/bia-core/services/bia-message.service';
+ import { RoleDas } from '../services/role-das.service';
++import { MemberDas } from '../../site/services/member-das.service';
+ 
+ /**
+  * Effects file is for isolating and managing side effects of the application in one place
+@@ -21,18 +25,31 @@ import { RoleDas } from '../services/role-das.service';
+ export class RolesEffects {
+   loadAll$ = createEffect(() =>
+     this.actions$.pipe(
+-      ofType(loadAllRoles) /* When action is dispatched */,
+-      startWith(loadAllRoles()),
+-      /* Hit the Roles Index endpoint of our REST API */
+-      /* Dispatch LoadAllSuccess action to the central store with id list returned by the backend as id*/
+-      /* 'Roles Reducers' will take care of the rest */
+-      switchMap(() =>
+-        this.roleDas.getList().pipe(
++      ofType(loadAllRoles),
++      switchMap(() => {
++        return this.roleDas.getList().pipe(
+           map((roles) => loadAllSuccess({ roles })),
+           catchError((err) => {
+             this.biaMessageService.showError();
+             return of(failure({ error: err }));
+           })
++        );
++      }
++      )
++    )
++  );
++
++  loadMemberRoles$ = createEffect(() =>
++    this.actions$.pipe(
++      ofType(loadMemberRoles),
++      pluck('siteId'),
++      switchMap((siteId) =>
++        this.roleDas.getMemberRoles(siteId).pipe(
++          map((roles) => loadMemberRolesSuccess({ roles })),
++          catchError((err) => {
++            this.biaMessageService.showError();
++            return of(failure({ error: err }));
++          })
+         )
+       )
+     )
+@@ -54,5 +71,23 @@ export class RolesEffects {
+     )
+   );
+ 
+-  constructor(private actions$: Actions, private roleDas: RoleDas, private biaMessageService: BiaMessageService) {}
++  setDefaultRole$ = createEffect(() =>
++    this.actions$.pipe(
++      ofType(setDefaultRole),
++      switchMap(data =>
++        this.memberDas.setDefaultRole(data.id).pipe(
++          map((x) => {
++            this.biaMessageService.showUpdateSuccess();
++            return loadMemberRoles({ siteId: data.siteId });
++          })
++        )
++      )
++    )
++  );
++
++  constructor(
++    private actions$: Actions,
++    private roleDas: RoleDas,
++    private memberDas: MemberDas,
++    private biaMessageService: BiaMessageService) { }
+ }
+diff --git a/Angular/src/app/domains/role/store/roles-reducer.ts b/Angular/src/app/domains/role/store/roles-reducer.ts
+index 0efdd32..99a8a4b 100644
+--- a/Angular/src/app/domains/role/store/roles-reducer.ts
++++ b/Angular/src/app/domains/role/store/roles-reducer.ts
+@@ -1,6 +1,6 @@
+ import { EntityState, createEntityAdapter } from '@ngrx/entity';
+ import { createReducer, on } from '@ngrx/store';
+-import { loadAllSuccess, loadSuccess } from './roles-actions';
++import { loadAllSuccess, loadMemberRoles, loadMemberRolesSuccess, loadSuccess } from './roles-actions';
+ import { Role } from '../model/role';
+ 
+ // This adapter will allow is to manipulate roles (mostly CRUD operations)
+@@ -9,7 +9,7 @@ export const rolesAdapter = createEntityAdapter<Role>({
+   sortComparer: false
+ });
+ 
+-// -----------------------------------------
++// ------------------------------------------
+ // The shape of EntityState
+ // ------------------------------------------
+ // interface EntityState<Role> {
+@@ -22,16 +22,24 @@ export const rolesAdapter = createEntityAdapter<Role>({
+ 
+ export interface State extends EntityState<Role> {
+   // additional props here
++  memberRoles: Role[] | null;
+ }
+ 
+ export const INIT_STATE: State = rolesAdapter.getInitialState({
+   // additional props default values here
++  memberRoles: null
+ });
+ 
+ export const roleReducers = createReducer<State>(
+   INIT_STATE,
+   on(loadAllSuccess, (state, { roles }) => rolesAdapter.setAll(roles, state)),
+-  on(loadSuccess, (state, { role }) => rolesAdapter.upsertOne(role, state))
++  on(loadSuccess, (state, { role }) => rolesAdapter.upsertOne(role, state)),
++  on(loadMemberRoles, (state, { }) => {
++    return { ...state, memberRoles: null };
++  }),
++  on(loadMemberRolesSuccess, (state, { roles }) => {
++    return { ...state, memberRoles: roles };
++  })
+ );
+ 
+ export const getRoleById = (id: number) => (state: State) => state.entities[id];
+diff --git a/Angular/src/app/domains/site/services/member-das.service.ts b/Angular/src/app/domains/site/services/member-das.service.ts
+index 78c140b..872646b 100644
+--- a/Angular/src/app/domains/site/services/member-das.service.ts
++++ b/Angular/src/app/domains/site/services/member-das.service.ts
+@@ -12,4 +12,9 @@ export class MemberDas {
+     const route = AbstractDas.buildRoute(`Members/Sites/${id}/setDefault`);
+     return this.http.put(route, null);
+   }
++
++  public setDefaultRole(id: number) {
++    const route = AbstractDas.buildRoute(`Members/Roles/${id}/setDefault`);
++    return this.http.put(route, null);
++  }
+ }
+diff --git a/Angular/src/app/domains/site/site.module.ts b/Angular/src/app/domains/site/site.module.ts
+index 9afd8ef..d94dfb3 100644
+--- a/Angular/src/app/domains/site/site.module.ts
++++ b/Angular/src/app/domains/site/site.module.ts
+@@ -1,6 +1,7 @@
+ import { NgModule } from '@angular/core';
+ import { EffectsModule } from '@ngrx/effects';
+ import { StoreModule } from '@ngrx/store';
++import { TranslateRoleLabelPipe } from 'src/app/shared/bia-shared/pipes/translate-role-label.pipe';
+ import { reducers } from './store/site.state';
+ import { SitesEffects } from './store/sites-effects';
+ 
+@@ -9,7 +10,8 @@ import { SitesEffects } from './store/sites-effects';
+   imports: [
+     StoreModule.forFeature('domain-sites', reducers),
+     EffectsModule.forFeature([SitesEffects]),
+-  ]
++  ],
++  providers: [TranslateRoleLabelPipe]
+ })
+ export class SiteModule {}
+ 
+diff --git a/Angular/src/app/domains/site/store/site.state.ts b/Angular/src/app/domains/site/store/site.state.ts
+index c3a37b5..ddf658f 100644
+--- a/Angular/src/app/domains/site/store/site.state.ts
++++ b/Angular/src/app/domains/site/store/site.state.ts
+@@ -24,6 +24,11 @@ export const getSitesEntitiesState = createSelector(
+   (state) => state.sites
+ );
+ 
++export const getUserSites = createSelector(
++  getSitesState,
++  (state) => state.sites?.userSites
++);
++
+ export const { selectAll: getAllSites } = fromSites.sitesAdapter.getSelectors(
+   getSitesEntitiesState
+ );
+diff --git a/Angular/src/app/domains/site/store/sites-actions.ts b/Angular/src/app/domains/site/store/sites-actions.ts
+index 573847e..e085b83 100644
+--- a/Angular/src/app/domains/site/store/sites-actions.ts
++++ b/Angular/src/app/domains/site/store/sites-actions.ts
+@@ -3,10 +3,18 @@ import { Site } from '../model/site';
+ 
+ export const loadAllSites = createAction('[Domain Sites] Load all');
+ 
++
+ export const load = createAction('[Domain Sites] Load', props<{ id: number }>());
+ 
+ export const loadAllSuccess = createAction('[Domain Sites] Load all success', props<{ sites: Site[] }>());
+ 
++export const loadAllSitesByUser = createAction('[Domain Sites] Load all by user', props<{ userId: number }>());
++
++export const loadAllSitesByUserSuccess = createAction(
++  '[Domain Sites] Load all sites by user success',
++  props<{ sites: Site[] }>()
++);
++
+ export const loadSuccess = createAction('[Domain Sites] Load success', props<{ site: Site }>());
+ 
+ export const setDefaultSite = createAction('[Domain Sites] Set default site', props<{ id: number }>());
+@@ -14,21 +22,3 @@ export const setDefaultSite = createAction('[Domain Sites] Set default site', pr
+ export const setDefaultSiteSuccess = createAction('[Domain Sites] Set default site success');
+ 
+ export const failure = createAction('[Domain Sites] Failure', props<{ error: any }>());
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+diff --git a/Angular/src/app/domains/site/store/sites-effects.ts b/Angular/src/app/domains/site/store/sites-effects.ts
+index a61b6fc..cf6b0df 100644
+--- a/Angular/src/app/domains/site/store/sites-effects.ts
++++ b/Angular/src/app/domains/site/store/sites-effects.ts
+@@ -6,6 +6,8 @@ import {
+   failure,
+   load,
+   loadAllSites,
++  loadAllSitesByUser,
++  loadAllSitesByUserSuccess,
+   loadAllSuccess,
+   loadSuccess,
+   setDefaultSite
+@@ -13,6 +15,7 @@ import {
+ import { BiaMessageService } from 'src/app/core/bia-core/services/bia-message.service';
+ import { SiteDas } from '../services/site-das.service';
+ import { MemberDas } from '../services/member-das.service';
++import { LazyLoadEvent } from 'primeng';
+ 
+ /**
+  * Effects file is for isolating and managing side effects of the application in one place
+@@ -23,11 +26,7 @@ import { MemberDas } from '../services/member-das.service';
+ export class SitesEffects {
+   loadAll$ = createEffect(() =>
+     this.actions$.pipe(
+-      ofType(loadAllSites) /* When action is dispatched */,
+-      /* startWith(loadAll()), */
+-      /* Hit the Sites Index endpoint of our REST API */
+-      /* Dispatch LoadAllSuccess action to the central store with id list returned by the backend as id*/
+-      /* 'Sites Reducers' will take care of the rest */
++      ofType(loadAllSites),
+       switchMap(() =>
+         this.siteDas.getList().pipe(
+           map((sites) => loadAllSuccess({ sites })),
+@@ -40,6 +39,22 @@ export class SitesEffects {
+     )
+   );
+ 
++  loadAllByUser$ = createEffect(() =>
++    this.actions$.pipe(
++      ofType(loadAllSitesByUser),
++      pluck('userId'),
++      switchMap((userId) =>
++        this.siteDas.getListByPost(<LazyLoadEvent>{ userId: userId }).pipe(
++          map((result) => loadAllSitesByUserSuccess({ sites: result.data })),
++          catchError((err) => {
++            this.biaMessageService.showError();
++            return of(failure({ error: err }));
++          })
++        )
++      )
++    )
++  );
++
+   load$ = createEffect(() =>
+     this.actions$.pipe(
+       ofType(load),
+diff --git a/Angular/src/app/domains/site/store/sites-reducer.ts b/Angular/src/app/domains/site/store/sites-reducer.ts
+index bb15b97..3bc4703 100644
+--- a/Angular/src/app/domains/site/store/sites-reducer.ts
++++ b/Angular/src/app/domains/site/store/sites-reducer.ts
+@@ -1,6 +1,6 @@
+ import { EntityState, createEntityAdapter } from '@ngrx/entity';
+ import { createReducer, on } from '@ngrx/store';
+-import { loadAllSuccess, loadSuccess } from './sites-actions';
++import { loadAllSitesByUser, loadAllSitesByUserSuccess, loadAllSuccess, loadSuccess } from './sites-actions';
+ import { Site } from '../model/site';
+ 
+ // This adapter will allow is to manipulate sites (mostly CRUD operations)
+@@ -22,34 +22,24 @@ export const sitesAdapter = createEntityAdapter<Site>({
+ 
+ export interface State extends EntityState<Site> {
+   // additional props here
++  userSites: Site[] | null;
+ }
+ 
+ export const INIT_STATE: State = sitesAdapter.getInitialState({
+   // additional props default values here
++  userSites: null
+ });
+ 
+ export const siteReducers = createReducer<State>(
+   INIT_STATE,
+   on(loadAllSuccess, (state, { sites }) => sitesAdapter.setAll(sites, state)),
+-  on(loadSuccess, (state, { site }) => sitesAdapter.upsertOne(site, state))
++  on(loadSuccess, (state, { site }) => sitesAdapter.upsertOne(site, state)),
++  on(loadAllSitesByUser, (state, {}) => {
++    return { ...state, userSites: null };
++  }),
++  on(loadAllSitesByUserSuccess, (state, { sites }) => {
++    return { ...state, userSites: sites };
++  })
+ );
+ 
+ export const getSiteById = (id: number) => (state: State) => state.entities[id];
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+diff --git a/Angular/src/app/features/sites/components/members/member-edit-form/member-edit-form.component.html b/Angular/src/app/features/sites/children/members/components/member-edit-form/member-edit-form.component.html
+similarity index 70%
+rename from Angular/src/app/features/sites/components/members/member-edit-form/member-edit-form.component.html
+rename to Angular/src/app/features/sites/children/members/components/member-edit-form/member-edit-form.component.html
+index 9056d4f..6f89bcc 100644
+--- a/Angular/src/app/features/sites/components/members/member-edit-form/member-edit-form.component.html
++++ b/Angular/src/app/features/sites/children/members/components/member-edit-form/member-edit-form.component.html
+@@ -8,9 +8,15 @@
+         formControlName="roles"
+         multiple="multiple"
+         checkbox="checkbox"
+-        optionLabel="label"
++        optionLabel="labelEn"
+         [style]="{ width: '100%' }"
+       >
++      <ng-template let-item pTemplate="item">
++        {{ item?.value | translateRoleLabel : translateService.currentLang }}
++      </ng-template>
++      <ng-template let-selectedItem pTemplate="selectedItem">
++        {{ selectedItem?.value | translateRoleLabel : translateService.currentLang }}
++      </ng-template>
+       </p-listbox>
+     </div>
+   </div>
+diff --git a/Angular/src/app/features/sites/components/members/member-edit-form/member-edit-form.component.scss b/Angular/src/app/features/sites/children/members/components/member-edit-form/member-edit-form.component.scss
+similarity index 100%
+rename from Angular/src/app/features/sites/components/members/member-edit-form/member-edit-form.component.scss
+rename to Angular/src/app/features/sites/children/members/components/member-edit-form/member-edit-form.component.scss
+diff --git a/Angular/src/app/features/sites/components/members/member-edit-form/member-edit-form.component.ts b/Angular/src/app/features/sites/children/members/components/member-edit-form/member-edit-form.component.ts
+similarity index 90%
+rename from Angular/src/app/features/sites/components/members/member-edit-form/member-edit-form.component.ts
+rename to Angular/src/app/features/sites/children/members/components/member-edit-form/member-edit-form.component.ts
+index 946fed2..3cbccab 100644
+--- a/Angular/src/app/features/sites/components/members/member-edit-form/member-edit-form.component.ts
++++ b/Angular/src/app/features/sites/children/members/components/member-edit-form/member-edit-form.component.ts
+@@ -9,10 +9,11 @@ import {
+   SimpleChanges
+ } from '@angular/core';
+ import { FormBuilder, FormGroup } from '@angular/forms';
+-import { Member } from '../../../model/user/member';
+-import { MemberRole } from '../../../model/user/member-role';
++import { Member } from '../../model/member';
++import { MemberRole } from '../../model/member-role';
+ import { DtoState } from 'src/app/shared/bia-shared/model/dto-state.enum';
+ import { Role } from 'src/app/domains/role/model/role';
++import { TranslateService } from '@ngx-translate/core';
+ 
+ export interface MemberEditFormVM {
+   roles: Role[] | null;
+@@ -34,7 +35,7 @@ export class MemberEditFormComponent implements OnInit, OnChanges {
+   memberEditFormData = <MemberEditFormVM>{};
+   form: FormGroup;
+ 
+-  constructor(public formBuilder: FormBuilder) {
++  constructor(public formBuilder: FormBuilder, public translateService: TranslateService) {
+     this.initForm();
+   }
+ 
+diff --git a/Angular/src/app/features/sites/components/members/member-new-form/member-new-form.component.html b/Angular/src/app/features/sites/children/members/components/member-new-form/member-new-form.component.html
+similarity index 83%
+rename from Angular/src/app/features/sites/components/members/member-new-form/member-new-form.component.html
+rename to Angular/src/app/features/sites/children/members/components/member-new-form/member-new-form.component.html
+index aacc960..d41eb19 100644
+--- a/Angular/src/app/features/sites/components/members/member-new-form/member-new-form.component.html
++++ b/Angular/src/app/features/sites/children/members/components/member-new-form/member-new-form.component.html
+@@ -32,6 +32,12 @@
+         optionLabel="label"
+         [style]="{ width: '100%' }"
+       >
++      <ng-template let-item pTemplate="item">
++        {{ item?.value | translateRoleLabel : translateService.currentLang }}
++      </ng-template>
++      <ng-template let-selectedItem pTemplate="selectedItem">
++        {{ selectedItem?.value | translateRoleLabel : translateService.currentLang }}
++      </ng-template>
+       </p-listbox>
+     </div>
+   </div>
+diff --git a/Angular/src/app/features/sites/components/members/member-new-form/member-new-form.component.scss b/Angular/src/app/features/sites/children/members/components/member-new-form/member-new-form.component.scss
+similarity index 100%
+rename from Angular/src/app/features/sites/components/members/member-new-form/member-new-form.component.scss
+rename to Angular/src/app/features/sites/children/members/components/member-new-form/member-new-form.component.scss
+diff --git a/Angular/src/app/features/sites/components/members/member-new-form/member-new-form.component.ts b/Angular/src/app/features/sites/children/members/components/member-new-form/member-new-form.component.ts
+similarity index 92%
+rename from Angular/src/app/features/sites/components/members/member-new-form/member-new-form.component.ts
+rename to Angular/src/app/features/sites/children/members/components/member-new-form/member-new-form.component.ts
+index 0b6e721..28a6018 100644
+--- a/Angular/src/app/features/sites/components/members/member-new-form/member-new-form.component.ts
++++ b/Angular/src/app/features/sites/children/members/components/member-new-form/member-new-form.component.ts
+@@ -9,14 +9,14 @@ import {
+   SimpleChanges
+ } from '@angular/core';
+ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+-import { Site } from '../../../model/site/site';
+-import { Member } from '../../../model/user/member';
+-import { MemberRole } from '../../../model/user/member-role';
+ import { DtoState } from 'src/app/shared/bia-shared/model/dto-state.enum';
+ import { User } from 'src/app/domains/user/model/user';
+ import { Role } from 'src/app/domains/role/model/role';
+ import { BiaMessageService } from 'src/app/core/bia-core/services/bia-message.service';
+ import { TranslateService } from '@ngx-translate/core';
++import { Site } from '../../../../model/site/site';
++import { Member } from '../../model/member';
++import { MemberRole } from '../../model/member-role';
+ 
+ export interface MemberNewFormVM {
+   users: User[];
+@@ -44,8 +44,8 @@ export class MemberNewFormComponent implements OnInit, OnChanges {
+ 
+   constructor(
+     public formBuilder: FormBuilder,
+-    private biaMessageService: BiaMessageService,
+-    private translateService: TranslateService
++    public translateService: TranslateService,
++    private biaMessageService: BiaMessageService
+   ) {
+     this.initForm();
+   }
+diff --git a/Angular/src/app/features/sites/children/members/member.module.ts b/Angular/src/app/features/sites/children/members/member.module.ts
+new file mode 100644
+index 0000000..89da32f
+--- /dev/null
++++ b/Angular/src/app/features/sites/children/members/member.module.ts
+@@ -0,0 +1,50 @@
++import { NgModule } from '@angular/core';
++import { RouterModule, Routes } from '@angular/router';
++import { StoreModule } from '@ngrx/store';
++import { EffectsModule } from '@ngrx/effects';
++import { MembersEffects } from './store/members-effects';
++import { reducers } from './store/member.state';
++import { MemberEditDialogComponent } from './views/member-edit-dialog/member-edit-dialog.component';
++import { MemberNewDialogComponent } from './views/member-new-dialog/member-new-dialog.component';
++import { MembersIndexComponent } from './views/members-index/members-index.component';
++import { MemberEditFormComponent } from './components/member-edit-form/member-edit-form.component';
++import { MemberNewFormComponent } from './components/member-new-form/member-new-form.component';
++import { SharedModule } from 'src/app/shared/shared.module';
++import { UserModule } from 'src/app/domains/user/user.module';
++import { RoleModule } from 'src/app/domains/role/role.module';
++import { PermissionGuard } from 'src/app/core/bia-core/guards/permission.guard';
++import { Permission } from 'src/app/shared/permission';
++import { UserFromADModule } from 'src/app/domains/user-from-AD/user-from-AD.module';
++
++const ROUTES: Routes = [
++  {
++    path: '',
++    data: {
++      breadcrumb: null,
++      permission: Permission.Member_List_Access
++    },
++    component: MembersIndexComponent,
++    canActivate: [PermissionGuard]
++  },
++  { path: '**', redirectTo: '' }
++];
++
++@NgModule({
++  declarations: [
++    MemberEditDialogComponent,
++    MemberNewDialogComponent,
++    MembersIndexComponent,
++    MemberEditFormComponent,
++    MemberNewFormComponent,
++  ],
++  imports: [
++    SharedModule,
++    RoleModule,
++    UserModule,
++    UserFromADModule,
++    RouterModule.forChild(ROUTES),
++    StoreModule.forFeature('members', reducers),
++    EffectsModule.forFeature([MembersEffects])
++  ]
++})
++export class MemberModule { }
+diff --git a/Angular/src/app/features/sites/model/user/member-role.ts b/Angular/src/app/features/sites/children/members/model/member-role.ts
+similarity index 100%
+rename from Angular/src/app/features/sites/model/user/member-role.ts
+rename to Angular/src/app/features/sites/children/members/model/member-role.ts
+diff --git a/Angular/src/app/features/sites/model/user/member.ts b/Angular/src/app/features/sites/children/members/model/member.ts
+similarity index 100%
+rename from Angular/src/app/features/sites/model/user/member.ts
+rename to Angular/src/app/features/sites/children/members/model/member.ts
+diff --git a/Angular/src/app/features/sites/services/member-das.service.ts b/Angular/src/app/features/sites/children/members/services/member-das.service.ts
+similarity index 91%
+rename from Angular/src/app/features/sites/services/member-das.service.ts
+rename to Angular/src/app/features/sites/children/members/services/member-das.service.ts
+index 55fbcb2..5ea6206 100644
+--- a/Angular/src/app/features/sites/services/member-das.service.ts
++++ b/Angular/src/app/features/sites/children/members/services/member-das.service.ts
+@@ -1,6 +1,6 @@
+ import { Injectable, Injector } from '@angular/core';
+ import { Observable } from 'rxjs';
+-import { Member } from '../model/user/member';
++import { Member } from '../model/member';
+ import { AbstractDas } from 'src/app/core/bia-core/services/abstract-das.service';
+ 
+ @Injectable({
+diff --git a/Angular/src/app/features/sites/store/members/member.state.ts b/Angular/src/app/features/sites/children/members/store/member.state.ts
+similarity index 100%
+rename from Angular/src/app/features/sites/store/members/member.state.ts
+rename to Angular/src/app/features/sites/children/members/store/member.state.ts
+diff --git a/Angular/src/app/features/sites/store/members/members-actions.ts b/Angular/src/app/features/sites/children/members/store/members-actions.ts
+similarity index 96%
+rename from Angular/src/app/features/sites/store/members/members-actions.ts
+rename to Angular/src/app/features/sites/children/members/store/members-actions.ts
+index 170ec0e..0076214 100644
+--- a/Angular/src/app/features/sites/store/members/members-actions.ts
++++ b/Angular/src/app/features/sites/children/members/store/members-actions.ts
+@@ -1,6 +1,6 @@
+ import { createAction, props } from '@ngrx/store';
+ import { LazyLoadEvent } from 'primeng/api';
+-import { Member } from '../../model/user/member';
++import { Member } from '../model/member';
+ import { DataResult } from 'src/app/shared/bia-shared/model/data-result';
+ 
+ export const loadAllByPost = createAction('[Members] Load all by post', props<{ event: LazyLoadEvent }>());
+diff --git a/Angular/src/app/features/sites/store/members/members-effects.ts b/Angular/src/app/features/sites/children/members/store/members-effects.ts
+similarity index 97%
+rename from Angular/src/app/features/sites/store/members/members-effects.ts
+rename to Angular/src/app/features/sites/children/members/store/members-effects.ts
+index ebbeab6..a40edca 100644
+--- a/Angular/src/app/features/sites/store/members/members-effects.ts
++++ b/Angular/src/app/features/sites/children/members/store/members-effects.ts
+@@ -16,8 +16,8 @@ import {
+ } from './members-actions';
+ import { Store } from '@ngrx/store';
+ import { getLastLazyLoadEvent } from './member.state';
+-import { Member } from '../../model/user/member';
+-import { MemberDas } from '../../services/member-das.service';
++import { Member } from '../model/member';
++import { MemberDas } from '../services/member-das.service';
+ import { DataResult } from 'src/app/shared/bia-shared/model/data-result';
+ import { AppState } from 'src/app/store/state';
+ import { BiaMessageService } from 'src/app/core/bia-core/services/bia-message.service';
+diff --git a/Angular/src/app/features/sites/store/members/members-reducer.ts b/Angular/src/app/features/sites/children/members/store/members-reducer.ts
+similarity index 98%
+rename from Angular/src/app/features/sites/store/members/members-reducer.ts
+rename to Angular/src/app/features/sites/children/members/store/members-reducer.ts
+index 29bbf94..fc4e23f 100644
+--- a/Angular/src/app/features/sites/store/members/members-reducer.ts
++++ b/Angular/src/app/features/sites/children/members/store/members-reducer.ts
+@@ -12,7 +12,7 @@ import {
+   failure
+ } from './members-actions';
+ import { LazyLoadEvent } from 'primeng/api';
+-import { Member } from '../../model/user/member';
++import { Member } from '../model/member';
+ 
+ // This adapter will allow is to manipulate members (mostly CRUD operations)
+ export const membersAdapter = createEntityAdapter<Member>({
+diff --git a/Angular/src/app/features/sites/views/members/member-edit-dialog/member-edit-dialog.component.html b/Angular/src/app/features/sites/children/members/views/member-edit-dialog/member-edit-dialog.component.html
+similarity index 100%
+rename from Angular/src/app/features/sites/views/members/member-edit-dialog/member-edit-dialog.component.html
+rename to Angular/src/app/features/sites/children/members/views/member-edit-dialog/member-edit-dialog.component.html
+diff --git a/Angular/src/app/features/sites/views/members/member-edit-dialog/member-edit-dialog.component.scss b/Angular/src/app/features/sites/children/members/views/member-edit-dialog/member-edit-dialog.component.scss
+similarity index 100%
+rename from Angular/src/app/features/sites/views/members/member-edit-dialog/member-edit-dialog.component.scss
+rename to Angular/src/app/features/sites/children/members/views/member-edit-dialog/member-edit-dialog.component.scss
+diff --git a/Angular/src/app/features/sites/views/members/member-edit-dialog/member-edit-dialog.component.ts b/Angular/src/app/features/sites/children/members/views/member-edit-dialog/member-edit-dialog.component.ts
+similarity index 89%
+rename from Angular/src/app/features/sites/views/members/member-edit-dialog/member-edit-dialog.component.ts
+rename to Angular/src/app/features/sites/children/members/views/member-edit-dialog/member-edit-dialog.component.ts
+index b91822a..5170d7d 100644
+--- a/Angular/src/app/features/sites/views/members/member-edit-dialog/member-edit-dialog.component.ts
++++ b/Angular/src/app/features/sites/children/members/views/member-edit-dialog/member-edit-dialog.component.ts
+@@ -2,9 +2,9 @@ import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/cor
+ import { Store, select } from '@ngrx/store';
+ import { Observable, Subscription } from 'rxjs';
+ import * as fromRoles from 'src/app/domains/role/store/role.state';
+-import { Member } from '../../../model/user/member';
+-import { getCurrentMember, getMemberLoadingGet, getDisplayEditDialog } from '../../../store/members/member.state';
+-import { update, closeDialogEdit } from '../../../store/members/members-actions';
++import { Member } from '../../model/member';
++import { getCurrentMember, getMemberLoadingGet, getDisplayEditDialog } from '../../store/member.state';
++import { update, closeDialogEdit } from '../../store/members-actions';
+ import { AppState } from 'src/app/store/state';
+ import { Role } from 'src/app/domains/role/model/role';
+ 
+diff --git a/Angular/src/app/features/sites/views/members/member-new-dialog/member-new-dialog.component.html b/Angular/src/app/features/sites/children/members/views/member-new-dialog/member-new-dialog.component.html
+similarity index 100%
+rename from Angular/src/app/features/sites/views/members/member-new-dialog/member-new-dialog.component.html
+rename to Angular/src/app/features/sites/children/members/views/member-new-dialog/member-new-dialog.component.html
+diff --git a/Angular/src/app/features/sites/views/members/member-new-dialog/member-new-dialog.component.scss b/Angular/src/app/features/sites/children/members/views/member-new-dialog/member-new-dialog.component.scss
+similarity index 100%
+rename from Angular/src/app/features/sites/views/members/member-new-dialog/member-new-dialog.component.scss
+rename to Angular/src/app/features/sites/children/members/views/member-new-dialog/member-new-dialog.component.scss
+diff --git a/Angular/src/app/features/sites/views/members/member-new-dialog/member-new-dialog.component.ts b/Angular/src/app/features/sites/children/members/views/member-new-dialog/member-new-dialog.component.ts
+similarity index 87%
+rename from Angular/src/app/features/sites/views/members/member-new-dialog/member-new-dialog.component.ts
+rename to Angular/src/app/features/sites/children/members/views/member-new-dialog/member-new-dialog.component.ts
+index 931774e..3520dc9 100644
+--- a/Angular/src/app/features/sites/views/members/member-new-dialog/member-new-dialog.component.ts
++++ b/Angular/src/app/features/sites/children/members/views/member-new-dialog/member-new-dialog.component.ts
+@@ -1,12 +1,12 @@
+ import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+ import { Store } from '@ngrx/store';
+-import { save, closeDialogNew } from '../../../store/members/members-actions';
++import { save, closeDialogNew } from '../../store/members-actions';
+ import { Observable } from 'rxjs';
+-import { Site } from '../../../model/site/site';
+-import { Member } from '../../../model/user/member';
++import { Site } from '../../../../model/site/site';
++import { Member } from '../../model/member';
+ import { AppState } from 'src/app/store/state';
+ import { Subscription } from 'rxjs';
+-import { getDisplayNewDialog } from '../../../store/members/member.state';
++import { getDisplayNewDialog } from '../../store/member.state';
+ import { Role } from 'src/app/domains/role/model/role';
+ import { User } from 'src/app/domains/user/model/user';
+ import { getAllRoles } from 'src/app/domains/role/store/role.state';
+diff --git a/Angular/src/app/features/sites/views/members/members-index/members-index.component.html b/Angular/src/app/features/sites/children/members/views/members-index/members-index.component.html
+similarity index 85%
+rename from Angular/src/app/features/sites/views/members/members-index/members-index.component.html
+rename to Angular/src/app/features/sites/children/members/views/members-index/members-index.component.html
+index 0f24048..f320e71 100644
+--- a/Angular/src/app/features/sites/views/members/members-index/members-index.component.html
++++ b/Angular/src/app/features/sites/children/members/views/members-index/members-index.component.html
+@@ -1,7 +1,7 @@
+ <div fxLayout fxLayout.xs="column" fxLayoutWrap="wrap">
+   <div fxFlex="100">
+-    <bia-table-header
+-      [headerTitle]="('member.listOfSiteMembers' | translate) + (currentSite.title)"
++    <bia-table-header  *ngIf="(siteService.loading$ | async) === (false)"
++      [headerTitle]="('member.listOfSiteMembers' | translate) + (siteService.currentSite?.title)"
+       [canAdd]="canAdd"
+       [canBack]="true"
+       (create)="onCreate()"
+@@ -37,7 +37,7 @@
+ </div>
+ <!-- begin popup mode -->
+ <app-member-edit-dialog></app-member-edit-dialog>
+-<app-member-new-dialog [site]="currentSite"></app-member-new-dialog>
++<app-member-new-dialog [site]="siteService.currentSite" *ngIf="(siteService.loading$ | async) === (false)"></app-member-new-dialog>
+ <!-- end popup mode -->
+ 
+ 
+diff --git a/Angular/src/app/features/sites/views/members/members-index/members-index.component.scss b/Angular/src/app/features/sites/children/members/views/members-index/members-index.component.scss
+similarity index 100%
+rename from Angular/src/app/features/sites/views/members/members-index/members-index.component.scss
+rename to Angular/src/app/features/sites/children/members/views/members-index/members-index.component.scss
+diff --git a/Angular/src/app/features/sites/views/members/members-index/members-index.component.ts b/Angular/src/app/features/sites/children/members/views/members-index/members-index.component.ts
+similarity index 71%
+rename from Angular/src/app/features/sites/views/members/members-index/members-index.component.ts
+rename to Angular/src/app/features/sites/children/members/views/members-index/members-index.component.ts
+index 2ffe7b4..bb316bd 100644
+--- a/Angular/src/app/features/sites/views/members/members-index/members-index.component.ts
++++ b/Angular/src/app/features/sites/children/members/views/members-index/members-index.component.ts
+@@ -1,14 +1,11 @@
+ import { Component, HostBinding, OnInit, ViewChild, OnDestroy } from '@angular/core';
+ import { Store } from '@ngrx/store';
+-import { Observable, Subscription } from 'rxjs';
++import { combineLatest, Observable, of, Subscription } from 'rxjs';
+ import { LazyLoadEvent } from 'primeng/api';
+-import { map, switchMap } from 'rxjs/operators';
+-import * as fromSites from '../../../store/site.state';
+-import { ActivatedRoute, Params, Router } from '@angular/router';
+-import { Member } from '../../../model/user/member';
+-import { Site } from '../../../model/site/site';
+-import { getAllMembers, getMembersTotalCount, getMemberLoadingGetAll } from '../../../store/members/member.state';
+-import { multiRemove, loadAllByPost, load, openDialogNew, openDialogEdit } from '../../../store/members/members-actions';
++import { map } from 'rxjs/operators';
++import { Member } from '../../../../children/members/model/member';
++import { getAllMembers, getMembersTotalCount, getMemberLoadingGetAll } from '../../store/member.state';
++import { multiRemove, loadAllByPost, load, openDialogNew, openDialogEdit } from '../../store/members-actions';
+ import { BiaTableComponent } from 'src/app/shared/bia-shared/components/table/bia-table/bia-table.component';
+ import { BiaListConfig, PrimeTableColumn } from 'src/app/shared/bia-shared/components/table/bia-table/bia-table-config';
+ import { AppState } from 'src/app/store/state';
+@@ -18,6 +15,9 @@ import { DEFAULT_PAGE_SIZE } from 'src/app/shared/constants';
+ import { AuthService } from 'src/app/core/bia-core/services/auth.service';
+ import { Permission } from 'src/app/shared/permission';
+ import { KeyValuePair } from 'src/app/shared/bia-shared/model/key-value-pair';
++import { TranslateService } from '@ngx-translate/core';
++import { TranslateRoleLabelPipe } from 'src/app/shared/bia-shared/pipes/translate-role-label.pipe';
++import { SiteService } from 'src/app/features/sites/services/site.service';
+ 
+ interface MemberListVM {
+   id: number;
+@@ -45,23 +45,23 @@ export class MembersIndexComponent implements OnInit, OnDestroy {
+   selectedMembers: MemberListVM[];
+   totalCount$: Observable<number>;
+   private sub = new Subscription();
+-  siteRoute = ['/sites'];
+-  currentSite: Site;
+   headerTitle: string;
+   canEdit = false;
+   canDelete = false;
+   canAdd = false;
+ 
+   tableConfiguration: BiaListConfig;
+-  columns: KeyValuePair[];
++  columns: KeyValuePair[] = [];
+   displayedColumns: KeyValuePair[] = this.columns;
+ 
+   constructor(
+-    private route: ActivatedRoute,
+     private store: Store<AppState>,
+-    private router: Router,
+-    private authService: AuthService
+-  ) {}
++    private authService: AuthService,
++    private translate: TranslateService,
++    private translateRoleLabelPipe: TranslateRoleLabelPipe,
++    public siteService: SiteService
++  ) {
++  }
+ 
+   ngOnInit() {
+     this.initTableConfiguration();
+@@ -69,7 +69,6 @@ export class MembersIndexComponent implements OnInit, OnDestroy {
+     this.initRoles();
+     this.initMembers();
+     this.initTotalCount();
+-    this.initSite();
+     this.initLoading();
+   }
+ 
+@@ -103,8 +102,8 @@ export class MembersIndexComponent implements OnInit, OnDestroy {
+   }
+ 
+   onLoadLazy(lazyLoadEvent: LazyLoadEvent) {
+-    if (this.currentSite && this.currentSite.id > 0) {
+-      const customEvent: any = { siteId: this.currentSite.id, ...lazyLoadEvent };
++    if (this.siteService.currentSiteId > 0) {
++      const customEvent: any = { siteId: +this.siteService.currentSiteId, ...lazyLoadEvent };
+       this.store.dispatch(loadAllByPost({ event: customEvent }));
+     }
+   }
+@@ -121,16 +120,16 @@ export class MembersIndexComponent implements OnInit, OnDestroy {
+     this.showColSearch = !this.showColSearch;
+   }
+ 
+-  toMemberListVM(objMember: Member): MemberListVM {
++  toMemberListVM(objMember: Member, currentLang: string): MemberListVM {
+     return {
+       member: objMember,
+       id: objMember.id,
+       displayName: `${objMember.userLastName} ${objMember.userFirstName}`,
+       roles: objMember.roles
+         ? this.roles
+-            .filter((x: Role) => objMember.roles.some((y) => y.roleId === x.id))
+-            .map((role: Role) => role.label)
+-            .join(', ')
++          .filter((x: Role) => objMember.roles.some((y) => y.roleId === x.id))
++          .map((role: Role) => this.translateRoleLabelPipe.transform(role, currentLang))
++          .join(', ')
+         : ''
+     };
+   }
+@@ -160,42 +159,23 @@ export class MembersIndexComponent implements OnInit, OnDestroy {
+   }
+ 
+   private initLoading() {
+-    this.loading$ = this.store.select(getMemberLoadingGetAll).pipe();
+-  }
+-
+-  private initSite() {
+-    this.sub.add(
+-      this.route.params
+-        .pipe(
+-          map((params: Params) => params['id']),
+-          switchMap((selectedSiteId) => this.store.select(fromSites.getSiteById(selectedSiteId)).pipe())
+-        )
+-        .subscribe((site) => {
+-          if (site) {
+-            this.currentSite = site;
+-          } else {
+-            this.router.navigate(this.siteRoute);
+-          }
+-        })
+-    );
++    this.loading$ = this.store.select(getMemberLoadingGetAll);
+   }
+ 
+   private initTotalCount() {
+-    this.totalCount$ = this.store.select(getMembersTotalCount).pipe();
++    this.totalCount$ = this.store.select(getMembersTotalCount);
+   }
+ 
+   private initMembers() {
+-    this.members$ = this.store
+-      .select(getAllMembers)
+-      .pipe()
+-      .pipe(map((members) => members.map((member) => this.toMemberListVM(member))));
++    this.members$ = combineLatest([this.store
++      .select(getAllMembers), of(this.translate.currentLang)])
++      .pipe(map((result) => result[0].map((member) => this.toMemberListVM(member, result[1]))));
+   }
+ 
+   private initRoles() {
+     this.sub.add(
+       this.store
+         .select(getAllRoles)
+-        .pipe()
+         .subscribe((roles: Role[]) => (this.roles = roles))
+     );
+   }
+diff --git a/Angular/src/app/features/sites/components/site-table-header/site-table-header.component.html b/Angular/src/app/features/sites/components/site-table-header/site-table-header.component.html
+index f1aada8..12af9fd 100644
+--- a/Angular/src/app/features/sites/components/site-table-header/site-table-header.component.html
++++ b/Angular/src/app/features/sites/components/site-table-header/site-table-header.component.html
+@@ -29,10 +29,10 @@
+     <button
+       pButton
+       [disabled]="nbSelectedElements !== 1"
+-      *ngIf="canManageMembers"
++      *ngIf="canEdit"
+       class="ui-button-secondary"
+-      label="{{ 'member.manage' | translate }}"
+-      (click)="manageMembers.emit()"
++      label="{{ 'site.edit' | translate }}"
++      (click)="edit.emit()"
+     ></button>
+   </div>
+   <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="stretch center">
+diff --git a/Angular/src/app/features/sites/components/site-table-header/site-table-header.component.ts b/Angular/src/app/features/sites/components/site-table-header/site-table-header.component.ts
+index bc8bc33..851754a 100644
+--- a/Angular/src/app/features/sites/components/site-table-header/site-table-header.component.ts
++++ b/Angular/src/app/features/sites/components/site-table-header/site-table-header.component.ts
+@@ -12,6 +12,6 @@ import { BiaTableHeaderComponent } from 'src/app/shared/bia-shared/components/ta
+   providers: [ConfirmationService]
+ })
+ export class SiteTableHeaderComponent extends BiaTableHeaderComponent {
+-  @Input() canManageMembers = false;
+-  @Output() manageMembers = new EventEmitter();
++  @Input() canEdit = false;
++  @Output() edit = new EventEmitter();
+ }
+diff --git a/Angular/src/app/features/sites/new-crud.ps1 b/Angular/src/app/features/sites/new-crud.ps1
+new file mode 100644
+index 0000000..6cc6ece
+--- /dev/null
++++ b/Angular/src/app/features/sites/new-crud.ps1
+@@ -0,0 +1,95 @@
++$oldRealSelector = 'site'
++$oldRealSelectorPlural = 'sites'
++$newRealSelector = read-host "new crud name? (singular)"
++$newRealSelectorPlural = read-host "new crud name? (plural)"
++$oldRealSelector = $oldRealSelector.ToLower();
++$newRealSelector = $newRealSelector.ToLower();
++$oldRealSelectorPlural = $oldRealSelectorPlural.ToLower();
++$newRealSelectorPlural = $newRealSelectorPlural.ToLower();
++
++function ReplaceInFiles
++{
++    param([string]$oldString, [string]$newString)
++	write-host "old " $oldString "new " $newString
++	Get-ChildItem -File -Recurse | ForEach-Object { ((Get-Content -path $_.PSPath -Raw) -creplace $oldString, $newString) | Set-Content -NoNewline -Path $_.PSPath }
++}
++
++function TransformCrud
++{
++    param([string]$oldSelector, [string]$oldSelectorPlural, [string]$newSelector, [string]$newSelectorPlural)
++		
++
++	$TextInfo = (Get-Culture).TextInfo
++	$oldClassName = $TextInfo.ToTitleCase("$oldSelector").replace('-', '')
++	$newClassName = $TextInfo.ToTitleCase("$newSelector").replace('-', '')
++	$oldClassNamePlural = $TextInfo.ToTitleCase("$oldSelectorPlural").replace('-', '')
++	$newClassNamePlural = $TextInfo.ToTitleCase("$newSelectorPlural").replace('-', '')
++
++	# file name
++	write-host "replace file name plural"
++	Get-ChildItem -File -Recurse | ForEach-Object { Rename-Item -Path $_.PSPath -NewName $_.Name.replace($oldSelectorPlural, $newSelectorPlural) } 
++	write-host "replace file name singular"
++	Get-ChildItem -File -Recurse | ForEach-Object { Rename-Item -Path $_.PSPath -NewName $_.Name.replace($oldSelector, $newSelector) } 
++
++	# folder name
++	write-host "replace folder name plural"
++	Get-ChildItem -Directory -Recurse | ForEach-Object { if ($_.Name -ne $_.Name.replace($oldSelectorPlural, $newSelectorPlural)) { Rename-Item -Path $_.PSPath -NewName $_.Name.replace($oldSelectorPlural, $newSelectorPlural) } }
++	write-host "replace folder name singular"
++	Get-ChildItem -Directory -Recurse | ForEach-Object { if ($_.Name -ne $_.Name.replace($oldSelector, $newSelector)) { Rename-Item -Path $_.PSPath -NewName $_.Name.replace($oldSelector, $newSelector) } }
++
++	# ----------------------------------------
++	ReplaceInFiles $oldClassNamePlural $newClassNamePlural
++	ReplaceInFiles $oldClassName $newClassName
++
++	if ($newSelector.Contains('-') -or $oldSelector.Contains('-'))
++	{
++		$oldPrefixPlural = $oldClassNamePlural.substring(0,1).tolower()+$oldClassNamePlural.substring(1);    
++		$newPrefixPlural = $newClassNamePlural.substring(0,1).tolower()+$newClassNamePlural.substring(1);    
++		$oldPrefix = $oldClassName.substring(0,1).tolower()+$oldClassName.substring(1);    
++		$newPrefix = $newClassName.substring(0,1).tolower()+$newClassName.substring(1);    
++
++		# No replace in path (after /), not in string concatenated (after -) and not in string (after ')
++		$old = '(?<![-/''])' + $oldPrefixPlural
++		$new = $newPrefixPlural
++		ReplaceInFiles $old $new
++
++		# No replace in path (after /), not in string concatenated (after -) and not in string (after ')
++		$old = '(?<![-/''])' + $oldPrefix
++		$new = $newPrefix
++		ReplaceInFiles $old $new
++	 
++		#Replace prefixe in some string (not done before) when it is before . except in path (/ before)
++		$old = '(?<![/])' + $oldPrefix + '(?=\.)'
++		$new = $newPrefix
++		ReplaceInFiles $old $new
++		
++		# Special path for pluck('...') becauce it is name of properties
++		$old = '(?<=pluck\('')' + $oldPrefixPlural + '(?=''\))'
++		$new = $newPrefixPlural
++		ReplaceInFiles $old $new
++		
++		$old = '(?<=pluck\('')' + $oldPrefix + '(?=''\))'
++		$new = $newPrefix
++		ReplaceInFiles $old $new
++	}
++
++	ReplaceInFiles $oldSelectorPlural $newSelectorPlural
++
++	ReplaceInFiles $oldSelector $newSelector
++}
++
++# Security if the new name contain the old name
++$SecuredSelector = "zzzzzzzzzz" + "zzzzzzzzzz"; #splited in 2 to not be replace by current script
++$SecuredSelectorPlural = $SecuredSelector + "s";
++
++TransformCrud $oldRealSelector $oldRealSelectorPlural $SecuredSelector $SecuredSelectorPlural
++TransformCrud $SecuredSelector $SecuredSelectorPlural $newRealSelector $newRealSelectorPlural 
++
++Write-Host "Finish"
++pause
++
++
++
++
++
++
+diff --git a/Angular/src/app/features/sites/services/site.service.ts b/Angular/src/app/features/sites/services/site.service.ts
+new file mode 100644
+index 0000000..ced90cf
+--- /dev/null
++++ b/Angular/src/app/features/sites/services/site.service.ts
+@@ -0,0 +1,50 @@
++import { Injectable } from '@angular/core';
++import { Store } from '@ngrx/store';
++import { Observable, Subscription } from 'rxjs';
++import { AppState } from 'src/app/store/state';
++import { Site } from '../model/site/site';
++import { getCurrentSite, getSiteLoadingGet } from '../store/site.state';
++import { load } from '../store/sites-actions';
++
++@Injectable({
++    providedIn: 'root'
++})
++export class SiteService {
++    constructor(
++        private store: Store<AppState>,
++    ) {
++        this.InitSub();
++        this.loading$ = this.store.select(getSiteLoadingGet);
++    }
++    private _currentSite: Site;
++    private _currentSiteId: number;
++    private sub = new Subscription();
++    public loading$: Observable<boolean>;
++
++    public get currentSite() {
++        if (this._currentSite?.id === this._currentSiteId) {
++            return this._currentSite;
++        } else {
++            return null;
++        }
++    }
++
++    public get currentSiteId(): number {
++        return this._currentSiteId;
++    }
++    public set currentSiteId(id: number) {
++        this._currentSiteId = Number(id);
++        this.store.dispatch(load({ id: id }));
++    }
++
++    InitSub() {
++        this.sub = new Subscription();
++        this.sub.add(
++            this.store.select(getCurrentSite).subscribe((site) => {
++                if (site) {
++                    this._currentSite = site;
++                }
++            })
++        );
++    }
++}
+diff --git a/Angular/src/app/features/sites/site.module.ts b/Angular/src/app/features/sites/site.module.ts
+index 60419c2..dacd5ef 100644
+--- a/Angular/src/app/features/sites/site.module.ts
++++ b/Angular/src/app/features/sites/site.module.ts
+@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
+ import { RouterModule, Routes } from '@angular/router';
+ import { StoreModule } from '@ngrx/store';
+ import { EffectsModule } from '@ngrx/effects';
+-import { MembersEffects } from './store/members/members-effects';
+ import { SitesEffects } from './store/sites-effects';
+ import { reducers } from './store/site.state';
+ import { SiteFormComponent } from './components/site-form/site-form.component';
+@@ -10,12 +9,6 @@ import { SiteEditDialogComponent } from './views/site-edit-dialog/site-edit-dial
+ import { SiteNewDialogComponent } from './views/site-new-dialog/site-new-dialog.component';
+ import { SitesIndexComponent } from './views/sites-index/sites-index.component';
+ import { SiteFilterComponent } from './components/site-filter/site-filter.component';
+-import { reducers as memberReducers } from './store/members/member.state';
+-import { MemberEditDialogComponent } from './views/members/member-edit-dialog/member-edit-dialog.component';
+-import { MemberNewDialogComponent } from './views/members/member-new-dialog/member-new-dialog.component';
+-import { MembersIndexComponent } from './views/members/members-index/members-index.component';
+-import { MemberEditFormComponent } from './components/members/member-edit-form/member-edit-form.component';
+-import { MemberNewFormComponent } from './components/members/member-new-form/member-new-form.component';
+ import { SharedModule } from 'src/app/shared/shared.module';
+ import { UserModule } from 'src/app/domains/user/user.module';
+ import { RoleModule } from 'src/app/domains/role/role.module';
+@@ -23,6 +16,7 @@ import { PermissionGuard } from 'src/app/core/bia-core/guards/permission.guard';
+ import { Permission } from 'src/app/shared/permission';
+ import { UserFromADModule } from 'src/app/domains/user-from-AD/user-from-AD.module';
+ import { SiteTableHeaderComponent } from './components/site-table-header/site-table-header.component';
++import { SiteItemComponent } from './views/site-item/site-item.component';
+ 
+ const ROUTES: Routes = [
+   {
+@@ -35,14 +29,25 @@ const ROUTES: Routes = [
+     canActivate: [PermissionGuard]
+   },
+   {
+-    path: ':id/members',
++    path: ':siteId',
+     data: {
+-      breadcrumb: 'app.members',
++      breadcrumb: '',
+       canNavigate: false,
+-      permission: Permission.Member_List_Access
+     },
+-    component: MembersIndexComponent,
+-    canActivate: [PermissionGuard]
++    component: SiteItemComponent,
++    canActivate: [PermissionGuard],
++    children: [
++      {
++        path: 'members',
++        data: {
++          breadcrumb: 'app.members',
++          canNavigate: true,
++          permission: Permission.Member_List_Access
++        },
++        loadChildren: () =>
++          import('./children/members/member.module').then((m) => m.MemberModule)
++      },
++    ]
+   },
+   { path: '**', redirectTo: '' }
+ ];
+@@ -54,11 +59,7 @@ const ROUTES: Routes = [
+     SiteEditDialogComponent,
+     SiteNewDialogComponent,
+     SitesIndexComponent,
+-    MemberEditDialogComponent,
+-    MemberNewDialogComponent,
+-    MembersIndexComponent,
+-    MemberEditFormComponent,
+-    MemberNewFormComponent,
++    SiteItemComponent,
+     SiteTableHeaderComponent
+   ],
+   entryComponents: [SiteEditDialogComponent, SiteNewDialogComponent],
+@@ -69,9 +70,7 @@ const ROUTES: Routes = [
+     UserFromADModule,
+     RouterModule.forChild(ROUTES),
+     StoreModule.forFeature('sites', reducers),
+-    StoreModule.forFeature('members', memberReducers),
+     EffectsModule.forFeature([SitesEffects]),
+-    EffectsModule.forFeature([MembersEffects])
+   ]
+ })
+-export class SiteModule {}
++export class SiteModule { }
+diff --git a/Angular/src/app/features/sites/views/site-edit-dialog/site-edit-dialog.component.ts b/Angular/src/app/features/sites/views/site-edit-dialog/site-edit-dialog.component.ts
+index d2d5a2f..d17cba8 100644
+--- a/Angular/src/app/features/sites/views/site-edit-dialog/site-edit-dialog.component.ts
++++ b/Angular/src/app/features/sites/views/site-edit-dialog/site-edit-dialog.component.ts
+@@ -26,7 +26,6 @@ export class SiteEditDialogComponent implements OnInit, OnDestroy {
+     this.sub.add(
+       this.store
+         .select(getDisplayEditDialog)
+-        .pipe()
+         .subscribe((x) => (this.display = x))
+     );
+   }
+diff --git a/Angular/src/app/features/sites/views/site-item/site-item.component.html b/Angular/src/app/features/sites/views/site-item/site-item.component.html
+new file mode 100644
+index 0000000..6f006c8
+--- /dev/null
++++ b/Angular/src/app/features/sites/views/site-item/site-item.component.html
+@@ -0,0 +1,2 @@
++<router-outlet></router-outlet>
++<bia-spinner *ngIf="siteService.loading$ | async" [overlay]="true"></bia-spinner>
+diff --git a/Angular/src/app/features/sites/views/site-item/site-item.component.scss b/Angular/src/app/features/sites/views/site-item/site-item.component.scss
+new file mode 100644
+index 0000000..e69de29
+diff --git a/Angular/src/app/features/sites/views/site-item/site-item.component.ts b/Angular/src/app/features/sites/views/site-item/site-item.component.ts
+new file mode 100644
+index 0000000..931d43f
+--- /dev/null
++++ b/Angular/src/app/features/sites/views/site-item/site-item.component.ts
+@@ -0,0 +1,45 @@
++import { Component, OnInit, OnDestroy } from '@angular/core';
++import { Store } from '@ngrx/store';
++import { Observable, Subscription } from 'rxjs';
++import { getCurrentSite} from '../../store/site.state';
++import { Site } from '../../model/site/site';
++import { AppState } from 'src/app/store/state';
++import { ActivatedRoute } from '@angular/router';
++import { SiteService } from '../../services/site.service';
++import { BiaClassicLayoutService } from 'src/app/shared/bia-shared/components/layout/classic-layout/bia-classic-layout.service';
++import { first } from 'rxjs/operators';
++
++@Component({
++  templateUrl: './site-item.component.html',
++  styleUrls: ['./site-item.component.scss']
++})
++export class SiteItemComponent implements OnInit, OnDestroy {
++  site$: Observable<Site>;
++  private sub = new Subscription();
++
++  constructor(private store: Store<AppState>,
++    private route: ActivatedRoute,
++    public siteService: SiteService,
++    private layoutService: BiaClassicLayoutService) { }
++
++  ngOnInit() {
++    this.siteService.currentSiteId = this.route.snapshot.params.siteId;
++    this.sub.add
++      (
++        this.store.select(getCurrentSite).subscribe((site) => {
++          if (site?.title) {
++            this.route.data.pipe(first()).subscribe(routeData => {
++              routeData['breadcrumb'] = site.title;
++            });
++            this.layoutService.refreshBreadcrumb();
++          }
++        })
++      );
++  }
++
++  ngOnDestroy() {
++    if (this.sub) {
++      this.sub.unsubscribe();
++    }
++  }
++}
+diff --git a/Angular/src/app/features/sites/views/site-new-dialog/site-new-dialog.component.ts b/Angular/src/app/features/sites/views/site-new-dialog/site-new-dialog.component.ts
+index b5acc9e..d16fbb3 100644
+--- a/Angular/src/app/features/sites/views/site-new-dialog/site-new-dialog.component.ts
++++ b/Angular/src/app/features/sites/views/site-new-dialog/site-new-dialog.component.ts
+@@ -23,7 +23,6 @@ export class SiteNewDialogComponent implements OnInit, OnDestroy {
+     this.sub.add(
+       this.store
+         .select(getDisplayNewDialog)
+-        .pipe()
+         .subscribe((x) => (this.display = x))
+     );
+   }
+diff --git a/Angular/src/app/features/sites/views/sites-index/sites-index.component.html b/Angular/src/app/features/sites/views/sites-index/sites-index.component.html
+index 5460940..32ff333 100644
+--- a/Angular/src/app/features/sites/views/sites-index/sites-index.component.html
++++ b/Angular/src/app/features/sites/views/sites-index/sites-index.component.html
+@@ -1,57 +1,59 @@
+-<div fxLayout fxLayout.xs="column" fxLayoutWrap="wrap">
+-  <app-site-filter
+-    [hidden]="!showFilter"
+-    [fxFlexValue]="25"
+-    [users]="users$ | async"
+-    (searchUsers)="onSearchUsers($event)"
+-    (filter)="onFilter($event)"
+-    (close)="onCloseFilter()"
+-  ></app-site-filter>
+-  <div fxFlex="100">
+-    <app-site-table-header
+-      [headerTitle]="'site.listOf' | translate"
+-      [haveFilter]="haveFilter"
+-      [showFilter]="showFilter"
+-      [showBtnFilter]="true"
+-      [canAdd]="canAdd"
+-      [canManageMembers]="canManageMembers"
+-      (create)="onCreate()"
+-      (openFilter)="onOpenFilter()"
+-      (delete)="onDelete()"
+-      (manageMembers)="onManageMember()"
+-      [selectedElements]="selectedSites"
+-    ></app-site-table-header>
+-    <bia-table-controller
+-      [defaultPageSize]="defaultPageSize"
+-      [length]="totalCount$ | async"
+-      [columns]="columns"
+-      [columnToDisplays]="displayedColumns"
+-      (displayedColumnsChange)="displayedColumnsChanged($event)"
+-      (filter)="searchGlobalChanged($event)"
+-      (pageSizeChange)="onPageSizeChange($event)"
+-      (toggleSearch)="onToggleSearch()"
+-      (viewChange)="onViewChange($event)"
+-    ></bia-table-controller>
+-    <bia-table
+-      [elements]="sites$ | async"
+-      [totalRecord]="totalCount$ | async"
+-      [columnToDisplays]="displayedColumns"
+-      [pageSize]="pageSize"
+-      [configuration]="tableConfiguration"
+-      [showColSearch]="showColSearch"
+-      [globalSearchValue]="globalSearchValue"
+-      [canEdit]="canEdit"
+-      [canSelectElement]="canDelete"
+-      [loading]="loading$ | async"
+-      (edit)="onEdit($event)"
+-      (loadLazy)="onLoadLazy($event)"
+-      [viewPreference]="viewPreference"
+-      [advancedFilter]="advancedFilter"
+-      (selectedElementsChanged)="onSelectedElementsChanged($event)"
+-    ></bia-table>
++<div>
++  <div fxLayout fxLayout.xs="column" fxLayoutWrap="wrap">
++    <app-site-filter
++      [hidden]="!showFilter"
++      [fxFlexValue]="25"
++      [users]="users$ | async"
++      (searchUsers)="onSearchUsers($event)"
++      (filter)="onFilter($event)"
++      (close)="onCloseFilter()"
++    ></app-site-filter>
++    <div fxFlex="100">
++      <app-site-table-header
++        [headerTitle]="'site.listOf' | translate"
++        [haveFilter]="haveFilter"
++        [showFilter]="showFilter"
++        [showBtnFilter]="true"
++        [canAdd]="canAdd"
++        [canEdit]="canEdit"
++        (create)="onCreate()"
++        (openFilter)="onOpenFilter()"
++        (delete)="onDelete()"
++        (edit)="onEdit()"
++        [selectedElements]="selectedSites"
++      ></app-site-table-header>
++      <bia-table-controller
++        [defaultPageSize]="defaultPageSize"
++        [length]="totalCount$ | async"
++        [columns]="columns"
++        [columnToDisplays]="displayedColumns"
++        (displayedColumnsChange)="displayedColumnsChanged($event)"
++        (filter)="searchGlobalChanged($event)"
++        (pageSizeChange)="onPageSizeChange($event)"
++        (toggleSearch)="onToggleSearch()"
++        (viewChange)="onViewChange($event)"
++      ></bia-table-controller>
++      <bia-table
++        [elements]="sites$ | async"
++        [totalRecord]="totalCount$ | async"
++        [columnToDisplays]="displayedColumns"
++        [pageSize]="pageSize"
++        [configuration]="tableConfiguration"
++        [showColSearch]="showColSearch"
++        [globalSearchValue]="globalSearchValue"
++        [canEdit]="canManageMembers"
++        [canSelectElement]="canDelete"
++        [loading]="loading$ | async"
++        (edit)="onManageMember($event)"
++        (loadLazy)="onLoadLazy($event)"
++        [viewPreference]="viewPreference"
++        [advancedFilter]="advancedFilter"
++        (selectedElementsChanged)="onSelectedElementsChanged($event)"
++      ></bia-table>
++    </div>
+   </div>
+-</div>
+-<!-- begin popup mode -->
+-<app-site-edit-dialog></app-site-edit-dialog>
+-<app-site-new-dialog></app-site-new-dialog>
+-<!-- end popup mode -->
++  <!-- begin popup mode -->
++  <app-site-edit-dialog></app-site-edit-dialog>
++  <app-site-new-dialog></app-site-new-dialog>
++  <!-- end popup mode -->
++</div>
+\ No newline at end of file
+diff --git a/Angular/src/app/features/sites/views/sites-index/sites-index.component.ts b/Angular/src/app/features/sites/views/sites-index/sites-index.component.ts
+index a058c91..af542f5 100644
+--- a/Angular/src/app/features/sites/views/sites-index/sites-index.component.ts
++++ b/Angular/src/app/features/sites/views/sites-index/sites-index.component.ts
+@@ -17,7 +17,7 @@ import { AuthService } from 'src/app/core/bia-core/services/auth.service';
+ import { Permission } from 'src/app/shared/permission';
+ import { KeyValuePair } from 'src/app/shared/bia-shared/model/key-value-pair';
+ import { SiteAdvancedFilter } from '../../model/site/site-advanced-filter';
+-import { Router } from '@angular/router';
++import { ActivatedRoute, Router } from '@angular/router';
+ 
+ interface SiteListVM {
+   id: number;
+@@ -55,7 +55,7 @@ export class SitesIndexComponent implements OnInit {
+   viewPreference: string;
+   advancedFilter: SiteAdvancedFilter;
+ 
+-  constructor(private store: Store<AppState>, private authService: AuthService, private router: Router) {}
++  constructor(private store: Store<AppState>, private authService: AuthService, private router: Router, public route: ActivatedRoute) { }
+ 
+   ngOnInit() {
+     this.initTableConfiguration();
+@@ -70,9 +70,11 @@ export class SitesIndexComponent implements OnInit {
+     this.store.dispatch(openDialogNew());
+   }
+ 
+-  onEdit(siteId: number) {
+-    this.store.dispatch(load({ id: siteId }));
+-    this.store.dispatch(openDialogEdit());
++  onEdit() {
++    if (this.selectedSites && this.selectedSites.length === 1) {
++      this.store.dispatch(load({ id: this.selectedSites[0].id }));
++      this.store.dispatch(openDialogEdit());
++    }
+   }
+ 
+   onDelete() {
+@@ -85,9 +87,9 @@ export class SitesIndexComponent implements OnInit {
+     this.selectedSites = planesTypes;
+   }
+ 
+-  onManageMember() {
+-    if (this.selectedSites && this.selectedSites.length === 1) {
+-      this.router.navigate(['/sites', this.selectedSites[0].id, 'members']);
++  onManageMember(siteId: number) {
++    if (siteId && siteId > 0) {
++      this.router.navigate(['/sites', siteId, 'members']);
+     }
+   }
+ 
+@@ -140,8 +142,8 @@ export class SitesIndexComponent implements OnInit {
+       title: site.title,
+       siteAdmin: site.siteAdmins
+         ? site.siteAdmins
+-            .map((siteMember: SiteMember) => `${siteMember.userLastName} ${siteMember.userFirstName}`)
+-            .join(', ')
++          .map((siteMember: SiteMember) => `${siteMember.userLastName} ${siteMember.userFirstName}`)
++          .join(', ')
+         : ''
+     };
+   }
+diff --git a/Angular/src/app/shared/bia-shared/bia-shared.module.ts b/Angular/src/app/shared/bia-shared/bia-shared.module.ts
+index 88500f7..3ef7ea3 100644
+--- a/Angular/src/app/shared/bia-shared/bia-shared.module.ts
++++ b/Angular/src/app/shared/bia-shared/bia-shared.module.ts
+@@ -78,6 +78,8 @@ import { reducers } from './features/view/store/view.state';
+ import { EffectsModule } from '@ngrx/effects';
+ import { ViewsEffects } from './features/view/store/views-effects';
+ import { ViewFormComponent } from './features/view/components/view-form/view-form.component';
++import { BiaCalcTableComponent } from './components/table/bia-calc-table/bia-calc-table.component';
++import { TranslateRoleLabelPipe } from './pipes/translate-role-label.pipe';
+ 
+ const PRIMENG_MODULES = [
+   AutoCompleteModule,
+@@ -144,6 +146,7 @@ const COMPONENTS = [
+   SpinnerComponent,
+   IeWarningComponent,
+   BiaTableComponent,
++  BiaCalcTableComponent,
+   BiaTableHeaderComponent,
+   BiaTableControllerComponent,
+   LayoutComponent,
+@@ -159,14 +162,18 @@ const VIEW_COMPONENTS = [
+   ViewFormComponent
+ ];
+ 
++const PIPES = [
++  TranslateRoleLabelPipe
++];
++
+ const VIEW_IMPORTS = [StoreModule.forFeature('views', reducers), EffectsModule.forFeature([ViewsEffects])];
+ 
+ const SERVICES = [MessageService];
+ 
+ @NgModule({
+   imports: [...PRIMENG_MODULES, ...MODULES, ...VIEW_IMPORTS],
+-  declarations: [...COMPONENTS, ...VIEW_COMPONENTS],
+-  exports: [...PRIMENG_MODULES, ...MODULES, ...COMPONENTS],
++  declarations: [...COMPONENTS, ...VIEW_COMPONENTS, ...PIPES],
++  exports: [...PRIMENG_MODULES, ...MODULES, ...COMPONENTS, ...PIPES],
+   providers: [...SERVICES]
+ })
+ 
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.html b/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.html
+index 52cb7be..181ef3b 100644
+--- a/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.html
++++ b/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.html
+@@ -11,12 +11,37 @@
+     <bia-ie-warning *ngIf="isIE"></bia-ie-warning>
+     <div class="controls" fxLayout="row">
+       <p-dropdown
+-        *ngIf="displaySiteList === true"
+-        [options]="allSites"
+-        [(ngModel)]="currentSite"
+-        optionLabel="title"
+-        dataKey="id"
+-        (onChange)="onSiteChange()"
++      *ngIf="displayRoleList"
++      [options]="allRoles"
++      [(ngModel)]="currentRole"
++      optionLabel="labelEn"
++      dataKey="id"
++      (onChange)="onRoleChange()"
++      placeholder="Select a role"
++      >
++      <ng-template let-item pTemplate="item">
++        {{ item?.value | translateRoleLabel : translateService.currentLang }}
++      </ng-template>
++      <ng-template let-selectedItem pTemplate="selectedItem">
++        {{ selectedItem?.value | translateRoleLabel : translateService.currentLang }}
++      </ng-template>
++    </p-dropdown>
++      <i
++      *ngIf="displayRoleList === true && currentRole?.isDefault === false"
++        class="ui-icon-star-border app-icon-header bia-pointer"
++        (click)="onSetDefaultRole()"
++        pTooltip="{{ 'bia.defineDefault' | translate }}"
++        tooltipPosition="bottom"
++        placeholder="Top"
++      ></i>
++      <i *ngIf="displayRoleList === true && currentRole?.isDefault === true" class="ui-icon-star app-icon-header"></i>
++      <p-dropdown
++      *ngIf="displaySiteList === true"
++      [options]="allSites"
++      [(ngModel)]="currentSite"
++      optionLabel="title"
++      dataKey="id"
++      (onChange)="onSiteChange()"
+       ></p-dropdown>
+       <i
+         *ngIf="displaySiteList === true && currentSite?.isDefault === false"
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.ts b/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.ts
+index 8f2af67..82cb198 100644
+--- a/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.ts
++++ b/Angular/src/app/shared/bia-shared/components/layout/classic-header/classic-header.component.ts
+@@ -9,6 +9,8 @@ import { environment } from 'src/environments/environment';
+ import { THEME_LIGHT, THEME_DARK } from 'src/app/shared/constants';
+ import { Site } from 'src/app/domains/site/model/site';
+ import { EnvironmentType } from 'src/app/domains/environment-configuration/model/environment-configuration';
++import { AuthService } from 'src/app/core/bia-core/services/auth.service';
++import { Role } from 'src/app/domains/role/model/role';
+ 
+ @Component({
+   selector: 'bia-classic-header',
+@@ -59,10 +61,27 @@ export class ClassicHeaderComponent implements OnDestroy {
+     this.initDropdownSite();
+   }
+ 
++
++  allRoles: Role[];
++  @Input()
++  set roles(roles: Role[]) {
++    this.allRoles = roles;
++    this.initDropdownRole();
++  }
++  currentRole: Role;
++  currentRoleId: number;
++  @Input()
++  set roleId(currentRoleId: number) {
++    this.currentRoleId = currentRoleId;
++    this.initDropdownRole();
++  }
++
+   @Output() language = new EventEmitter<string>();
+   @Output() theme = new EventEmitter<string>();
+   @Output() siteChange = new EventEmitter<number>();
+   @Output() setDefaultSite = new EventEmitter<number>();
++  @Output() roleChange = new EventEmitter<number>();
++  @Output() setDefaultRole = new EventEmitter<number>();
+ 
+   usernameParam: { name: string };
+   navigations: BiaNavigation[];
+@@ -71,7 +90,9 @@ export class ClassicHeaderComponent implements OnDestroy {
+   urlAppIcon = environment.urlAppIcon;
+   urlDMIndex = environment.urlDMIndex;
+   displaySiteList = false;
++  displayRoleList = false;
+   cssClassEnv: string;
++  singleRoleMode = environment.singleRoleMode;
+ 
+   private sub = new Subscription();
+ 
+@@ -81,9 +102,10 @@ export class ClassicHeaderComponent implements OnDestroy {
+ 
+   constructor(
+     public layoutService: BiaClassicLayoutService,
++    public auth: AuthService,
++    public translateService: TranslateService,
+     private platform: Platform,
+-    private translateService: TranslateService
+-  ) {}
++  ) { }
+ 
+   ngOnDestroy() {
+     if (this.sub) {
+@@ -140,6 +162,22 @@ export class ClassicHeaderComponent implements OnDestroy {
+     }
+   }
+ 
++  onRoleChange() {
++    this.roleChange.emit(this.currentRole.id);
++  }
++
++  onSetDefaultRole() {
++    this.setDefaultRole.emit(this.currentRole.id);
++  }
++
++  private initDropdownRole() {
++    this.displayRoleList = false;
++    if (this.currentRoleId > 0 && this.allRoles && this.allRoles.length > 1) {
++      this.currentRole = this.allRoles.filter((x) => x.id === this.currentRoleId)[0];
++      this.displayRoleList = true;
++    }
++  }
++
+   buildNavigation() {
+     const translationKeys = new Array<string>();
+     this.navigations.forEach((menu) => {
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/classic-layout/bia-classic-layout.service.ts b/Angular/src/app/shared/bia-shared/components/layout/classic-layout/bia-classic-layout.service.ts
+index e1351ea..f232c2a 100644
+--- a/Angular/src/app/shared/bia-shared/components/layout/classic-layout/bia-classic-layout.service.ts
++++ b/Angular/src/app/shared/bia-shared/components/layout/classic-layout/bia-classic-layout.service.ts
+@@ -8,6 +8,7 @@ import {
+   ViewContainerRef
+ } from '@angular/core';
+ import { BehaviorSubject } from 'rxjs';
++import { environment } from 'src/environments/environment';
+ 
+ export const BIA_LAYOUT_DATA = new InjectionToken<any>('BiaLayoutData');
+ 
+@@ -18,12 +19,18 @@ export class BiaClassicLayoutService {
+   private mainBarHidden = new BehaviorSubject<boolean>(false);
+   private footerHidden = new BehaviorSubject<boolean>(false);
+   private breadcrumbHidden = new BehaviorSubject<boolean>(false);
++  private breadcrumbRefresh = new BehaviorSubject<boolean>(false);
++
++  // Whether user should choose a single role
++  private singleRoleMode = new BehaviorSubject<boolean>(environment.singleRoleMode ?? true);
+ 
+   footerPortal$ = this.footerPortal.asObservable();
+   mainBarPortal$ = this.mainBarPortal.asObservable();
+   mainBarHidden$ = this.mainBarHidden.asObservable();
+   footerHidden$ = this.footerHidden.asObservable();
+   breadcrumbHidden$ = this.breadcrumbHidden.asObservable();
++  breadcrumbRefresh$ = this.breadcrumbRefresh.asObservable();
++  singleRoleMode$ = this.singleRoleMode.asObservable();
+ 
+   changeFooter<T, D>(
+     componentOrTemplateRef: ComponentType<T> | TemplateRef<T> | null,
+@@ -75,6 +82,10 @@ export class BiaClassicLayoutService {
+     this.breadcrumbHidden.next(false);
+   }
+ 
++  refreshBreadcrumb() {
++    this.breadcrumbRefresh.next(!this.breadcrumbRefresh.value);
++  }
++
+   private setPortal<T, D>(
+     portalSubject: BehaviorSubject<Portal<any> | null>,
+     componentOrTemplateRef: ComponentType<T> | TemplateRef<T>,
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/classic-layout/classic-layout.component.html b/Angular/src/app/shared/bia-shared/components/layout/classic-layout/classic-layout.component.html
+index f204e29..b03cef4 100644
+--- a/Angular/src/app/shared/bia-shared/components/layout/classic-layout/classic-layout.component.html
++++ b/Angular/src/app/shared/bia-shared/components/layout/classic-layout/classic-layout.component.html
+@@ -10,11 +10,15 @@
+   [reportUrl]="reportUrl"
+   [sites]="sites"
+   [siteId]="siteId"
++  [roles]="roles"
++  [roleId]="roleId"
+   [environmentType]="environmentType"
+   (language)="onLanguageChange($event)"
+   (theme)="onThemeChange($event)"
+   (siteChange)="onSiteChange($event)"
++  (roleChange)="onRoleChange($event)"
+   (setDefaultSite)="onSetDefaultSite($event)"
++  (setDefaultRole)="onSetDefaultRole($event)"
+ ></bia-classic-header>
+ <section class="content">
+   <p-breadcrumb *ngIf="(layoutService.breadcrumbHidden$ | async) === false" [model]="menuItems"></p-breadcrumb>
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/classic-layout/classic-layout.component.ts b/Angular/src/app/shared/bia-shared/components/layout/classic-layout/classic-layout.component.ts
+index cbc067b..83ad619 100644
+--- a/Angular/src/app/shared/bia-shared/components/layout/classic-layout/classic-layout.component.ts
++++ b/Angular/src/app/shared/bia-shared/components/layout/classic-layout/classic-layout.component.ts
+@@ -1,4 +1,4 @@
+-import { ChangeDetectionStrategy, Component, Input, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
++import { ChangeDetectionStrategy, Component, Input, OnInit, OnDestroy, EventEmitter, Output, HostBinding } from '@angular/core';
+ import { BiaClassicLayoutService } from './bia-classic-layout.service';
+ import { BiaThemeService } from 'src/app/core/bia-core/services/bia-theme.service';
+ import { BiaTranslationService } from 'src/app/core/bia-core/services/bia-translation.service';
+@@ -7,10 +7,11 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+ import { filter } from 'rxjs/operators';
+ import { TranslateService } from '@ngx-translate/core';
+ import { BiaNavigation } from '../../../model/bia-navigation';
+-import { ROUTE_DATA_CAN_NAVIGATE, ROUTE_DATA_BREADCRUMB, APP_SUPPORTED_TRANSLATIONS } from 'src/app/shared/constants';
++import { ROUTE_DATA_CAN_NAVIGATE, ROUTE_DATA_BREADCRUMB, APP_SUPPORTED_TRANSLATIONS, ROUTE_DATA_NO_MARGIN } from 'src/app/shared/constants';
+ import { Subscription } from 'rxjs';
+ import { Site } from 'src/app/domains/site/model/site';
+ import { EnvironmentType } from 'src/app/domains/environment-configuration/model/environment-configuration';
++import { Role } from 'src/app/domains/role/model/role';
+ 
+ @Component({
+   selector: 'bia-classic-layout',
+@@ -21,6 +22,7 @@ import { EnvironmentType } from 'src/app/domains/environment-configuration/model
+   changeDetection: ChangeDetectionStrategy.Default
+ })
+ export class ClassicLayoutComponent implements OnInit, OnDestroy {
++  @HostBinding('class.no-margin') noMargin = false;
+   @Input() version = 'v0.0.0-dev';
+   @Input() appTitle = 'BIA';
+   @Input() menus: BiaNavigation[];
+@@ -34,10 +36,14 @@ export class ClassicLayoutComponent implements OnInit, OnDestroy {
+   @Input() reportUrl?: string;
+   @Input() sites: Site;
+   @Input() siteId: number;
++  @Input() roles: Role[];
++  @Input() roleId: number;
+   @Input() environmentType: EnvironmentType;
+ 
+   @Output() siteChange = new EventEmitter<number>();
++  @Output() roleChange = new EventEmitter<number>();
+   @Output() setDefaultSite = new EventEmitter<number>();
++  @Output() setDefaultRole = new EventEmitter<number>();
+ 
+   menuItems: MenuItem[];
+   private sub = new Subscription();
+@@ -49,11 +55,20 @@ export class ClassicLayoutComponent implements OnInit, OnDestroy {
+     private translateService: TranslateService,
+     private router: Router,
+     private activatedRoute: ActivatedRoute
+-  ) {}
++  ) { }
+ 
+   ngOnInit(): void {
++    this.setNoMargin(this.activatedRoute);
+     this.sub.add(this.translateService.stream('bia.languages').subscribe(() => this.updateMenuItems()));
+-    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => this.updateMenuItems());
++    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event) => {
++      this.setNoMargin(this.activatedRoute);
++      this.updateMenuItems();
++    });
++
++    this.layoutService.breadcrumbRefresh$.subscribe((val) => {
++      this.setNoMargin(this.activatedRoute);
++      this.updateMenuItems();
++    });
+   }
+ 
+   ngOnDestroy(): void {
+@@ -74,10 +89,18 @@ export class ClassicLayoutComponent implements OnInit, OnDestroy {
+     this.siteChange.emit(siteId);
+   }
+ 
++  onRoleChange(roleId: number) {
++    this.roleChange.emit(roleId);
++  }
++
+   onSetDefaultSite(siteId: number) {
+     this.setDefaultSite.emit(siteId);
+   }
+ 
++  onSetDefaultRole(roleId: number) {
++    this.setDefaultRole.emit(roleId);
++  }
++
+   private updateMenuItems() {
+     const menuItems = this.createBreadcrumbs(this.activatedRoute.root);
+     if (menuItems !== undefined) {
+@@ -114,4 +137,22 @@ export class ClassicLayoutComponent implements OnInit, OnDestroy {
+       return this.createBreadcrumbs(child, url, breadcrumbs);
+     }
+   }
++
++  private setNoMargin(activatedRoute: ActivatedRoute, firstPass = true) {
++
++    if (firstPass) {
++      this.noMargin = false;
++    }
++
++    const children: ActivatedRoute[] = activatedRoute.children;
++
++    if (activatedRoute.snapshot.data[ROUTE_DATA_NO_MARGIN] === true) {
++      this.noMargin = true;
++      return;
++    }
++
++    for (const child of children) {
++      this.setNoMargin(child, false);
++    }
++  }
+ }
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/layout.component.ts b/Angular/src/app/shared/bia-shared/components/layout/layout.component.ts
+index 75606f1..a6417b0 100644
+--- a/Angular/src/app/shared/bia-shared/components/layout/layout.component.ts
++++ b/Angular/src/app/shared/bia-shared/components/layout/layout.component.ts
+@@ -18,7 +18,10 @@ import { getLocaleId } from 'src/app/app.module';
+ import { filter, map } from 'rxjs/operators';
+ import { EnvironmentType } from 'src/app/domains/environment-configuration/model/environment-configuration';
+ import { getEnvironmentConfiguration } from 'src/app/domains/environment-configuration/store/environment-configuration.state';
++import { Role } from 'src/app/domains/role/model/role';
++import { getMemberRoles } from 'src/app/domains/role/store/role.state';
+ import { APP_BASE_HREF } from '@angular/common';
++import { setDefaultRole } from 'src/app/domains/role/store/roles-actions';
+ 
+ @Component({
+   selector: 'app-bia-layout',
+@@ -36,10 +39,14 @@ import { APP_BASE_HREF } from '@angular/common';
+       [reportUrl]="reportUrl"
+       [sites]="sites$ | async"
+       [siteId]="currentSiteId"
++      [roles]="roles$ | async"
++      [roleId]="currentRoleId"
+       [environmentType]="environmentType$ | async"
+       [companyName]="companyName"
+       (siteChange)="onSiteChange($event)"
++      (roleChange)="onRoleChange($event)"
+       (setDefaultSite)="onSetDefaultSite($event)"
++      (setDefaultRole)="onSetDefaultRole($event)"
+     >
+       <router-outlet></router-outlet>
+     </bia-classic-layout>
+@@ -60,8 +67,10 @@ export class LayoutComponent implements OnInit {
+   footerLogo = 'assets/bia/Footer.png';
+   supportedLangs = APP_SUPPORTED_TRANSLATIONS;
+   sites$: Observable<Site[]>;
++  roles$: Observable<Role[]>;
+   environmentType$: Observable<EnvironmentType | null>;
+   currentSiteId: number;
++  currentRoleId: number;
+ 
+   constructor(
+     private biaTranslationService: BiaTranslationService,
+@@ -70,11 +79,12 @@ export class LayoutComponent implements OnInit {
+     private biaThemeService: BiaThemeService,
+     private store: Store<AppState>,
+     @Inject(APP_BASE_HREF) public baseHref: string
+-  ) {}
++  ) { }
+ 
+   ngOnInit() {
+     this.initEnvironmentType();
+     this.initSites();
++    this.initRoles();
+     this.setAllParamByUserInfo();
+     this.initHeaderLogos();
+   }
+@@ -90,15 +100,28 @@ export class LayoutComponent implements OnInit {
+     this.sites$ = this.store.select(getAllSites).pipe();
+   }
+ 
++  private initRoles() {
++    this.roles$ = this.store.select(getMemberRoles);
++  }
++
+   onSiteChange(siteId: number) {
+     this.authService.setCurrentSiteId(siteId);
+     location.assign(this.baseHref);
+   }
+ 
++  onRoleChange(roleId: number) {
++    this.authService.setCurrentRoleId(roleId);
++    location.assign(this.baseHref);
++  }
++
+   onSetDefaultSite(siteId: number) {
+     this.store.dispatch(setDefaultSite({ id: siteId }));
+   }
+ 
++  onSetDefaultRole(roleId: number) {
++    this.store.dispatch(setDefaultRole({ id: roleId, siteId: this.authService.getCurrentSiteId() }));
++  }
++
+   private initHeaderLogos() {
+     this.biaThemeService.isCurrentThemeDark$.subscribe((isThemeDark) => {
+       this.headerLogos = [
+@@ -113,6 +136,7 @@ export class LayoutComponent implements OnInit {
+     this.authService.authInfo$.subscribe((authInfo: AuthInfo | null) => {
+       if (authInfo) {
+         this.setCurrentSiteId(authInfo);
++        this.setcurrentRoleId(authInfo);
+         this.setUserName(authInfo);
+         this.setLanguage(authInfo);
+         this.filterNavByRole(authInfo);
+@@ -130,6 +154,14 @@ export class LayoutComponent implements OnInit {
+     }
+   }
+ 
++  private setcurrentRoleId(authInfo: AuthInfo) {
++    if (authInfo && authInfo.additionalInfos && authInfo.additionalInfos.userData) {
++      this.currentRoleId = authInfo.additionalInfos.userData.currentRoleId;
++    } else {
++      this.currentRoleId = 0;
++    }
++  }
++
+   private setUserName(authInfo: AuthInfo) {
+     if (authInfo && authInfo.additionalInfos && authInfo.additionalInfos.userInfo) {
+       this.username = authInfo.additionalInfos.userInfo.firstName
+diff --git a/Angular/src/app/shared/bia-shared/components/table/bia-calc-table/bia-calc-table.component.html b/Angular/src/app/shared/bia-shared/components/table/bia-calc-table/bia-calc-table.component.html
+new file mode 100644
+index 0000000..ed41fbf
+--- /dev/null
++++ b/Angular/src/app/shared/bia-shared/components/table/bia-calc-table/bia-calc-table.component.html
+@@ -0,0 +1,247 @@
++<form [formGroup]="form" class="bia-calc-form">
++  <p-table
++    *ngIf="configuration"
++    #dt
++    [autoLayout]="true"
++    [reorderableColumns]="true"
++    [columns]="displayedColumns"
++    [value]="elements"
++    [paginator]="paginator"
++    [rows]="pageSize"
++    (onFilter)="onFilter()"
++    [totalRecords]="totalRecord"
++    [lazy]="true"
++    [loading]="loading && (showLoading$ | async) !== null"
++    (onLazyLoad)="onLoadLazy($event)"
++    [stateStorage]="'session'"
++    [stateKey]="tableStateKey"
++    [lazyLoadOnInit]="getLazyLoadOnInit()"
++    [sortField]="sortFieldValue"
++    [sortOrder]="sortOrderValue"
++    (onStateSave)="onStateSave($event)"
++    (selectionChange)="onSelectionChange()"
++    editMode="row"
++    dataKey="id"
++  >
++    <!-- HEADER -->
++    <ng-template pTemplate="header" let-columns>
++      <tr>
++        <th class="bia-table-select-col" *ngIf="canSelectElement">
++          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
++        </th>
++        <ng-container *ngFor="let col of columns">
++          <th *ngIf="col?.isSortable === true" [pSortableColumn]="col.field">
++            {{ col?.header | translate }}
++            <p-sortIcon [field]="col.field"></p-sortIcon>
++          </th>
++          <th *ngIf="col?.isSortable !== true">
++            {{ col?.header | translate }}
++          </th>
++        </ng-container>
++      </tr>
++      <tr *ngIf="showColSearch">
++        <th *ngIf="canSelectElement"></th>
++        <th *ngFor="let col of columns" [ngSwitch]="col.field">
++          <span *ngIf="col.isSearchable === true" class="md-inputfield">
++            <input
++              pInputText
++              class="input-search"
++              type="{{ col.type === 'Number' ? 'number' : 'text' }}"
++              placeholder="{{ col.isDate === true ? ('bia.dateIso8601' | translate) : '' }}"
++              (input)="dt.filter($event.target.value, col.field, col.filterMode)"
++              [value]="dt.filters[col.field]?.value"
++              [ngClass]="{ 'ui-state-filled': dt.filters[col.field]?.value != '' }"
++            />
++          </span>
++        </th>
++      </tr>
++    </ng-template>
++    <!-- BODY -->
++    <ng-template pTemplate="body" let-rowData let-columns="columns" let-editing="editing" let-ri="rowIndex">
++      <tr
++        [pSelectableRow]="isFooter(rowData) !== true ? rowData : null"
++        [pEditableRow]="rowData"
++        (focusout)="onFocusout()"
++        (keyup.enter)="initEditableRow(null)"
++        (keyup.escape)="cancel()"
++      >
++        <!-- FIRST COLUMN WITH CHECKBOX -->
++        <td *ngIf="canSelectElement">
++          <p-tableCheckbox *ngIf="isFooter(rowData) !== true && rowData.id > 0" [value]="rowData"></p-tableCheckbox>
++          <i *ngIf="isFooter(rowData) === true" class="pi pi-plus"></i>
++        </td>
++        <!-- OTHER COLUMNS -->
++        <td (click)="initEditableRow(rowData)" *ngFor="let col of columns">
++          <p-cellEditor>
++            <!-- SPECIFIC INPUT -->
++            <ng-template pTemplate="input" *ngIf="isSpecificInput(col.field) === true">
++              <ng-container [ngSwitch]="col.field">
++                <!-- Begin Add here specific input -->                
++                <!-- End Add here specific input -->
++                <ng-container *ngSwitchDefault>
++                  <input pInputText type="text" [formControlName]="col.field" (change)="onChange()" />
++                </ng-container>
++              </ng-container>
++              <span *ngIf="isRequired(col.field) === true" class="bia-star-mandatory">*</span>
++            </ng-template>
++            <!-- SPECIFIC OUTPUT -->
++            <ng-template pTemplate="output" *ngIf="isSpecificInput(col.field) === true">
++              <ng-container [ngSwitch]="col.field">
++                <!-- Begin Add here specific output -->
++                <!-- End Add here specific output -->
++                <ng-container *ngSwitchDefault>
++                  {{ rowData[col.field] }}
++                </ng-container>
++              </ng-container>
++            </ng-template>
++            <!-- INPUT -->
++            <ng-template pTemplate="input" *ngIf="isSpecificInput(col.field) !== true">
++              <ng-template [ngIf]="col.isEditable === true" [ngIfElse]="isNotEditable">
++                <ng-container [ngSwitch]="col.type">
++                  <ng-container *ngSwitchCase="'OneToMany'">
++                    <p-dropdown
++                      placeholder="&nbsp;"
++                      [formControlName]="col.field"
++                      [options]="getOptionDto(col.field)"
++                      optionLabel="display"
++                      dataKey="id"
++                      showClear="true"
++                      (onChange)="onChange()"
++                      appendTo="body"
++                      [style]="{ width: '100%' }"
++                    ></p-dropdown>
++                  </ng-container>
++                  <ng-container *ngSwitchCase="'ManyToMany'">
++                    <p-multiSelect
++                      defaultLabel="&nbsp;"
++                      [formControlName]="col.field"
++                      [options]="getOptionDto(col.field)"
++                      optionLabel="display"
++                      datakey="id"
++                      (onChange)="onChange()"
++                      (onPanelShow)="onPanelShowMultiSelect()"
++                      (onPanelHide)="onPanelHideMultiSelect()"
++                      appendTo="body"
++                      [style]="{ width: '100%' }"
++                    ></p-multiSelect>
++                  </ng-container>
++                  <ng-container *ngSwitchCase="'Boolean'">
++                    <p-checkbox [binary]="true" [formControlName]="col.field" (onChange)="onChange()"></p-checkbox>
++                  </ng-container>
++                  <ng-container *ngSwitchCase="'Number'">
++                    <input pInputText type="number" [formControlName]="col.field" (change)="onChange()" />
++                  </ng-container>
++                  <ng-container *ngSwitchCase="'Date'">
++                    <p-calendar
++                      biaLocale
++                      [formControlName]="col.field"
++                      placeholder="&nbsp;"
++                      [showButtonBar]="true"
++                      (onShow)="onShowCalendar()"
++                      (onSelect)="onChange()"
++                      (onBlur)="onBlurCalendar()"
++                      appendTo="body"
++                      readonlyInput="true"
++                      [style]="{ width: '100%' }"
++                      [inputStyle]="{ width: '100%' }"
++                      dateFormat="yy-mm-dd"
++                    ></p-calendar>
++                  </ng-container>
++                  <ng-container *ngSwitchCase="'Time'">
++                    <p-calendar
++                      biaLocale
++                      [formControlName]="col.field"
++                      placeholder="&nbsp;"
++                      (onShow)="onShowCalendar()"
++                      (onSelect)="onChange()"
++                      (onBlur)="onBlurCalendar()"
++                      appendTo="body"
++                      readonlyInput="true"
++                      [style]="{ width: '100%' }"
++                      [inputStyle]="{ width: '100%' }"
++                      showTime="true"
++                      [timeOnly]="true"
++                      dateFormat="yy-mm-dd"
++                    ></p-calendar>
++                  </ng-container>
++                  <ng-container *ngSwitchCase="'DateTime'">
++                    <p-calendar
++                      biaLocale
++                      [formControlName]="col.field"
++                      placeholder="&nbsp;"
++                      [showButtonBar]="true"
++                      (onShow)="onShowCalendar()"
++                      (onSelect)="onChange()"
++                      (onBlur)="onBlurCalendar()"
++                      appendTo="body"
++                      readonlyInput="true"
++                      [style]="{ width: '100%' }"
++                      [inputStyle]="{ width: '100%' }"
++                      showTime="true"
++                      dateFormat="yy-mm-dd"
++                    ></p-calendar>
++                  </ng-container>
++                  <ng-container *ngSwitchDefault>
++                    <input
++                      pInputText
++                      type="text"
++                      [maxlength]="col.maxlength"
++                      [formControlName]="col.field"
++                      (change)="onChange()"
++                    />
++                  </ng-container>
++                </ng-container>
++                <span *ngIf="isRequired(col.field) === true" class="bia-star-mandatory">*</span>
++              </ng-template>
++              <ng-template #isNotEditable>
++                <ng-container *ngIf="isFooter(rowData) !== true">
++                  <ng-container [ngSwitch]="col.type">
++                    <ng-container *ngSwitchCase="'OneToMany'">
++                      {{ rowData[col.field]?.display }}
++                    </ng-container>
++                    <ng-container *ngSwitchCase="'ManyToMany'">
++                      {{ formatDisplayName(rowData[col.field]) }}
++                    </ng-container>
++                    <ng-container *ngSwitchDefault>
++                      {{ col.isDate === true ? (rowData[col.field] | date: col.formatDate) : rowData[col.field] }}
++                    </ng-container>
++                  </ng-container>
++                </ng-container>
++              </ng-template>
++            </ng-template>
++            <!-- OUTPUT -->
++            <ng-template pTemplate="output" *ngIf="isSpecificInput(col.field) !== true">
++              <ng-template [ngIf]="isFooter(rowData) === true" [ngIfElse]="editRow">
++                <label *ngIf="col.isEditable === true">-</label>
++              </ng-template>
++              <ng-template #editRow>
++                <ng-container [ngSwitch]="col.type">
++                  <ng-container *ngSwitchCase="'OneToMany'">
++                    {{ rowData[col.field]?.display }}
++                  </ng-container>
++                  <ng-container *ngSwitchCase="'ManyToMany'">
++                    {{ formatDisplayName(rowData[col.field]) }}
++                  </ng-container>
++                  <ng-container *ngSwitchCase="'Boolean'">
++                    <i class="ui-icon-check" *ngIf="rowData[col.field] === true"></i>
++                  </ng-container>
++                  <ng-container *ngSwitchDefault>
++                    {{ col.isDate === true ? (rowData[col.field] | date: col.formatDate) : rowData[col.field] }}
++                  </ng-container>
++                </ng-container>
++              </ng-template>
++            </ng-template>
++          </p-cellEditor>
++        </td>
++      </tr>
++    </ng-template>
++    <!-- EMPTY MESSAGE -->
++    <ng-template pTemplate="emptymessage" let-columns>
++      <tr>
++        <td class="app-empty-message" [attr.colspan]="columns.length + 1">
++          {{ 'bia.NoRecordsFound' | translate }}
++        </td>
++      </tr>
++    </ng-template>
++  </p-table>
++</form>
+diff --git a/Angular/src/app/shared/bia-shared/components/table/bia-calc-table/bia-calc-table.component.scss b/Angular/src/app/shared/bia-shared/components/table/bia-calc-table/bia-calc-table.component.scss
+new file mode 100644
+index 0000000..7346296
+--- /dev/null
++++ b/Angular/src/app/shared/bia-shared/components/table/bia-calc-table/bia-calc-table.component.scss
+@@ -0,0 +1,2 @@
++@import '../bia-table/bia-table.component.scss';
++
+diff --git a/Angular/src/app/shared/bia-shared/components/table/bia-calc-table/bia-calc-table.component.ts b/Angular/src/app/shared/bia-shared/components/table/bia-calc-table/bia-calc-table.component.ts
+new file mode 100644
+index 0000000..0300db9
+--- /dev/null
++++ b/Angular/src/app/shared/bia-shared/components/table/bia-calc-table/bia-calc-table.component.ts
+@@ -0,0 +1,180 @@
++import { Component, Output, EventEmitter, SimpleChanges, Input, OnInit } from '@angular/core';
++import { FormBuilder, FormGroup } from '@angular/forms';
++import { BiaTableComponent } from 'src/app/shared/bia-shared/components/table/bia-table/bia-table.component';
++import { AuthService } from 'src/app/core/bia-core/services/auth.service';
++import { BiaMessageService } from 'src/app/core/bia-core/services/bia-message.service';
++import { TranslateService } from '@ngx-translate/core';
++import { Subscription } from 'rxjs';
++import { DictOptionDto } from '../bia-table/dict-option-dto';
++
++@Component({
++  selector: 'bia-calc-table',
++  templateUrl: './bia-calc-table.component.html',
++  styleUrls: ['../bia-table/bia-table.component.scss']
++})
++export class BiaCalcTableComponent extends BiaTableComponent implements OnInit {
++  @Input() canAdd = true;
++  @Output() save = new EventEmitter<any>();
++  @Input() dictOptionDtos: DictOptionDto[];
++
++  public formId: string;
++  public form: FormGroup;
++  public element: any = {};
++  public hasChanged = false;
++  public specificInputs: string[] = [];
++  protected mandatoryFields: string[] = [];
++
++  protected sub = new Subscription();
++
++  protected currentRow: HTMLElement;
++  protected isInMultiSelect = false;
++
++  constructor(
++    public formBuilder: FormBuilder,
++    public authService: AuthService,
++    public biaMessageService: BiaMessageService,
++    public translateService: TranslateService
++  ) {
++    super(authService);
++    this.initForm();
++  }
++
++  ngOnInit() {
++    this.fillMandatoryFields();
++  }
++
++  protected fillMandatoryFields() {
++    Object.keys(this.form.controls).forEach(key => {
++      if (this.form.controls[key]?.validator?.name === 'required') {
++        this.mandatoryFields.push(key);
++      }
++    });
++  }
++
++  public isRequired(field: string): boolean {
++    return this.mandatoryFields.includes(field);
++  }
++
++  public getOptionDto(key: string) {
++    return this.dictOptionDtos.filter((x) => x.key === key)[0]?.value;
++  }
++
++  public onElementsChange(changes: SimpleChanges) {
++    super.onElementsChange(changes);
++    if (changes.elements && this.table) {
++      if (this.selectedElements && this.selectedElements.length > 0 && this.elements) {
++        this.selectedElements = this.elements.filter((x) => this.selectedElements.some((y) => x.id === y.id));
++      } else {
++        this.selectedElements = [];
++      }
++      if (this.elements && this.canAdd === true) {
++        this.addFooterEmptyObject();
++      }
++      this.onSelectionChange();
++    }
++  }
++
++  public addFooterEmptyObject() {
++    this.elements = [...this.elements, { id: 0 }];
++  }
++
++  public initForm() {
++    throw new Error('initForm not Implemented');
++  }
++
++  public isFooter(element: any) {
++    return element.id === 0;
++  }
++
++  public onChange() {
++    this.hasChanged = true;
++  }
++
++  public isSpecificInput(field: string) {
++    return this.specificInputs && this.specificInputs.some((x) => field === x);
++  }
++
++  public initEditableRow(rowData: any) {
++    if (this.canEdit === true && (!rowData || (rowData && this.table.editingRowKeys[rowData.id] !== true))) {
++      if (this.hasChanged === true) {
++        if (this.form.valid) {
++          this.onSave();
++          this.cancel();
++          this.initRowEdit(rowData);
++        } else {
++          this.biaMessageService.showWarning(this.translateService.instant('biaMsg.invalidForm'));
++        }
++      } else {
++        this.cancel();
++        this.initRowEdit(rowData);
++      }
++    }
++  }
++  public initRowEdit(rowData: any) {
++    if (rowData) {
++      this.element = rowData;
++      this.table.initRowEdit(rowData);
++      this.form.reset();
++      this.form.patchValue({ ...rowData });
++    }
++  }
++
++  public onSave() {
++    if (this.hasChanged === true) {
++      this.onSubmit();
++      this.hasChanged = false;
++    }
++  }
++
++  public cancel() {
++    this.hasChanged = false;
++    this.form.reset();
++    this.table.editingRowKeys = {};
++  }
++
++  public onSubmit() {
++    throw new Error('onSubmit not Implemented');
++  }
++
++  public onFocusout() {
++    setTimeout(() => {
++      if (this.isInMultiSelect !== true && this.getParentComponent(document.activeElement, 'bia-calc-form') === null) {
++        this.initEditableRow(null);
++      }
++    }, 200);
++  }
++
++  public onShowCalendar() {
++    this.currentRow = this.getParentComponent(document.activeElement, 'ui-selectable-row') as HTMLElement;
++  }
++
++  public onBlurCalendar() {
++    this.currentRow?.focus();
++  }
++
++  public onPanelShowMultiSelect() {
++    this.isInMultiSelect = true;
++  }
++
++  public onPanelHideMultiSelect() {
++    this.isInMultiSelect = false;
++    this.onFocusout();
++  }
++
++  public getParentComponent(el: Element | null, parentClassName: string): HTMLElement | null {
++    if (el) {
++      while (el.parentElement) {
++        if (el.parentElement.classList.contains(parentClassName)) {
++          return el.parentElement;
++        } else {
++          el = el.parentElement;
++        }
++      }
++    }
++    return null;
++  }
++
++  public formatDisplayName(objs: any[]): string {
++    return objs?.map(x => x.display)?.join(', ');
++  }
++}
+diff --git a/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table-config.ts b/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table-config.ts
+index 5be7862..1e3822c 100644
+--- a/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table-config.ts
++++ b/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table-config.ts
+@@ -11,11 +11,15 @@ export enum PrimeNGFiltering {
+   Gte = 'gte'
+ }
+ 
+-export enum TypeTS {
++export enum PropType {
+   Date = 'Date',
++  DateTime = 'DateTime',
++  Time = 'Time',
+   Number = 'Number',
+   Boolean = 'Boolean',
+-  String = 'String'
++  String = 'String',
++  OneToMany = 'OneToMany',
++  ManyToMany = 'ManyToMany'
+ }
+ 
+ export interface CustomButton {
+@@ -28,20 +32,27 @@ export interface CustomButton {
+ export class PrimeTableColumn {
+   field: string;
+   header: string;
+-  type: TypeTS;
++  type: PropType;
+   filterMode: PrimeNGFiltering;
+   formatDate: string;
+   isSearchable: boolean;
+   isSortable: boolean;
++  isEditable: boolean;
++  maxlength: number;
++  get isDate() {
++    return this.type === PropType.Date || this.type === PropType.DateTime || this.type === PropType.Time;
++  }
+ 
+-  constructor(field: string, header: string) {
++  constructor(field: string, header: string, maxlength = 255) {
+     this.field = field;
+     this.header = header;
+-    this.type = TypeTS.String;
++    this.type = PropType.String;
+     this.filterMode = PrimeNGFiltering.Contains;
+     this.formatDate = '';
+     this.isSearchable = true;
+     this.isSortable = true;
++    this.isEditable = true;
++    this.maxlength = maxlength;
+   }
+ }
+ 
+diff --git a/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.html b/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.html
+index 078a3a3..64f6cec 100644
+--- a/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.html
++++ b/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.html
+@@ -22,7 +22,7 @@
+ >
+   <ng-template pTemplate="header" let-columns>
+     <tr>
+-      <th *ngIf="canSelectElement">
++      <th class="bia-table-select-col" *ngIf="canSelectElement">
+         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+       </th>
+       <ng-container *ngFor="let col of columns">
+@@ -43,7 +43,7 @@
+             pInputText
+             class="input-search"
+             type="{{ col.type === 'Number' ? 'number' : 'text' }}"
+-            placeholder="{{ col.type === 'Date' ? ('bia.dateIso8601' | translate) : '' }}"
++            placeholder="{{ col.isDate === true ? ('bia.dateIso8601' | translate) : '' }}"
+             (input)="dt.filter($event.target.value, col.field, col.filterMode)"
+             [value]="dt.filters[col.field]?.value"
+             [ngClass]="{ 'ui-state-filled': dt.filters[col.field]?.value != '' }"
+@@ -62,7 +62,7 @@
+           <i class="ui-icon-check" *ngIf="rowData[col.field] === true"></i>
+         </ng-container>
+         <ng-container *ngIf="col.type !== 'Boolean'">
+-          {{ col.type === 'Date' ? (rowData[col.field] | date: col.formatDate) : rowData[col.field] }}
++          {{ col.isDate === true ? (rowData[col.field] | date: col.formatDate) : rowData[col.field] }}
+         </ng-container>
+       </td>
+     </tr>
+diff --git a/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.scss b/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.scss
+index 1d806ba..8aea48e 100644
+--- a/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.scss
++++ b/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.scss
+@@ -13,3 +13,7 @@
+ table {
+   width: 100%;
+ }
++
++.bia-table-select-col {
++  width: 60px;
++}
+\ No newline at end of file
+diff --git a/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.ts b/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.ts
+index 3aef771..27876a4 100644
+--- a/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.ts
++++ b/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.ts
+@@ -1,7 +1,7 @@
+ import { Component, Input, ViewChild, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+ import { Table } from 'primeng/table';
+ import { LazyLoadEvent, TableState } from 'primeng/api';
+-import { BiaListConfig, TypeTS, PrimeTableColumn } from './bia-table-config';
++import { BiaListConfig, PropType, PrimeTableColumn } from './bia-table-config';
+ import { AuthService } from 'src/app/core/bia-core/services/auth.service';
+ import { DEFAULT_VIEW, TABLE_FILTER_GLOBAL } from 'src/app/shared/constants';
+ import { KeyValuePair } from '../../../model/key-value-pair';
+@@ -73,7 +73,7 @@ export class BiaTableComponent implements OnChanges {
+     this.onAdvancedFilterChange(changes);
+   }
+ 
+-  private onElementsChange(changes: SimpleChanges) {
++  protected onElementsChange(changes: SimpleChanges) {
+     if (changes.elements && this.table) {
+       if (this.selectedElements && this.selectedElements.length > 0 && this.elements) {
+         this.selectedElements = this.elements.filter((x) => this.selectedElements.some((y) => x.id === y.id));
+@@ -84,7 +84,7 @@ export class BiaTableComponent implements OnChanges {
+     }
+   }
+ 
+-  private onLoadingChange(changes: SimpleChanges) {
++  protected onLoadingChange(changes: SimpleChanges) {
+     if (changes.loading) {
+       if (this.loading === true) {
+         this.showLoading$ = timer(this.showLoadingAfter);
+@@ -94,19 +94,19 @@ export class BiaTableComponent implements OnChanges {
+     }
+   }
+ 
+-  private onAdvancedFilterChange(changes: SimpleChanges) {
++  protected onAdvancedFilterChange(changes: SimpleChanges) {
+     if (changes.advancedFilter) {
+       this.saveTableState();
+     }
+   }
+ 
+-  private onConfigurationChange(changes: SimpleChanges) {
++  protected onConfigurationChange(changes: SimpleChanges) {
+     if (this.configuration && changes.configuration) {
+       this.updateDisplayedColumns();
+     }
+   }
+ 
+-  private onColumnToDisplayChange(changes: SimpleChanges) {
++  protected onColumnToDisplayChange(changes: SimpleChanges) {
+     if (this.columnToDisplays && changes.columnToDisplays) {
+       this.updateDisplayedColumns();
+       if (changes.columnToDisplays.isFirstChange()) {
+@@ -117,7 +117,7 @@ export class BiaTableComponent implements OnChanges {
+     }
+   }
+ 
+-  private initDefaultSort() {
++  protected initDefaultSort() {
+     if (this.sortFieldValue.length < 1 && this.displayedColumns && this.displayedColumns.length > 0) {
+       this.sortFieldValue = this.displayedColumns[0].field;
+     }
+@@ -125,7 +125,7 @@ export class BiaTableComponent implements OnChanges {
+     this.defaultSortOrder = this.sortOrderValue;
+   }
+ 
+-  private updateDisplayedColumns() {
++  protected updateDisplayedColumns() {
+     if (this.columnToDisplays) {
+       this.displayedColumns = this.configuration.columns.filter(
+         (col) => this.columnToDisplays.map((x) => x.key).indexOf(col.field) > -1
+@@ -136,19 +136,19 @@ export class BiaTableComponent implements OnChanges {
+     this.saveTableState();
+   }
+ 
+-  private onPageSizeChange(changes: SimpleChanges) {
++  protected onPageSizeChange(changes: SimpleChanges) {
+     if (changes.pageSize && this.table) {
+       this.table.onPageChange({ first: 0, rows: Number(this.pageSize) });
+     }
+   }
+ 
+-  private onSearchGlobalChange(changes: SimpleChanges) {
++  protected onSearchGlobalChange(changes: SimpleChanges) {
+     if (changes.globalSearchValue) {
+       this.searchGlobalChanged(this.globalSearchValue);
+     }
+   }
+ 
+-  private onViewPreferenceChange(changes: SimpleChanges) {
++  protected onViewPreferenceChange(changes: SimpleChanges) {
+     if (this.table && this.table.isStateful() && changes.viewPreference) {
+       let viewPreference = changes.viewPreference.currentValue;
+       if (viewPreference === DEFAULT_VIEW) {
+@@ -160,7 +160,7 @@ export class BiaTableComponent implements OnChanges {
+     }
+   }
+ 
+-  private createDefaultTableState(): TableState {
++  protected createDefaultTableState(): TableState {
+     return <TableState>{
+       first: 0,
+       rows: this.defaultPageSize,
+@@ -181,7 +181,7 @@ export class BiaTableComponent implements OnChanges {
+     if (this.table) {
+       if (this.table.lazy === true) {
+         this.configuration.columns.forEach((col) => {
+-          if (col.isSearchable === true && col.type !== TypeTS.Boolean) {
++          if (col.isSearchable === true && col.type !== PropType.Boolean) {
+             this.table.filter(value, TABLE_FILTER_GLOBAL + col.field, col.filterMode);
+           }
+         });
+@@ -213,14 +213,14 @@ export class BiaTableComponent implements OnChanges {
+     }
+   }
+ 
+-  private saveTableState() {
++  protected saveTableState() {
+     if (this.table && this.table.isStateful()) {
+       this.table.columns = this.displayedColumns;
+       this.table.saveState();
+     }
+   }
+ 
+-  private restoreStateTable() {
++  protected restoreStateTable() {
+     if (this.table) {
+       const storage = this.table.getStorage();
+       const stateString = storage.getItem(this.table.stateKey);
+diff --git a/Angular/src/app/shared/bia-shared/components/table/bia-table/dict-option-dto.ts b/Angular/src/app/shared/bia-shared/components/table/bia-table/dict-option-dto.ts
+new file mode 100644
+index 0000000..6b9ebf1
+--- /dev/null
++++ b/Angular/src/app/shared/bia-shared/components/table/bia-table/dict-option-dto.ts
+@@ -0,0 +1,11 @@
++import { OptionDto } from '../../../model/option-dto';
++
++export class DictOptionDto {
++  key: string;
++  value: OptionDto[];
++
++  constructor(key: string, value: OptionDto[]) {
++    this.key = key;
++    this.value = value;
++  }
++}
+diff --git a/Angular/src/app/shared/bia-shared/framework-version.ts b/Angular/src/app/shared/bia-shared/framework-version.ts
+index d4ab4c8..2fb4110 100644
+--- a/Angular/src/app/shared/bia-shared/framework-version.ts
++++ b/Angular/src/app/shared/bia-shared/framework-version.ts
+@@ -1 +1 @@
+-export const FRAMEWORK_VERSION = '3.3.0';
++export const FRAMEWORK_VERSION = '3.3.2';
+diff --git a/Angular/src/app/shared/bia-shared/model/auth-info.ts b/Angular/src/app/shared/bia-shared/model/auth-info.ts
+index f861de2..f6036a1 100644
+--- a/Angular/src/app/shared/bia-shared/model/auth-info.ts
++++ b/Angular/src/app/shared/bia-shared/model/auth-info.ts
+@@ -13,6 +13,7 @@ export interface UserProfile {
+ 
+ export interface UserData {
+   currentSiteId: number;
++  currentRoleId: number;
+ }
+ 
+ export interface AdditionalInfos {
+diff --git a/Angular/src/app/shared/bia-shared/pipes/translate-role-label.pipe.ts b/Angular/src/app/shared/bia-shared/pipes/translate-role-label.pipe.ts
+new file mode 100644
+index 0000000..134bfa5
+--- /dev/null
++++ b/Angular/src/app/shared/bia-shared/pipes/translate-role-label.pipe.ts
+@@ -0,0 +1,26 @@
++import { Pipe, PipeTransform } from '@angular/core';
++import { Role } from 'src/app/domains/role/model/role';
++
++@Pipe({
++  name: 'translateRoleLabel'
++})
++export class TranslateRoleLabelPipe implements PipeTransform {
++
++  transform(role: Role, currentLang: string): any {
++    if (!role) {
++      return undefined;
++    }
++
++    let roleLabel = '';
++    switch (currentLang) {
++      case 'fr':
++        roleLabel = role.labelFr;
++        break;
++      case 'es':
++        roleLabel = role.labelEs;
++        break;
++    }
++
++    return roleLabel && roleLabel.length > 0 ? roleLabel : role.labelEn;
++  }
++}
+diff --git a/Angular/src/app/shared/constants.ts b/Angular/src/app/shared/constants.ts
+index 7786f84..6d4f79c 100644
+--- a/Angular/src/app/shared/constants.ts
++++ b/Angular/src/app/shared/constants.ts
+@@ -3,6 +3,7 @@ export const DEFAULT_PAGE_SIZE = 10;
+ 
+ export const ROUTE_DATA_BREADCRUMB = 'breadcrumb';
+ export const ROUTE_DATA_CAN_NAVIGATE = 'canNavigate';
++export const ROUTE_DATA_NO_MARGIN = 'noMargin';
+ 
+ export const THEME_LIGHT = 'light';
+ export const THEME_DARK = 'dark';
+diff --git a/Angular/src/assets/bia/bg-default-ENGINeUS.jpg b/Angular/src/assets/bia/bg-default-ENGINeUS.jpg
+new file mode 100644
+index 0000000..0985ab3
+Binary files /dev/null and b/Angular/src/assets/bia/bg-default-ENGINeUS.jpg differ
+diff --git a/Angular/src/assets/bia/bg-default-Ewis.jpg b/Angular/src/assets/bia/bg-default-Ewis.jpg
+new file mode 100644
+index 0000000..d758a4b
+Binary files /dev/null and b/Angular/src/assets/bia/bg-default-Ewis.jpg differ
+diff --git a/Angular/src/assets/bia/bg-default-engine.jpg b/Angular/src/assets/bia/bg-default-engine.jpg
+new file mode 100644
+index 0000000..df4b5bb
+Binary files /dev/null and b/Angular/src/assets/bia/bg-default-engine.jpg differ
+diff --git a/Angular/src/assets/bia/i18n/en.json b/Angular/src/assets/bia/i18n/en.json
+index 2cec61a..bd99ac6 100644
+--- a/Angular/src/assets/bia/i18n/en.json
++++ b/Angular/src/assets/bia/i18n/en.json
+@@ -19,6 +19,7 @@
+     "fullscreen": "Full Screen",
+     "greetings": "Hello",
+     "help": "Help",
++    "id": "id",
+     "info": "Info",
+     "itemsPerPage": "Items per page",
+     "lang": {
+@@ -87,6 +88,7 @@
+     "errorOccurredWhileProccessing": "An error occurred while processing your request",
+     "ieWarning": "[Degraded mode] Your browser (internet explorer) is outdated. For a better experience, we recommend upgrading to the latest Google Chrome.",
+     "infoBeforeGetLatestVersion": "The application will reload in a few seconds in order to retrieve the latest version.",
++    "invalidForm": "Invalid form",
+     "syncElementSuccess": "Synchronization completed",
+     "updateElementSuccess": "Item updated successfully",
+     "userAlreadyAssociatedSite": "This user is already associated with this site"
+diff --git a/Angular/src/assets/bia/i18n/es.json b/Angular/src/assets/bia/i18n/es.json
+index acf28ff..0b3cf0f 100644
+--- a/Angular/src/assets/bia/i18n/es.json
++++ b/Angular/src/assets/bia/i18n/es.json
+@@ -19,6 +19,7 @@
+     "fullscreen": "Pantalla completa",
+     "greetings": "¡Hola!",
+     "help": "Ayuda",
++    "id": "id",
+     "info": "Info",
+     "itemsPerPage": "Artículos por página",
+     "lang": {
+@@ -87,6 +88,7 @@
+     "errorOccurredWhileProccessing": "Se produjo un error al procesar su solicitud",
+     "ieWarning": "[Modo degradado] Su navegador (Internet Explorer) está desactualizado. Para una mejor experiencia, recomendamos usar Google Chrome.",
+     "infoBeforeGetLatestVersion": "La aplicación se recargará en unos segundos para recuperar la última versión.",
++    "invalidForm": "Forma invalida",
+     "syncElementSuccess": "Sincronización completada",
+     "updateElementSuccess": "Elemento actualizado con éxito",
+     "userAlreadyAssociatedSite": "Este usuario ya está asociado a este sitio"
+diff --git a/Angular/src/assets/bia/i18n/fr.json b/Angular/src/assets/bia/i18n/fr.json
+index 6b9a263..3bca9ca 100644
+--- a/Angular/src/assets/bia/i18n/fr.json
++++ b/Angular/src/assets/bia/i18n/fr.json
+@@ -19,6 +19,7 @@
+     "fullscreen": "Plein écran",
+     "greetings": "Bonjour",
+     "help": "Aide",
++    "id": "id",
+     "info": "Info",
+     "itemsPerPage": "Élements par page",
+     "lang": {
+@@ -87,6 +88,7 @@
+     "errorOccurredWhileProccessing": "Une erreur s'est produite lors du traitement de votre demande",
+     "ieWarning": "[Mode dégradé] Votre navigateur (internet explorer) est dépassé. Pour une meilleure expérience, nous vous recommandons d'utiliser Google Chrome.",
+     "infoBeforeGetLatestVersion": "L'application va se recharger dans quelques secondes afin de récupérer la dernière version.",
++    "invalidForm": "Formulaire non valide",
+     "syncElementSuccess": "Synchronisation terminée",
+     "updateElementSuccess": "Élément mis à jour avec succès",
+     "userAlreadyAssociatedSite": "Cet utilisateur est déjà associé à ce site"
+diff --git a/Angular/src/environments/environment.prod.ts b/Angular/src/environments/environment.prod.ts
+index 596b10d..916f794 100644
+--- a/Angular/src/environments/environment.prod.ts
++++ b/Angular/src/environments/environment.prod.ts
+@@ -15,12 +15,13 @@ export const environment = {
+   production: true,
+   appTitle: 'BIATemplate',
+   companyName: 'TheBIADevCompany',
+-  version: '1.3.0',
++  version: '1.3.2',
+   logging: {
+     conf: {
+       serverLoggingUrl: '../WebApi/api/logs',
+       level: NgxLoggerLevel.DEBUG,
+       serverLogLevel: NgxLoggerLevel.ERROR
+     }
+-  }
++  },
++  singleRoleMode: false
+ };
+diff --git a/Angular/src/environments/environment.ts b/Angular/src/environments/environment.ts
+index e14e05e..24e669e 100644
+--- a/Angular/src/environments/environment.ts
++++ b/Angular/src/environments/environment.ts
+@@ -15,12 +15,13 @@ export const environment = {
+   production: false,
+   appTitle: 'BIATemplate',
+   companyName: 'TheBIADevCompany',
+-  version: '1.3.0',
++  version: '1.3.2',
+   logging: {
+     conf: {
+       serverLoggingUrl: 'http://localhost/BIATemplate/WebApi/api/logs',
+       level: NgxLoggerLevel.DEBUG,
+       serverLogLevel: NgxLoggerLevel.ERROR
+     }
+-  }
++  },
++  singleRoleMode: false
+ };
+diff --git a/Angular/src/scss/bia/_bia-custom-theme.scss b/Angular/src/scss/bia/_bia-custom-theme.scss
+index 928668f..9dbddda 100644
+--- a/Angular/src/scss/bia/_bia-custom-theme.scss
++++ b/Angular/src/scss/bia/_bia-custom-theme.scss
+@@ -54,6 +54,23 @@ bia-classic-layout {
+       font-weight: bold;
+     }
+   }
++  
++  &.no-margin{
++    section.content {
++      display: flex;
++      flex-flow: column;
++      bia-classic-page-layout {
++        align-items: stretch;
++    
++        div.mat-elevation-z2 {
++          margin-top: 0;
++          max-width: 100% !important;
++          padding: 0;
++          background-color: transparent;
++        }
++      }
++    }
++  }
+ }
+ // classic-page-layout-theme
+ bia-classic-page-layout {
+@@ -75,8 +92,22 @@ bia-table-controller {
+ .bia-star-mandatory {
+   color: $biaRed;
+   margin-right: 5px;
++  font-weight: bold;
+ }
+ 
+ .logo svg {
+   fill: $biaOrange;
+ }
++
++// For table calc mode
++.bia-calc-form {
++  p-celleditor input {
++    width: 100%;
++  }
++  .ui-table-tbody td {
++    position: relative;
++    .bia-star-mandatory {
++      position: absolute;
++    }
++  }
++}
+diff --git a/Docs/PACKAGING.md b/Docs/PACKAGING.md
+index 5e20f9a..a180d13 100644
+--- a/Docs/PACKAGING.md
++++ b/Docs/PACKAGING.md
+@@ -86,7 +86,7 @@
+ 
+ ## Store the BIAExtensions in BIADemo repository
+ - In folder ..\BIADemo\Docs\BIAExtension create a new folder VX.Y.Z with (X.Y.Z = version)
+-- Move the generated file **...\BIADemo\Docs\BIAExtension\BIA.ProjectCreator.vsix** to  **...\BIADemo\Docs\BIAExtension\VX.Y.Z\BIA.ProjectCreator.vsix**
++- Move the generated file **...\BIADemo\Docs\BIAExtension\BIA.ProjectCreator.vsix** to  **...\BIADemo\Docs\BIAExtension\VX.Y.Z\BIA.ProjectCreator.X.Y.Z.vsix**
+ - Zip the **...\BIATemplate\Angular** folder to  **...\BIADemo\Docs\BIAExtension\VX.Y.Z\BIA.AngularTemplate.X.Y.Z.zip**
+ - COMMIT the BIADemo repository.
+ 
+@@ -95,5 +95,5 @@
+ - Mail all developer to informe than a new version is available.
+ 
+ ## Prepare Migration
+-Follow those step:
+-- [PREPARE MIGRATION](./PREPARE MIGRATION.md)
+\ No newline at end of file
++
++- Follow those steps: [PREPARE MIGRATION](./PREPARE%20MIGRATION.md)
+\ No newline at end of file
+diff --git a/Docs/PREPARE MIGRATION.md b/Docs/PREPARE MIGRATION.md
+index 94972cc..a5e19a5 100644
+--- a/Docs/PREPARE MIGRATION.md	
++++ b/Docs/PREPARE MIGRATION.md	
+@@ -34,7 +34,7 @@ cd "...\\YourProject"
+ git apply --reject --whitespace=fix "3.2.2-3.3.0.patch"
+ \```
+ 
+-2. Analyse the .rej file that have been created in your project folder
++2. Analyse the .rej file (search "diff a/" in VS code) that have been created in your project folder
+ => It is change that cannot be apply automaticaly.
+ => Apply manualy the change.
+ ```
+diff --git a/DotNet/BIATemplate.sln b/DotNet/BIATemplate.sln
+index 397cd89..e210032 100644
+--- a/DotNet/BIATemplate.sln
++++ b/DotNet/BIATemplate.sln
+@@ -34,7 +34,9 @@ EndProject
+ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdditionalFiles", "AdditionalFiles", "{25ADA917-6580-4F47-A856-CF04AB8CE7B7}"
+ 	ProjectSection(SolutionItems) = preProject
+ 		.gitignore = .gitignore
++		CHANGELOG.md = CHANGELOG.md
+ 		Directory.Build.props = Directory.Build.props
++		README.md = README.md
+ 		Switch-To-Nuget.ps1 = Switch-To-Nuget.ps1
+ 		Switch-To-Project.ps1 = Switch-To-Project.ps1
+ 	EndProjectSection
+@@ -42,8 +44,6 @@ EndProject
+ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{90DD0210-8503-485D-831A-28FC09BC7011}"
+ 	ProjectSection(SolutionItems) = preProject
+ 		CHANGELOG.md = CHANGELOG.md
+-		Docs\EXAMPLE_IN_PROJECTS.md = Docs\EXAMPLE_IN_PROJECTS.md
+-		Docs\NEW_PROJECT.md = Docs\NEW_PROJECT.md
+ 		README.md = README.md
+ 	EndProjectSection
+ EndProject
+@@ -51,24 +51,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "99 - Test", "99 - Test", "{
+ EndProject
+ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBIADevCompany.BIATemplate.Test", "TheBIADevCompany.BIATemplate.Test\TheBIADevCompany.BIATemplate.Test.csproj", "{99D1E791-6C11-4512-9779-1540FCAAA18C}"
+ EndProject
+-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Features", "Features", "{79A0DA02-E79F-413F-9C18-12E5B269B299}"
+-	ProjectSection(SolutionItems) = preProject
+-		Docs\Features\CLIENT_FOR_HUB.md = Docs\Features\CLIENT_FOR_HUB.md
+-		Docs\Features\DATABASE_HANDLER.md = Docs\Features\DATABASE_HANDLER.md
+-		Docs\Features\DELEGATE_JOB_TO_WORKER.md = Docs\Features\DELEGATE_JOB_TO_WORKER.md
+-		Docs\Features\HUB_FOR_CLIENTS.md = Docs\Features\HUB_FOR_CLIENTS.md
+-		Docs\Features\SWAGGER.md = Docs\Features\SWAGGER.md
+-	EndProjectSection
+-EndProject
+-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projects", "Projects", "{8D3E2080-0BA0-4DFD-B281-7213BD9BFBE2}"
+-	ProjectSection(SolutionItems) = preProject
+-		Docs\Projects\00 - SOLUTION.md = Docs\Projects\00 - SOLUTION.md
+-		Docs\Projects\01 - WORKER_SERVICE.md = Docs\Projects\01 - WORKER_SERVICE.md
+-		Docs\Projects\99 - TEST.md = Docs\Projects\99 - TEST.md
+-	EndProjectSection
+-EndProject
+ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheBIADevCompany.BIATemplate.DeployDB", "TheBIADevCompany.BIATemplate.DeployDB\TheBIADevCompany.BIATemplate.DeployDB.csproj", "{56D0D92E-471F-48F9-B0C1-A801BCE01F9B}"
+ EndProject
++Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Docs", "Docs\Docs.csproj", "{97D11137-4483-4AD1-95E2-648582C12F1C}"
++EndProject
+ Global
+ 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+ 		Debug|Any CPU = Debug|Any CPU
+@@ -119,6 +105,10 @@ Global
+ 		{56D0D92E-471F-48F9-B0C1-A801BCE01F9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+ 		{56D0D92E-471F-48F9-B0C1-A801BCE01F9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+ 		{56D0D92E-471F-48F9-B0C1-A801BCE01F9B}.Release|Any CPU.Build.0 = Release|Any CPU
++		{97D11137-4483-4AD1-95E2-648582C12F1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++		{97D11137-4483-4AD1-95E2-648582C12F1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
++		{97D11137-4483-4AD1-95E2-648582C12F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
++		{97D11137-4483-4AD1-95E2-648582C12F1C}.Release|Any CPU.Build.0 = Release|Any CPU
+ 	EndGlobalSection
+ 	GlobalSection(SolutionProperties) = preSolution
+ 		HideSolutionNode = FALSE
+@@ -134,9 +124,8 @@ Global
+ 		{814971AB-8B45-4EDF-A529-336CAD3D1ECE} = {C9EE7482-A883-4D78-86C1-9575FDF7C1BE}
+ 		{6C976803-D3F2-44B0-B7F6-6B8AAD8DD333} = {CD137582-30F5-4875-8481-C9017FAC9AE3}
+ 		{99D1E791-6C11-4512-9779-1540FCAAA18C} = {416ECC3A-996F-4D16-BE5F-0774094FCA27}
+-		{79A0DA02-E79F-413F-9C18-12E5B269B299} = {90DD0210-8503-485D-831A-28FC09BC7011}
+-		{8D3E2080-0BA0-4DFD-B281-7213BD9BFBE2} = {90DD0210-8503-485D-831A-28FC09BC7011}
+ 		{56D0D92E-471F-48F9-B0C1-A801BCE01F9B} = {CD137582-30F5-4875-8481-C9017FAC9AE3}
++		{97D11137-4483-4AD1-95E2-648582C12F1C} = {90DD0210-8503-485D-831A-28FC09BC7011}
+ 	EndGlobalSection
+ 	GlobalSection(ExtensibilityGlobals) = postSolution
+ 		SolutionGuid = {6D07EDEA-2197-4E6C-8665-3D76E7D31E14}
+diff --git a/DotNet/CHANGELOG.md b/DotNet/CHANGELOG.md
+index 63bfdfd..0a0a4bc 100644
+--- a/DotNet/CHANGELOG.md
++++ b/DotNet/CHANGELOG.md
+@@ -1,6 +1,11 @@
+-### [3.3.1] (2021-04-01)
+-* DeployDB use native code First mecanism
+-* Use the new clusterised database
++### [3.3.2] (2021-05-28)
++* Possibility for the user to choice his role.
++* Click on site open manage member.
++* Member is a children of site with related service and breadcrumb.
++* Adding the Calc mode for CRUD.
++### [3.3.1] (2021-03-31)
++* DeployDB use native code First mechanism
++* Use the new clustered database
+ * Add the MapperMode flag in FilteredService to not multiplicate mapper when only a part of the field are to update.
+ * Add the project title on hangfire dashboard.
+ * Suppress all warning in test and generated code.
+diff --git a/DotNet/Docs/CONFIGURE_YOUR_DEV_ENVIRONMENT.md b/DotNet/Docs/CONFIGURE_YOUR_DEV_ENVIRONMENT.md
+index cf6e817..d084d13 100644
+--- a/DotNet/Docs/CONFIGURE_YOUR_DEV_ENVIRONMENT.md
++++ b/DotNet/Docs/CONFIGURE_YOUR_DEV_ENVIRONMENT.md
+@@ -3,6 +3,8 @@
+ ## Minimum requierement
+ 
+ ### Visual Studio 2019 & components
++**Installation :**
++
+ Install [Visual Studio 2019](https://visualstudio.microsoft.com/fr/vs/) and be sure to add the latest SDK of .NET Core from the components list.
+ Add those components during installation :
+ - [Git for Visual Studio](https://subscription.packtpub.com/book/programming/9781789530094/9/ch09lvl1sec71/installing-git-for-visual-studio-2019)
+@@ -10,6 +12,12 @@ Add those components during installation :
+ 
+ If Visual Studio 2019 is already install, you can add thoses component by launching the VS Installer.
+ 
++**Configuration :**
++
++Set your �using placement� code style setting to �inside namespace� 
++Code style settings are available from Tools > Options > Text Editor > C# > Advanced > Code Style.
++![Code style settings](./Images/CodeStyleSetting.png)
++
+ ### Variable Environment
+ create the following system environment variable:  
+ Name: ASPNETCORE_ENVIRONMENT  
+diff --git a/DotNet/Docs/Docs.csproj b/DotNet/Docs/Docs.csproj
+new file mode 100644
+index 0000000..7c4ae4c
+--- /dev/null
++++ b/DotNet/Docs/Docs.csproj
+@@ -0,0 +1,7 @@
++﻿<Project Sdk="Microsoft.NET.Sdk">
++
++  <PropertyGroup>
++    <TargetFramework>netcoreapp3.1</TargetFramework>
++  </PropertyGroup>
++
++</Project>
+diff --git a/DotNet/Docs/EXAMPLE_IN_PROJECTS.md b/DotNet/Docs/EXAMPLE_IN_PROJECTS.md
+index b0acf3c..f62aaaa 100644
+--- a/DotNet/Docs/EXAMPLE_IN_PROJECTS.md
++++ b/DotNet/Docs/EXAMPLE_IN_PROJECTS.md
+@@ -7,14 +7,14 @@ This files list the functionnalities use in different project build with the fra
+ Open this file to see connector usage: [ConnectorsUsage.xls ](http://nateamwork.labinal.snecma/sep/is/PDMnDM/DM/Documents/300_ARCHI_INFRA/330_APPLICATION/ConnectorsUsage.xlsx).
+ 
+ 
+-## Scheduled task (Tache planifi�e)
++## Scheduled task (Tache planifiée)
+ **Windows Service / WorkerService**
+ * SkillPower
+ * JobMonitor
+ 
+ ## Image computing(Traitement d'image)
+ 
+-## Data loading(Chargement de donn�es)
++## Data loading(Chargement de données)
+ **Load DB to DB with SSIS (Chargement d'une BDD vers une autre via SSIS)**
+ * ADPConnector
+ 
+@@ -28,17 +28,8 @@ Open this file to see connector usage: [ConnectorsUsage.xls ](http://nateamwork.
+ * SkillPower
+ 
+ ## FrontEnd
+-**Print client Side (Impression c�t� client)**
+-* FastTrack
++(moved to EXAMPLE_IN_PROJECTS.md in Angular folder)
+ 
+-**Drag And Drop**
+-* iDo
+-
+-**Utilisation des contr�les Telerik/Kendo**
+-* ePlan
+-
+-**HighCharts usage**
+-* ePlan
+ 
+ ## Manipulation de document Document
+ **Creation/Lecture PDF avec PDF Sharp**
+diff --git a/DotNet/Docs/Images/CodeStyleSetting.png b/DotNet/Docs/Images/CodeStyleSetting.png
+new file mode 100644
+index 0000000..a69276d
+Binary files /dev/null and b/DotNet/Docs/Images/CodeStyleSetting.png differ
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Application/User/IMemberAppService.cs b/DotNet/TheBIADevCompany.BIATemplate.Application/User/IMemberAppService.cs
+index a5edb81..9885495 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Application/User/IMemberAppService.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Application/User/IMemberAppService.cs
+@@ -28,5 +28,12 @@ namespace TheBIADevCompany.BIATemplate.Application.User
+         /// <param name="siteId">The site identifier.</param>
+         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+         Task SetDefaultSiteAsync(int siteId);
++
++        /// <summary>
++        /// Sets the default role.
++        /// </summary>
++        /// <param name="roleId">The role identifier.</param>
++        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
++        Task SetDefaultRoleAsync(int roleId);
+     }
+ }
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Application/User/IRoleAppService.cs b/DotNet/TheBIADevCompany.BIATemplate.Application/User/IRoleAppService.cs
+index ed5a7f0..80332c9 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Application/User/IRoleAppService.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Application/User/IRoleAppService.cs
+@@ -18,5 +18,13 @@ namespace TheBIADevCompany.BIATemplate.Application.User
+         /// </summary>
+         /// <returns>The list of roles.</returns>
+         Task<IEnumerable<RoleDto>> GetAllAsync();
++
++        /// <summary>
++        /// Get all member roles.
++        /// </summary>
++        /// <param name="siteId">The site identifier.</param>
++        /// <param name="userId">The user identifier.</param>
++        /// <returns>The list of roles for this member.</returns>
++        Task<IEnumerable<RoleDto>> GetMemberRolesAsync(int siteId, int userId);
+     }
+ }
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Application/User/IUserAppService.cs b/DotNet/TheBIADevCompany.BIATemplate.Application/User/IUserAppService.cs
+index 88b357c..5181f24 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Application/User/IUserAppService.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Application/User/IUserAppService.cs
+@@ -35,10 +35,11 @@ namespace TheBIADevCompany.BIATemplate.Application.User
+         /// <param name="userDirectoryRoles">The user roles in user directory.</param>
+         /// <param name="sid">The user sid.</param>
+         /// <param name="siteId">The site identifier.</param>
++        /// <param name="roleId">The role identifier.</param>
+         /// <returns>
+         /// The list of right.
+         /// </returns>
+-        Task<List<string>> GetRightsForUserAsync(List<string> userDirectoryRoles, string sid, int siteId = 0);
++        Task<List<string>> GetRightsForUserAsync(List<string> userDirectoryRoles, string sid, int siteId = 0, int roleId = 0);
+ 
+         /// <summary>
+         /// Translate the roles in rights.
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Application/User/MemberAppService.cs b/DotNet/TheBIADevCompany.BIATemplate.Application/User/MemberAppService.cs
+index 50f5df5..84bbded 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Application/User/MemberAppService.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Application/User/MemberAppService.cs
+@@ -4,8 +4,10 @@
+ 
+ namespace TheBIADevCompany.BIATemplate.Application.User
+ {
++    using System;
+     using System.Collections.Generic;
+     using System.Linq;
++    using System.Linq.Expressions;
+     using System.Security.Principal;
+     using System.Threading.Tasks;
+     using BIA.Net.Core.Application;
+@@ -65,5 +67,30 @@ namespace TheBIADevCompany.BIATemplate.Application.User
+                 }
+             }
+         }
++
++        /// <inheritdoc cref="IMemberAppService.SetDefaultRoleAsync(int)"/>
++        public async Task SetDefaultRoleAsync(int roleId)
++        {
++            int userId = this.principal.GetUserId();
++            if (userId > 0 && roleId > 0)
++            {
++                IList<Member> members = (await this.Repository.GetAllEntityAsync(filter: x => x.UserId == userId, includes: new Expression<Func<Member, object>>[] { member => member.MemberRoles })).ToList();
++
++                if (members?.Any() == true)
++                {
++                    foreach (Member member in members)
++                    {
++                        foreach (MemberRole memberRole in member.MemberRoles)
++                        {
++                            memberRole.IsDefault = memberRole.RoleId == roleId;
++                        }
++
++                        this.Repository.Update(member);
++                    }
++
++                    await this.Repository.UnitOfWork.CommitAsync();
++                }
++            }
++        }
+     }
+ }
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Application/User/RoleAppService.cs b/DotNet/TheBIADevCompany.BIATemplate.Application/User/RoleAppService.cs
+index 72f5160..e607ed6 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Application/User/RoleAppService.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Application/User/RoleAppService.cs
+@@ -5,8 +5,11 @@
+ namespace TheBIADevCompany.BIATemplate.Application.User
+ {
+     using System.Collections.Generic;
++    using System.Linq;
++    using System.Security.Principal;
+     using System.Threading.Tasks;
+     using BIA.Net.Core.Application;
++    using BIA.Net.Core.Application.Authentication;
+     using BIA.Net.Core.Domain.RepoContract;
+     using TheBIADevCompany.BIATemplate.Domain.Dto.User;
+     using TheBIADevCompany.BIATemplate.Domain.UserModule.Aggregate;
+@@ -16,19 +19,48 @@ namespace TheBIADevCompany.BIATemplate.Application.User
+     /// </summary>
+     public class RoleAppService : AppServiceBase<Role>, IRoleAppService
+     {
++        /// <summary>
++        /// The claims principal.
++        /// </summary>
++        private readonly BIAClaimsPrincipal principal;
++
+         /// <summary>
+         /// Initializes a new instance of the <see cref="RoleAppService"/> class.
+         /// </summary>
+         /// <param name="repository">The repository.</param>
+-        public RoleAppService(ITGenericRepository<Role> repository)
++        public RoleAppService(ITGenericRepository<Role> repository, IPrincipal principal)
+             : base(repository)
+         {
++            this.principal = principal as BIAClaimsPrincipal;
+         }
+ 
+         /// <inheritdoc cref="IRoleAppService.GetAllAsync"/>
+         public async Task<IEnumerable<RoleDto>> GetAllAsync()
+         {
+-            return await this.Repository.GetAllResultAsync<RoleDto>(role => new RoleDto { Id = role.Id, Label = role.Label });
++            var userId = this.principal.GetUserId();
++            return await this.Repository.GetAllResultAsync<RoleDto>(role => new RoleDto
++            {
++                Id = role.Id,
++                LabelEn = role.LabelEn,
++                LabelFr = role.LabelFr,
++                LabelEs = role.LabelEs,
++                IsDefault = role.MemberRoles.Any(mr => mr.Member.UserId == userId && mr.IsDefault),
++            });
++        }
++
++        /// <inheritdoc cref="IRoleAppService.GetMemberRolesAsync"/>
++        public async Task<IEnumerable<RoleDto>> GetMemberRolesAsync(int siteId, int userId)
++        {
++            return await this.Repository.GetAllResultAsync<RoleDto>(
++                role => new RoleDto
++                {
++                    Id = role.Id,
++                    LabelEn = role.LabelEn,
++                    LabelFr = role.LabelFr,
++                    LabelEs = role.LabelEs,
++                    IsDefault = role.MemberRoles.Any(mr => mr.Member.UserId == userId && mr.IsDefault),
++                },
++                filter: x => x.MemberRoles.Select(mr => mr.Member).Any(m => m.SiteId == siteId && m.UserId == userId));
+         }
+     }
+ }
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Application/User/UserAppService.cs b/DotNet/TheBIADevCompany.BIATemplate.Application/User/UserAppService.cs
+index 4d65531..dba8d26 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Application/User/UserAppService.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Application/User/UserAppService.cs
+@@ -115,9 +115,9 @@ namespace TheBIADevCompany.BIATemplate.Application.User
+         }
+ 
+         /// <inheritdoc cref="IUserAppService.GetRightsForUserAsync"/>
+-        public async Task<List<string>> GetRightsForUserAsync(List<string> userDirectoryRoles, string sid, int siteId = 0)
++        public async Task<List<string>> GetRightsForUserAsync(List<string> userDirectoryRoles, string sid, int siteId = 0, int roleId = 0)
+         {
+-            return await this.userRightDomainService.GetRightsForUserAsync(userDirectoryRoles, sid, siteId);
++            return await this.userRightDomainService.GetRightsForUserAsync(userDirectoryRoles, sid, siteId, roleId);
+         }
+ 
+         /// <inheritdoc cref="IUserAppService.TranslateRolesInRights"/>
+@@ -169,24 +169,28 @@ namespace TheBIADevCompany.BIATemplate.Application.User
+         /// <inheritdoc cref="IUserAppService.GetUserProfileAsync"/>
+         public async Task<UserProfileDto> GetUserProfileAsync(string login)
+         {
+-            var url = this.configuration.UserProfile.Url;
+-            var parameters = new Dictionary<string, string> { { "login", login } };
+-            Dictionary<string, string> result;
++            var profile = new UserProfileDto();
+ 
+-            try
+-            {
+-                result = await RequestHelper.GetAsync<Dictionary<string, string>>(url, parameters);
+-            }
+-            catch (Exception exception)
++            var url = this.configuration.UserProfile.Url;
++            if (!string.IsNullOrEmpty(url))
+             {
+-                result = new Dictionary<string, string>();
+-                this.logger.LogError(exception, "An error occured while getting the user profile.");
+-            }
++                var parameters = new Dictionary<string, string> { { "login", login } };
++                Dictionary<string, string> result;
+ 
+-            var profile = new UserProfileDto();
+-            foreach (var item in result)
+-            {
+-                typeof(UserProfileDto).GetProperty(item.Key)?.SetValue(profile, item.Value);
++                try
++                {
++                    result = await RequestHelper.GetAsync<Dictionary<string, string>>(url, parameters);
++                }
++                catch (Exception exception)
++                {
++                    result = new Dictionary<string, string>();
++                    this.logger.LogError(exception, "An error occured while getting the user profile.");
++                }
++
++                foreach (var item in result)
++                {
++                    typeof(UserProfileDto).GetProperty(item.Key)?.SetValue(profile, item.Value);
++                }
+             }
+ 
+             return profile;
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Application/stylecop.json b/DotNet/TheBIADevCompany.BIATemplate.Application/stylecop.json
+deleted file mode 100644
+index 42fb1f8..0000000
+--- a/DotNet/TheBIADevCompany.BIATemplate.Application/stylecop.json
++++ /dev/null
+@@ -1,14 +0,0 @@
+-﻿{
+-  // ACTION REQUIRED: This file was automatically added to your project, but it
+-  // will not take effect until additional steps are taken to enable it. See the
+-  // following page for additional information:
+-  //
+-  // https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/EnableConfiguration.md
+-
+-  "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+-  "settings": {
+-    "documentationRules": {
+-      "companyName": "PlaceholderCompany"
+-    }
+-  }
+-}
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/Constants.cs b/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/Constants.cs
+index e564836..1bac71f 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/Constants.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/Constants.cs
+@@ -17,17 +17,17 @@ namespace TheBIADevCompany.BIATemplate.Crosscutting.Common
+             /// <summary>
+             /// The back end version.
+             /// </summary>
+-            public const string BackEndVersion = "1.3.0";
++            public const string BackEndVersion = "1.3.2";
+ 
+             /// <summary>
+             /// The front end version.
+             /// </summary>
+-            public const string FrontEndVersion = "1.3.0";
++            public const string FrontEndVersion = "1.3.2";
+ 
+             /// <summary>
+             /// The framework version.
+             /// </summary>
+-            public const string FrameworkVersion = "3.3.0";
++            public const string FrameworkVersion = "3.3.2";
+         }
+ 
+         /// <summary>
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/Rights.cs b/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/Rights.cs
+index f833aee..9b0caf0 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/Rights.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/Rights.cs
+@@ -70,6 +70,11 @@ namespace TheBIADevCompany.BIATemplate.Crosscutting.Common
+             /// The right to set default site.
+             /// </summary>
+             public const string SetDefaultSite = "Member_Set_Default_Site";
++
++            /// <summary>
++            /// The right to set default role.
++            /// </summary>
++            public const string SetDefaultRole = "Member_Set_Default_Role";
+         }
+ 
+         /// <summary>
+@@ -81,6 +86,11 @@ namespace TheBIADevCompany.BIATemplate.Crosscutting.Common
+             /// The right to get all roles.
+             /// </summary>
+             public const string List = "Roles_List";
++
++            /// <summary>
++            /// The right to get the roles of the current user.
++            /// </summary>
++            public const string ListForCurrentUser = "Roles_List_For_Current_User";
+         }
+ 
+         /// <summary>
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Domain.Dto/User/RoleDto.cs b/DotNet/TheBIADevCompany.BIATemplate.Domain.Dto/User/RoleDto.cs
+index 2cf157b..57c32a6 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Domain.Dto/User/RoleDto.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Domain.Dto/User/RoleDto.cs
+@@ -15,8 +15,23 @@ namespace TheBIADevCompany.BIATemplate.Domain.Dto.User
+         public int Id { get; set; }
+ 
+         /// <summary>
+-        /// Gets or sets the label.
++        /// Gets or sets the label in english.
+         /// </summary>
+-        public string Label { get; set; }
++        public string LabelEn { get; set; }
++
++        /// <summary>
++        /// Gets or sets the label in french.
++        /// </summary>
++        public string LabelFr { get; set; }
++
++        /// <summary>
++        /// Gets or sets the label in spanish.
++        /// </summary>
++        public string LabelEs { get; set; }
++
++        /// <summary>
++        /// Gets or sets a value indicating whether the role is the default one.
++        /// </summary>
++        public bool IsDefault { get; set; }
+     }
+ }
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Aggregate/MemberRole.cs b/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Aggregate/MemberRole.cs
+index 2cb9177..8ceec34 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Aggregate/MemberRole.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Aggregate/MemberRole.cs
+@@ -30,5 +30,10 @@ namespace TheBIADevCompany.BIATemplate.Domain.UserModule.Aggregate
+         /// Gets or sets the role id.
+         /// </summary>
+         public int RoleId { get; set; }
++
++        /// <summary>
++        /// Gets or sets a value indicating whether the role is the default one.
++        /// </summary>
++        public bool IsDefault { get; set; }
+     }
+ }
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Aggregate/Role.cs b/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Aggregate/Role.cs
+index 67d2017..d7847de 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Aggregate/Role.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Aggregate/Role.cs
+@@ -19,9 +19,19 @@ namespace TheBIADevCompany.BIATemplate.Domain.UserModule.Aggregate
+         public int Id { get; set; }
+ 
+         /// <summary>
+-        /// Gets or sets the label.
++        /// Gets or sets the label in english.
+         /// </summary>
+-        public string Label { get; set; }
++        public string LabelEn { get; set; }
++
++        /// <summary>
++        /// Gets or sets the label in french.
++        /// </summary>
++        public string LabelFr { get; set; }
++
++        /// <summary>
++        /// Gets or sets the label in spanish.
++        /// </summary>
++        public string LabelEs { get; set; }
+ 
+         /// <summary>
+         /// Gets or sets the code.
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Aggregate/UserRoleSelectResult.cs b/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Aggregate/UserRoleSelectResult.cs
+index c3f9272..5f6db44 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Aggregate/UserRoleSelectResult.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Aggregate/UserRoleSelectResult.cs
+@@ -19,6 +19,6 @@ namespace TheBIADevCompany.BIATemplate.Domain.UserModule.Aggregate
+         /// <summary>
+         /// The list of roles.
+         /// </summary>
+-        public IEnumerable<string> Roles { get; set; }
++        public IEnumerable<KeyValuePair<int, string>> Roles { get; set; }
+     }
+ }
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Service/IUserRightDomainService.cs b/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Service/IUserRightDomainService.cs
+index a5b768a..8a40b0e 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Service/IUserRightDomainService.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Service/IUserRightDomainService.cs
+@@ -18,10 +18,11 @@ namespace TheBIADevCompany.BIATemplate.Domain.UserModule.Service
+         /// <param name="userDirectoryRoles">The user directory role.</param>
+         /// <param name="sid">The user sid.</param>
+         /// <param name="siteId">The site identifier.</param>
++        /// <param name="roleId">The role identifier.</param>
+         /// <returns>
+         /// The DTO containing the right list.
+         /// </returns>
+-        Task<List<string>> GetRightsForUserAsync(List<string> userDirectoryRoles, string sid, int siteId = 0);
++        Task<List<string>> GetRightsForUserAsync(List<string> userDirectoryRoles, string sid, int siteId = 0, int roleId = 0);
+ 
+         /// <summary>
+         /// Translate the roles in rights.
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Service/UserRightDomainService.cs b/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Service/UserRightDomainService.cs
+index 824cc09..c728de2 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Service/UserRightDomainService.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Domain/UserModule/Service/UserRightDomainService.cs
+@@ -46,7 +46,7 @@ namespace TheBIADevCompany.BIATemplate.Domain.UserModule.Service
+         }
+ 
+         /// <inheritdoc cref="IUserRightDomainService.GetRightsForUserAsync"/>
+-        public async Task<List<string>> GetRightsForUserAsync(List<string> userDirectoryRoles, string sid, int siteId = 0)
++        public async Task<List<string>> GetRightsForUserAsync(List<string> userDirectoryRoles, string sid, int siteId = 0, int roleId = 0)
+         {
+             var specification = siteId > 0 ? MemberSpecification.SearchForSidAndSite(sid, siteId) : MemberSpecification.SearchForSid(sid);
+ 
+@@ -54,7 +54,7 @@ namespace TheBIADevCompany.BIATemplate.Domain.UserModule.Service
+                 .GetAllResultAsync(
+                     s => new UserRoleSelectResult
+                     {
+-                        Roles = s.MemberRoles.Select(mr => mr.Role.Code),
++                        Roles = s.MemberRoles.Select(mr => new KeyValuePair<int, string>(mr.Role.Id, mr.Role.Code)),
+                         UserId = s.UserId,
+                     },
+                     specification: specification)).Distinct().FirstOrDefault();
+@@ -62,7 +62,18 @@ namespace TheBIADevCompany.BIATemplate.Domain.UserModule.Service
+             var roles = userDirectoryRoles;
+             if (sitesMemberRoles != null)
+             {
+-                roles.AddRange(sitesMemberRoles.Roles);
++                if (roleId > 0)
++                {
++                    var siteMemberRole = sitesMemberRoles.Roles.FirstOrDefault(kvp => kvp.Key == roleId);
++                    if (siteMemberRole.Key > 0)
++                    {
++                        roles.Add(siteMemberRole.Value);
++                    }
++                }
++                else
++                {
++                    roles.AddRange(sitesMemberRoles.Roles.Select(kvp => kvp.Value));
++                }
+             }
+ 
+             return this.TranslateRolesInRights(roles);
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Data/ModelBuilders/UserModelBuilder.cs b/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Data/ModelBuilders/UserModelBuilder.cs
+index dd0e755..d260a58 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Data/ModelBuilders/UserModelBuilder.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Infrastructure.Data/ModelBuilders/UserModelBuilder.cs
+@@ -76,8 +76,10 @@ namespace TheBIADevCompany.BIATemplate.Infrastructure.Data.ModelBuilders
+         private static void CreateRoleModel(ModelBuilder modelBuilder)
+         {
+             modelBuilder.Entity<Role>().HasKey(r => r.Id);
+-            modelBuilder.Entity<Role>().Property(r => r.Label).IsRequired().HasMaxLength(100);
+-            modelBuilder.Entity<Role>().HasData(new Role { Id = 1, Label = "Site Admin", Code = "Site_Admin" });
++            modelBuilder.Entity<Role>().Property(r => r.LabelEn).IsRequired().HasMaxLength(100);
++            modelBuilder.Entity<Role>().Property(r => r.LabelFr).HasMaxLength(100);
++            modelBuilder.Entity<Role>().Property(r => r.LabelEs).HasMaxLength(100);
++            modelBuilder.Entity<Role>().HasData(new Role { Id = 1, LabelEn = "Site Admin", Code = "Site_Admin" });
+         }
+ 
+         /// <summary>
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/AuthController.cs b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/AuthController.cs
+index 350b711..4371a6f 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/AuthController.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/AuthController.cs
+@@ -39,6 +39,11 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+         /// </summary>
+         private readonly ISiteAppService siteAppService;
+ 
++        /// <summary>
++        /// The role application service.
++        /// </summary>
++        private readonly IRoleAppService roleAppService;
++
+         /// <summary>
+         /// The logger.
+         /// </summary>
+@@ -51,39 +56,43 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+         /// <param name="userAppService">The user application service.</param>
+         /// <param name="siteAppService">The site application service.</param>
+         /// <param name="logger">The logger.</param>
+-        public AuthController(IJwtFactory jwtFactory, IUserAppService userAppService, ISiteAppService siteAppService, ILogger<AuthController> logger)
++        public AuthController(IJwtFactory jwtFactory, IUserAppService userAppService, ISiteAppService siteAppService, IRoleAppService roleAppService, ILogger<AuthController> logger)
+         {
+             this.jwtFactory = jwtFactory;
+             this.userAppService = userAppService;
+             this.siteAppService = siteAppService;
++            this.roleAppService = roleAppService;
+             this.logger = logger;
+         }
+ 
+         /// <summary>
+         /// The login action.
+         /// </summary>
++        /// <param name="singleRoleMode">Whether the front is configured to use a single role at a time.</param>
+         /// <returns>The JWT if authenticated.</returns>
+-        [HttpGet("login")]
++        [HttpGet("login/{singleRoleMode}")]
+         [ProducesResponseType(StatusCodes.Status200OK)]
+         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+-        public async Task<IActionResult> Login()
++        public async Task<IActionResult> Login(bool singleRoleMode = false)
+         {
+-            return await this.LoginOnSite(0);
++            return await this.LoginOnSite(0, singleRoleMode);
+         }
+ 
+         /// <summary>
+         /// The login action.
+         /// </summary>
+         /// <param name="siteId">The site identifier.</param>
++        /// <param name="singleRoleMode">Whether the front is configured to use a single role at a time.</param>
++        /// <param name="roleId">The role id.</param>
+         /// <returns>
+         /// The JWT if authenticated.
+         /// </returns>
+-        [HttpGet("login/site/{siteId}")]
++        [HttpGet("login/site/{siteId}/{singleRoleMode}/{roleId?}")]
+         [ProducesResponseType(StatusCodes.Status200OK)]
+         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+-        public async Task<IActionResult> LoginOnSite(int siteId)
++        public async Task<IActionResult> LoginOnSite(int siteId, bool singleRoleMode = false, int roleId = 0)
+         {
+             var identity = this.User.Identity;
+             if (identity == null || !identity.IsAuthenticated)
+@@ -162,9 +171,21 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+                     }
+                 }
+ 
++                if (singleRoleMode && roleId < 1)
++                {
++                    var roles = await this.roleAppService.GetMemberRolesAsync(siteId, userInfo.Id);
++
++                    var role = roles?.OrderByDescending(x => x.IsDefault).FirstOrDefault();
++
++                    if (role != null)
++                    {
++                        roleId = role.Id;
++                    }
++                }
++
+                 if (siteId > 0)
+                 {
+-                    userRights = await this.userAppService.GetRightsForUserAsync(userRolesFromUserDirectory, sid, siteId);
++                    userRights = await this.userAppService.GetRightsForUserAsync(userRolesFromUserDirectory, sid, siteId, roleId);
+                     if (userRights == null || !userRights.Any())
+                     {
+                         this.logger.LogInformation("Unauthorized because no user rights for site : " + siteId);
+@@ -176,7 +197,7 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+             // For admin and non user
+             if (userRights == null)
+             {
+-                userRights = await this.userAppService.GetRightsForUserAsync(userRolesFromUserDirectory, sid);
++                userRights = await this.userAppService.GetRightsForUserAsync(userRolesFromUserDirectory, sid, 0, 0);
+             }
+ 
+             if (userRights == null || !userRights.Any())
+@@ -186,10 +207,15 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+             }
+ 
+             // user data
+-            UserDataDto userData = null;
++            var userData = new { CurrentSiteId = 0, CurrentRoleId = 0 };
++
+             if (siteId > 0)
+             {
+-                userData = new UserDataDto() { CurrentSiteId = siteId };
++                userData = new
++                {
++                    CurrentSiteId = siteId,
++                    CurrentRoleId = roleId,
++                };
+             }
+ 
+             var claimsIdentity = await Task.FromResult(this.jwtFactory.GenerateClaimsIdentity(login, userInfo.Id, userRights, userData));
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/MembersController.cs b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/MembersController.cs
+index 5dd3894..bba9972 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/MembersController.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/MembersController.cs
+@@ -296,5 +296,42 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+                 return this.StatusCode(500, "Internal server error");
+             }
+         }
++
++        /// <summary>
++        /// Sets the default role.
++        /// </summary>
++        /// <param name="id">The role identifier.</param>
++        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
++        [HttpPut("Roles/{id}/setDefault")]
++        [ProducesResponseType(StatusCodes.Status200OK)]
++        [ProducesResponseType(StatusCodes.Status400BadRequest)]
++        [ProducesResponseType(StatusCodes.Status404NotFound)]
++        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
++        [Authorize(Roles = Rights.Members.SetDefaultRole)]
++        public async Task<IActionResult> SetDefaultRole(int id)
++        {
++            if (id == 0)
++            {
++                return this.BadRequest();
++            }
++
++            try
++            {
++                await this.memberService.SetDefaultRoleAsync(id);
++                return this.Ok();
++            }
++            catch (ArgumentNullException)
++            {
++                return this.ValidationProblem();
++            }
++            catch (ElementNotFoundException)
++            {
++                return this.NotFound();
++            }
++            catch (Exception)
++            {
++                return this.StatusCode(500, "Internal server error");
++            }
++        }
+     }
+ }
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/RolesController.cs b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/RolesController.cs
+index 0a6ac6b..21e708a 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/RolesController.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/RolesController.cs
+@@ -5,7 +5,9 @@
+ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+ {
+     using System.Linq;
++    using System.Security.Principal;
+     using System.Threading.Tasks;
++    using BIA.Net.Core.Application.Authentication;
+     using BIA.Net.Core.Common;
+     using BIA.Net.Presentation.Api.Controllers.Base;
+     using Microsoft.AspNetCore.Authorization;
+@@ -24,13 +26,20 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+         /// </summary>
+         private readonly IRoleAppService roleService;
+ 
++        /// <summary>
++        /// The claims principal.
++        /// </summary>
++        private readonly BIAClaimsPrincipal principal;
++
+         /// <summary>
+         /// Initializes a new instance of the <see cref="RolesController"/> class.
+         /// </summary>
+         /// <param name="roleService">The role service.</param>
+-        public RolesController(IRoleAppService roleService)
++        /// <param name="principal">The claims principal.</param>
++        public RolesController(IRoleAppService roleService, IPrincipal principal)
+         {
+             this.roleService = roleService;
++            this.principal = principal as BIAClaimsPrincipal;
+         }
+ 
+         /// <summary>
+@@ -39,7 +48,6 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+         /// <returns>The list of roles.</returns>
+         [HttpGet]
+         [ProducesResponseType(StatusCodes.Status200OK)]
+-        [Authorize(Roles = Rights.Roles.List)]
+         public async Task<IActionResult> GetAll()
+         {
+             var results = await this.roleService.GetAllAsync();
+@@ -48,5 +56,24 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+ 
+             return this.Ok(results);
+         }
++
++        /// <summary>
++        /// Gets all existing roles.
++        /// </summary>
++        /// <param name="siteId">The site identifier.</param>
++        /// <returns>The list of roles.</returns>
++        [HttpGet("{siteId}")]
++        [ProducesResponseType(StatusCodes.Status200OK)]
++        [Authorize(Roles = Rights.Roles.ListForCurrentUser)]
++        public async Task<IActionResult> GetAllMemberRoles(int siteId)
++        {
++            var userId = this.principal.GetUserId();
++
++            var results = await this.roleService.GetMemberRolesAsync(siteId, userId);
++
++            this.HttpContext.Response.Headers.Add(BIAConstants.HttpHeaders.TotalCount, results.Count().ToString());
++
++            return this.Ok(results);
++        }
+     }
+ }
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/SitesController.cs b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/SitesController.cs
+index 2c23404..294beee 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/SitesController.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/SitesController.cs
+@@ -58,13 +58,13 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+         [HttpPost("all")]
+         [ProducesResponseType(StatusCodes.Status200OK)]
+         [Authorize(Roles = Rights.Sites.ListAccess)]
+-        public async Task<IActionResult> GetAll([FromBody]SiteFilterDto filters)
++        public async Task<IActionResult> GetAll([FromBody] SiteFilterDto filters)
+         {
+-            var results = await this.siteService.GetAllWithMembersAsync(filters);
++            var (results, total) = await this.siteService.GetAllWithMembersAsync(filters);
+ 
+-            this.HttpContext.Response.Headers.Add(BIAConstants.HttpHeaders.TotalCount, results.Total.ToString());
++            this.HttpContext.Response.Headers.Add(BIAConstants.HttpHeaders.TotalCount, total.ToString());
+ 
+-            return this.Ok(results.Sites);
++            return this.Ok(results);
+         }
+ 
+         /// <summary>
+@@ -110,7 +110,7 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+         [Authorize(Roles = Rights.Sites.Create)]
+-        public async Task<IActionResult> Add([FromBody]SiteDto dto)
++        public async Task<IActionResult> Add([FromBody] SiteDto dto)
+         {
+             try
+             {
+@@ -139,7 +139,7 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+         [ProducesResponseType(StatusCodes.Status404NotFound)]
+         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+         [Authorize(Roles = Rights.Sites.Update)]
+-        public async Task<IActionResult> Update(int id, [FromBody]SiteDto dto)
++        public async Task<IActionResult> Update(int id, [FromBody] SiteDto dto)
+         {
+             if (id == 0 || dto == null || dto.Id != id)
+             {
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/UsersController.cs b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/UsersController.cs
+index 3175efb..08f898f 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/UsersController.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/UsersController.cs
+@@ -59,13 +59,13 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+         [HttpPost("all")]
+         [ProducesResponseType(StatusCodes.Status200OK)]
+         [Authorize(Roles = Rights.Users.ListAccess)]
+-        public async Task<IActionResult> GetAll([FromBody]LazyLoadDto filters)
++        public async Task<IActionResult> GetAll([FromBody] LazyLoadDto filters)
+         {
+-            var results = await this.userService.GetAllAsync(filters);
++            var (results, total) = await this.userService.GetAllAsync(filters);
+ 
+-            this.HttpContext.Response.Headers.Add(BIAConstants.HttpHeaders.TotalCount, results.Total.ToString());
++            this.HttpContext.Response.Headers.Add(BIAConstants.HttpHeaders.TotalCount, total.ToString());
+ 
+-            return this.Ok(results.Users);
++            return this.Ok(results);
+         }
+ 
+         /// <summary>
+@@ -112,7 +112,7 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+         [ProducesResponseType(StatusCodes.Status200OK)]
+         [ProducesResponseType(StatusCodes.Status303SeeOther)]
+         [Authorize(Roles = Rights.Users.Add)]
+-        public async Task<IActionResult> AddInGroup([FromBody]IEnumerable<UserFromDirectoryDto> users)
++        public async Task<IActionResult> AddInGroup([FromBody] IEnumerable<UserFromDirectoryDto> users)
+         {
+             string errors = await this.userService.AddInGroupAsync(users);
+             if (!string.IsNullOrEmpty(errors))
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.Development.json b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.Development.json
+index ad62728..80e9675 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.Development.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.Development.json
+@@ -85,7 +85,8 @@
+       //}
+     ],
+     "UserProfile": {
+-      "url": "http://localhost/DMIndex/UserProfile/GetUserProfile"
++      //remove url for faster debug (http://localhost/DMIndex/UserProfile/GetUserProfile)
++      "url": ""
+     }
+   }
+ }
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.json b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.json
+index 0e074d2..92fc053 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.json
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.json
+@@ -91,11 +91,19 @@
+         "Name": "Member_Set_Default_Site",
+         "Roles": [ "Admin", "Site_Admin", "Site_Member" ]
+       },
++      {
++        "Name": "Member_Set_Default_Role",
++        "Roles": [ "User", "Admin", "Site_Admin", "Site_Member" ]
++      },
+       // Role
+       {
+         "Name": "Roles_List",
+         "Roles": [ "Admin", "Site_Admin" ]
+       },
++      {
++        "Name": "Roles_List_For_Current_User",
++        "Roles": [ "User", "Admin", "Site_Admin" ]
++      },
+       // Ldap Domain
+       {
+         "Name": "LdapDomains_List",

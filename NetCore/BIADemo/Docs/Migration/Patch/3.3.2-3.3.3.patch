@@ -1,0 +1,1239 @@
+diff --git a/Angular-BIADemo-BIATemplate.ps1 b/Angular-BIADemo-BIATemplate.ps1
+index 2ea6a43..c6b8f21 100644
+--- a/Angular-BIADemo-BIATemplate.ps1
++++ b/Angular-BIADemo-BIATemplate.ps1
+@@ -127,8 +127,10 @@ Copy-Item -Path (Get-Item -Path "$oldPath\*" -Exclude ('dist', 'node_modules')).
+ 
+ Set-Location -Path ./Angular
+ 
++Write-Host "Zip plane"
++compress-archive -path '.\src\app\features\planes\*' -destinationpath '.\docs\feature-planes.zip' -compressionlevel optimal
+ Write-Host "Zip plane popup"
+-compress-archive -path '.\src\app\features\planes\*' -destinationpath '.\docs\feature-planes-popup.zip' -compressionlevel optimal
++compress-archive -path '.\src\app\features\planes-popup\*' -destinationpath '.\docs\feature-planes-popup.zip' -compressionlevel optimal
+ Write-Host "Zip plane page"
+ compress-archive -path '.\src\app\features\planes-page\*' -destinationpath '.\docs\feature-planes-page.zip' -compressionlevel optimal
+ Write-Host "Zip plane SignalR"
+@@ -157,6 +159,8 @@ Write-Host "RemoveFolder node_modules"
+ RemoveFolder -path 'node_modules'
+ Write-Host "RemoveFolder src\app\features\planes"
+ RemoveFolder -path 'src\app\features\planes'
++Write-Host "RemoveFolder src\app\features\planes-popup"
++RemoveFolder -path 'src\app\features\planes-popup'
+ Write-Host "RemoveFolder src\app\features\planes-page"
+ RemoveFolder -path 'src\app\features\planes-page'
+ Write-Host "RemoveFolder src\app\features\planes-view"
+diff --git a/Angular/docs/CRUD.md b/Angular/docs/CRUD_SPECIFIC_MODE.md
+similarity index 99%
+rename from Angular/docs/CRUD.md
+rename to Angular/docs/CRUD_SPECIFIC_MODE.md
+index 8a5fe3b..fb63f9a 100644
+--- a/Angular/docs/CRUD.md
++++ b/Angular/docs/CRUD_SPECIFIC_MODE.md
+@@ -22,7 +22,7 @@ For **new crud name? (singular)**, type <span style="background-color:yellow">ai
+ For **new crud name? (plural)**, type <span style="background-color:yellow">aircrafts</span>    (use - in complexe name example : planes-types)
+ When finished, you can delete **new-crud.ps1**   
+ 
+-## Update navigation
++## Update permission
+ Open the file **src\app\shared\permission.ts** and in the **Permission** enum, add
+ ```typescript
+   Aircraft_Create = 'Aircraft_Create',
+diff --git a/Angular/docs/CRUD_UNIVERSAL_MODE.md b/Angular/docs/CRUD_UNIVERSAL_MODE.md
+new file mode 100644
+index 0000000..2d0b5e4
+--- /dev/null
++++ b/Angular/docs/CRUD_UNIVERSAL_MODE.md
+@@ -0,0 +1,183 @@
++# CRUD
++This document explains how to quickly create a CRUD module feature universal.
++It means that you can switch this functionnalities:
++- Navigation in Page mode / Popup Mode
++- Use view / Not use view
++- Modification in the table / in dedicated form 
++- Refresh with SignalR / not use signalR
++  
++<u>For this example, we imagine that we want to create a new feature with the name: <span style="background-color:yellow">aircrafts-types</span>.   </u>
++
++## Prerequisite
++The back-end is ready, i.e. the <span style="background-color:yellow">AircraftType</span> controller exists as well as permissions such as `AircraftType_List_Access`.
++
++## Create a new feature
++First, create a new <span style="background-color:yellow">aircrafts-types</span> folder under the **src\app\features** folder of your project.   
++Then copy, paste and unzip into this feature <span style="background-color:yellow">aircrafts-types</span> folder the contents of :
++  * **Angular\docs\feature-planes.zip** Universal Mode 
++
++Then, inside the folder of your new feature, execute the file **new-crud.ps1**   
++For **new crud name? (singular)**, type <span style="background-color:yellow">aircraft-type</span> 
++For **new crud name? (plural)**, type <span style="background-color:yellow">aircrafts-types</span>
++When finished, you can delete **new-crud.ps1**   
++
++## Update permission
++Open the file **src\app\shared\permission.ts** and in the **Permission** enum, add
++```typescript
++  AircraftType_Create = 'AircraftType_Create',
++  AircraftType_Delete = 'AircraftType_Delete',
++  AircraftType_List_Access = 'AircraftType_List_Access',
++  AircraftType_Read = 'AircraftType_Read',
++  AircraftType_Save = 'AircraftType_Save',
++  AircraftType_Update = 'AircraftType_Update',
++```
++
++## Update navigation
++Open the file **src\app\shared\navigation.ts** and in the array **NAVIGATION**, add 
++```typescript
++{
++  labelKey: 'app.aircraftsTypes',
++  permissions: [Permission.AircraftType_List_Access],
++  path: ['/aircrafts-types']
++}
++```
++
++## Update routing
++Open the file **src\app\app-routing.module.ts** and in the array **routes**, add 
++```typescript
++{
++  path: 'aircrafts-types',
++  data: {
++    breadcrumb: 'app.aircraftsTypes',
++    canNavigate: true
++    },
++    loadChildren: () => import('./features/aircrafts/aircraft-type.module').then((m) => m.AircraftTypeModule)
++}
++```
++
++## Create the model
++Use the back-end with swagger to retrieve a json from the new entity <span style="background-color:yellow">AircraftType</span>.   
++Use this site to convert the json to interface TypeScript:   
++http://json2ts.com/   
++And then, copy the generated code in **src\app\features\aircrafts\model\aircraft-type.ts**
++
++If you have a related model you have 2 models to generate replace all any and object generated by OptionDto.
++
++## Update translations
++Open the file **src\assets\i18n\app\en.json** and   
++add in `"app"`
++```json
++"app": {
++    ...
++    "aircraftsType": "Aircrafts types"
++  }
++```
++add 
++```json
++"aircraftType": {
++  "add": "Add aircraft type",
++  "edit": "Edit aircraft type",
++  "listOf": "List of aircrafts types"
++  }
++```
++and add translations of interface properties.
++
++Open the file **src\assets\i18n\app\fr.json** and
++add in `"app"`
++```json
++"app": {
++    ...
++    "aircraftsType": "Type d'aéronefs"
++  }
++```
++add
++```json
++"aircraftType": {
++    "add": "Ajouter type d'aéronef",
++    "edit": "Modifier type d'aéronef",
++    "listOf": "Liste des types d'aéronefs"
++  }
++```
++and add translations of interface properties.
++
++Open the file **src\assets\i18n\app\es.json** and
++add in `"app"`
++```json
++"app": {
++    ...
++    "aircraftsType": "Aeronaves"
++  }
++```
++add
++```json
++"aircraftType": {
++   "add": "Añadir tipo de aeronave",
++    "edit": "Editar tipo de aeronave",
++    "listOf": "Lista de tipos de aeronaves"
++  }
++```
++and add translations of interface properties.
++
++When you have finished adding translations, use this site to sort your json:
++https://novicelab.org/jsonabc/
++
++## Form
++Change the following form component to match the model and the business requirements:
++**src\app\features\aircrafts-types\components\aircraft-type-form**
++
++## Table
++Open the following file **src\app\features\aircrafts\views\aircrafts-types-index\aircrafts-types-index.component.ts**   
++Change columns field of the `tableConfiguration` variable according to the columns in the table you want to display.   
++If it is a simple string type column with filter and possible sorting, then use this column line to define your column.
++```typescript
++new PrimeTableColumn('msn', 'aircraft.msn'),
++```
++If the column type is not a string, or if the column is not sortable, or not sortable, you must define the column as follows: 
++```typescript
++Object.assign(new PrimeTableColumn('msn', 'aircraft.msn'), {
++        isSearchable: false,
++        isSortable: false,
++        type: TypeTS.Number
++      })
++```
++
++## Relation to Option
++### Universal Mode
++* In universal mode the loading of the relations are done in **...OptionsService**
++* Adapt the lists to display in combo box in :
++  * the members of the classe, 
++  * the constructor 
++  * the function loadAllOptions.
++* The list should be OptionDto list in domain. See [this page](OPTION.md) to create the domain feature option.
++
++## Enable Views
++* Just change the variable useView = false; to useView = true; in the **...-index.component.ts**
++
++## Enable SignalR:
++* Just change the variable useSignalR = false; to useSignalR = true; in the **...-index.component.ts**
++
++## Spreadsheet mode
++* Just change the variable useCalc = false; to useCalc = true; in the **...-index.component.ts**
++
++### Specific Input
++For specific properties that are not managed by the Framework, your table component must have an html. In this html, you have to copy/paste the content of the html from **bia-calc-table.component.html**.
++
++In this html, you must add your components in the **SPECIFIC INPUT** zone and **SPECIFIC OUTPUT** zone.
++
++```html
++<!-- Begin Add here specific input -->
++<!-- End Add here specific input -->
++...
++<!-- Begin Add here specific output -->
++<!-- End Add here specific output -->
++```
++
++in your typescript file, you must fill the **specificInputs** property.
++
++``` typescript
++specificInputs: string[] = [
++    'potting',
++    'locking',
++    ...
++  ];
++```
+diff --git a/Angular/docs/NEW_PROJECT.md b/Angular/docs/NEW_PROJECT.md
+index 5ef0d72..5626a74 100644
+--- a/Angular/docs/NEW_PROJECT.md
++++ b/Angular/docs/NEW_PROJECT.md
+@@ -89,7 +89,6 @@ The component library chosen for this framework is [PrimeNG](https://www.primefa
+ If the content of this framework is not enough, please contact first [Jérémie Souques](mailto:jeremie.souques@thebiadevcompanygroup.com) before installing an npm package on your project.
+ 
+ ## Design / Layout
+-You can access [here](https://cgifrance.invisionapp.com/share/6CMNQJLWVQX#/screens/315722051) to the graphic charter. (password: TheBIADevCompany)<br />
+ If you need to modify the PrimeNG component design, you can modify the following file: src\scss\\_app-custom-theme.scss   
+ For example you can change the row/cell size of the tables by changing the following `padding` property:
+ ``` scss
+diff --git a/Angular/docs/feature-airports.zip b/Angular/docs/feature-airports.zip
+index cf0dbbe..6cace1c 100644
+Binary files a/Angular/docs/feature-airports.zip and b/Angular/docs/feature-airports.zip differ
+diff --git a/Angular/docs/feature-planes-SignalR.zip b/Angular/docs/feature-planes-SignalR.zip
+index 8c1d4de..c863c6b 100644
+Binary files a/Angular/docs/feature-planes-SignalR.zip and b/Angular/docs/feature-planes-SignalR.zip differ
+diff --git a/Angular/docs/feature-planes-calc.zip b/Angular/docs/feature-planes-calc.zip
+index d4d807c..881b0ca 100644
+Binary files a/Angular/docs/feature-planes-calc.zip and b/Angular/docs/feature-planes-calc.zip differ
+diff --git a/Angular/docs/feature-planes-page.zip b/Angular/docs/feature-planes-page.zip
+index 9cb4f1b..fefc44e 100644
+Binary files a/Angular/docs/feature-planes-page.zip and b/Angular/docs/feature-planes-page.zip differ
+diff --git a/Angular/docs/feature-planes-popup.zip b/Angular/docs/feature-planes-popup.zip
+index 12a231d..698b065 100644
+Binary files a/Angular/docs/feature-planes-popup.zip and b/Angular/docs/feature-planes-popup.zip differ
+diff --git a/Angular/docs/feature-planes-view.zip b/Angular/docs/feature-planes-view.zip
+index 3170364..5ef1b1b 100644
+Binary files a/Angular/docs/feature-planes-view.zip and b/Angular/docs/feature-planes-view.zip differ
+diff --git a/Angular/docs/feature-planes.zip b/Angular/docs/feature-planes.zip
+new file mode 100644
+index 0000000..e37b718
+Binary files /dev/null and b/Angular/docs/feature-planes.zip differ
+diff --git a/Angular/src/app/core/bia-core/services/bia-injector.service.ts b/Angular/src/app/core/bia-core/services/bia-injector.service.ts
+new file mode 100644
+index 0000000..6d1ed91
+--- /dev/null
++++ b/Angular/src/app/core/bia-core/services/bia-injector.service.ts
+@@ -0,0 +1,20 @@
++
++import {
++  ComponentFactoryResolver,
++  ComponentRef,
++  Injectable,
++  Type,
++  ViewContainerRef
++} from '@angular/core';
++@Injectable({
++  providedIn: 'root'
++})
++export class BiaInjectorService {
++  constructor(private factoryResolver: ComponentFactoryResolver) {
++    this.factoryResolver = factoryResolver;
++  }
++  addDynamicComponent<T>(viewContainerRef: ViewContainerRef, componentType: Type<T>): ComponentRef<T> {
++    const factory = this.factoryResolver.resolveComponentFactory(componentType);
++    return viewContainerRef.createComponent(factory);
++  }
++}
+diff --git a/Angular/src/app/core/bia-core/services/bia-signalr.service.ts b/Angular/src/app/core/bia-core/services/bia-signalr.service.ts
+index a724f5b..628299d 100644
+--- a/Angular/src/app/core/bia-core/services/bia-signalr.service.ts
++++ b/Angular/src/app/core/bia-core/services/bia-signalr.service.ts
+@@ -23,24 +23,45 @@ export class BiaSignalRService {
+    * without having to redefine every needed event and data structure in the domain.
+    */
+   private readonly hubConnection: HubConnection;
+-
+-  /**
+-   * Retrieve the hubConnection instance.
+-   */
+-  public getHubConnection() {
+-    return this.hubConnection;
+-  }
++  private methods: string[];
++  private isStarted: boolean;
+ 
+   /**
+    * Constructor.
+    */
+   public constructor() {
+-    this.hubConnection = new HubConnectionBuilder()
+-      .withUrl(environment.hubUrl)
+-      .build();
++    this.hubConnection = new HubConnectionBuilder().withUrl(environment.hubUrl).build();
+ 
+     this.configureConnection();
+-    this.startConnection();
++
++    this.methods = [];
++    this.isStarted = false;
++  }
++
++  public addMethod(methodName: string, newMethod: (...args: any[]) => void): void {
++    this.hubConnection.on(methodName, newMethod);
++    if (this.methods.indexOf(methodName) < 0) {
++      this.methods.push(methodName);
++    }
++    if (!this.isStarted) {
++      this.isStarted = true;
++      this.startConnection();
++    }
++  }
++
++  public removeMethod(methodName: string): void {
++    this.hubConnection.off(methodName);
++    if (this.methods.indexOf(methodName) > -1) {
++      this.methods.splice(this.methods.indexOf(methodName), 1);
++    }
++
++    // We wait 500ms before stop the connection, to not do it if it is use in next screen
++    setTimeout(() => {
++      if (this.methods.length === 0) {
++        this.isStarted = false;
++        this.hubConnection.stop();
++      }
++    }, 500);
+   }
+ 
+   /**
+@@ -48,8 +69,14 @@ export class BiaSignalRService {
+    */
+   private configureConnection(): void {
+     this.hubConnection.onclose(async () => {
+-      console.log('%c [SignalRService] Hub connection closed. Try restarting it...', 'color: red; font-weight: bold');
+-      setTimeout(e => { this.startConnection(); }, 5000);
++      if (this.isStarted) {
++        console.log('%c [SignalRService] Hub connection closed. Try restarting it...', 'color: red; font-weight: bold');
++        setTimeout((e) => {
++          this.startConnection();
++        }, 5000);
++      } else {
++        console.log('%c [SignalRService] Hub connection stoped', 'color: blue; font-weight: bold');
++      }
+     });
+   }
+ 
+@@ -63,9 +90,20 @@ export class BiaSignalRService {
+         console.log('%c [SignalRService] Hub connection started', 'color: blue; font-weight: bold');
+       })
+       .catch((err: string) => {
+-        console.log('%c [SignalRService] Error while establishing connection, retrying...' + err,
+-          'color: red; font-weight: bold');
+-        setTimeout(e => { this.startConnection(); }, 5000);
++        if (this.isStarted) {
++          console.log(
++            '%c [SignalRService] Error while establishing connection, retrying...' + err,
++            'color: red; font-weight: bold'
++          );
++          setTimeout((e) => {
++            this.startConnection();
++          }, 5000);
++        } else {
++          console.log(
++            '%c [SignalRService] Hub connection stoped before establishing connection.',
++            'color: blue; font-weight: bold'
++          );
++        }
+       });
+   }
+ }
+diff --git a/Angular/src/app/features/sites/children/members/views/member-edit-dialog/member-edit-dialog.component.html b/Angular/src/app/features/sites/children/members/views/member-edit-dialog/member-edit-dialog.component.html
+index 48f4cf7..c9eae91 100644
+--- a/Angular/src/app/features/sites/children/members/views/member-edit-dialog/member-edit-dialog.component.html
++++ b/Angular/src/app/features/sites/children/members/views/member-edit-dialog/member-edit-dialog.component.html
+@@ -6,7 +6,7 @@
+   [responsive]="true"
+   [maximizable]="true"
+   [style]="{ minWidth: '40vw' }"
+-  [contentStyle]="{ overflow: 'visible' }"
++  [contentStyle]="{ overflow: 'auto' }"
+ >
+   <p-header>
+     {{ 'member.manage' | translate }}
+diff --git a/Angular/src/app/features/sites/children/members/views/member-new-dialog/member-new-dialog.component.html b/Angular/src/app/features/sites/children/members/views/member-new-dialog/member-new-dialog.component.html
+index 80db4ba..abc7fb5 100644
+--- a/Angular/src/app/features/sites/children/members/views/member-new-dialog/member-new-dialog.component.html
++++ b/Angular/src/app/features/sites/children/members/views/member-new-dialog/member-new-dialog.component.html
+@@ -6,7 +6,7 @@
+   [responsive]="true"
+   [maximizable]="true"
+   [style]="{ minWidth: '40vw' }"
+-  [contentStyle]="{'overflow': 'visible'}"
++  [contentStyle]="{'overflow': 'auto'}"
+ >
+   <p-header>
+     {{ 'member.add' | translate }}
+diff --git a/Angular/src/app/features/sites/views/site-edit-dialog/site-edit-dialog.component.html b/Angular/src/app/features/sites/views/site-edit-dialog/site-edit-dialog.component.html
+index 75af7b3..f90350d 100644
+--- a/Angular/src/app/features/sites/views/site-edit-dialog/site-edit-dialog.component.html
++++ b/Angular/src/app/features/sites/views/site-edit-dialog/site-edit-dialog.component.html
+@@ -6,7 +6,7 @@
+   [responsive]="true"
+   [maximizable]="true"
+   [style]="{ minWidth: '50vw' }"
+-  [contentStyle]="{ overflow: 'visible' }"
++  [contentStyle]="{ overflow: 'auto' }"
+ >
+   <p-header>
+     {{ 'site.edit' | translate }}
+diff --git a/Angular/src/app/features/sites/views/site-new-dialog/site-new-dialog.component.html b/Angular/src/app/features/sites/views/site-new-dialog/site-new-dialog.component.html
+index 590fa91..55fc29e 100644
+--- a/Angular/src/app/features/sites/views/site-new-dialog/site-new-dialog.component.html
++++ b/Angular/src/app/features/sites/views/site-new-dialog/site-new-dialog.component.html
+@@ -6,7 +6,7 @@
+   [responsive]="true"
+   [maximizable]="true"
+   [style]="{ minWidth: '50vw' }"
+-  [contentStyle]="{'overflow': 'visible'}"
++  [contentStyle]="{'overflow': 'auto'}"
+ >
+   <p-header>
+     {{ 'site.add' | translate }}
+diff --git a/Angular/src/app/features/users/views/user-new-dialog/user-new-dialog.component.html b/Angular/src/app/features/users/views/user-new-dialog/user-new-dialog.component.html
+index ce710a9..1f654c7 100644
+--- a/Angular/src/app/features/users/views/user-new-dialog/user-new-dialog.component.html
++++ b/Angular/src/app/features/users/views/user-new-dialog/user-new-dialog.component.html
+@@ -6,7 +6,7 @@
+   [responsive]="true"
+   [maximizable]="true"
+   [style]="{ minWidth: '50vw' }"
+-  [contentStyle]="{ overflow: 'visible' }"
++  [contentStyle]="{ overflow: 'auto' }"
+ >
+   <p-header>
+     {{ 'user.add' | translate }}
+diff --git a/Angular/src/app/shared/bia-shared/bia-shared.module.ts b/Angular/src/app/shared/bia-shared/bia-shared.module.ts
+index 3ef7ea3..a5c1fbb 100644
+--- a/Angular/src/app/shared/bia-shared/bia-shared.module.ts
++++ b/Angular/src/app/shared/bia-shared/bia-shared.module.ts
+@@ -80,6 +80,10 @@ import { ViewsEffects } from './features/view/store/views-effects';
+ import { ViewFormComponent } from './features/view/components/view-form/view-form.component';
+ import { BiaCalcTableComponent } from './components/table/bia-calc-table/bia-calc-table.component';
+ import { TranslateRoleLabelPipe } from './pipes/translate-role-label.pipe';
++import { PopupLayoutComponent } from './components/layout/popup-layout/popup-layout.component';
++import { FullPageLayoutComponent } from './components/layout/fullpage-layout/fullpage-layout.component';
++import { PluckPipe } from './pipes/pluck.pipe';
++import { JoinPipe } from './pipes/join.pipe';
+ 
+ const PRIMENG_MODULES = [
+   AutoCompleteModule,
+@@ -151,6 +155,8 @@ const COMPONENTS = [
+   BiaTableControllerComponent,
+   LayoutComponent,
+   PageLayoutComponent,
++  PopupLayoutComponent,
++  FullPageLayoutComponent,
+   PrimengCalendarLocaleDirective
+ ];
+ 
+@@ -163,7 +169,9 @@ const VIEW_COMPONENTS = [
+ ];
+ 
+ const PIPES = [
+-  TranslateRoleLabelPipe
++  TranslateRoleLabelPipe,
++  PluckPipe,
++  JoinPipe
+ ];
+ 
+ const VIEW_IMPORTS = [StoreModule.forFeature('views', reducers), EffectsModule.forFeature([ViewsEffects])];
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/fullpage-layout/fullpage-layout.component.html b/Angular/src/app/shared/bia-shared/components/layout/fullpage-layout/fullpage-layout.component.html
+new file mode 100644
+index 0000000..edf24af
+--- /dev/null
++++ b/Angular/src/app/shared/bia-shared/components/layout/fullpage-layout/fullpage-layout.component.html
+@@ -0,0 +1,4 @@
++<div [(hidden)]="!this.displayPageComponent"  style="width: 100%;">
++  <ng-template #dynamic></ng-template>
++</div>
++<router-outlet></router-outlet>
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/fullpage-layout/fullpage-layout.component.ts b/Angular/src/app/shared/bia-shared/components/layout/fullpage-layout/fullpage-layout.component.ts
+new file mode 100644
+index 0000000..6501a33
+--- /dev/null
++++ b/Angular/src/app/shared/bia-shared/components/layout/fullpage-layout/fullpage-layout.component.ts
+@@ -0,0 +1,84 @@
++import { AfterViewInit, ComponentRef, HostBinding, OnInit, ViewContainerRef } from '@angular/core';
++import { OnDestroy } from '@angular/core';
++import { ViewChild } from '@angular/core';
++import { Component } from '@angular/core';
++import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router } from '@angular/router';
++import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
++import { filter } from 'rxjs/operators';
++import { BiaInjectorService } from 'src/app/core/bia-core/services/bia-injector.service';
++
++@Component({
++  selector: 'full-page-layout',
++  templateUrl: './fullpage-layout.component.html',
++})
++export class FullPageLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
++  @ViewChild('dynamic', {
++    read: ViewContainerRef
++  }) viewContainerRef: ViewContainerRef;
++
++  constructor(
++    public activatedRoute: ActivatedRoute,
++    private router: Router,
++    private serviceInjector: BiaInjectorService
++  ) {
++  }
++
++  public $displayPageComponent: BehaviorSubject<boolean>;
++  public displayPageComponent: boolean;
++  protected dynamicComponent: ComponentRef<any>;
++  @HostBinding('class.bia-flex') flex = true;
++
++  ngOnInit() {
++    this.$displayPageComponent = new BehaviorSubject<boolean>(true);
++    this.displayPageComponent = true;
++    this.checkVisibility();
++    this.router.events.pipe(
++      filter(event => event instanceof NavigationEnd)
++    ).subscribe(() => {
++      this.checkVisibility();
++    });
++  }
++
++  checkVisibility() {
++    const snapshot = this.activatedRoute.snapshot;
++    let child: ActivatedRouteSnapshot | null;
++    child = snapshot.firstChild;
++    let hasFullPageChild = false;
++    while (child) {
++      if (child.component === FullPageLayoutComponent) {
++        hasFullPageChild = true;
++        break;
++      }
++      child = child?.firstChild;
++    }
++    if (hasFullPageChild === this.$displayPageComponent.value) {
++      this.$displayPageComponent.next(!hasFullPageChild);
++      this.displayPageComponent = !hasFullPageChild;
++    }
++  }
++  ngAfterViewInit() {
++    this.$displayPageComponent.subscribe(() => {
++      const snapshot = this.activatedRoute.snapshot;
++      if (this.$displayPageComponent.value && this.dynamicComponent === undefined) {
++        setTimeout(() => {
++          this.dynamicComponent = this.serviceInjector.addDynamicComponent(this.viewContainerRef, snapshot.data['InjectComponent']);
++        }, 0);
++      } else {
++        if (this.dynamicComponent !== undefined) {
++          if (this.$displayPageComponent.value) {
++            this.dynamicComponent.instance.OnDisplay();
++          } else {
++            this.dynamicComponent.instance.OnHide();
++          }
++        }
++        // if( this.dynamicComponent !== undefined ) this.dynamicComponent.destroy();
++      }
++    });
++  }
++  ngOnDestroy() {
++    if (this.dynamicComponent !== undefined) {
++      this.dynamicComponent.destroy();
++    }
++  }
++
++}
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/layout.component.ts b/Angular/src/app/shared/bia-shared/components/layout/layout.component.ts
+index a6417b0..8a8ad41 100644
+--- a/Angular/src/app/shared/bia-shared/components/layout/layout.component.ts
++++ b/Angular/src/app/shared/bia-shared/components/layout/layout.component.ts
+@@ -1,6 +1,6 @@
+ import { Component, HostBinding, Inject, OnInit } from '@angular/core';
+ import { environment } from 'src/environments/environment';
+-import { APP_SUPPORTED_TRANSLATIONS, THEME_LIGHT, THEME_DARK } from '../../../constants';
++import { APP_SUPPORTED_TRANSLATIONS } from '../../../constants';
+ import { AuthInfo } from '../../model/auth-info';
+ import { AuthService } from 'src/app/core/bia-core/services/auth.service';
+ import { BiaThemeService } from 'src/app/core/bia-core/services/bia-theme.service';
+@@ -123,12 +123,17 @@ export class LayoutComponent implements OnInit {
+   }
+ 
+   private initHeaderLogos() {
++    this.headerLogos = [
++      'assets/bia/Company.png',
++      `assets/bia/Division.gif`
++    ];
++    /* If image change with the theme :
+     this.biaThemeService.isCurrentThemeDark$.subscribe((isThemeDark) => {
+       this.headerLogos = [
+         'assets/bia/Company.png',
+         `assets/bia/themes/${isThemeDark !== true ? THEME_LIGHT : THEME_DARK}/img/Division.gif`
+       ];
+-    });
++    });*/
+   }
+ 
+   private setAllParamByUserInfo() {
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/popup-layout/popup-layout.component.html b/Angular/src/app/shared/bia-shared/components/layout/popup-layout/popup-layout.component.html
+new file mode 100644
+index 0000000..ec2a5c3
+--- /dev/null
++++ b/Angular/src/app/shared/bia-shared/components/layout/popup-layout/popup-layout.component.html
+@@ -0,0 +1,16 @@
++<p-dialog
++[focusOnShow]="false"
++[visible]="true"
++[modal]="true"
++[closable]="false"
++[responsive]="true"
++[maximizable]="this.maximizable"
++[style]="this.style"
++[contentStyle]="{'overflow': 'auto'}"
++>
++<p-header>
++  {{ this.popupTitle | translate}}
++</p-header>
++  <ng-template #dynamic></ng-template>
++</p-dialog> 
++<router-outlet></router-outlet>
+\ No newline at end of file
+diff --git a/Angular/src/app/shared/bia-shared/components/layout/popup-layout/popup-layout.component.ts b/Angular/src/app/shared/bia-shared/components/layout/popup-layout/popup-layout.component.ts
+new file mode 100644
+index 0000000..a47d209
+--- /dev/null
++++ b/Angular/src/app/shared/bia-shared/components/layout/popup-layout/popup-layout.component.ts
+@@ -0,0 +1,58 @@
++import {
++  AfterViewInit,
++  ComponentRef,
++  HostBinding,
++  OnDestroy,
++  OnInit,
++  ViewChild,
++  ViewContainerRef
++} from '@angular/core';
++import { Component } from '@angular/core';
++import { ActivatedRoute } from '@angular/router';
++import { BiaInjectorService } from 'src/app/core/bia-core/services/bia-injector.service';
++
++@Component({
++  selector: 'popup-layout',
++  templateUrl: './popup-layout.component.html'
++})
++export class PopupLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
++  @ViewChild('dynamic', {
++    read: ViewContainerRef
++  })
++  viewContainerRef: ViewContainerRef;
++
++  constructor(public activatedRoute: ActivatedRoute, private serviceInjector: BiaInjectorService) {}
++  protected dynamicComponent: ComponentRef<any>;
++
++  popupTitle: string;
++  style: any;
++  maximizable: boolean;
++  @HostBinding('class.bia-flex') flex = true;
++
++  ngOnInit() {
++    const snapshot = this.activatedRoute.snapshot;
++
++    this.popupTitle = snapshot.data['title'];
++    this.style = { minWidth: '50vw' };
++    if (snapshot.data['style']) {
++      this.style = snapshot.data['style'];
++    }
++    this.maximizable = true;
++    if (snapshot.data['maximizable']) {
++      this.maximizable = snapshot.data['maximizable'];
++    }
++  }
++  ngAfterViewInit() {
++    setTimeout(() => {
++      this.dynamicComponent = this.serviceInjector.addDynamicComponent(
++        this.viewContainerRef,
++        this.activatedRoute.snapshot.data['InjectComponent']
++      );
++    }, 0);
++  }
++  ngOnDestroy() {
++    if (this.dynamicComponent !== undefined) {
++      this.dynamicComponent.destroy();
++    }
++  }
++}
+diff --git a/Angular/src/app/shared/bia-shared/components/table/bia-calc-table/bia-calc-table.component.ts b/Angular/src/app/shared/bia-shared/components/table/bia-calc-table/bia-calc-table.component.ts
+index 0300db9..7dc4ae2 100644
+--- a/Angular/src/app/shared/bia-shared/components/table/bia-calc-table/bia-calc-table.component.ts
++++ b/Angular/src/app/shared/bia-shared/components/table/bia-calc-table/bia-calc-table.component.ts
+@@ -62,20 +62,16 @@ export class BiaCalcTableComponent extends BiaTableComponent implements OnInit {
+   public onElementsChange(changes: SimpleChanges) {
+     super.onElementsChange(changes);
+     if (changes.elements && this.table) {
+-      if (this.selectedElements && this.selectedElements.length > 0 && this.elements) {
+-        this.selectedElements = this.elements.filter((x) => this.selectedElements.some((y) => x.id === y.id));
+-      } else {
+-        this.selectedElements = [];
+-      }
+       if (this.elements && this.canAdd === true) {
+         this.addFooterEmptyObject();
+       }
+-      this.onSelectionChange();
+     }
+   }
+ 
+   public addFooterEmptyObject() {
+-    this.elements = [...this.elements, { id: 0 }];
++    if (this.elements.filter(el => el.id === 0).length === 0) {
++      this.elements = [...this.elements, { id: 0 }];
++    }
+   }
+ 
+   public initForm() {
+diff --git a/Angular/src/app/shared/bia-shared/components/table/bia-table-controller/bia-table-controller.component.ts b/Angular/src/app/shared/bia-shared/components/table/bia-table-controller/bia-table-controller.component.ts
+index 6082f29..a4b8193 100644
+--- a/Angular/src/app/shared/bia-shared/components/table/bia-table-controller/bia-table-controller.component.ts
++++ b/Angular/src/app/shared/bia-shared/components/table/bia-table-controller/bia-table-controller.component.ts
+@@ -85,7 +85,7 @@ export class BiaTableControllerComponent implements OnChanges, OnInit, OnDestroy
+ 
+   onViewChange(event: string) {
+     this.setControlByViewState(event);
+-    this.viewChange.emit(event);
++    setTimeout(() => this.viewChange.emit(event));
+   }
+ 
+   private onColumnsChange(changes: SimpleChanges) {
+diff --git a/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.html b/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.html
+index 64f6cec..d4d145b 100644
+--- a/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.html
++++ b/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.html
+@@ -58,11 +58,19 @@
+         <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+       </td>
+       <td (click)="editElement(rowData.id)" *ngFor="let col of columns">
+-        <ng-container *ngIf="col.type === 'Boolean'">
+-          <i class="ui-icon-check" *ngIf="rowData[col.field] === true"></i>
+-        </ng-container>
+-        <ng-container *ngIf="col.type !== 'Boolean'">
+-          {{ col.isDate === true ? (rowData[col.field] | date: col.formatDate) : rowData[col.field] }}
++        <ng-container [ngSwitch]="col.type">
++          <ng-container *ngSwitchCase="'OneToMany'">
++            {{ rowData[col.field]?.display }}
++          </ng-container>
++          <ng-container *ngSwitchCase="'ManyToMany'">
++            {{ rowData[col.field] | pluck:"display" | join:", " }}
++          </ng-container>
++          <ng-container *ngSwitchCase="'Boolean'">
++            <i class="ui-icon-check" *ngIf="rowData[col.field] === true"></i>
++          </ng-container>
++          <ng-container *ngSwitchDefault>
++            {{ col.isDate === true ? (rowData[col.field] | date: col.formatDate) : rowData[col.field] }}
++          </ng-container>
+         </ng-container>
+       </td>
+     </tr>
+diff --git a/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.ts b/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.ts
+index 27876a4..b13eb37 100644
+--- a/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.ts
++++ b/Angular/src/app/shared/bia-shared/components/table/bia-table/bia-table.component.ts
+@@ -198,11 +198,11 @@ export class BiaTableComponent implements OnChanges {
+   }
+ 
+   onLoadLazy(event: LazyLoadEvent) {
+-    this.loadLazy.emit(event);
++    setTimeout(() => this.loadLazy.emit(event), 0);
+   }
+ 
+   onSelectionChange() {
+-    this.selectedElementsChanged.next(this.selectedElements);
++    setTimeout(() => this.selectedElementsChanged.next(this.selectedElements), 0);
+   }
+ 
+   onStateSave(state: TableState) {
+diff --git a/Angular/src/app/shared/bia-shared/features/view/views/view-dialog/view-dialog.component.html b/Angular/src/app/shared/bia-shared/features/view/views/view-dialog/view-dialog.component.html
+index 5ab4c3e..18bfb56 100644
+--- a/Angular/src/app/shared/bia-shared/features/view/views/view-dialog/view-dialog.component.html
++++ b/Angular/src/app/shared/bia-shared/features/view/views/view-dialog/view-dialog.component.html
+@@ -6,7 +6,7 @@
+   [closable]="true"
+   [responsive]="true"
+   [maximizable]="true"
+-  [contentStyle]="{ overflow: 'visible' }"
++  [contentStyle]="{ overflow: 'auto' }"
+   (onHide)="onClose()"
+   (onShow)="showDialogMaximized(viewDialog)"
+ >
+diff --git a/Angular/src/app/shared/bia-shared/features/view/views/view-list/view-list.component.ts b/Angular/src/app/shared/bia-shared/features/view/views/view-list/view-list.component.ts
+index 813aa51..078d2ae 100644
+--- a/Angular/src/app/shared/bia-shared/features/view/views/view-list/view-list.component.ts
++++ b/Angular/src/app/shared/bia-shared/features/view/views/view-list/view-list.component.ts
+@@ -32,7 +32,7 @@ export class ViewListComponent implements OnInit, OnDestroy {
+     private store: Store<AppState>,
+     public translateService: TranslateService,
+     private authService: AuthService
+-  ) {}
++  ) { }
+ 
+   ngOnInit() {
+     const dataLoaded$ = this.store.pipe(select(getDataLoaded));
+@@ -64,6 +64,13 @@ export class ViewListComponent implements OnInit, OnDestroy {
+     if (this.sub) {
+       this.sub.unsubscribe();
+     }
++
++    const defaultView = this.views.find((v) => v.id === this.defaultView);
++    if (defaultView) {
++      sessionStorage.setItem(this.tableStateKey, defaultView.preference);
++    } else {
++      sessionStorage.removeItem(this.tableStateKey);
++    }
+   }
+ 
+   onViewChange(event: any) {
+@@ -129,7 +136,7 @@ export class ViewListComponent implements OnInit, OnDestroy {
+ 
+   private updateFilterValues(preference?: string | null) {
+     if (preference) {
+-      this.selectedView = -1;
++      this.selectedView = this.defaultView;
+       this.viewChange.emit(preference);
+     } else {
+       if (this.selectedView > 0) {
+diff --git a/Angular/src/app/shared/bia-shared/framework-version.ts b/Angular/src/app/shared/bia-shared/framework-version.ts
+index 2fb4110..12d2e9b 100644
+--- a/Angular/src/app/shared/bia-shared/framework-version.ts
++++ b/Angular/src/app/shared/bia-shared/framework-version.ts
+@@ -1 +1 @@
+-export const FRAMEWORK_VERSION = '3.3.2';
++export const FRAMEWORK_VERSION = '3.3.3';
+diff --git a/Angular/src/app/shared/bia-shared/pipes/join.pipe.ts b/Angular/src/app/shared/bia-shared/pipes/join.pipe.ts
+new file mode 100644
+index 0000000..5f14631
+--- /dev/null
++++ b/Angular/src/app/shared/bia-shared/pipes/join.pipe.ts
+@@ -0,0 +1,10 @@
++import { Pipe, PipeTransform } from '@angular/core';
++
++@Pipe({
++  name: 'join'
++})
++export class JoinPipe implements PipeTransform {
++  transform(input: Array<any>, sep = ','): string {
++    return input.join(sep);
++  }
++}
+diff --git a/Angular/src/app/shared/bia-shared/pipes/pluck.pipe.ts b/Angular/src/app/shared/bia-shared/pipes/pluck.pipe.ts
+new file mode 100644
+index 0000000..ddb0b33
+--- /dev/null
++++ b/Angular/src/app/shared/bia-shared/pipes/pluck.pipe.ts
+@@ -0,0 +1,8 @@
++import { Pipe, PipeTransform } from '@angular/core';
++
++@Pipe({ name: 'pluck' })
++export class PluckPipe implements PipeTransform {
++  transform(input: any[], key: string): any {
++    return input.map(value => value[key]);
++  }
++}
+diff --git a/Angular/src/assets/bia/themes/dark/img/Division.gif b/Angular/src/assets/bia/Division.gif
+similarity index 100%
+rename from Angular/src/assets/bia/themes/dark/img/Division.gif
+rename to Angular/src/assets/bia/Division.gif
+diff --git a/Angular/src/assets/bia/themes/light/img/Division.gif b/Angular/src/assets/bia/themes/light/img/Division.gif
+deleted file mode 100644
+index 935a189..0000000
+Binary files a/Angular/src/assets/bia/themes/light/img/Division.gif and /dev/null differ
+diff --git a/Angular/src/environments/environment.prod.ts b/Angular/src/environments/environment.prod.ts
+index 916f794..60c088d 100644
+--- a/Angular/src/environments/environment.prod.ts
++++ b/Angular/src/environments/environment.prod.ts
+@@ -15,7 +15,7 @@ export const environment = {
+   production: true,
+   appTitle: 'BIATemplate',
+   companyName: 'TheBIADevCompany',
+-  version: '1.3.2',
++  version: '1.3.3',
+   logging: {
+     conf: {
+       serverLoggingUrl: '../WebApi/api/logs',
+diff --git a/Angular/src/environments/environment.ts b/Angular/src/environments/environment.ts
+index 24e669e..5362419 100644
+--- a/Angular/src/environments/environment.ts
++++ b/Angular/src/environments/environment.ts
+@@ -15,7 +15,7 @@ export const environment = {
+   production: false,
+   appTitle: 'BIATemplate',
+   companyName: 'TheBIADevCompany',
+-  version: '1.3.2',
++  version: '1.3.3',
+   logging: {
+     conf: {
+       serverLoggingUrl: 'http://localhost/BIATemplate/WebApi/api/logs',
+diff --git a/Docs/PACKAGING.md b/Docs/PACKAGING.md
+index a180d13..818ff8e 100644
+--- a/Docs/PACKAGING.md
++++ b/Docs/PACKAGING.md
+@@ -87,7 +87,7 @@
+ ## Store the BIAExtensions in BIADemo repository
+ - In folder ..\BIADemo\Docs\BIAExtension create a new folder VX.Y.Z with (X.Y.Z = version)
+ - Move the generated file **...\BIADemo\Docs\BIAExtension\BIA.ProjectCreator.vsix** to  **...\BIADemo\Docs\BIAExtension\VX.Y.Z\BIA.ProjectCreator.X.Y.Z.vsix**
+-- Zip the **...\BIATemplate\Angular** folder to  **...\BIADemo\Docs\BIAExtension\VX.Y.Z\BIA.AngularTemplate.X.Y.Z.zip**
++- Zip the **...\BIATemplate\Angular** folder (after delete node_modules) to  **...\BIADemo\Docs\BIAExtension\VX.Y.Z\BIA.AngularTemplate.X.Y.Z.zip**
+ - COMMIT the BIADemo repository.
+ 
+ ## Deliver the version
+diff --git a/DotNet/TheBIADevCompany.ruleset b/DotNet/BIA.ruleset
+similarity index 100%
+rename from DotNet/TheBIADevCompany.ruleset
+rename to DotNet/BIA.ruleset
+diff --git a/DotNet/BIATemplate.sln b/DotNet/BIATemplate.sln
+index e210032..7cbe630 100644
+--- a/DotNet/BIATemplate.sln
++++ b/DotNet/BIATemplate.sln
+@@ -34,6 +34,7 @@ EndProject
+ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdditionalFiles", "AdditionalFiles", "{25ADA917-6580-4F47-A856-CF04AB8CE7B7}"
+ 	ProjectSection(SolutionItems) = preProject
+ 		.gitignore = .gitignore
++		BIA.ruleset = BIA.ruleset
+ 		CHANGELOG.md = CHANGELOG.md
+ 		Directory.Build.props = Directory.Build.props
+ 		README.md = README.md
+diff --git a/DotNet/CHANGELOG.md b/DotNet/CHANGELOG.md
+index 0a0a4bc..585e8e8 100644
+--- a/DotNet/CHANGELOG.md
++++ b/DotNet/CHANGELOG.md
+@@ -1,3 +1,5 @@
++### [3.3.3] (2021-06-25)
++* Universal Mode for CRUD.
+ ### [3.3.2] (2021-05-28)
+ * Possibility for the user to choice his role.
+ * Click on site open manage member.
+diff --git a/DotNet/Directory.Build.props b/DotNet/Directory.Build.props
+index 3abcaee..0e129b8 100644
+--- a/DotNet/Directory.Build.props
++++ b/DotNet/Directory.Build.props
+@@ -1,11 +1,11 @@
+ <Project>
+ 
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+-    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)TheBIADevCompany.ruleset</CodeAnalysisRuleSet>
++    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)BIA.ruleset</CodeAnalysisRuleSet>
+   </PropertyGroup>
+ 
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+-    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)TheBIADevCompany.ruleset</CodeAnalysisRuleSet>
++    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)BIA.ruleset</CodeAnalysisRuleSet>
+   </PropertyGroup>
+ 
+   <ItemGroup>
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Application/User/RoleAppService.cs b/DotNet/TheBIADevCompany.BIATemplate.Application/User/RoleAppService.cs
+index e607ed6..7d7fe14 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Application/User/RoleAppService.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Application/User/RoleAppService.cs
+@@ -28,6 +28,7 @@ namespace TheBIADevCompany.BIATemplate.Application.User
+         /// Initializes a new instance of the <see cref="RoleAppService"/> class.
+         /// </summary>
+         /// <param name="repository">The repository.</param>
++        /// <param name="principal">The principal.</param>
+         public RoleAppService(ITGenericRepository<Role> repository, IPrincipal principal)
+             : base(repository)
+         {
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/Constants.cs b/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/Constants.cs
+index 1bac71f..a9f7aa1 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/Constants.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/Constants.cs
+@@ -17,17 +17,17 @@ namespace TheBIADevCompany.BIATemplate.Crosscutting.Common
+             /// <summary>
+             /// The back end version.
+             /// </summary>
+-            public const string BackEndVersion = "1.3.2";
++            public const string BackEndVersion = "1.3.3";
+ 
+             /// <summary>
+             /// The front end version.
+             /// </summary>
+-            public const string FrontEndVersion = "1.3.2";
++            public const string FrontEndVersion = "1.3.3";
+ 
+             /// <summary>
+             /// The framework version.
+             /// </summary>
+-            public const string FrameworkVersion = "3.3.2";
++            public const string FrameworkVersion = "3.3.3";
+         }
+ 
+         /// <summary>
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/TheBIADevCompany.BIATemplate.Crosscutting.Common.csproj b/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/TheBIADevCompany.BIATemplate.Crosscutting.Common.csproj
+index 46a7db1..5dfb052 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/TheBIADevCompany.BIATemplate.Crosscutting.Common.csproj
++++ b/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Common/TheBIADevCompany.BIATemplate.Crosscutting.Common.csproj
+@@ -7,7 +7,7 @@
+   </PropertyGroup>
+ 
+   <ItemGroup>
+-    <PackageReference Include="BIA.Net.Core.Common" Version="3.3.0" />
++    <PackageReference Include="BIA.Net.Core.Common" Version="3.3.3" />
+     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+     <PackageReference Include="System.Security.Principal.Windows" Version="4.7.0" />
+   </ItemGroup>
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Ioc/TheBIADevCompany.BIATemplate.Crosscutting.Ioc.csproj b/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Ioc/TheBIADevCompany.BIATemplate.Crosscutting.Ioc.csproj
+index d01d3f0..e5d4a3b 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Ioc/TheBIADevCompany.BIATemplate.Crosscutting.Ioc.csproj
++++ b/DotNet/TheBIADevCompany.BIATemplate.Crosscutting.Ioc/TheBIADevCompany.BIATemplate.Crosscutting.Ioc.csproj
+@@ -7,7 +7,7 @@
+   </PropertyGroup>
+ 
+   <ItemGroup>
+-    <PackageReference Include="BIA.Net.Core.Ioc" Version="3.3.0.1" />
++    <PackageReference Include="BIA.Net.Core.Ioc" Version="3.3.3" />
+     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.8" />
+     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.8" />
+   </ItemGroup>
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.DeployDB/TheBIADevCompany.BIATemplate.DeployDB.csproj b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/TheBIADevCompany.BIATemplate.DeployDB.csproj
+index e0578ca..09c3d70 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.DeployDB/TheBIADevCompany.BIATemplate.DeployDB.csproj
++++ b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/TheBIADevCompany.BIATemplate.DeployDB.csproj
+@@ -11,6 +11,7 @@
+     <None Remove="appsettings.TheBIADevTeam_PRA.json" />
+     <None Remove="appsettings.TheBIADevTeam_PRD.json" />
+     <None Remove="appsettings.TheBIADevTeam_UAT.json" />
++    <None Remove="appsettings.DMNIO_PRD.json" />
+     <None Remove="appsettings.json" />
+   </ItemGroup>
+ 
+@@ -30,6 +31,11 @@
+     <Content Include="appsettings.TheBIADevTeam_UAT.json">
+       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+     </Content>
++    <Content Include="appsettings.DMNIO_PRD.json">
++      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
++      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
++      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
++    </Content>
+     <Content Include="appsettings.json">
+       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+     </Content>
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.DMNIO_PRD.json b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.DMNIO_PRD.json
+new file mode 100644
+index 0000000..0e28b1f
+--- /dev/null
++++ b/DotNet/TheBIADevCompany.BIATemplate.DeployDB/appsettings.DMNIO_PRD.json
+@@ -0,0 +1,5 @@
++{
++  "ConnectionStrings": {
++    "BIATemplateDatabase": "data source=SRMTESTNIO004\\SEPEUDMNIOSQLP1;initial catalog=BIATemplate_PRD;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
++  }
++}
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Domain.Dto/TheBIADevCompany.BIATemplate.Domain.Dto.csproj b/DotNet/TheBIADevCompany.BIATemplate.Domain.Dto/TheBIADevCompany.BIATemplate.Domain.Dto.csproj
+index 5531c97..fd667f8 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Domain.Dto/TheBIADevCompany.BIATemplate.Domain.Dto.csproj
++++ b/DotNet/TheBIADevCompany.BIATemplate.Domain.Dto/TheBIADevCompany.BIATemplate.Domain.Dto.csproj
+@@ -18,7 +18,7 @@
+   </ItemGroup>
+ 
+   <ItemGroup>
+-    <PackageReference Include="BIA.Net.Core.Domain.Dto" Version="3.3.0" />
++    <PackageReference Include="BIA.Net.Core.Domain.Dto" Version="3.3.3" />
+   </ItemGroup>
+ 
+ </Project>
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/AuthController.cs b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/AuthController.cs
+index 4371a6f..da3cb16 100644
+--- a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/AuthController.cs
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/Controllers/AuthController.cs
+@@ -55,6 +55,7 @@ namespace TheBIADevCompany.BIATemplate.Presentation.Api.Controllers
+         /// <param name="jwtFactory">The JWT factory.</param>
+         /// <param name="userAppService">The user application service.</param>
+         /// <param name="siteAppService">The site application service.</param>
++        /// <param name="roleAppService">The role application service.</param>
+         /// <param name="logger">The logger.</param>
+         public AuthController(IJwtFactory jwtFactory, IUserAppService userAppService, ISiteAppService siteAppService, IRoleAppService roleAppService, ILogger<AuthController> logger)
+         {
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.DMNIO_PRD.json b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.DMNIO_PRD.json
+new file mode 100644
+index 0000000..0e28b1f
+--- /dev/null
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/appsettings.DMNIO_PRD.json
+@@ -0,0 +1,5 @@
++{
++  "ConnectionStrings": {
++    "BIATemplateDatabase": "data source=SRMTESTNIO004\\SEPEUDMNIOSQLP1;initial catalog=BIATemplate_PRD;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
++  }
++}
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.DMNIO_PRD.json b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.DMNIO_PRD.json
+new file mode 100644
+index 0000000..0100834
+--- /dev/null
++++ b/DotNet/TheBIADevCompany.BIATemplate.Presentation.Api/bianetconfig.DMNIO_PRD.json
+@@ -0,0 +1,51 @@
++{
++  "BiaNet": {
++    "Environment": {
++      "Type": "PRD",
++      "UrlMatomo": "https://matomo.devops.thebiadevcompany/"
++    },
++    "Authentication": {
++      "LdapDomains": [
++        {
++          "Name": "EU",
++          "LdapName": "eu.labinal.snecma",
++          "CredentialKeyInWindowsVault": "BIA:LDAP://eu.labinal.snecma",
++          "ContainsGroup": true,
++          "ContainsUser": true
++        }
++      ]
++    },
++    "Roles": [
++      //{
++      //  "Label": "User",
++      //  "Type": "Fake"
++      //},
++      //{
++      //  "Label": "Admin",
++      //  "Type": "Fake"
++      //}
++      {
++        "Label": "User",
++        "Type": "Ldap",
++        "LdapGroups": [
++          {
++            "AddUsersOfDomains": [ "EU" ],
++            "LdapName": "EU\\P_LPS_DM_EU_BIATemplate_User",
++            "Domain": "EU"
++          }
++        ]
++      },
++      {
++        "Label": "Admin",
++        "Type": "Ldap",
++        "LdapGroups": [
++          {
++            "RecursiveGroupsOfDomains": [ "EU" ],
++            "LdapName": "EU\\P_LPS_DM_EU_BIATemplate_Admin",
++            "Domain": "EU"
++          }
++        ]
++      }
++    ]
++  }
++}
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.DMNIO_PRD.json b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.DMNIO_PRD.json
+new file mode 100644
+index 0000000..0e28b1f
+--- /dev/null
++++ b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/appsettings.DMNIO_PRD.json
+@@ -0,0 +1,5 @@
++{
++  "ConnectionStrings": {
++    "BIATemplateDatabase": "data source=SRMTESTNIO004\\SEPEUDMNIOSQLP1;initial catalog=BIATemplate_PRD;integrated security=True;MultipleActiveResultSets=True;App=BIATemplate"
++  }
++}
+\ No newline at end of file
+diff --git a/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.DMNIO_PRD.json b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.DMNIO_PRD.json
+new file mode 100644
+index 0000000..0100834
+--- /dev/null
++++ b/DotNet/TheBIADevCompany.BIATemplate.WorkerService/bianetconfig.DMNIO_PRD.json
+@@ -0,0 +1,51 @@
++{
++  "BiaNet": {
++    "Environment": {
++      "Type": "PRD",
++      "UrlMatomo": "https://matomo.devops.thebiadevcompany/"
++    },
++    "Authentication": {
++      "LdapDomains": [
++        {
++          "Name": "EU",
++          "LdapName": "eu.labinal.snecma",
++          "CredentialKeyInWindowsVault": "BIA:LDAP://eu.labinal.snecma",
++          "ContainsGroup": true,
++          "ContainsUser": true
++        }
++      ]
++    },
++    "Roles": [
++      //{
++      //  "Label": "User",
++      //  "Type": "Fake"
++      //},
++      //{
++      //  "Label": "Admin",
++      //  "Type": "Fake"
++      //}
++      {
++        "Label": "User",
++        "Type": "Ldap",
++        "LdapGroups": [
++          {
++            "AddUsersOfDomains": [ "EU" ],
++            "LdapName": "EU\\P_LPS_DM_EU_BIATemplate_User",
++            "Domain": "EU"
++          }
++        ]
++      },
++      {
++        "Label": "Admin",
++        "Type": "Ldap",
++        "LdapGroups": [
++          {
++            "RecursiveGroupsOfDomains": [ "EU" ],
++            "LdapName": "EU\\P_LPS_DM_EU_BIATemplate_Admin",
++            "Domain": "EU"
++          }
++        ]
++      }
++    ]
++  }
++}
+\ No newline at end of file

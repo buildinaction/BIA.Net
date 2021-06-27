@@ -5,9 +5,11 @@
     "airports": "Aeropuertos",
     "examples": "Ejemplos",
     "planes": "Planos",
-    "planesPageMode": "Planos (Modo página)",
-    "planesViewMode": "Planos (Modo ver)",
-    "planesSignalRMode": "Planos (Modo SignalR)",
+    "planesPageMode": "Planos (Página)",
+    "planesPopupMode": "Planos (Popup)",
+    "planesViewMode": "Planos (Ver)",
+    "planesSignalRMode": "Planos (SignalR)",
+    "planesCalcMode": "Planos (Hoja de cálculo)",
     "planesTypes": "Tipos de planos",
     "End BIADemo" : "To remove in project up to here",
     "members": "Miembros",
@@ -36,7 +38,7 @@
     "planeType": "Tipos de planos",
     "site": "Compañía aérea"
   },
-  "planesTypes": {
+  "planeType": {
     "add": "Añadir tipos de planos",
     "certificationDate": "Fecha de certificación",
     "edit": "Editar tipos de planos",

@@ -49,16 +49,6 @@ export const getPlaneLoadingGetAll = createSelector(
   (state) => state.loadingGetAll
 );
 
-export const getDisplayEditDialog = createSelector(
-  getPlanesEntitiesState,
-  (state) => state.displayEditDialog
-);
-
-export const getDisplayNewDialog = createSelector(
-  getPlanesEntitiesState,
-  (state) => state.displayNewDialog
-);
-
 export const { selectAll: getAllPlanes } = fromPlanes.planesAdapter.getSelectors(getPlanesEntitiesState);
 
 export const getPlaneById = (id: number) =>

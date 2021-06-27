@@ -20,7 +20,6 @@ import { Plane } from '../../model/plane';
   changeDetection: ChangeDetectionStrategy.Default
 })
 
-
 export class PlaneFormComponent implements OnInit, OnChanges {
   @Input() plane: Plane = <Plane>{};
   @Input() airportOptions: OptionDto[];
@@ -36,11 +35,6 @@ export class PlaneFormComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    /*this.airports = [
-      {name: 'New York', city: 'NY', id: 1},
-      {name: 'Rome', city: 'Rome', id: 2}
-    ];*/
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -83,3 +77,4 @@ export class PlaneFormComponent implements OnInit, OnChanges {
     }
   }
 }
+

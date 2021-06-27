@@ -12,4 +12,9 @@ export class MemberDas {
     const route = AbstractDas.buildRoute(`Members/Sites/${id}/setDefault`);
     return this.http.put(route, null);
   }
+
+  public setDefaultRole(id: number) {
+    const route = AbstractDas.buildRoute(`Members/Roles/${id}/setDefault`);
+    return this.http.put(route, null);
+  }
 }

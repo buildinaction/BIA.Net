@@ -7,68 +7,33 @@ This document explains how to create a new .NET Core project based on the BIA fr
 * [C# 8](https://docs.microsoft.com/fr-fr/dotnet/csharp/)
 * [.NET Core 3.1](https://docs.microsoft.com/fr-fr/dotnet/core/)
 
-### Configuration for the Safran proxy
-[Add the following **User** environment variables :](https://www.tenforums.com/tutorials/121664-set-new-user-system-environment-variables-windows.html#option1)  
-* HTTP_PROXY: http://10.179.8.30:3128/
-* HTTPS_PROXY: http://10.179.8.30:3128/
-* NO_PROXY: https://tfsdm.eu.labinal.snecma
+### Configure your environment
+* Follow the steps in [CONFIGURE_YOUR_DEV_ENVIRONMENT.md](./CONFIGURE_YOUR_DEV_ENVIRONMENT.md)
 
-### Visual Studio 2019 & components
-Install [Visual Studio 2019](https://visualstudio.microsoft.com/fr/vs/) and be sure to add the latest SDK of .NET Core from the components list.
-Add those components during installation :
-- [Git for Visual Studio](https://subscription.packtpub.com/book/programming/9781789530094/9/ch09lvl1sec71/installing-git-for-visual-studio-2019)
-- [Development Time IIS Support](https://devblogs.microsoft.com/aspnet/development-time-iis-support-for-asp-net-core-applications/)
-
-If Visual Studio 2019 is already install, you can add thoses component by launching the VS Installer.
-
-### Git config
-To find the path to the **.gitconfig** file, type the following command:  
-`git config --list --show-origin`  
-
-Open your **.gitconfig** file (usualy located in your user folder) and add this configuration:
-```
-[http "https://tfsdm.eu.labinal.snecma/"]
-                sslVerify = false
-                proxy = ""
-[http "https://azure.devops.safran/"]
-                sslVerify = false
-                proxy = ""
-```
-### Variable Environment
-create the following system environment variable:  
-Name: ASPNETCORE_ENVIRONMENT  
-Value: Development  
-
-## Create a new project
+## Create a new project ...
 You must respect the following tree structure:   
 **ProjectName\Angular** and **ProjectName\DotNet**    
    
-Install the latest version of the **[BIA Project Creator](https://inshare.collab.group.safran/bao/DevOps/BIAV3/Shared%20Documents/VSExtensions)** extension for Visual Studio 2019.  
+Install the latest version of the **[BIA.ProjectCreator.vsix](../../Docs/BIAExtension)** extension for Visual Studio 2019.  
 You can now go to File > New > Project in Visual Studio.  
 Select the BIA template in the type of projects and click on Next button.  
-Fill **Project name** field. For **Location**, type [MyLocationSourceCode]\\[ProjectName]\DotNet and check **Place solution and project in the same directory**.  
+Fill **Project name** field. For **Location**, type [MyLocationSourceCode]\\[ProjectName] and check **Place solution and project in the same directory**.  
+Close Visual studio and rename the second level of folder [ProjectName] (in [MyLocationSourceCode]\\[ProjectName]\\**[ProjectName]**) in DotNet
 
-## Setup project
-Once your solution is created, you need to update some files.  
-1. Create the corresponding database on your computer. 
-2. Open the appsettings.json file and update the connection string to the database.
-3. Launch the Package Manager Console in VS 2019 (Tools > Nuget Package Manager > Package Manager Console).
-4. Be sure to have the project **Safran.[ProjectName].Infrastructure.Data** selected as the Default Project in the console and the project **Safran.[ProjectName].Presentation.Api** as the Startup Project of your solution.
-5. Run the **Add-Migration** command to initialize the migrations for the database project. `Add-Migration [nameOfYourMigration]`
-6. Run the **Update-Database** command to update you database schema (you can check if everything is fine in SQL Server Management Studio).
-7. Update the Roles section in the bianetconfig.json file to use the correct AD groups or the Fakes roles.
-8. Update the version of the application. To do this, change the variable: **Safran.[ProjectName].Crosscutting.Common.Constants.Application.Version**.
+## ... Or Clone an existing one
 
-## Launch project
+## Prepare the Presentation WebApi:
+* Follow the steps "Prepare the Presentation WebApi" in [01 - PRESENTATION.API.md](./Projects/01%20-%20PRESENTATION.API.md)
 
-To launch your project, you have to use **only IIS** (not compatible with IIS Express).
-Your IIS pool must be in "No Managed Code".
-For the user launching the pool, you have two options :
-- Use your own account but your will not be able to manage Users in the associated CRUD.
-- Use a Service account which have sufficient rights on AD. If you choose this option, don't forget to allow this user to access your database in SQL Server Management Studio.
+## Prepare the database
+* Follow the steps " Preparation of the Database" in [04 - INFRASTRUCTURE.DATA.md](./Projects/04%20-%20INFRASTRUCTURE.DATA.md)
 
+## Run the project
+* you can now run the project Presentation Api in IIS 
+* In the swagger page verify that the login work by clicking on the "BIA Log In" button  at the bottom right.
 
 ## Use standard BIA Framework Component
 
-To use the project created by the framework have a look in the docs in [this folder](./Projects).
-To use the features proposed by the framework have a look in the docs in [this folder](./Features).
+* To use the project created by the framework have a look in the docs in [this folder](./Projects).
+
+* To use the features proposed by the framework have a look in the docs in [this folder](./Features).

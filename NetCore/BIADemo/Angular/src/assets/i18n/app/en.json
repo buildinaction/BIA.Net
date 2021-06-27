@@ -5,9 +5,11 @@
     "airports": "Airports",
     "examples": "Examples",
     "planes": "Planes",
-    "planesPageMode": "Planes (Page Mode)",
-    "planesViewMode": "Planes (View Mode)",
-    "planesSignalRMode": "Planes (SignalR Mode)",
+    "planesPageMode": "Planes (Page)",
+    "planesPopupMode": "Planes (Popup)",
+    "planesViewMode": "Planes (View)",
+    "planesSignalRMode": "Planes (SignalR)",
+    "planesCalcMode": "Planes (Spreadsheet)",
     "planesTypes": "Planes types",
     "End BIADemo" : "To remove in project up to here",
     "members": "Members",
@@ -36,7 +38,7 @@
     "planeType": "Plane Type",
     "site": "Airline"
   },
-  "planesTypes": {
+  "planeType": {
     "add": "Add type of planes",
     "certificationDate": "Certification date",
     "edit": "Edit type of planes",

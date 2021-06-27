@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { LazyLoadEvent } from 'primeng/api';
-import { Plane, PlaneListItem } from '../model/plane';
+import { Plane } from '../model/plane';
 import { DataResult } from 'src/app/shared/bia-shared/model/data-result';
 
 export const loadAllByPost = createAction('[Planes] Load all by post', props<{ event: LazyLoadEvent }>());
@@ -17,17 +17,15 @@ export const multiRemove = createAction('[Planes] Multi Remove', props<{ ids: nu
 
 export const loadAllByPostSuccess = createAction(
   '[Planes] Load all by post success',
-  props<{ result: DataResult<PlaneListItem[]>; event: LazyLoadEvent }>()
+  props<{ result: DataResult<Plane[]>; event: LazyLoadEvent }>()
 );
 
 export const loadSuccess = createAction('[Planes] Load success', props<{ plane: Plane }>());
 
 export const failure = createAction('[Planes] Failure', props<{ error: any }>());
 
-export const openDialogEdit = createAction('[Planes] Open dialog edit');
 
-export const closeDialogEdit = createAction('[Planes] Close dialog edit');
 
-export const openDialogNew = createAction('[Planes] Open dialog new');
 
-export const closeDialogNew = createAction('[Planes] Close dialog new');
+
+
