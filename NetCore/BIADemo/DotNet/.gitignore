@@ -3,6 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Specific config files
+appsettings.*.json
+!appsettings.Example*.json
+
 # User-specific files
 *.suo
 *.user
