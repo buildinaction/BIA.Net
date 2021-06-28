@@ -19,9 +19,3 @@
 
 # Visual Studio 2017 auto generated files
 Generated\ Files/
-
-#setting files (only template)
-appsettings.*.json
-bianetconfig.*.json
-!appsettings.TheBIADevTeam*.json
-!bianetconfig.TheBIADevTeam*.json
