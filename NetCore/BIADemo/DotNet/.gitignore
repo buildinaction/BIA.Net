@@ -6,6 +6,8 @@
 # Specific config files
 appsettings.*.json
 !appsettings.Example*.json
+bianetconfig.*.json
+!bianetconfig.Example*.json
 
 # User-specific files
 *.suo
