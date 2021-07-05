@@ -136,7 +136,6 @@
             this.SupportMailTextBox.Name = "SupportMailTextBox";
             this.SupportMailTextBox.Size = new System.Drawing.Size(100, 20);
             this.SupportMailTextBox.TabIndex = 6;
-            this.SupportMailTextBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged_1);
             // 
             // label2
             // 
@@ -155,7 +154,6 @@
             this.SupportMailLabel.Size = new System.Drawing.Size(79, 13);
             this.SupportMailLabel.TabIndex = 9;
             this.SupportMailLabel.Text = "Mail of support:";
-            this.SupportMailLabel.Click += new System.EventHandler(this.label3_Click);
             // 
             // CompanyAndDesignOptionForm
             // 

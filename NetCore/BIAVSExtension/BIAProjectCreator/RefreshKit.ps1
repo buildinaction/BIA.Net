@@ -8,6 +8,7 @@
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 $projectTemplateName = "BIATemplate"
+$companyateTemplateName = "TheBIADevCompany"
 $RepSource="C:\Users\L025308\Documents\Visual Studio 2019\My Exported Templates"
 $RepAdditionalFiles="..\..\BIATemplate\DotNet"
 $RepTarget= Resolve-Path -Path ".\BIA.ProjectCreatorTemplateV3\Temp"
@@ -36,7 +37,7 @@ function Zip ([string]$zipfile, [string]$outpath) {
 $zipFiles = Get-ChildItem "$RepTarget" *.zip
 foreach ($file in $zipFiles)
 {
-	$dirname = (Get-Item "$RepTarget\$file").Basename
+	$dirname = (Get-Item "$RepTarget\$file").Basename.Replace("$companyateTemplateName.$projectTemplateName.","")
     New-Item -Force -ItemType directory -Path "$RepTarget\$dirname"
 	Unzip "$RepTarget\$file" "$RepTarget\$dirname\"
 }
@@ -44,13 +45,25 @@ foreach ($file in $zipFiles)
 Remove-Item "$RepTarget\*.zip"
 
 # Remove company config files
-$allFiles = Get-ChildItem -File -Path "$RepTarget" -Exclude "*.Example*.json" -rec | Where-Object {$_.Name -like "appsettings.*.json" -or $_.Name -like "bianetconfig.*.json"}
+$allFiles = Get-ChildItem -File -Path "$RepTarget" -Include "*.*.json" -Exclude "*.Example*.json" -rec | Where-Object {$_.Name -like "appsettings.*.json" -or $_.Name -like "bianetconfig.*.json"}
 foreach ($file in $allFiles)
 {
 	$filePath = $file.FullName
 	Write-Host "Remove file : $filePath"
 	Remove-Item "$filePath"
 }
+
+$allFiles = Get-ChildItem -File -Path "$RepTarget" -Include "*.vstemplate" -rec
+foreach ($file in $allFiles)
+{
+	$filePath = $file.FullName
+	Write-Host "Clean template file : $filePath"
+	Set-Content -Path $filePath -Value (get-content -Path $filePath | Where-Object { 
+	($_ -NotMatch '(appsettings|bianetconfig).*.json*' -or $_ -like '*appsettings.Example*.json*' -or $_ -like '*bianetconfig.Example*.json*')
+	})
+}
+
+
 
 
 $allFiles = Get-ChildItem -File -Path "$RepTarget" -Exclude "*.vstemplate" -rec | Where-Object { Select-String $projectTemplateName $_ -Quiet }
@@ -59,6 +72,7 @@ foreach ($file in $allFiles)
 	$filePath = $file.FullName
 	# Write-Host "Treate file : $filePath"
 	$text = [IO.File]::ReadAllText("$filePath") -replace $projectTemplateName, "`$saferootprojectname`$"
+	$text = [IO.File]::ReadAllText("$filePath") -replace $companyateTemplateName, "`$safecompanyName`$"
 	[IO.File]::WriteAllText("$filePath", $text)
 }
 

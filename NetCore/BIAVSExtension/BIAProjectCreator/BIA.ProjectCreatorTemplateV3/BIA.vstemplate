@@ -18,47 +18,47 @@
     <ProjectCollection>
       <SolutionFolder Name="01 - Presentation" CreateOnDisk="false">
         <ProjectTemplateLink ProjectName="$safeprojectname$.DeployDB">
-          temp\TheBIADevCompany.BIATemplate.DeployDB\MyTemplate.vstemplate
+          temp\DeployDB\MyTemplate.vstemplate
         </ProjectTemplateLink>
         <ProjectTemplateLink ProjectName="$safeprojectname$.Presentation.Api">
-          temp\TheBIADevCompany.BIATemplate.Presentation.Api\MyTemplate.vstemplate
+          temp\Presentation.Api\MyTemplate.vstemplate
         </ProjectTemplateLink>
         <ProjectTemplateLink ProjectName="$safeprojectname$.WorkerService">
-          temp\TheBIADevCompany.BIATemplate.WorkerService\MyTemplate.vstemplate
+          temp\WorkerService\MyTemplate.vstemplate
         </ProjectTemplateLink>
       </SolutionFolder>
       <SolutionFolder Name="02 - Application" CreateOnDisk="false">
         <ProjectTemplateLink ProjectName="$safeprojectname$.Application">
-          temp\TheBIADevCompany.BIATemplate.Application\MyTemplate.vstemplate
+          temp\Application\MyTemplate.vstemplate
         </ProjectTemplateLink>
       </SolutionFolder>
       <SolutionFolder Name="03 - Domain" CreateOnDisk="false">
         <ProjectTemplateLink ProjectName="$safeprojectname$.Domain">
-          temp\TheBIADevCompany.BIATemplate.Domain\MyTemplate.vstemplate
+          temp\Domain\MyTemplate.vstemplate
         </ProjectTemplateLink>
         <ProjectTemplateLink ProjectName="$safeprojectname$.Domain.Dto">
-          temp\TheBIADevCompany.BIATemplate.Domain.Dto\MyTemplate.vstemplate
+          temp\Domain.Dto\MyTemplate.vstemplate
         </ProjectTemplateLink>
       </SolutionFolder>
       <SolutionFolder Name="04 - Infrastructure" CreateOnDisk="false">
         <ProjectTemplateLink ProjectName="$safeprojectname$.Infrastructure.Data">
-          temp\TheBIADevCompany.BIATemplate.Infrastructure.Data\MyTemplate.vstemplate
+          temp\Infrastructure.Data\MyTemplate.vstemplate
         </ProjectTemplateLink>
         <ProjectTemplateLink ProjectName="$safeprojectname$.Infrastructure.Service">
-          temp\TheBIADevCompany.BIATemplate.Infrastructure.Service\MyTemplate.vstemplate
+          temp\Infrastructure.Service\MyTemplate.vstemplate
         </ProjectTemplateLink>
       </SolutionFolder>
       <SolutionFolder Name="05 - Crosscutting" CreateOnDisk="false">
         <ProjectTemplateLink ProjectName="$safeprojectname$.Crosscutting.Common">
-          temp\TheBIADevCompany.BIATemplate.Crosscutting.Common\MyTemplate.vstemplate
+          temp\Crosscutting.Common\MyTemplate.vstemplate
         </ProjectTemplateLink>
         <ProjectTemplateLink ProjectName="$safeprojectname$.Crosscutting.Ioc">
-          temp\TheBIADevCompany.BIATemplate.Crosscutting.Ioc\MyTemplate.vstemplate
+          temp\Crosscutting.Ioc\MyTemplate.vstemplate
         </ProjectTemplateLink>
       </SolutionFolder>
       <SolutionFolder Name="99 - Test" CreateOnDisk="false">
         <ProjectTemplateLink ProjectName="$safeprojectname$.Test">
-          temp\TheBIADevCompany.BIATemplate.Test\MyTemplate.vstemplate
+          temp\Test\MyTemplate.vstemplate
         </ProjectTemplateLink>
       </SolutionFolder>
       <SolutionFolder Name="Docs" CreateOnDisk="false">

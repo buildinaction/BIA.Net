@@ -1,5 +1,5 @@
-﻿// <copyright file="ChildWizard.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
+﻿// <copyright file="ChildWizard.cs" company="BIA">
+//     Copyright (c) BIA. All rights reserved.
 // </copyright>
 
 namespace BIA.ProjectCreatorWizard
@@ -18,7 +18,9 @@ namespace BIA.ProjectCreatorWizard
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             string solutionName = RootWizard.GlobalDictionary.TryGetValue(RootWizard.SAFEROOTPROJECTNAME, out solutionName) ? solutionName : string.Empty;
+            string companyName = RootWizard.GlobalDictionary.TryGetValue(RootWizard.SAFECOMPANYNAME, out companyName) ? companyName : string.Empty;
             replacementsDictionary[RootWizard.SAFEROOTPROJECTNAME] = solutionName;
+            replacementsDictionary[RootWizard.SAFECOMPANYNAME] = companyName;
         }
 
         /// <inheritdoc/>

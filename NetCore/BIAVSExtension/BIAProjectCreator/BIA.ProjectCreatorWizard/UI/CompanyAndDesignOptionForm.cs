@@ -1,4 +1,8 @@
-﻿namespace BIA.ProjectCreatorWizard.UI
+﻿// <copyright file="CompanyAndDesignOptionForm.cs" company="BIA">
+//     Copyright (c) BIA. All rights reserved.
+// </copyright>
+
+namespace BIA.ProjectCreatorWizard.UI
 {
     using System;
     using System.Windows.Forms;
@@ -53,18 +57,6 @@
 
             this.DialogResult = DialogResult.OK;
             this.Close();
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void textBox1_TextChanged_1(object sender, EventArgs e)
-        {
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
         }
 
         private void UseSupportMailCheckbox_CheckedChanged(object sender, EventArgs e)
