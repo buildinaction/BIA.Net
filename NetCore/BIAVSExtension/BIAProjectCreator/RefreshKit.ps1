@@ -10,9 +10,6 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 $projectTemplateName = "BIATemplate"
 $RepSource="C:\Users\L025308\Documents\Visual Studio 2019\My Exported Templates"
 $RepAdditionalFiles="..\..\BIATemplate\DotNet"
-#$pathZZProjectInstaller = "D:\Sources\Azure.DevOps.Safran\Digital Manufacturing\BIAVSExtension\BIAProjectCreator"
-
-#$RepTarget= $pathZZProjectInstaller + "\BIA.ProjectCreatorTemplateV3\Temp"
 $RepTarget= Resolve-Path -Path ".\BIA.ProjectCreatorTemplateV3\Temp"
 $RepTargetAdditionalFiles= Resolve-Path -Path ".\BIA.ProjectCreator\AdditionalFiles"
 
@@ -46,12 +43,21 @@ foreach ($file in $zipFiles)
 
 Remove-Item "$RepTarget\*.zip"
 
+# Remove company config files
+$allFiles = Get-ChildItem -File -Path "$RepTarget" -Exclude "*.Example*.json" -rec | Where-Object {$_.Name -like "appsettings.*.json" -or $_.Name -like "bianetconfig.*.json"}
+foreach ($file in $allFiles)
+{
+	$filePath = $file.FullName
+	Write-Host "Remove file : $filePath"
+	Remove-Item "$filePath"
+}
+
 
 $allFiles = Get-ChildItem -File -Path "$RepTarget" -Exclude "*.vstemplate" -rec | Where-Object { Select-String $projectTemplateName $_ -Quiet }
 foreach ($file in $allFiles)
 {
 	$filePath = $file.FullName
-	Write-Host "Treate file : $filePath"
+	# Write-Host "Treate file : $filePath"
 	$text = [IO.File]::ReadAllText("$filePath") -replace $projectTemplateName, "`$saferootprojectname`$"
 	[IO.File]::WriteAllText("$filePath", $text)
 }
@@ -60,7 +66,7 @@ $templateFiles = Get-ChildItem -File -Path "$RepTarget" *.vstemplate -rec | Wher
 foreach ($file in $templateFiles)
 {
 	$filePath = $file.FullName
-	Write-Host "Treate file : $filePath"
+	# Write-Host "Treate file : $filePath"
 	$text = [IO.File]::ReadAllText("$filePath") -replace "</VSTemplate>", "  <WizardExtension>
     <Assembly>BIA.ProjectCreatorWizard, Version=3.0.0.0, Culture=neutral, PublicKeyToken=null</Assembly>
     <FullClassName>BIA.ProjectCreatorWizard.ChildWizard</FullClassName>
@@ -69,9 +75,10 @@ foreach ($file in $templateFiles)
 	[IO.File]::WriteAllText("$filePath", $text)
 }
 
-Copy-Item "$RepAdditionalFiles\Safran.ruleset" "$RepTargetAdditionalFiles\" -Force
+Copy-Item "$RepAdditionalFiles\BIA.ruleset" "$RepTargetAdditionalFiles\" -Force
 Copy-Item "$RepAdditionalFiles\Directory.Build.props" "$RepTargetAdditionalFiles\" -Force
 Copy-Item "$RepAdditionalFiles\*.ps1" "$RepTargetAdditionalFiles\" -Force
+#Copy-Item "$RepAdditionalFiles\Docs" "$RepTargetAdditionalFiles" -Force –Recurse
 
 # $file = "$RepTarget/SyncDatabase/MyTemplate.vstemplate"
 # $text = [IO.File]::ReadAllText("$file") -replace 'ReplaceParameters="false" (TargetFileName="[A-Za-z0-9\-_]*.scmp")', 'ReplaceParameters="true" $1'

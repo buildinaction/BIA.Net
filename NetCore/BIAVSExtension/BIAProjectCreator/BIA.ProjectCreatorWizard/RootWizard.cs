@@ -6,6 +6,8 @@ namespace BIA.ProjectCreatorWizard
 {
     using System.Collections.Generic;
     using System.IO;
+    using System.Windows.Forms;
+    using BIA.ProjectCreatorWizard.UI;
     using EnvDTE;
     using Microsoft.VisualStudio.TemplateWizard;
 
@@ -40,13 +42,28 @@ namespace BIA.ProjectCreatorWizard
         /// </summary>
         private string solutionName;
 
+        /// <summary>
+        /// View model use for UI.
+        /// </summary>
+        private CompanyAndDesignOptionViewModel viewModel = new CompanyAndDesignOptionViewModel();
+
         /// <inheritdoc/>
         public void RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
         {
             this.destFolder = Directory.GetParent(replacementsDictionary["$destinationdirectory$"]);
 
+
+            CompanyAndDesignOptionForm window = new CompanyAndDesignOptionForm(this.viewModel);
+            DialogResult showDialog = window.ShowDialog();
+
+            if (showDialog != DialogResult.OK)
+            {
+                throw new WizardBackoutException();
+            }
+
+
             this.solutionName = replacementsDictionary[SAFEPROJECTNAME];
-            string companyName = "Safran";
+            string companyName = this.viewModel.CompanyName;
             string combineName = string.Join(".", companyName, this.solutionName);
 
             GlobalDictionary[SAFEPROJECTNAME] = combineName;
@@ -66,10 +83,6 @@ namespace BIA.ProjectCreatorWizard
         public void RunFinished()
         {
             this.PlaceAdditionnalFilesInSolutionFolder();
-            /*this.PlaceFileInSolutionFolder("Safran.ruleset");
-            this.PlaceFileInSolutionFolder("Directory.Build.props");
-            this.PlaceFileInSolutionFolder("Switch-To-Nuget.ps1");
-            this.PlaceFileInSolutionFolder("Switch-To-Project.ps1");*/
         }
 
         /// <inheritdoc/>

@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ReadMe", "ReadMe", "{920D3CBC-90A7-4DDC-AF1E-208424CB972A}"
 	ProjectSection(SolutionItems) = preProject
-		RefreshKit.ps1 = RefreshKit.ps1
+		BIAProjectCreator\RefreshKit.ps1 = BIAProjectCreator\RefreshKit.ps1
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.ProjectCreatorTemplateV3", "BIAProjectCreator\BIA.ProjectCreatorTemplateV3\BIA.ProjectCreatorTemplateV3.csproj", "{45CA2E06-5B64-43C7-8B4D-69FDA4E867D0}"
@@ -13,8 +13,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.ProjectCreatorWizard", "BIAProjectCreator\BIA.ProjectCreatorWizard\BIA.ProjectCreatorWizard.csproj", "{AB617895-58CA-48D2-8890-C51BCEA14C4E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIA.ProjectCreator", "BIAProjectCreator\BIA.ProjectCreator\BIA.ProjectCreator.csproj", "{6FBFF83F-D3D3-409B-A56F-328AE7D7BC87}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIAVSExtension", "BIAVSExtension\BIAVSExtension.csproj", "{2AA3CCDF-AC17-4101-9F73-450B28F63AC2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BIAProjectCreator", "BIAProjectCreator", "{B9B70326-6748-4457-AF1A-473E12FC8E03}"
 EndProject
@@ -36,10 +34,6 @@ Global
 		{6FBFF83F-D3D3-409B-A56F-328AE7D7BC87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FBFF83F-D3D3-409B-A56F-328AE7D7BC87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FBFF83F-D3D3-409B-A56F-328AE7D7BC87}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2AA3CCDF-AC17-4101-9F73-450B28F63AC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2AA3CCDF-AC17-4101-9F73-450B28F63AC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2AA3CCDF-AC17-4101-9F73-450B28F63AC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2AA3CCDF-AC17-4101-9F73-450B28F63AC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

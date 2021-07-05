@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="BIA.ProjectCreator.acde96dc-7727-44e4-9c2b-6591ab80580a" Version="3.3.0.0" Language="en-US" Publisher="Gwenael Fillon" />
-        <DisplayName>BIA Project Creator</DisplayName>
+        <Identity Id="BIA.ProjectCreator.acde96dc-7727-44e4-9c2b-6591ab80580a" Version="3.3.4.0" Language="en-US" Publisher="Gwenael Fillon" />
+        <DisplayName>BIA Project Creator V3</DisplayName>
         <Description xml:space="preserve">Template from powerfull application with a WebServer. 
-Contain sample for UI in MVC, Heavy Client, or HTML. 
 Contain sample for WebApi.
 And layers for secure acces to datas.</Description>
         <Icon>Icon_DM.ico</Icon>
