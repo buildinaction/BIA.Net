@@ -23,24 +23,45 @@ export class BiaSignalRService {
    * without having to redefine every needed event and data structure in the domain.
    */
   private readonly hubConnection: HubConnection;
-
-  /**
-   * Retrieve the hubConnection instance.
-   */
-  public getHubConnection() {
-    return this.hubConnection;
-  }
+  private methods: string[];
+  private isStarted: boolean;
 
   /**
    * Constructor.
    */
   public constructor() {
-    this.hubConnection = new HubConnectionBuilder()
-      .withUrl(environment.hubUrl)
-      .build();
+    this.hubConnection = new HubConnectionBuilder().withUrl(environment.hubUrl).build();
 
     this.configureConnection();
-    this.startConnection();
+
+    this.methods = [];
+    this.isStarted = false;
+  }
+
+  public addMethod(methodName: string, newMethod: (...args: any[]) => void): void {
+    this.hubConnection.on(methodName, newMethod);
+    if (this.methods.indexOf(methodName) < 0) {
+      this.methods.push(methodName);
+    }
+    if (!this.isStarted) {
+      this.isStarted = true;
+      this.startConnection();
+    }
+  }
+
+  public removeMethod(methodName: string): void {
+    this.hubConnection.off(methodName);
+    if (this.methods.indexOf(methodName) > -1) {
+      this.methods.splice(this.methods.indexOf(methodName), 1);
+    }
+
+    // We wait 500ms before stop the connection, to not do it if it is use in next screen
+    setTimeout(() => {
+      if (this.methods.length === 0) {
+        this.isStarted = false;
+        this.hubConnection.stop();
+      }
+    }, 500);
   }
 
   /**
@@ -48,8 +69,14 @@ export class BiaSignalRService {
    */
   private configureConnection(): void {
     this.hubConnection.onclose(async () => {
-      console.log('%c [SignalRService] Hub connection closed. Try restarting it...', 'color: red; font-weight: bold');
-      setTimeout(e => { this.startConnection(); }, 5000);
+      if (this.isStarted) {
+        console.log('%c [SignalRService] Hub connection closed. Try restarting it...', 'color: red; font-weight: bold');
+        setTimeout((e) => {
+          this.startConnection();
+        }, 5000);
+      } else {
+        console.log('%c [SignalRService] Hub connection stoped', 'color: blue; font-weight: bold');
+      }
     });
   }
 
@@ -63,9 +90,20 @@ export class BiaSignalRService {
         console.log('%c [SignalRService] Hub connection started', 'color: blue; font-weight: bold');
       })
       .catch((err: string) => {
-        console.log('%c [SignalRService] Error while establishing connection, retrying...' + err,
-          'color: red; font-weight: bold');
-        setTimeout(e => { this.startConnection(); }, 5000);
+        if (this.isStarted) {
+          console.log(
+            '%c [SignalRService] Error while establishing connection, retrying...' + err,
+            'color: red; font-weight: bold'
+          );
+          setTimeout((e) => {
+            this.startConnection();
+          }, 5000);
+        } else {
+          console.log(
+            '%c [SignalRService] Hub connection stoped before establishing connection.',
+            'color: blue; font-weight: bold'
+          );
+        }
       });
   }
 }

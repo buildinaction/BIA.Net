@@ -24,6 +24,11 @@ export const getRolesEntitiesState = createSelector(
   (state) => state.roles
 );
 
+export const getMemberRoles = createSelector(
+  getRolesState,
+  (state) => state.roles?.memberRoles ?? []
+);
+
 export const { selectAll: getAllRoles } = fromRoles.rolesAdapter.getSelectors(
   getRolesEntitiesState
 );

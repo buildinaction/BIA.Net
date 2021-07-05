@@ -24,6 +24,11 @@ export const getSitesEntitiesState = createSelector(
   (state) => state.sites
 );
 
+export const getUserSites = createSelector(
+  getSitesState,
+  (state) => state.sites?.userSites
+);
+
 export const { selectAll: getAllSites } = fromSites.sitesAdapter.getSelectors(
   getSitesEntitiesState
 );

@@ -34,7 +34,7 @@ In the BIANet Section add:
 ```Json
     "WorkerFeatures": {
       "HubForClients": {
-        "SignalRUrl": "https://dmeu-[ENV].electrical-power.safran/BIADemo/WebApi/HubForClients"
+        "SignalRUrl": "https://dmeu-[ENV].electrical-power.thebiadevcompany/BIADemo/WebApi/HubForClients"
       }
     },
 ```

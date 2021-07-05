@@ -1,4 +1,7 @@
 export interface Role {
   id: number;
-  label: string;
+  labelEn: string;
+  labelFr: string;
+  labelEs: string;
+  isDefault: boolean;
 }

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { MembersEffects } from './store/members/members-effects';
 import { SitesEffects } from './store/sites-effects';
 import { reducers } from './store/site.state';
 import { SiteFormComponent } from './components/site-form/site-form.component';
@@ -10,12 +9,6 @@ import { SiteEditDialogComponent } from './views/site-edit-dialog/site-edit-dial
 import { SiteNewDialogComponent } from './views/site-new-dialog/site-new-dialog.component';
 import { SitesIndexComponent } from './views/sites-index/sites-index.component';
 import { SiteFilterComponent } from './components/site-filter/site-filter.component';
-import { reducers as memberReducers } from './store/members/member.state';
-import { MemberEditDialogComponent } from './views/members/member-edit-dialog/member-edit-dialog.component';
-import { MemberNewDialogComponent } from './views/members/member-new-dialog/member-new-dialog.component';
-import { MembersIndexComponent } from './views/members/members-index/members-index.component';
-import { MemberEditFormComponent } from './components/members/member-edit-form/member-edit-form.component';
-import { MemberNewFormComponent } from './components/members/member-new-form/member-new-form.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { UserModule } from 'src/app/domains/user/user.module';
 import { RoleModule } from 'src/app/domains/role/role.module';
@@ -23,6 +16,7 @@ import { PermissionGuard } from 'src/app/core/bia-core/guards/permission.guard';
 import { Permission } from 'src/app/shared/permission';
 import { UserFromADModule } from 'src/app/domains/user-from-AD/user-from-AD.module';
 import { SiteTableHeaderComponent } from './components/site-table-header/site-table-header.component';
+import { SiteItemComponent } from './views/site-item/site-item.component';
 
 const ROUTES: Routes = [
   {
@@ -35,14 +29,25 @@ const ROUTES: Routes = [
     canActivate: [PermissionGuard]
   },
   {
-    path: ':id/members',
+    path: ':siteId',
     data: {
-      breadcrumb: 'app.members',
+      breadcrumb: '',
       canNavigate: false,
-      permission: Permission.Member_List_Access
     },
-    component: MembersIndexComponent,
-    canActivate: [PermissionGuard]
+    component: SiteItemComponent,
+    canActivate: [PermissionGuard],
+    children: [
+      {
+        path: 'members',
+        data: {
+          breadcrumb: 'app.members',
+          canNavigate: true,
+          permission: Permission.Member_List_Access
+        },
+        loadChildren: () =>
+          import('./children/members/member.module').then((m) => m.MemberModule)
+      },
+    ]
   },
   { path: '**', redirectTo: '' }
 ];
@@ -54,11 +59,7 @@ const ROUTES: Routes = [
     SiteEditDialogComponent,
     SiteNewDialogComponent,
     SitesIndexComponent,
-    MemberEditDialogComponent,
-    MemberNewDialogComponent,
-    MembersIndexComponent,
-    MemberEditFormComponent,
-    MemberNewFormComponent,
+    SiteItemComponent,
     SiteTableHeaderComponent
   ],
   entryComponents: [SiteEditDialogComponent, SiteNewDialogComponent],
@@ -69,9 +70,7 @@ const ROUTES: Routes = [
     UserFromADModule,
     RouterModule.forChild(ROUTES),
     StoreModule.forFeature('sites', reducers),
-    StoreModule.forFeature('members', memberReducers),
     EffectsModule.forFeature([SitesEffects]),
-    EffectsModule.forFeature([MembersEffects])
   ]
 })
-export class SiteModule {}
+export class SiteModule { }

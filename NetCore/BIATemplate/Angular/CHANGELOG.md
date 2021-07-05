@@ -1,3 +1,11 @@
+### [3.3.3] (2021-06-25)
+* Universal Mode for CRUD.
+### [3.3.2] (2021-05-28)
+* Possibility for the user to choice his role.
+* Click on site open manage member.
+* Member is a children of site with related service and breadcrumb.
+* Adding the Calc mode for CRUD.
+### [3.3.1] (2021-03-31)
 ### [3.3.0] (2021-01-15)
 *  Date bug fix
 *  Matomo integration

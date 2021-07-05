@@ -167,8 +167,8 @@ RemoveItemFolder -path '*\bin'
 Write-Host "Remove *\obj"
 RemoveItemFolder -path '*\obj'
 
-Write-Host "Remove Migrations folder"
-RemoveItemFolder -path 'Safran.BIADemo.Infrastructure.Data\Migrations'
+Write-Host "Remove Migrations and keep .editconfig"
+Remove-Item '*.BIADemo.Infrastructure.Data\Migrations\*.cs' -Recurse -Force -Confirm:$false
 
 Write-Host "Remove BIA demo only files"
 RemoveBIADemoOnlyFiles

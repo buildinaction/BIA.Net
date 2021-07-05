@@ -78,6 +78,12 @@ import { reducers } from './features/view/store/view.state';
 import { EffectsModule } from '@ngrx/effects';
 import { ViewsEffects } from './features/view/store/views-effects';
 import { ViewFormComponent } from './features/view/components/view-form/view-form.component';
+import { BiaCalcTableComponent } from './components/table/bia-calc-table/bia-calc-table.component';
+import { TranslateRoleLabelPipe } from './pipes/translate-role-label.pipe';
+import { PopupLayoutComponent } from './components/layout/popup-layout/popup-layout.component';
+import { FullPageLayoutComponent } from './components/layout/fullpage-layout/fullpage-layout.component';
+import { PluckPipe } from './pipes/pluck.pipe';
+import { JoinPipe } from './pipes/join.pipe';
 
 const PRIMENG_MODULES = [
   AutoCompleteModule,
@@ -144,10 +150,13 @@ const COMPONENTS = [
   SpinnerComponent,
   IeWarningComponent,
   BiaTableComponent,
+  BiaCalcTableComponent,
   BiaTableHeaderComponent,
   BiaTableControllerComponent,
   LayoutComponent,
   PageLayoutComponent,
+  PopupLayoutComponent,
+  FullPageLayoutComponent,
   PrimengCalendarLocaleDirective
 ];
 
@@ -159,14 +168,20 @@ const VIEW_COMPONENTS = [
   ViewFormComponent
 ];
 
+const PIPES = [
+  TranslateRoleLabelPipe,
+  PluckPipe,
+  JoinPipe
+];
+
 const VIEW_IMPORTS = [StoreModule.forFeature('views', reducers), EffectsModule.forFeature([ViewsEffects])];
 
 const SERVICES = [MessageService];
 
 @NgModule({
   imports: [...PRIMENG_MODULES, ...MODULES, ...VIEW_IMPORTS],
-  declarations: [...COMPONENTS, ...VIEW_COMPONENTS],
-  exports: [...PRIMENG_MODULES, ...MODULES, ...COMPONENTS],
+  declarations: [...COMPONENTS, ...VIEW_COMPONENTS, ...PIPES],
+  exports: [...PRIMENG_MODULES, ...MODULES, ...COMPONENTS, ...PIPES],
   providers: [...SERVICES]
 })
 

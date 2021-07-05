@@ -9,6 +9,8 @@ import { environment } from 'src/environments/environment';
 import { THEME_LIGHT, THEME_DARK } from 'src/app/shared/constants';
 import { Site } from 'src/app/domains/site/model/site';
 import { EnvironmentType } from 'src/app/domains/environment-configuration/model/environment-configuration';
+import { AuthService } from 'src/app/core/bia-core/services/auth.service';
+import { Role } from 'src/app/domains/role/model/role';
 
 @Component({
   selector: 'bia-classic-header',
@@ -59,10 +61,27 @@ export class ClassicHeaderComponent implements OnDestroy {
     this.initDropdownSite();
   }
 
+
+  allRoles: Role[];
+  @Input()
+  set roles(roles: Role[]) {
+    this.allRoles = roles;
+    this.initDropdownRole();
+  }
+  currentRole: Role;
+  currentRoleId: number;
+  @Input()
+  set roleId(currentRoleId: number) {
+    this.currentRoleId = currentRoleId;
+    this.initDropdownRole();
+  }
+
   @Output() language = new EventEmitter<string>();
   @Output() theme = new EventEmitter<string>();
   @Output() siteChange = new EventEmitter<number>();
   @Output() setDefaultSite = new EventEmitter<number>();
+  @Output() roleChange = new EventEmitter<number>();
+  @Output() setDefaultRole = new EventEmitter<number>();
 
   usernameParam: { name: string };
   navigations: BiaNavigation[];
@@ -71,7 +90,9 @@ export class ClassicHeaderComponent implements OnDestroy {
   urlAppIcon = environment.urlAppIcon;
   urlDMIndex = environment.urlDMIndex;
   displaySiteList = false;
+  displayRoleList = false;
   cssClassEnv: string;
+  singleRoleMode = environment.singleRoleMode;
 
   private sub = new Subscription();
 
@@ -81,9 +102,10 @@ export class ClassicHeaderComponent implements OnDestroy {
 
   constructor(
     public layoutService: BiaClassicLayoutService,
+    public auth: AuthService,
+    public translateService: TranslateService,
     private platform: Platform,
-    private translateService: TranslateService
-  ) {}
+  ) { }
 
   ngOnDestroy() {
     if (this.sub) {
@@ -137,6 +159,22 @@ export class ClassicHeaderComponent implements OnDestroy {
     if (this.currentSiteId > 0 && this.allSites && this.allSites.length > 1) {
       this.currentSite = this.allSites.filter((x) => x.id === this.currentSiteId)[0];
       this.displaySiteList = true;
+    }
+  }
+
+  onRoleChange() {
+    this.roleChange.emit(this.currentRole.id);
+  }
+
+  onSetDefaultRole() {
+    this.setDefaultRole.emit(this.currentRole.id);
+  }
+
+  private initDropdownRole() {
+    this.displayRoleList = false;
+    if (this.currentRoleId > 0 && this.allRoles && this.allRoles.length > 1) {
+      this.currentRole = this.allRoles.filter((x) => x.id === this.currentRoleId)[0];
+      this.displayRoleList = true;
     }
   }
 

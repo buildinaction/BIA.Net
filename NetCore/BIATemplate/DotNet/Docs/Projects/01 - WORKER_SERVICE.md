@@ -1,6 +1,6 @@
 ```powershell
 # Adapt the path to your dev environment
-$serviceFullPath = "D:\Sources\Azure.DevOps.Safran\DigitalManufacturing\BIADemo\DotNet\Safran.BIADemo.WorkerService\bin\Debug\netcoreapp3.1\Safran.BIADemo.WorkerService.exe"
+$serviceFullPath = "D:\Sources\Azure.DevOps.TheBIADevCompany\DigitalManufacturing\BIADemo\DotNet\TheBIADevCompany.BIADemo.WorkerService\bin\Debug\netcoreapp3.1\TheBIADevCompany.BIADemo.WorkerService.exe"
 
 # Adapt the user un pass to your environment
 $secpasswd = ConvertTo-SecureString "**********" -AsPlainText -Force
@@ -8,7 +8,7 @@ $cred = New-Object System.Management.Automation.PSCredential ("EU\*****", $secpa
 
 # Adapt the appli name to your application
 $appli = "BIADemo"
-$sCompanyName = "Safran"
+$sCompanyName = "TheBIADevCompany"
 $sTeamName = "DM"
 
 $serviceName = $sCompanyName + "_" + $sTeamName + "_" + $appli

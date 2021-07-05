@@ -32,7 +32,7 @@ export class ViewListComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     public translateService: TranslateService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit() {
     const dataLoaded$ = this.store.pipe(select(getDataLoaded));
@@ -63,6 +63,13 @@ export class ViewListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.sub) {
       this.sub.unsubscribe();
+    }
+
+    const defaultView = this.views.find((v) => v.id === this.defaultView);
+    if (defaultView) {
+      sessionStorage.setItem(this.tableStateKey, defaultView.preference);
+    } else {
+      sessionStorage.removeItem(this.tableStateKey);
     }
   }
 
@@ -129,7 +136,7 @@ export class ViewListComponent implements OnInit, OnDestroy {
 
   private updateFilterValues(preference?: string | null) {
     if (preference) {
-      this.selectedView = -1;
+      this.selectedView = this.defaultView;
       this.viewChange.emit(preference);
     } else {
       if (this.selectedView > 0) {

@@ -19,6 +19,7 @@
     "fullscreen": "Full Screen",
     "greetings": "Hello",
     "help": "Help",
+    "id": "id",
     "info": "Info",
     "itemsPerPage": "Items per page",
     "lang": {
@@ -87,6 +88,7 @@
     "errorOccurredWhileProccessing": "An error occurred while processing your request",
     "ieWarning": "[Degraded mode] Your browser (internet explorer) is outdated. For a better experience, we recommend upgrading to the latest Google Chrome.",
     "infoBeforeGetLatestVersion": "The application will reload in a few seconds in order to retrieve the latest version.",
+    "invalidForm": "Invalid form",
     "syncElementSuccess": "Synchronization completed",
     "updateElementSuccess": "Item updated successfully",
     "userAlreadyAssociatedSite": "This user is already associated with this site"

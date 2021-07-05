@@ -1,5 +1,5 @@
 # New Project
-This document explains how to create a new project based on the Safran Angular framework.   
+This document explains how to create a new project based on the TheBIADevCompany Angular framework.   
 
 ## Prerequisite
 
@@ -10,7 +10,7 @@ This document explains how to create a new project based on the Safran Angular f
 * [PrimeNG component list](https://www.primefaces.org/primeng/v9.1.4-lts/)
 * [angular/flex-layout](https://github.com/angular/flex-layout/wiki)
 
-### Configuration for the Safran proxy
+### Configuration for the TheBIADevCompany proxy
 [Add the following **User** environment variables :](https://www.tenforums.com/tutorials/121664-set-new-user-system-environment-variables-windows.html#option1)  
 * HTTP_PROXY: http://10.179.8.30:3128/
 * HTTPS_PROXY: http://10.179.8.30:3128/
@@ -56,14 +56,14 @@ Open your **.gitconfig** file and add this configuration:
 [http "https://tfsdm.eu.labinal.snecma/"]
                 sslVerify = false
                 proxy = ""
-[http "https://azure.devops.safran/"]
+[http "https://azure.devops.thebiadevcompany/"]
                 sslVerify = false
                 proxy = ""
 ```
 
 
 ## Create a new project
-Retrieve the latest version of the **[BIA Template](https://inshare.collab.group.safran/bao/DevOps/BIAV3/Shared%20Documents/AngularTemplates)**.   
+Retrieve the latest version of the **[BIA.AngularTemplate.X.Y.Z.zip](../../Docs/BIAExtension)**.   
 Copy/Paste the contents of the zip into the Angular folder of your new project.   
 Inside the Angular folder of your new project, run the powershell script `new-angular-project.ps1`.   
 For **old project name?**, type **BIATemplate**   
@@ -86,10 +86,9 @@ Some files are part of the Framework and should not be modified.
 ## NPM Package
 The content of the framework is normally sufficient for the needs of any project. You should never install any other npm package other than those provided by the Framework.   You should not use the `ng update` command.   
 The component library chosen for this framework is [PrimeNG](https://www.primefaces.org/primeng/v9.1.4-lts/). You must use only these components.   
-If the content of this framework is not enough, please contact first [Jérémie Souques](mailto:jeremie.souques@safrangroup.com) before installing an npm package on your project.
+If the content of this framework is not enough, please contact first [Jérémie Souques](mailto:jeremie.souques@thebiadevcompanygroup.com) before installing an npm package on your project.
 
 ## Design / Layout
-You can access [here](https://cgifrance.invisionapp.com/share/6CMNQJLWVQX#/screens/315722051) to the graphic charter. (password: Safran)<br />
 If you need to modify the PrimeNG component design, you can modify the following file: src\scss\\_app-custom-theme.scss   
 For example you can change the row/cell size of the tables by changing the following `padding` property:
 ``` scss

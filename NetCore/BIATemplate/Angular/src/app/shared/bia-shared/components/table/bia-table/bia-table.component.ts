@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Table } from 'primeng/table';
 import { LazyLoadEvent, TableState } from 'primeng/api';
-import { BiaListConfig, TypeTS, PrimeTableColumn } from './bia-table-config';
+import { BiaListConfig, PropType, PrimeTableColumn } from './bia-table-config';
 import { AuthService } from 'src/app/core/bia-core/services/auth.service';
 import { DEFAULT_VIEW, TABLE_FILTER_GLOBAL } from 'src/app/shared/constants';
 import { KeyValuePair } from '../../../model/key-value-pair';
@@ -73,7 +73,7 @@ export class BiaTableComponent implements OnChanges {
     this.onAdvancedFilterChange(changes);
   }
 
-  private onElementsChange(changes: SimpleChanges) {
+  protected onElementsChange(changes: SimpleChanges) {
     if (changes.elements && this.table) {
       if (this.selectedElements && this.selectedElements.length > 0 && this.elements) {
         this.selectedElements = this.elements.filter((x) => this.selectedElements.some((y) => x.id === y.id));
@@ -84,7 +84,7 @@ export class BiaTableComponent implements OnChanges {
     }
   }
 
-  private onLoadingChange(changes: SimpleChanges) {
+  protected onLoadingChange(changes: SimpleChanges) {
     if (changes.loading) {
       if (this.loading === true) {
         this.showLoading$ = timer(this.showLoadingAfter);
@@ -94,19 +94,19 @@ export class BiaTableComponent implements OnChanges {
     }
   }
 
-  private onAdvancedFilterChange(changes: SimpleChanges) {
+  protected onAdvancedFilterChange(changes: SimpleChanges) {
     if (changes.advancedFilter) {
       this.saveTableState();
     }
   }
 
-  private onConfigurationChange(changes: SimpleChanges) {
+  protected onConfigurationChange(changes: SimpleChanges) {
     if (this.configuration && changes.configuration) {
       this.updateDisplayedColumns();
     }
   }
 
-  private onColumnToDisplayChange(changes: SimpleChanges) {
+  protected onColumnToDisplayChange(changes: SimpleChanges) {
     if (this.columnToDisplays && changes.columnToDisplays) {
       this.updateDisplayedColumns();
       if (changes.columnToDisplays.isFirstChange()) {
@@ -117,7 +117,7 @@ export class BiaTableComponent implements OnChanges {
     }
   }
 
-  private initDefaultSort() {
+  protected initDefaultSort() {
     if (this.sortFieldValue.length < 1 && this.displayedColumns && this.displayedColumns.length > 0) {
       this.sortFieldValue = this.displayedColumns[0].field;
     }
@@ -125,7 +125,7 @@ export class BiaTableComponent implements OnChanges {
     this.defaultSortOrder = this.sortOrderValue;
   }
 
-  private updateDisplayedColumns() {
+  protected updateDisplayedColumns() {
     if (this.columnToDisplays) {
       this.displayedColumns = this.configuration.columns.filter(
         (col) => this.columnToDisplays.map((x) => x.key).indexOf(col.field) > -1
@@ -136,19 +136,19 @@ export class BiaTableComponent implements OnChanges {
     this.saveTableState();
   }
 
-  private onPageSizeChange(changes: SimpleChanges) {
+  protected onPageSizeChange(changes: SimpleChanges) {
     if (changes.pageSize && this.table) {
       this.table.onPageChange({ first: 0, rows: Number(this.pageSize) });
     }
   }
 
-  private onSearchGlobalChange(changes: SimpleChanges) {
+  protected onSearchGlobalChange(changes: SimpleChanges) {
     if (changes.globalSearchValue) {
       this.searchGlobalChanged(this.globalSearchValue);
     }
   }
 
-  private onViewPreferenceChange(changes: SimpleChanges) {
+  protected onViewPreferenceChange(changes: SimpleChanges) {
     if (this.table && this.table.isStateful() && changes.viewPreference) {
       let viewPreference = changes.viewPreference.currentValue;
       if (viewPreference === DEFAULT_VIEW) {
@@ -160,7 +160,7 @@ export class BiaTableComponent implements OnChanges {
     }
   }
 
-  private createDefaultTableState(): TableState {
+  protected createDefaultTableState(): TableState {
     return <TableState>{
       first: 0,
       rows: this.defaultPageSize,
@@ -181,7 +181,7 @@ export class BiaTableComponent implements OnChanges {
     if (this.table) {
       if (this.table.lazy === true) {
         this.configuration.columns.forEach((col) => {
-          if (col.isSearchable === true && col.type !== TypeTS.Boolean) {
+          if (col.isSearchable === true && col.type !== PropType.Boolean) {
             this.table.filter(value, TABLE_FILTER_GLOBAL + col.field, col.filterMode);
           }
         });
@@ -198,11 +198,11 @@ export class BiaTableComponent implements OnChanges {
   }
 
   onLoadLazy(event: LazyLoadEvent) {
-    this.loadLazy.emit(event);
+    setTimeout(() => this.loadLazy.emit(event), 0);
   }
 
   onSelectionChange() {
-    this.selectedElementsChanged.next(this.selectedElements);
+    setTimeout(() => this.selectedElementsChanged.next(this.selectedElements), 0);
   }
 
   onStateSave(state: TableState) {
@@ -213,14 +213,14 @@ export class BiaTableComponent implements OnChanges {
     }
   }
 
-  private saveTableState() {
+  protected saveTableState() {
     if (this.table && this.table.isStateful()) {
       this.table.columns = this.displayedColumns;
       this.table.saveState();
     }
   }
 
-  private restoreStateTable() {
+  protected restoreStateTable() {
     if (this.table) {
       const storage = this.table.getStorage();
       const stateString = storage.getItem(this.table.stateKey);

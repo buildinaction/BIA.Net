@@ -27,8 +27,8 @@ In the BIANet Section add:
 ```Json
     "ApiFeatures": {
       "HubForClients": {
-        "RedisConnectionString": "dmeu-redis-[ENV].electrical-power.safran",
-        "RedisChannelPrefix": "Safran.[YourProjectName]"
+        "RedisConnectionString": "dmeu-redis-[ENV].electrical-power.thebiadevcompany",
+        "RedisChannelPrefix": "TheBIADevCompany.[YourProjectName]"
       }
     },
 ```

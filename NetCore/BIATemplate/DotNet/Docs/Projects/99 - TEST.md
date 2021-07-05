@@ -1,4 +1,4 @@
-﻿# Unit tests for V3 projects
+# Unit tests for V3 projects
 This file explains what to do in order to add unit tests for the back-end of your V3 project.
 
 It contains an overview of the architecture, but if you just want to know how to create your own unit tests project, go directly to chapter **How to add unit tests for my project?**.
@@ -80,12 +80,12 @@ IoC of classes strongly coupled to your project shall be defined in **<code>IocC
 If you want to know what to do in order to add unit tests to your project, this is the way...
 
 ### Create your test project
-#### Copy of Safran.BIADemo.Test
-* Copy/paste **Safran.BIADemo.Test** project from [here](https://azure.devops.safran/SafranElectricalAndPower/Digital%20Manufacturing/_git/BIADemo?path=%2FDotNet%2FSafran.BIADemo.Test) and add it in the "**DotNet**" folder of your solution.
+#### Copy of TheBIADevCompany.BIADemo.Test
+* Copy/paste **TheBIADevCompany.BIADemo.Test** project from [here](https://azure.devops.thebiadevcompany/TheBIADevCompanyElectricalAndPower/Digital%20Manufacturing/_git/BIADemo?path=%2FDotNet%2FTheBIADevCompany.BIADemo.Test) and add it in the "**DotNet**" folder of your solution.
 * Rename the folder and csproj in order to match your company and project names, but keep the pattern **[CompanyName].[ProjectName].Test**.
 * Add the project to your solution (usually inside a "**99 - Test**" folder).
 * Check the properties of your test project and (if necessary) change information in the "Package" tab in order to match your project information.
-* Replace all **Safran.BIADemo** occurences by **[CompanyName].[ProjectName]** (Ctrl+Shift+H on Visual Studio).
+* Replace all **TheBIADevCompany.BIADemo** occurences by **[CompanyName].[ProjectName]** (Ctrl+Shift+H on Visual Studio).
 
 #### Remove examples
 * Some example classes/interfaces have been added in order to show how to implement unit tests in a more realistic way.
@@ -256,18 +256,18 @@ In order to execute your unit tests before each build on Azure DevOps, do the fo
     !\*\*\\obj\\\*\*</code>
 * When you execute the pipeline, check the results of the "**API Tests**" task.
 You should see something like that:
-  > 2020-12-22T10:39:52.7079229Z "D:\Agent\_work\8\s\DotNet\Safran.BIADemo.Test\bin\Release\netcoreapp3.1\Safran.BIADemo.Test.dll"
+  > 2020-12-22T10:39:52.7079229Z "D:\Agent\_work\8\s\DotNet\TheBIADevCompany.BIADemo.Test\bin\Release\netcoreapp3.1\TheBIADevCompany.BIADemo.Test.dll"
   2020-12-22T10:39:52.7079265Z /logger:"trx"
   2020-12-22T10:39:52.7079308Z /TestAdapterPath:"D:\Agent\_work\8\s"
   2020-12-22T10:39:52.7079341Z **Starting test execution, please wait...**
   2020-12-22T10:39:53.4299256Z 
   2020-12-22T10:39:53.4299811Z **A total of 1 test files matched the specified pattern.**
-  2020-12-22T10:39:56.0532657Z   âˆš **TestMethod** [640ms]
-  2020-12-22T10:39:56.0533075Z   âˆš **TestMethodFactorized** [4ms]
-  2020-12-22T10:39:56.0533872Z   âˆš **TestMethodFactorized (-1,True)** [1ms]
-  2020-12-22T10:39:56.0534709Z   âˆš **TestMethodFactorized (0,True)** [< 1ms]
-  2020-12-22T10:39:56.0535006Z   âˆš **TestMethodFactorized (1,True)** [< 1ms]
-  2020-12-22T10:39:56.0535243Z   âˆš **TestMethodFactorized (2,False)** [< 1ms]
+  2020-12-22T10:39:56.0532657Z   √ **TestMethod** [640ms]
+  2020-12-22T10:39:56.0533075Z   √ **TestMethodFactorized** [4ms]
+  2020-12-22T10:39:56.0533872Z   √ **TestMethodFactorized (-1,True)** [1ms]
+  2020-12-22T10:39:56.0534709Z   √ **TestMethodFactorized (0,True)** [< 1ms]
+  2020-12-22T10:39:56.0535006Z   √ **TestMethodFactorized (1,True)** [< 1ms]
+  2020-12-22T10:39:56.0535243Z   √ **TestMethodFactorized (2,False)** [< 1ms]
   ...
   2020-12-22T10:39:56.6390388Z Results File: D:\Agent\_work\8\s\TestResults\lrAPP003_DS002AZS_2020-12-22_11_39_56.trx
   2020-12-22T10:39:56.6413163Z 
@@ -278,6 +278,6 @@ You should see something like that:
   2020-12-22T10:39:56.8593561Z ##[section]Async Command Start: Publish test results
   2020-12-22T10:39:56.8686539Z Publishing test results to test run '57'
   2020-12-22T10:39:56.8686682Z Test results remaining: 22. Test run id: 57
-  2020-12-22T10:39:57.1301682Z Published Test Run : https://azure.devops.safran/SafranElectricalAndPower/Digital%20Manufacturing/_TestManagement/Runs?runId=57&_a=runCharts
+  2020-12-22T10:39:57.1301682Z Published Test Run : https://azure.devops.thebiadevcompany/TheBIADevCompanyElectricalAndPower/Digital%20Manufacturing/_TestManagement/Runs?runId=57&_a=runCharts
   2020-12-22T10:39:57.1315111Z ##[section]Async Command End: Publish test results
   2020-12-22T10:39:57.1316208Z ##[section]Finishing: API Tests

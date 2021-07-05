@@ -13,6 +13,7 @@ export interface UserProfile {
 
 export interface UserData {
   currentSiteId: number;
+  currentRoleId: number;
 }
 
 export interface AdditionalInfos {

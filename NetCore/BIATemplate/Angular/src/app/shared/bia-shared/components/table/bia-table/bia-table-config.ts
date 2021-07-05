@@ -11,11 +11,15 @@ export enum PrimeNGFiltering {
   Gte = 'gte'
 }
 
-export enum TypeTS {
+export enum PropType {
   Date = 'Date',
+  DateTime = 'DateTime',
+  Time = 'Time',
   Number = 'Number',
   Boolean = 'Boolean',
-  String = 'String'
+  String = 'String',
+  OneToMany = 'OneToMany',
+  ManyToMany = 'ManyToMany'
 }
 
 export interface CustomButton {
@@ -28,20 +32,27 @@ export interface CustomButton {
 export class PrimeTableColumn {
   field: string;
   header: string;
-  type: TypeTS;
+  type: PropType;
   filterMode: PrimeNGFiltering;
   formatDate: string;
   isSearchable: boolean;
   isSortable: boolean;
+  isEditable: boolean;
+  maxlength: number;
+  get isDate() {
+    return this.type === PropType.Date || this.type === PropType.DateTime || this.type === PropType.Time;
+  }
 
-  constructor(field: string, header: string) {
+  constructor(field: string, header: string, maxlength = 255) {
     this.field = field;
     this.header = header;
-    this.type = TypeTS.String;
+    this.type = PropType.String;
     this.filterMode = PrimeNGFiltering.Contains;
     this.formatDate = '';
     this.isSearchable = true;
     this.isSortable = true;
+    this.isEditable = true;
+    this.maxlength = maxlength;
   }
 }
 

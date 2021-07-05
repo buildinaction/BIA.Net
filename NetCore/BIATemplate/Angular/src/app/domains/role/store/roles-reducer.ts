@@ -1,6 +1,6 @@
 import { EntityState, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
-import { loadAllSuccess, loadSuccess } from './roles-actions';
+import { loadAllSuccess, loadMemberRoles, loadMemberRolesSuccess, loadSuccess } from './roles-actions';
 import { Role } from '../model/role';
 
 // This adapter will allow is to manipulate roles (mostly CRUD operations)
@@ -9,7 +9,7 @@ export const rolesAdapter = createEntityAdapter<Role>({
   sortComparer: false
 });
 
-// -----------------------------------------
+// ------------------------------------------
 // The shape of EntityState
 // ------------------------------------------
 // interface EntityState<Role> {
@@ -22,16 +22,24 @@ export const rolesAdapter = createEntityAdapter<Role>({
 
 export interface State extends EntityState<Role> {
   // additional props here
+  memberRoles: Role[] | null;
 }
 
 export const INIT_STATE: State = rolesAdapter.getInitialState({
   // additional props default values here
+  memberRoles: null
 });
 
 export const roleReducers = createReducer<State>(
   INIT_STATE,
   on(loadAllSuccess, (state, { roles }) => rolesAdapter.setAll(roles, state)),
-  on(loadSuccess, (state, { role }) => rolesAdapter.upsertOne(role, state))
+  on(loadSuccess, (state, { role }) => rolesAdapter.upsertOne(role, state)),
+  on(loadMemberRoles, (state, { }) => {
+    return { ...state, memberRoles: null };
+  }),
+  on(loadMemberRolesSuccess, (state, { roles }) => {
+    return { ...state, memberRoles: roles };
+  })
 );
 
 export const getRoleById = (id: number) => (state: State) => state.entities[id];

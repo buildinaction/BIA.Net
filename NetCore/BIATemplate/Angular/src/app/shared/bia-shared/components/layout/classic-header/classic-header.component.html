@@ -11,12 +11,37 @@
     <bia-ie-warning *ngIf="isIE"></bia-ie-warning>
     <div class="controls" fxLayout="row">
       <p-dropdown
-        *ngIf="displaySiteList === true"
-        [options]="allSites"
-        [(ngModel)]="currentSite"
-        optionLabel="title"
-        dataKey="id"
-        (onChange)="onSiteChange()"
+      *ngIf="displayRoleList"
+      [options]="allRoles"
+      [(ngModel)]="currentRole"
+      optionLabel="labelEn"
+      dataKey="id"
+      (onChange)="onRoleChange()"
+      placeholder="Select a role"
+      >
+      <ng-template let-item pTemplate="item">
+        {{ item?.value | translateRoleLabel : translateService.currentLang }}
+      </ng-template>
+      <ng-template let-selectedItem pTemplate="selectedItem">
+        {{ selectedItem?.value | translateRoleLabel : translateService.currentLang }}
+      </ng-template>
+    </p-dropdown>
+      <i
+      *ngIf="displayRoleList === true && currentRole?.isDefault === false"
+        class="ui-icon-star-border app-icon-header bia-pointer"
+        (click)="onSetDefaultRole()"
+        pTooltip="{{ 'bia.defineDefault' | translate }}"
+        tooltipPosition="bottom"
+        placeholder="Top"
+      ></i>
+      <i *ngIf="displayRoleList === true && currentRole?.isDefault === true" class="ui-icon-star app-icon-header"></i>
+      <p-dropdown
+      *ngIf="displaySiteList === true"
+      [options]="allSites"
+      [(ngModel)]="currentSite"
+      optionLabel="title"
+      dataKey="id"
+      (onChange)="onSiteChange()"
       ></p-dropdown>
       <i
         *ngIf="displaySiteList === true && currentSite?.isDefault === false"
