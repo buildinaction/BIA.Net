@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { getAllPlanes, getPlanesTotalCount, getPlaneLoadingGetAll } from '../../store/plane.state';
 import { multiRemove, loadAllByPost, update, create } from '../../store/planes-actions';
 import { Observable } from 'rxjs';
-import { LazyLoadEvent } from 'primeng/api';
+import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
 import { Plane } from '../../model/plane';
 import { BiaTableComponent } from 'src/app/shared/bia-shared/components/table/bia-table/bia-table.component';
 import {
@@ -154,7 +154,7 @@ export class PlanesIndexComponent implements OnInit, OnDestroy {
     this.pageSize = pageSize;
   }
 
-  onLoadLazy(lazyLoadEvent: LazyLoadEvent) {
+  onLoadLazy(lazyLoadEvent: BIALazyLoadEvent) {
     this.store.dispatch(loadAllByPost({ event: lazyLoadEvent }));
   }
 

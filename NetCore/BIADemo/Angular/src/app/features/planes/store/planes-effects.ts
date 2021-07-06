@@ -20,7 +20,7 @@ import { Plane } from '../model/plane';
 import { DataResult } from 'src/app/shared/bia-shared/model/data-result';
 import { AppState } from 'src/app/store/state';
 import { BiaMessageService } from 'src/app/core/bia-core/services/bia-message.service';
-import { LazyLoadEvent } from 'primeng/api';
+import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
 import { biaSuccessWaitRefreshSignalR } from 'src/app/core/bia-core/shared/bia-action';
 
 /**
@@ -75,7 +75,7 @@ export class PlanesEffects {
             if (PlanesEffects.useSignalR) {
               return biaSuccessWaitRefreshSignalR();
             } else {
-              return loadAllByPost({ event: <LazyLoadEvent>event });
+              return loadAllByPost({ event: <BIALazyLoadEvent>event });
             }
           }),
           catchError((err) => {
@@ -99,7 +99,7 @@ export class PlanesEffects {
             if (PlanesEffects.useSignalR) {
               return biaSuccessWaitRefreshSignalR();
             } else {
-              return loadAllByPost({ event: <LazyLoadEvent>event });
+              return loadAllByPost({ event: <BIALazyLoadEvent>event });
             }
           }),
           catchError((err) => {
@@ -123,7 +123,7 @@ export class PlanesEffects {
             if (PlanesEffects.useSignalR) {
               return biaSuccessWaitRefreshSignalR();
             } else {
-              return loadAllByPost({ event: <LazyLoadEvent>event });
+              return loadAllByPost({ event: <BIALazyLoadEvent>event });
             }
           }),
           catchError((err) => {
@@ -147,7 +147,7 @@ export class PlanesEffects {
             if (PlanesEffects.useSignalR) {
               return biaSuccessWaitRefreshSignalR();
             } else {
-              return loadAllByPost({ event: <LazyLoadEvent>event });
+              return loadAllByPost({ event: <BIALazyLoadEvent>event });
             }
           }),
           catchError((err) => {

@@ -11,7 +11,7 @@ import {
   closeDialogNew,
   failure
 } from './planes-actions';
-import { LazyLoadEvent } from 'primeng/api';
+import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
 import { Plane } from '../model/plane';
 
 // This adapter will allow is to manipulate planes (mostly CRUD operations)
@@ -35,7 +35,7 @@ export interface State extends EntityState<Plane> {
   // additional props here
   totalCount: number;
   currentPlane: Plane;
-  lastLazyLoadEvent: LazyLoadEvent;
+  lastLazyLoadEvent: BIALazyLoadEvent;
   loadingGet: boolean;
   loadingGetAll: boolean;
   displayEditDialog: boolean;
@@ -46,7 +46,7 @@ export const INIT_STATE: State = planesAdapter.getInitialState({
   // additional props default values here
   totalCount: 0,
   currentPlane: <Plane>{},
-  lastLazyLoadEvent: <LazyLoadEvent>{},
+  lastLazyLoadEvent: <BIALazyLoadEvent>{},
   loadingGet: false,
   loadingGetAll: false,
   displayEditDialog: false,

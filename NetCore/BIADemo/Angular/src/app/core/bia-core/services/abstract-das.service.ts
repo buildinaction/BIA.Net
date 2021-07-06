@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { LazyLoadEvent } from 'primeng/api';
+import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
 import { DataResult } from 'src/app/shared/bia-shared/model/data-result';
 import { GenericDas, HttpOptions } from './generic-das.service';
 import { Injector } from '@angular/core';
@@ -22,7 +22,7 @@ export abstract class AbstractDas<TOut, TIn = Pick<TOut, Exclude<keyof TOut, 'id
     return this.getListItems<TOut>(endpoint, options);
   }
 
-  getListByPost(event: LazyLoadEvent, endpoint: string = 'all'): Observable<DataResult<TOut[]>> {
+  getListByPost(event: BIALazyLoadEvent, endpoint: string = 'all'): Observable<DataResult<TOut[]>> {
     return this.getListItemsByPost<TOut>(event, endpoint);
   }
 
@@ -46,7 +46,7 @@ export abstract class AbstractDas<TOut, TIn = Pick<TOut, Exclude<keyof TOut, 'id
     return this.deleteItems(ids, options);
   }
 
-  getFile(event: LazyLoadEvent, endpoint: string = 'csv'): Observable<any> {
+  getFile(event: BIALazyLoadEvent, endpoint: string = 'csv'): Observable<any> {
     return this.getItemFile(event, endpoint);
   }
 }

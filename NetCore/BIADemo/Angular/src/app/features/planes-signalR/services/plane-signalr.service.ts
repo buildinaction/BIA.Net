@@ -5,7 +5,7 @@ import { first } from 'rxjs/operators';
 import { BiaSignalRService } from 'src/app/core/bia-core/services/bia-signalr.service';
 import { loadAllByPost } from '../store/planes-actions';
 import { getLastLazyLoadEvent } from '../store/plane.state';
-import { LazyLoadEvent } from 'primeng/api';
+import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
 
 /**
  * Service managing SignalR events for hangfire jobs.
@@ -34,7 +34,7 @@ export class PlanesSignalRService {
       this.store.select(getLastLazyLoadEvent).pipe(first()).subscribe(
         (event) => {
           console.log('%c [PlanesSignalR] RefreshSuccess', 'color: green; font-weight: bold');
-          this.store.dispatch(loadAllByPost({ event: <LazyLoadEvent>event }));
+          this.store.dispatch(loadAllByPost({ event: <BIALazyLoadEvent>event }));
         }
       );
     });

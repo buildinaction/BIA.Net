@@ -13,6 +13,11 @@ namespace BIA.Net.Core.Domain.Dto.Base
     public class LazyLoadDto
     {
         /// <summary>
+        /// Gets or sets the id of the parent element to filter
+        /// </summary>
+        public int ParentId { get; set; } = 0;
+
+        /// <summary>
         /// Gets or sets the number of the first element to return.
         /// </summary>
         public int? First { get; set; }
@@ -49,10 +54,11 @@ namespace BIA.Net.Core.Domain.Dto.Base
         public override string ToString()
         {
             var trace = new StringBuilder("record:[");
-            trace.AppendFormat("first: {0}, rows: {1}, ", this.First, this.Rows);
-            trace.AppendFormat("sortField: {0}, sortOrder: {1}, ", this.SortField, this.SortOrder);
-            trace.AppendFormat("filters: {0}, ", this.Filters);
-            trace.AppendFormat("globalFilter: {0}]", this.GlobalFilter);
+            trace.AppendFormat($"first: {this.First}, rows: {this.Rows}, ");
+            trace.AppendFormat($"parentId: {this.ParentId}, ");
+            trace.AppendFormat($"sortField: {this.SortField}, sortOrder: {this.SortOrder}, ");
+            trace.AppendFormat($"filters: {this.Filters}, ");
+            trace.AppendFormat($"globalFilter: {this.GlobalFilter}]");
             return trace.ToString();
         }
     }
