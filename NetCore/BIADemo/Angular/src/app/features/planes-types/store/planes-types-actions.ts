@@ -1,9 +1,9 @@
 import { createAction, props } from '@ngrx/store';
-import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
+import { LazyLoadEvent } from 'primeng/api';
 import { PlaneType } from '../model/plane-type';
 import { DataResult } from 'src/app/shared/bia-shared/model/data-result';
 
-export const loadAllByPost = createAction('[PlanesTypes] Load all by post', props<{ event: BIALazyLoadEvent }>());
+export const loadAllByPost = createAction('[PlanesTypes] Load all by post', props<{ event: LazyLoadEvent }>());
 
 export const load = createAction('[PlanesTypes] Load', props<{ id: number }>());
 
@@ -17,7 +17,7 @@ export const multiRemove = createAction('[PlanesTypes] Multi Remove', props<{ id
 
 export const loadAllByPostSuccess = createAction(
   '[PlanesTypes] Load all by post success',
-  props<{ result: DataResult<PlaneType[]>; event: BIALazyLoadEvent }>()
+  props<{ result: DataResult<PlaneType[]>; event: LazyLoadEvent }>()
 );
 
 export const loadSuccess = createAction('[PlanesTypes] Load success', props<{ planeType: PlaneType }>());

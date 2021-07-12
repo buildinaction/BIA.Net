@@ -3,7 +3,7 @@ import { Injector } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
-import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
+import { LazyLoadEvent } from 'primeng/api';
 import { DataResult } from 'src/app/shared/bia-shared/model/data-result';
 import { DateHelperService } from './date-helper.service';
 
@@ -59,7 +59,7 @@ export abstract class GenericDas {
     );
   }
 
-  getListItemsByPost<TOut>(event: BIALazyLoadEvent, endpoint: string = 'all'): Observable<DataResult<TOut[]>> {
+  getListItemsByPost<TOut>(event: LazyLoadEvent, endpoint: string = 'all'): Observable<DataResult<TOut[]>> {
     if (!event) {
       return of();
     }
@@ -107,7 +107,7 @@ export abstract class GenericDas {
     return this.http.delete<void>(`${this.route}?ids=${ids.join('&ids=')}`, options);
   }
 
-  getItemFile(event: BIALazyLoadEvent, endpoint: string = 'csv'): Observable<any> {
+  getItemFile(event: LazyLoadEvent, endpoint: string = 'csv'): Observable<any> {
     return this.http.post(`${this.route}${endpoint}`, event, {
       responseType: 'blob',
       headers: new HttpHeaders().append('Content-Type', 'application/json')

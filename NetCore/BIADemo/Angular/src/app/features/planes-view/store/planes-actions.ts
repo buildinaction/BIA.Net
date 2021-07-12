@@ -1,9 +1,9 @@
 import { createAction, props } from '@ngrx/store';
-import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
+import { LazyLoadEvent } from 'primeng/api';
 import { Plane } from '../model/plane';
 import { DataResult } from 'src/app/shared/bia-shared/model/data-result';
 
-export const loadAllByPost = createAction('[Planes] Load all by post (ViewMode)', props<{ event: BIALazyLoadEvent }>());
+export const loadAllByPost = createAction('[Planes] Load all by post (ViewMode)', props<{ event: LazyLoadEvent }>());
 
 export const load = createAction('[Planes] Load (ViewMode)', props<{ id: number }>());
 
@@ -17,7 +17,7 @@ export const multiRemove = createAction('[Planes] Multi Remove (ViewMode)', prop
 
 export const loadAllByPostSuccess = createAction(
   '[Planes] Load all by post success (ViewMode)',
-  props<{ result: DataResult<Plane[]>; event: BIALazyLoadEvent }>()
+  props<{ result: DataResult<Plane[]>; event: LazyLoadEvent }>()
 );
 
 export const loadSuccess = createAction('[Planes] Load success (ViewMode)', props<{ plane: Plane }>());

@@ -11,7 +11,7 @@ import {
   closeDialogNew,
   failure
 } from './planes-types-actions';
-import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
+import { LazyLoadEvent } from 'primeng/api';
 import { PlaneType } from '../model/plane-type';
 
 // This adapter will allow is to manipulate planesTypes (mostly CRUD operations)
@@ -35,7 +35,7 @@ export interface State extends EntityState<PlaneType> {
   // additional props here
   totalCount: number;
   currentPlaneType: PlaneType;
-  lastLazyLoadEvent: BIALazyLoadEvent;
+  lastLazyLoadEvent: LazyLoadEvent;
   loadingGet: boolean;
   loadingGetAll: boolean;
   displayEditDialog: boolean;
@@ -46,7 +46,7 @@ export const INIT_STATE: State = planesTypesAdapter.getInitialState({
   // additional props default values here
   totalCount: 0,
   currentPlaneType: <PlaneType>{},
-  lastLazyLoadEvent: <BIALazyLoadEvent>{},
+  lastLazyLoadEvent: <LazyLoadEvent>{},
   loadingGet: false,
   loadingGetAll: false,
   displayEditDialog: false,

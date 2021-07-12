@@ -1,7 +1,7 @@
 import { EntityState, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
 import { loadSuccess, loadAllByPostSuccess } from './users-actions';
-import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
+import { LazyLoadEvent } from 'primeng/api';
 import { User } from 'src/app/domains/user/model/user';
 
 // This adapter will allow is to manipulate users (mostly CRUD operations)
@@ -25,14 +25,14 @@ export interface State extends EntityState<User> {
   // additional props here
   totalCount: number;
   currentUser: User;
-  lastLazyLoadEvent: BIALazyLoadEvent;
+  lastLazyLoadEvent: LazyLoadEvent;
 }
 
 export const INIT_STATE: State = usersAdapter.getInitialState({
   // additional props default values here
   totalCount: 0,
   currentUser: <User>{},
-  lastLazyLoadEvent: <BIALazyLoadEvent>{}
+  lastLazyLoadEvent: <LazyLoadEvent>{}
 });
 
 export const userReducers = createReducer<State>(

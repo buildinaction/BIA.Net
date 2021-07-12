@@ -9,7 +9,7 @@ import {
   openDialogNew
 } from '../../store/planes-types-actions';
 import { Observable } from 'rxjs';
-import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
+import { LazyLoadEvent } from 'primeng/api';
 import { PlaneType } from '../../model/plane-type';
 import { BiaTableComponent } from 'src/app/shared/bia-shared/components/table/bia-table/bia-table.component';
 import {
@@ -87,7 +87,7 @@ export class PlanesTypesIndexComponent implements OnInit {
     this.pageSize = pageSize;
   }
 
-  onLoadLazy(lazyLoadEvent: BIALazyLoadEvent) {
+  onLoadLazy(lazyLoadEvent: LazyLoadEvent) {
     this.store.dispatch(loadAllByPost({ event: lazyLoadEvent }));
   }
 

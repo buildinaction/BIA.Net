@@ -11,7 +11,7 @@ import {
   closeDialogNew,
   failure
 } from './members-actions';
-import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
+import { LazyLoadEvent } from 'primeng/api';
 import { Member } from '../model/member';
 
 // This adapter will allow is to manipulate members (mostly CRUD operations)
@@ -35,7 +35,7 @@ export interface State extends EntityState<Member> {
   // additional props here
   totalCount: number;
   currentMember: Member;
-  lastLazyLoadEvent: BIALazyLoadEvent;
+  lastLazyLoadEvent: LazyLoadEvent;
   loadingGet: boolean;
   loadingGetAll: boolean;
   displayEditDialog: boolean;
@@ -46,7 +46,7 @@ export const INIT_STATE: State = membersAdapter.getInitialState({
   // additional props default values here
   totalCount: 0,
   currentMember: <Member>{},
-  lastLazyLoadEvent: <BIALazyLoadEvent>{},
+  lastLazyLoadEvent: <LazyLoadEvent>{},
   loadingGet: false,
   loadingGetAll: false,
   displayEditDialog: false,

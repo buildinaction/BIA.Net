@@ -11,7 +11,7 @@ import {
   closeDialogNew,
   failure
 } from './airports-actions';
-import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
+import { LazyLoadEvent } from 'primeng/api';
 import { Airport } from '../model/airport';
 
 // This adapter will allow is to manipulate airports (mostly CRUD operations)
@@ -35,7 +35,7 @@ export interface State extends EntityState<Airport> {
   // additional props here
   totalCount: number;
   currentAirport: Airport;
-  lastLazyLoadEvent: BIALazyLoadEvent;
+  lastLazyLoadEvent: LazyLoadEvent;
   loadingGet: boolean;
   loadingGetAll: boolean;
   displayEditDialog: boolean;
@@ -46,7 +46,7 @@ export const INIT_STATE: State = airportsAdapter.getInitialState({
   // additional props default values here
   totalCount: 0,
   currentAirport: <Airport>{},
-  lastLazyLoadEvent: <BIALazyLoadEvent>{},
+  lastLazyLoadEvent: <LazyLoadEvent>{},
   loadingGet: false,
   loadingGetAll: false,
   displayEditDialog: false,

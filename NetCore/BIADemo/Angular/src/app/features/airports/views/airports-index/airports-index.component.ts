@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { getAllAirports, getAirportsTotalCount, getAirportLoadingGetAll } from '../../store/airport.state';
 import { multiRemove, loadAllByPost, load, openDialogEdit, openDialogNew } from '../../store/airports-actions';
 import { Observable } from 'rxjs';
-import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
+import { LazyLoadEvent } from 'primeng/api';
 import { Airport } from '../../model/airport';
 import { BiaTableComponent } from 'src/app/shared/bia-shared/components/table/bia-table/bia-table.component';
 import { BiaListConfig, PrimeTableColumn } from 'src/app/shared/bia-shared/components/table/bia-table/bia-table-config';
@@ -81,7 +81,7 @@ export class AirportsIndexComponent implements OnInit {
     this.pageSize = pageSize;
   }
 
-  onLoadLazy(lazyLoadEvent: BIALazyLoadEvent) {
+  onLoadLazy(lazyLoadEvent: LazyLoadEvent) {
     this.store.dispatch(loadAllByPost({ event: lazyLoadEvent }));
   }
 

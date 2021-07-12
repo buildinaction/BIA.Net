@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { getAllSites, getSitesTotalCount, getSiteLoadingGetAll } from '../../store/site.state';
 import { multiRemove, loadAllByPost, load, openDialogNew, openDialogEdit } from '../../store/sites-actions';
 import { Observable } from 'rxjs';
-import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
+import { LazyLoadEvent } from 'primeng/api';
 import { map } from 'rxjs/operators';
 import { SiteInfo } from '../../model/site/site-info';
 import { SiteMember } from '../../model/site/site-member';
@@ -44,7 +44,7 @@ export class SitesIndexComponent implements OnInit {
   loading$: Observable<boolean>;
   showFilter = false;
   haveFilter = false;
-  private lastLazyLoadEvent: BIALazyLoadEvent;
+  private lastLazyLoadEvent: LazyLoadEvent;
   canEdit = false;
   canDelete = false;
   canAdd = false;
@@ -97,7 +97,7 @@ export class SitesIndexComponent implements OnInit {
     this.pageSize = pageSize;
   }
 
-  onLoadLazy(lazyLoadEvent: BIALazyLoadEvent) {
+  onLoadLazy(lazyLoadEvent: LazyLoadEvent) {
     this.lastLazyLoadEvent = lazyLoadEvent;
 
     const userId: number = this.advancedFilter && this.advancedFilter.userId > 0 ? this.advancedFilter.userId : 0;

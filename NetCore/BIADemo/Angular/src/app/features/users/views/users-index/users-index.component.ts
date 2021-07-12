@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { getAllUsers, getUsersTotalCount } from '../../store/user.state';
 import { multiRemove, loadAllByPost, synchronize } from '../../store/users-actions';
 import { Observable } from 'rxjs';
-import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
+import { LazyLoadEvent } from 'primeng/api';
 import { User } from 'src/app/domains/user/model/user';
 import { BiaTableComponent } from 'src/app/shared/bia-shared/components/table/bia-table/bia-table.component';
 import { BiaListConfig, PrimeTableColumn } from 'src/app/shared/bia-shared/components/table/bia-table/bia-table-config';
@@ -47,7 +47,7 @@ export class UsersIndexComponent implements OnInit {
     (col) => <KeyValuePair>{ key: col.field, value: col.header }
   );
   displayedColumns: KeyValuePair[] = this.columns;
-  lastLazyLoadEvent: BIALazyLoadEvent;
+  lastLazyLoadEvent: LazyLoadEvent;
 
   constructor(
     private store: Store<AppState>,
@@ -79,7 +79,7 @@ onSelectedElementsChanged(planesTypes: User[]) {
     this.pageSize = pageSize;
   }
 
-  onLoadLazy(lazyLoadEvent: BIALazyLoadEvent) {
+  onLoadLazy(lazyLoadEvent: LazyLoadEvent) {
     this.lastLazyLoadEvent = lazyLoadEvent;
     this.store.dispatch(loadAllByPost({ event: lazyLoadEvent }));
   }

@@ -1,10 +1,10 @@
 import { createAction, props } from '@ngrx/store';
-import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
+import { LazyLoadEvent } from 'primeng/api';
 import { Site } from '../model/site/site';
 import { SiteInfo } from '../model/site/site-info';
 import { DataResult } from 'src/app/shared/bia-shared/model/data-result';
 
-export const loadAllByPost = createAction('[Sites] Load all by post', props<{ event: BIALazyLoadEvent }>());
+export const loadAllByPost = createAction('[Sites] Load all by post', props<{ event: LazyLoadEvent }>());
 
 export const load = createAction('[Sites] Load', props<{ id: number }>());
 
@@ -18,7 +18,7 @@ export const multiRemove = createAction('[Sites] Multi Remove', props<{ ids: num
 
 export const loadAllByPostSuccess = createAction(
   '[Sites] Load all by post success',
-  props<{ result: DataResult<SiteInfo[]>; event: BIALazyLoadEvent }>()
+  props<{ result: DataResult<SiteInfo[]>; event: LazyLoadEvent }>()
 );
 
 export const loadSuccess = createAction('[Sites] Load success', props<{ site: Site }>());

@@ -20,7 +20,7 @@ import { Airport } from '../model/airport';
 import { DataResult } from 'src/app/shared/bia-shared/model/data-result';
 import { AppState } from 'src/app/store/state';
 import { BiaMessageService } from 'src/app/core/bia-core/services/bia-message.service';
-import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
+import { LazyLoadEvent } from 'primeng/api';
 
 /**
  * Effects file is for isolating and managing side effects of the application in one place
@@ -71,7 +71,7 @@ export class AirportsEffects {
           map(() => {
             this.biaMessageService.showAddSuccess();
             // Uncomment this if you do not use SignalR to refresh
-            return loadAllByPost({ event: <BIALazyLoadEvent>event });
+            return loadAllByPost({ event: <LazyLoadEvent>event });
             // Uncomment this if you use SignalR to refresh
             // return biaSuccessWaitRefreshSignalR();
           }),
@@ -94,7 +94,7 @@ export class AirportsEffects {
           map(() => {
             this.biaMessageService.showUpdateSuccess();
             // Uncomment this if you do not use SignalR to refresh
-            return loadAllByPost({ event: <BIALazyLoadEvent>event });
+            return loadAllByPost({ event: <LazyLoadEvent>event });
             // Uncomment this if you use SignalR to refresh
             // return biaSuccessWaitRefreshSignalR();
           }),
@@ -117,7 +117,7 @@ export class AirportsEffects {
           map(() => {
             this.biaMessageService.showDeleteSuccess();
             // Uncomment this if you do not use SignalR to refresh
-            return loadAllByPost({ event: <BIALazyLoadEvent>event });
+            return loadAllByPost({ event: <LazyLoadEvent>event });
             // Uncomment this if you use SignalR to refresh
             // return biaSuccessWaitRefreshSignalR();
           }),
@@ -140,7 +140,7 @@ export class AirportsEffects {
           map(() => {
             this.biaMessageService.showDeleteSuccess();
             // Uncomment this if you do not use SignalR to refresh
-            return loadAllByPost({ event: <BIALazyLoadEvent>event });
+            return loadAllByPost({ event: <LazyLoadEvent>event });
             // Uncomment this if you use SignalR to refresh
             // return biaSuccessWaitRefreshSignalR();
           }),

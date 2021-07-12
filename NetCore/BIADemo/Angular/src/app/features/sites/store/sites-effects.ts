@@ -21,7 +21,7 @@ import { getLastLazyLoadEvent } from './site.state';
 import { DataResult } from 'src/app/shared/bia-shared/model/data-result';
 import { AppState } from 'src/app/store/state';
 import { BiaMessageService } from 'src/app/core/bia-core/services/bia-message.service';
-import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
+import { LazyLoadEvent } from 'primeng/api';
 
 /**
  * Effects file is for isolating and managing side effects of the application in one place
@@ -70,7 +70,7 @@ export class SitesEffects {
         return this.siteDas.post(site).pipe(
           map(() => {
             this.biaMessageService.showAddSuccess();
-            return loadAllByPost({ event: <BIALazyLoadEvent>event });
+            return loadAllByPost({ event: <LazyLoadEvent>event });
           }),
           catchError((err) => {
             this.biaMessageService.showError();
@@ -90,7 +90,7 @@ export class SitesEffects {
         return this.siteDas.put(site, site.id).pipe(
           map(() => {
             this.biaMessageService.showUpdateSuccess();
-            return loadAllByPost({ event: <BIALazyLoadEvent>event });
+            return loadAllByPost({ event: <LazyLoadEvent>event });
           }),
           catchError((err) => {
             this.biaMessageService.showError();
@@ -110,7 +110,7 @@ export class SitesEffects {
         return this.siteDas.delete(id).pipe(
           map(() => {
             this.biaMessageService.showDeleteSuccess();
-            return loadAllByPost({ event: <BIALazyLoadEvent>event });
+            return loadAllByPost({ event: <LazyLoadEvent>event });
           }),
           catchError((err) => {
             this.biaMessageService.showError();
@@ -131,7 +131,7 @@ export class SitesEffects {
           map(() => {
             this.biaMessageService.showDeleteSuccess();
             // Uncomment this if you do not use SignalR to refresh
-            return loadAllByPost({ event: <BIALazyLoadEvent>event });
+            return loadAllByPost({ event: <LazyLoadEvent>event });
             // Uncomment this if you use SignalR to refresh
             // return biaSuccessWaitRefreshSignalR();
           }),

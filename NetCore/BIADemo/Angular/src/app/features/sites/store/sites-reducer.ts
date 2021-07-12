@@ -2,7 +2,7 @@ import { EntityState, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
 import { Site } from '../model/site/site';
 import { SiteInfo } from '../model/site/site-info';
-import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
+import { LazyLoadEvent } from 'primeng/api';
 import {
   loadSuccess,
   loadAllByPostSuccess,
@@ -36,7 +36,7 @@ export interface State extends EntityState<SiteInfo> {
   // additional props here
   totalCount: number;
   currentSite: Site;
-  lastLazyLoadEvent: BIALazyLoadEvent;
+  lastLazyLoadEvent: LazyLoadEvent;
   loadingGet: boolean;
   loadingGetAll: boolean;
   displayEditDialog: boolean;
@@ -47,7 +47,7 @@ export const INIT_STATE: State = sitesAdapter.getInitialState({
   // additional props default values here
   totalCount: 0,
   currentSite: <Site>{},
-  lastLazyLoadEvent: <BIALazyLoadEvent>{},
+  lastLazyLoadEvent: <LazyLoadEvent>{},
   loadingGet: false,
   loadingGetAll: false,
   displayEditDialog: false,

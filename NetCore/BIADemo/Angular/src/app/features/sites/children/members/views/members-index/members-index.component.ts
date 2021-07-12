@@ -1,7 +1,7 @@
 import { Component, HostBinding, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { combineLatest, Observable, of, Subscription } from 'rxjs';
-import { BIALazyLoadEvent } from 'src/app/shared/bia-shared/model/bia-lazyloadEvent';
+import { LazyLoadEvent } from 'primeng/api';
 import { map } from 'rxjs/operators';
 import { Member } from '../../../../children/members/model/member';
 import { getAllMembers, getMembersTotalCount, getMemberLoadingGetAll } from '../../store/member.state';
@@ -101,7 +101,7 @@ export class MembersIndexComponent implements OnInit, OnDestroy {
     this.pageSize = pageSize;
   }
 
-  onLoadLazy(lazyLoadEvent: BIALazyLoadEvent) {
+  onLoadLazy(lazyLoadEvent: LazyLoadEvent) {
     if (this.siteService.currentSiteId > 0) {
       const customEvent: any = { siteId: +this.siteService.currentSiteId, ...lazyLoadEvent };
       this.store.dispatch(loadAllByPost({ event: customEvent }));
