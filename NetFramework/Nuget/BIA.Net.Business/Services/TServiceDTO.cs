@@ -85,7 +85,14 @@ namespace BIA.Net.Business.Services
             using (var dbContextReadPerformance = new Helpers.DbContextReadPerformance(this.Repository.GetProjectDBContextForOptim()))
             {
                 IQueryable<Entity> query = Repository.GetStandardQuery(TranslateAccess(smode));
-                list = query.AsNoTracking().Select(GetSelectorExpression()).ToList();
+                if (!query.GetType().FullName.Contains("Castle.Proxies.DbSet"))
+                {
+                    list = query.AsNoTracking().Select(GetSelectorExpression()).ToList();
+                }
+                else
+                {
+                    list = query.Select(GetSelectorExpression()).ToList();
+                }
             }
 
             return list;

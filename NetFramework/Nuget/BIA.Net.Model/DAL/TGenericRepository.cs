@@ -643,8 +643,8 @@ namespace BIA.Net.Model
                                         ((param.Values2Update != null) && param.Values2Update.Contains(prop.Name))
                                         ||
                                         ((param.Values2Exclude != null) && !param.Values2Exclude.Contains(prop.Name)))
-                                    //||
-                                    /*prop.CustomAttributes.Any(c => c.AttributeType.Name == "RequiredAttribute")*/))))
+                                    ||
+                                    prop.CustomAttributes.Any(c => c.AttributeType.Name == "RequiredAttribute")))))
                 {
                     retLstProp.Add(prop.Name);
                 }
